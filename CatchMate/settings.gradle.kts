@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "CatchMate"
-include ':app'
+include(":app")
