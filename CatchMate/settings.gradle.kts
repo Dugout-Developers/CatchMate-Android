@@ -16,3 +16,4 @@ rootProject.name = "CatchMate"
 include(":app")
 include(":presentation")
 include(":data")
+include(":domain")
