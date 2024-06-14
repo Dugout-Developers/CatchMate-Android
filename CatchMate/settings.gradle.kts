@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "CatchMate"
 include(":app")
 include(":presentation")
+include(":data")
