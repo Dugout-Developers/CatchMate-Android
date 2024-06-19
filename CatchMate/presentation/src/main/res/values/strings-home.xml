@@ -4,4 +4,5 @@
     <string name="home_menu_post">등록</string>
     <string name="home_menu_notice">알림</string>
     <string name="home_menu_mypage">마이</string>
+    <string name="home_item_text">VS</string>
 </resources>

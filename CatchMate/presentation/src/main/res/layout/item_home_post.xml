@@ -25,27 +25,27 @@
                 android:id="@+id/tv_post_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="06.09 | "
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="06.09 | " />
 
             <TextView
                 android:id="@+id/tv_post_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="17:00 | "
                 app:layout_constraintBottom_toBottomOf="@+id/tv_post_date"
                 app:layout_constraintStart_toEndOf="@+id/tv_post_date"
-                app:layout_constraintTop_toTopOf="@+id/tv_post_date" />
+                app:layout_constraintTop_toTopOf="@+id/tv_post_date"
+                tools:text="17:00 | " />
 
             <TextView
                 android:id="@+id/tv_post_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="사직"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_post_time"
                 app:layout_constraintStart_toEndOf="@+id/tv_post_time"
-                app:layout_constraintTop_toTopOf="@+id/tv_post_time" />
+                app:layout_constraintTop_toTopOf="@+id/tv_post_time"
+                tools:text="사직" />
 
             <TextView
                 android:id="@+id/tv_post_member_count"
@@ -55,20 +55,20 @@
                 android:background="@drawable/all_rect_r10"
                 android:backgroundTint="#FFF2F2"
                 android:gravity="center"
-                android:text="3/4"
                 android:textColor="#FD5E5E"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_post_date" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_date"
+                tools:text="3/4" />
 
             <TextView
                 android:id="@+id/tv_post_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="카리나 시구 보러 같이 가실 분"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_post_member_count"
                 app:layout_constraintStart_toEndOf="@+id/tv_post_member_count"
-                app:layout_constraintTop_toTopOf="@+id/tv_post_member_count" />
+                app:layout_constraintTop_toTopOf="@+id/tv_post_member_count"
+                tools:text="카리나 시구 보러 같이 가실 분" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
@@ -106,7 +106,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="자이언츠" />
+                            tools:text="자이언츠" />
                     </LinearLayout>
 
                     <TextView
@@ -116,7 +116,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
-                        android:text="VS" />
+                        android:text="@string/home_item_text" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="랜더스" />
+                            tools:text="랜더스" />
                     </LinearLayout>
 
                 </LinearLayout>
