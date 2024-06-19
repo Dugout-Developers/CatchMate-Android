@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuitem_home"
+        android:icon="@drawable/all_rect_r6"
+        android:title="홈" />
+    <item
+        android:id="@+id/menuitem_chatting"
+        android:icon="@drawable/all_rect_r6"
+        android:title="채팅" />
+    <item
+        android:id="@+id/menuitem_post"
+        android:icon="@drawable/all_rect_r6"
+        android:title="등록" />
+    <item
+        android:id="@+id/menuitem_notice"
+        android:icon="@drawable/all_rect_r6"
+        android:title="알림" />
+    <item
+        android:id="@+id/menuitem_mypage"
+        android:icon="@drawable/all_rect_r6"
+        android:title="마이" />
+</menu>
