@@ -1,0 +1,13 @@
+<resources>
+    <string name="team_nc_dinos">다이노스</string>
+    <string name="team_samsung_lions">라이온즈</string>
+    <string name="team_ssg_landers">랜더스</string>
+    <string name="team_doosan_bears">베어스</string>
+    <string name="team_kt_wiz">위즈</string>
+    <string name="team_hanwha_eagles">이글스</string>
+    <string name="team_lotte_giants">자이언츠</string>
+    <string name="team_kia_tigers">타이거즈</string>
+    <string name="team_lg_twins">트윈스</string>
+    <string name="team_kiwoom_heroes">히어로즈</string>
+
+</resources>
