@@ -52,7 +52,7 @@
                 android:layout_width="36dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/all_rect_r10"
+                android:background="@drawable/shape_all_rect_r10"
                 android:backgroundTint="#FFF2F2"
                 android:gravity="center"
                 android:textColor="#FD5E5E"
@@ -99,7 +99,7 @@
                             android:id="@+id/iv_post_home_team_logo"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            app:srcCompat="@drawable/all_rect_r6" />
+                            app:srcCompat="@drawable/shape_all_rect_r6" />
 
                         <TextView
                             android:id="@+id/tv_post_home_team_name"
@@ -128,7 +128,7 @@
                             android:id="@+id/iv_post_away_team_logo"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            app:srcCompat="@drawable/all_rect_r6" />
+                            app:srcCompat="@drawable/shape_all_rect_r6" />
 
                         <TextView
                             android:id="@+id/tv_post_away_team_name"

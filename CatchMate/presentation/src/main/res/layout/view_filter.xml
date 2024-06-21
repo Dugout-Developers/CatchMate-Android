@@ -26,7 +26,7 @@
                 android:layout_height="20dp"
                 android:layout_marginRight="7dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/all_rect_r6" />
+                app:srcCompat="@drawable/shape_all_rect_r6" />
 
             <TextView
                 android:id="@+id/tv_filter_name"
