@@ -8,7 +8,7 @@
     tools:context=".home.HomeFragment" >
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineLeft"
+        android:id="@+id/guideline_home_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineRight"
+        android:id="@+id/guideline_home_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="822dp"
@@ -25,24 +25,24 @@
         app:layout_constraintGuide_end="18dp" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_home_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:src="@drawable/home_logo_text"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+        android:id="@+id/nestedsv_home"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fillViewport="true"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
+        app:layout_constraintTop_toBottomOf="@+id/iv_home_logo">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_marginBottom="4dp">
 
             <include
-                android:id="@+id/chip_all_filter"
+                android:id="@+id/chip_home_all_filter"
                 layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:layout_weight="1" />
 
             <include
-                android:id="@+id/chip_date_filter"
+                android:id="@+id/chip_home_date_filter"
                 layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_weight="1" />
 
             <include
-                android:id="@+id/chip_place_filter"
+                android:id="@+id/chip_home_place_filter"
                 layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,9 +82,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
+        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home"
         tools:itemCount="4"
         tools:listitem="@layout/item_home_post" />
 
