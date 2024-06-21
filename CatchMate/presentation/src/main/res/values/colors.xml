@@ -15,6 +15,8 @@
     <!-- System -->
     <color name="system_blue">#3182F6</color>
     <color name="system_red">#EE5147</color>
+    <color name="system_white">#FFFFFF</color>
+    <color name="system_grey">#CFCFCF</color>
 
     <!-- Brand -->
     <color name="brand50">#FFDFDF</color>
