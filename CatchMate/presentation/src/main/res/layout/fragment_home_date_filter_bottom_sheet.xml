@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".home.HomeDateFilterBottomSheetFragment">
+    tools:context=".view.home.HomeDateFilterBottomSheetFragment">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:id="@+id/draghandleview_datebottomsheet"

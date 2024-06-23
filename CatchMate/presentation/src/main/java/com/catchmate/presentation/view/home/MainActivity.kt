@@ -1,4 +1,4 @@
-package com.catchmate.presentation.home
+package com.catchmate.presentation.view.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
