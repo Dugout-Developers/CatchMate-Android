@@ -6,4 +6,7 @@
     <string name="home_menu_mypage">마이</string>
     <string name="home_item_text">VS</string>
     <string name="filter_state_save">저장</string>
+    <string name="filter_title_date">날짜</string>
+    <string name="filter_title_team">응원 구단</string>
+    <string name="filter_title_head_count">모집 인원 수</string>
 </resources>
