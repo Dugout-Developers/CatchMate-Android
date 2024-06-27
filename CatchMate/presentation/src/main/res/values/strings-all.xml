@@ -10,6 +10,11 @@
     <string name="team_lg_twins">트윈스</string>
     <string name="team_kiwoom_heroes">히어로즈</string>
 
+    <string name="badge_kt_wiz">KT위즈</string>
+    <string name="badge_lotte_giants">롯데자이언츠</string>
+
+    <string name="badge_cheer_leader">응원단장</string>
+
     <string name="next">다음</string>
     <string name="finish">완료</string>
     <string name="complete">확인</string>
