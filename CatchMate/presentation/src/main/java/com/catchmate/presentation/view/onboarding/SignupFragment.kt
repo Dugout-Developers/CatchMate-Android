@@ -9,18 +9,22 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupBinding
 
 class SignupFragment : Fragment() {
-    private var _binding : FragmentSignupBinding? = null
-    private val binding get() = _binding!!
+    private var _binding: FragmentSignupBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.layoutSignupFooter.btnFooterOne.setText(R.string.next)
     }
