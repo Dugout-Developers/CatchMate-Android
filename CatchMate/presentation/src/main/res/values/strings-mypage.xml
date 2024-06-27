@@ -11,4 +11,6 @@
     <string name="mypage_information">정보</string>
 
     <string name="edit_profile_title">프로필 편집</string>
+
+    <string name="my_post_title">작성한 글</string>
 </resources>
