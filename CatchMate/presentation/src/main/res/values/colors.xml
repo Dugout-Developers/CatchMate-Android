@@ -15,7 +15,6 @@
     <!-- System -->
     <color name="system_blue">#3182F6</color>
     <color name="system_red">#EE5147</color>
-    <color name="system_white">#FFFFFF</color>
     <color name="system_team_logo_grey">#CFCFCF</color>
     <color name="system_login_grey">#E3E3E3</color>
     <color name="system_login_sneak_peek_grey">#A7A7A7</color>
@@ -35,11 +34,12 @@
     <color name="brand900">#77383C</color>
 
     <!-- Grey -->
-    <color name="grey50">#FCFAFA</color>
-    <color name="grey100">#F5F2F2</color>
-    <color name="grey200">#EEE9E9</color>
-    <color name="grey300">#D0CCCE</color>
-    <color name="grey400">#B2AFB2</color>
+    <color name="grey0">#FFFFFF</color>
+    <color name="grey50">#FAFAFC</color>
+    <color name="grey100">#F2F2F5</color>
+    <color name="grey200">#E9E9EE</color>
+    <color name="grey300">#CCCCD0</color>
+    <color name="grey400">#AFAFB2</color>
     <color name="grey500">#949297</color>
     <color name="grey600">#76747B</color>
     <color name="grey700">#595860</color>
