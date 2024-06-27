@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey0">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_cheer_style_onboarding_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_cheer_style_onboarding_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="24dp" />
+
+    <include
+        android:id="@+id/layout_cheer_style_onboarding_header"
+        layout="@layout/layout_header_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_cheer_style_onboarding_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/team_onboarding_title1"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_cheer_style_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/layout_cheer_style_onboarding_header" />
+
+    <TextView
+        android:id="@+id/tv_cheer_style_onboarding_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cheer_style_onboarding_title2"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_cheer_style_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cheer_style_onboarding_title1" />
+
+    <TextView
+        android:id="@+id/tv_cheer_style_onboarding_selectable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/selectable_mark"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_cheer_style_onboarding_title2"
+        app:layout_constraintStart_toEndOf="@+id/tv_cheer_style_onboarding_title2" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/layout_cheer_style_onboarding_next"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_cheer_style_onboarding_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_cheer_style_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cheer_style_onboarding_title2">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_director"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_mother_bird"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_director"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_director"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_director" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_mother_bird"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_director"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_mother_bird"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_mother_bird"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_mother_bird" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_glutton"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_cheer_leader"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_cheer_style_onboarding_director">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_glutton"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_glutton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_glutton" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_cheer_leader"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_glutton"
+                app:layout_constraintTop_toTopOf="@+id/cv_cheer_style_onboarding_glutton">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_cheer_leader"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_cheer_leader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_cheer_leader" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_stone"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="56dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_cheer_bodhisattva"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_cheer_style_onboarding_glutton">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_stone"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_stone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_stone" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_cheer_style_onboarding_cheer_bodhisattva"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_stone"
+                app:layout_constraintTop_toTopOf="@+id/cv_cheer_style_onboarding_stone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/iv_cheer_style_onboarding_cheer_bodhisattva"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:src="@drawable/shape_all_rect_r6" />
+
+                    <TextView
+                        android:id="@+id/tv_cheer_style_onboarding_cheer_bodhisattva"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/cheer_style_bodhisattva" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/layout_cheer_style_onboarding_next"
+        layout="@layout/layout_footer_one_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
