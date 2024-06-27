@@ -1,0 +1,27 @@
+<resources>
+    <string name="signup_title_1">딱 맞는 직관 친구 찾기를 위해</string>
+    <string name="signup_title_2">정보를 입력해주세요</string>
+    <string name="signup_nickname">닉네임</string>
+    <string name="signup_birth">생년월일</string>
+    <string name="signup_gender">성별</string>
+    <string name="signup_gender_female">여성</string>
+    <string name="signup_gender_male">남성</string>
+
+    <string name="team_onboarding_title1">%s 님의</string>
+    <string name="team_onboarding_title2">응원구단을 알려주세요</string>
+    <string name="pacifist">평화주의자</string>
+    <string name="baseball_beginner">야알못</string>
+
+    <string name="cheer_style_onboarding_title2">응원 스타일을 알려주세요</string>
+    <string name="cheer_style_director">"당근과 채찍"\n감독 스타일</string>
+    <string name="cheer_style_mother_bird">"무조건 애정과 박수"\n어미새 스타일</string>
+    <string name="cheer_style_glutton">"맛집이 어디라구요?"\n먹보 스타일</string>
+    <string name="cheer_style_cheer_leader">"이곳이 나의 무대"\n응원단장 스타일</string>
+    <string name="cheer_style_stone">"..."\n돌하르방 스타일</string>
+    <string name="cheer_style_bodhisattva">"그럴 수 있지"\n보살 스타일</string>
+    <string name="selectable_mark">선택</string>
+
+
+    <string name="signup_complete_title">회원가입 완료</string>
+    <string name="signup_complete_sub_title">함께 할수록 재미있는 야구 직관\n캐치메이트에서 구해보세요!</string>
+</resources>
