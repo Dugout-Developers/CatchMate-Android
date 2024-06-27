@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.onboarding.SignupFragment" >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_signup_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_signup_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="24dp" />
+
+    <include
+        android:id="@+id/layout_signup_header"
+        layout="@layout/layout_header_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_signup_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/signup_title_1"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_signup_right"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/layout_signup_header" />
+
+    <TextView
+        android:id="@+id/tv_signup_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_title_2"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_title" />
+
+    <ImageView
+        android:id="@+id/iv_signup_essential_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/vec_all_essential_mark"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_signup_title2"
+        app:layout_constraintStart_toEndOf="@+id/tv_signup_title2"
+        app:layout_constraintTop_toTopOf="@+id/tv_signup_title2" />
+
+    <TextView
+        android:id="@+id/tv_signup_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/signup_nickname"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_title2" />
+
+    <EditText
+        android:id="@+id/edt_signup_nickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_signup_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_nickname" />
+
+    <TextView
+        android:id="@+id/tv_signup_birth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/signup_birth"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/edt_signup_nickname" />
+
+    <EditText
+        android:id="@+id/edt_signup_birth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_signup_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_birth" />
+
+    <TextView
+        android:id="@+id/tv_signup_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/signup_gender"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/edt_signup_birth" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipgroup_signup_gender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:checkedChip="@id/chip_signup_female"
+        app:chipSpacingHorizontal="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_signup_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_signup_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signup_gender"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_signup_female"
+            style="@style/CustomGenderChip"
+            android:gravity="center"
+            android:text="@string/signup_gender_female" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_signup_male"
+            style="@style/CustomGenderChip"
+            android:text="@string/signup_gender_male" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <include
+        android:id="@+id/layout_signup_footer"
+        layout="@layout/layout_footer_one_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

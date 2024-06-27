@@ -10,4 +10,7 @@
     <string name="team_lg_twins">트윈스</string>
     <string name="team_kiwoom_heroes">히어로즈</string>
 
+    <string name="next">다음</string>
+    <string name="finish">완료</string>
+    <string name="complete">확인</string>
 </resources>

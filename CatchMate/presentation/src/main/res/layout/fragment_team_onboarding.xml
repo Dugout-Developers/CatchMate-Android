@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey0">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_team_onboarding_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_team_onboarding_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="24dp" />
+
+    <include
+        android:id="@+id/layout_team_onboarding_header"
+        layout="@layout/layout_header_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_team_onboarding_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/team_onboarding_title1"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/layout_team_onboarding_header" />
+
+    <TextView
+        android:id="@+id/tv_team_onboarding_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/team_onboarding_title2"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_team_onboarding_title1" />
+
+    <ImageView
+        android:id="@+id/iv_team_onboarding_essential_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/vec_all_essential_mark"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_team_onboarding_title2"
+        app:layout_constraintStart_toEndOf="@+id/tv_team_onboarding_title2"
+        app:layout_constraintTop_toTopOf="@+id/tv_team_onboarding_title2" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/layout_team_onboarding_footer"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_team_onboarding_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_team_onboarding_title2">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_nc"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_samsung"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_nc"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_nc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_nc_dinos" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_samsung"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_ssg"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_nc"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_samsung"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_samsung"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_samsung_lions" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_ssg"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_samsung"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_ssg"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_ssg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_ssg_landers" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_doosan"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_kt"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_team_onboarding_nc">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_doosan"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_doosan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_doosan_bears" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_kt"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_doosan"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_hanwha"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_doosan"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_doosan">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_kt"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_kt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_kt_wiz" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_hanwha"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_kt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_kt"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_kt">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_hanwha"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_hanwha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_hanwha_eagles" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_lotte"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/shape_signup_team_selected_bg"
+
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_kia"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_team_onboarding_doosan">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_lotte"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_lotte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_lotte_giants" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_kia"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_lotte"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_lg"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_lotte"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_lotte">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_kia"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_kia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_kia_tigers" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_lg"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_kia"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_kia"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_kia">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_lg"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_lg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_lg_twins" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_kiwoom"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+
+                android:layout_marginBottom="56dp"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_pacifist"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_team_onboarding_lotte">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_kiwoom"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_kiwoom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/team_kiwoom_heroes" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_pacifist"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_kiwoom"
+                app:layout_constraintEnd_toStartOf="@+id/cv_team_onboarding_baseball_beginner"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_kiwoom"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_kiwoom">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_pacifist"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_pacifist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/pacifist" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_team_onboarding_baseball_beginner"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_signup_team_selected_bg"
+                app:cardCornerRadius="8dp"
+
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_team_onboarding_pacifist"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cv_team_onboarding_pacifist"
+                app:layout_constraintTop_toTopOf="@+id/cv_team_onboarding_pacifist">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_team_onboarding_baseball_beginner"
+                        android:layout_width="95dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+
+                    <TextView
+                        android:id="@+id/tv_team_onboarding_baseball_beginner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/baseball_beginner" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/layout_team_onboarding_footer"
+        layout="@layout/layout_footer_one_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
