@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.post.AddPostFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_add_post_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="18dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_add_post_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="18dp" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_add_post_footer"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_add_post_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_add_post_left"
+        app:layout_constraintTop_toBottomOf="@+id/imgbtn_add_post_back">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_add_post_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/edt_add_post_people_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_title" />
+
+            <TextView
+                android:id="@+id/tv_add_post_game_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/post_game_info"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_people_count" />
+
+            <ImageView
+                android:id="@+id/iv_add_post_essential_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/vec_all_essential_mark"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_game_info"
+                app:layout_constraintStart_toEndOf="@+id/tv_add_post_game_info"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_game_info" />
+
+            <EditText
+                android:id="@+id/edt_add_post_game_date_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_post_game_info" />
+
+            <EditText
+                android:id="@+id/edt_add_post_home_team"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="17dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toStartOf="@+id/tv_add_post_versus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_game_date_time" />
+
+            <TextView
+                android:id="@+id/tv_add_post_versus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/versus"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_add_post_home_team"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edt_add_post_home_team" />
+
+            <EditText
+                android:id="@+id/edt_add_post_away_team"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_add_post_versus"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_game_date_time" />
+
+            <EditText
+                android:id="@+id/edt_add_post_place"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_home_team" />
+
+            <TextView
+                android:id="@+id/tv_add_post_additional_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/post_additional_info"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_place" />
+
+            <ImageView
+                android:id="@+id/iv_add_post_essential_mark2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/vec_all_essential_mark"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_additional_info"
+                app:layout_constraintStart_toEndOf="@+id/tv_add_post_additional_info"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_additional_info" />
+
+            <EditText
+                android:id="@+id/edt_add_post_additional_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_post_additional_info" />
+
+            <TextView
+                android:id="@+id/tv_add_post_preference_gender_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/post_preference_gender"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_additional_info" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipgroup_add_post_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:chipSpacingHorizontal="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_post_preference_gender_title"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_gender_female"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/female" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_gender_male"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/male" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <TextView
+                android:id="@+id/tv_add_post_preference_age_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/post_preference_age"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipgroup_add_post_gender" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipgroup_add_post_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="56dp"
+                app:chipSpacingHorizontal="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_post_preference_age_title">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_teenager"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teenager" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_twenties"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/twenties" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_thirties"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/thirties" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_fourties"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fourties" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_fifties"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fifties" />
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/imgbtn_add_post_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="14dp"
+        android:background="@null"
+        android:src="@drawable/shape_all_rect_r6"
+        app:layout_constraintStart_toStartOf="@+id/guideline_add_post_left"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_add_post_temporary_storage"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="14dp"
+        android:background="@null"
+        android:src="@drawable/shape_all_rect_r6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_add_post_right"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/layout_add_post_footer"
+        layout="@layout/layout_footer_one_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
