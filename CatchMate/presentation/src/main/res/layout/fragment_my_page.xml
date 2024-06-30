@@ -43,7 +43,7 @@
                 android:layout_marginTop="14dp"
                 android:text="@string/mypage_title"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
@@ -51,7 +51,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:src=""
                 app:cardBackgroundColor="@color/grey0"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/mypage_menu_title_life"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_my_page_profile" />
 
             <LinearLayout
@@ -186,8 +185,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_my_post" />
 
             <LinearLayout
@@ -223,8 +222,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_sent_join" />
 
             <LinearLayout
@@ -261,8 +260,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_received_join" />
 
             <TextView
@@ -309,8 +308,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_push_notification" />
 
             <LinearLayout
@@ -347,8 +346,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_account_management" />
 
             <LinearLayout
@@ -381,12 +380,12 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/divider5"
+                android:id="@+id/divider6"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="#F5F5F5"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_my_page_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_my_page_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_page_menu_service_center" />
 
             <LinearLayout
@@ -401,7 +400,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider5">
+                app:layout_constraintTop_toBottomOf="@+id/divider6">
 
                 <TextView
                     android:id="@+id/tv_my_page_information"
