@@ -130,12 +130,12 @@
             android:id="@+id/chip_signup_female"
             style="@style/CustomGenderChip"
             android:gravity="center"
-            android:text="@string/signup_gender_female" />
+            android:text="@string/female" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_signup_male"
             style="@style/CustomGenderChip"
-            android:text="@string/signup_gender_male" />
+            android:text="@string/male" />
 
     </com.google.android.material.chip.ChipGroup>
 

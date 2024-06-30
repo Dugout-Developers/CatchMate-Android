@@ -15,6 +15,10 @@
 
     <string name="badge_cheer_leader">응원단장</string>
 
+    <string name="female">여성</string>
+    <string name="male">남성</string>
+    <string name="posting">등록</string>
+    <string name="versus">VS</string>
     <string name="next">다음</string>
     <string name="finish">완료</string>
     <string name="complete">확인</string>

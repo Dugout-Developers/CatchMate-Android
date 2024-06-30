@@ -12,7 +12,7 @@
     <item
         android:id="@+id/menuitem_post"
         android:icon="@drawable/shape_all_rect_r6"
-        android:title="@string/home_menu_post" />
+        android:title="@string/posting" />
     <item
         android:id="@+id/menuitem_notice"
         android:icon="@drawable/shape_all_rect_r6"
