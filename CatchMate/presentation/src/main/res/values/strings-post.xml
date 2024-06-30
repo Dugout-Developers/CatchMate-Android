@@ -1,0 +1,11 @@
+<resources>
+    <string name="post_game_info">경기 정보</string>
+    <string name="post_additional_info">추가 정보</string>
+    <string name="post_preference_gender">선호 성별</string>
+    <string name="post_preference_age">선호 나이대</string>
+    <string name="teenager">10대</string>
+    <string name="twenties">20대</string>
+    <string name="thirties">30대</string>
+    <string name="fourties">40대</string>
+    <string name="fifties">50대 이상</string>
+</resources>
