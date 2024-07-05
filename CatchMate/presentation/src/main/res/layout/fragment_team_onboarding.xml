@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:src="@drawable/vec_all_essential_mark"
+        android:src="@drawable/vec_all_essential_mark_6dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_team_onboarding_title2"
         app:layout_constraintStart_toEndOf="@+id/tv_team_onboarding_title2"
         app:layout_constraintTop_toTopOf="@+id/tv_team_onboarding_title2" />
@@ -103,7 +103,7 @@
                         android:id="@+id/iv_team_onboarding_nc"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_nc"
@@ -142,7 +142,7 @@
                         android:id="@+id/iv_team_onboarding_samsung"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_samsung"
@@ -182,7 +182,7 @@
                         android:id="@+id/iv_team_onboarding_ssg"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_ssg"
@@ -223,7 +223,7 @@
                         android:id="@+id/iv_team_onboarding_doosan"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_doosan"
@@ -263,7 +263,7 @@
                         android:id="@+id/iv_team_onboarding_kt"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_kt"
@@ -303,7 +303,7 @@
                         android:id="@+id/iv_team_onboarding_hanwha"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_hanwha"
@@ -344,7 +344,7 @@
                         android:id="@+id/iv_team_onboarding_lotte"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_lotte"
@@ -384,7 +384,7 @@
                         android:id="@+id/iv_team_onboarding_kia"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_kia"
@@ -424,7 +424,7 @@
                         android:id="@+id/iv_team_onboarding_lg"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_lg"
@@ -467,7 +467,7 @@
                         android:id="@+id/iv_team_onboarding_kiwoom"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_kiwoom"
@@ -507,7 +507,7 @@
                         android:id="@+id/iv_team_onboarding_pacifist"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_pacifist"
@@ -547,7 +547,7 @@
                         android:id="@+id/iv_team_onboarding_baseball_beginner"
                         android:layout_width="95dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/vec_all_bottom_sheet_handle" />
+                        android:src="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
                     <TextView
                         android:id="@+id/tv_team_onboarding_baseball_beginner"
