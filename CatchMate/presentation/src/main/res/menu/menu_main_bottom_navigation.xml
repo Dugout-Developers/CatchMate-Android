@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/menuitem_home"
-        android:icon="@drawable/shape_all_rect_r6"
+        android:icon="@drawable/vec_bottom_nav_home_20dp"
         android:title="@string/home_menu_home" />
     <item
-        android:id="@+id/menuitem_chatting"
-        android:icon="@drawable/shape_all_rect_r6"
-        android:title="@string/home_menu_chatting" />
+        android:id="@+id/menuitem_favorite"
+        android:icon="@drawable/vec_bottom_nav_favorite_20dp"
+        android:title="@string/home_menu_favorite" />
     <item
         android:id="@+id/menuitem_post"
-        android:icon="@drawable/shape_all_rect_r6"
+        android:icon="@drawable/vec_bottom_nav_post_20dp"
         android:title="@string/posting" />
     <item
-        android:id="@+id/menuitem_notice"
-        android:icon="@drawable/shape_all_rect_r6"
-        android:title="@string/home_menu_notice" />
+        android:id="@+id/menuitem_chatting"
+        android:icon="@drawable/vec_bottom_nav_chat_20dp"
+        android:title="@string/home_menu_chatting" />
     <item
         android:id="@+id/menuitem_mypage"
-        android:icon="@drawable/shape_all_rect_r6"
+        android:icon="@drawable/vec_bottom_nav_user_20dp"
         android:title="@string/home_menu_mypage" />
 </menu>
