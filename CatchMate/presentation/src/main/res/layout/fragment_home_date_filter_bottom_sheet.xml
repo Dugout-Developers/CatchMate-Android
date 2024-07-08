@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vec_all_bottom_sheet_handle" />
+        app:srcCompat="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
     <CalendarView
         android:id="@+id/calendarview_datebottomsheet"

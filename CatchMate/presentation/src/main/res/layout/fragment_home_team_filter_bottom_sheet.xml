@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vec_all_bottom_sheet_handle" />
+        app:srcCompat="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedsv_team"
