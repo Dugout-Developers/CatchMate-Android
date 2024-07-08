@@ -26,11 +26,26 @@ class AddPostFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutAddPostFooter.btnFooterOne.setText(R.string.posting)
+        initHeader()
+        initFooter()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initHeader() {
+        binding.layoutAddPostHeader.run {
+            imgbtnHeaderTextBack.setOnClickListener {
+                // back
+            }
+            tvHeaderTextTitle.visibility = View.GONE
+            tvHeaderTextSub.setText(R.string.temporary_storage)
+        }
+    }
+
+    private fun initFooter() {
+        binding.layoutAddPostFooter.btnFooterOne.setText(R.string.post_complete)
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey0"
     tools:context=".view.post.AddPostFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -11,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="18dp"
+        app:layout_constraintGuide_begin="@dimen/main_grid_margin"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,61 +21,116 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="18dp" />
+        app:layout_constraintGuide_end="@dimen/main_grid_margin" />
+
+    <include
+        android:id="@+id/layout_add_post_header"
+        layout="@layout/layout_header_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="14dp"
+        android:scrollbarSize="0dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_add_post_footer"
         app:layout_constraintEnd_toStartOf="@+id/guideline_add_post_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_add_post_left"
-        app:layout_constraintTop_toBottomOf="@+id/imgbtn_add_post_back">
+        app:layout_constraintTop_toBottomOf="@+id/layout_add_post_header">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/tv_add_post_title_basic_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/smedium"
+                android:text="@string/post_basic_info"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_add_post_essential_mark_basic_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/xtiny"
+                android:src="@drawable/vec_all_essential_mark_6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_title_basic_info"
+                app:layout_constraintStart_toEndOf="@+id/tv_add_post_title_basic_info"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_title_basic_info" />
+
             <EditText
                 android:id="@+id/edt_add_post_title"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/xsmall"
+                android:background="@drawable/selector_all_edt_bg"
                 android:ems="10"
+                android:hint="@string/post_edt_hint_title"
                 android:inputType="text"
-                android:text="Name"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_post_title_basic_info" />
 
             <EditText
                 android:id="@+id/edt_add_post_people_count"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/selector_all_edt_bg"
                 android:ems="10"
-                android:inputType="text"
-                android:text="Name"
+                android:hint="@string/post_edt_hint_count"
+                android:inputType="number"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_title" />
 
             <TextView
+                android:id="@+id/tv_add_post_count_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/small"
+                android:text="@string/post_edt_hint_count_unit"
+                android:textAppearance="@style/Typography.Body02.SemiBold"
+                android:textColor="@color/grey400"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_add_post_people_count"
+                app:layout_constraintEnd_toEndOf="@+id/edt_add_post_people_count"
+                app:layout_constraintTop_toTopOf="@+id/edt_add_post_people_count" />
+
+            <TextView
                 android:id="@+id/tv_add_post_game_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/medium"
                 android:text="@string/post_game_info"
-                android:textSize="18sp"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_people_count" />
 
             <ImageView
-                android:id="@+id/iv_add_post_essential_mark"
+                android:id="@+id/iv_add_post_essential_mark_game_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/vec_all_essential_mark"
+                android:layout_marginStart="@dimen/xtiny"
+                android:src="@drawable/vec_all_essential_mark_6dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_game_info"
                 app:layout_constraintStart_toEndOf="@+id/tv_add_post_game_info"
                 app:layout_constraintTop_toTopOf="@+id/tv_add_post_game_info" />
@@ -82,58 +138,73 @@
             <EditText
                 android:id="@+id/edt_add_post_game_date_time"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/layout_height"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/shape_all_edt_default_bg"
                 android:ems="10"
+                android:hint="@string/post_edt_hint_game_date_time"
                 android:inputType="text"
-                android:text="Name"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_add_post_game_info" />
 
             <EditText
                 android:id="@+id/edt_add_post_home_team"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="17dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/tiny"
+                android:layout_marginRight="@dimen/gutter"
+                android:background="@drawable/shape_all_edt_default_bg"
                 android:ems="10"
+                android:hint="@string/post_edt_hint_home"
                 android:inputType="text"
-                android:text="Name"
-                app:layout_constraintEnd_toStartOf="@+id/tv_add_post_versus"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
+                app:layout_constraintEnd_toStartOf="@+id/edt_add_post_away_team"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_game_date_time" />
-
-            <TextView
-                android:id="@+id/tv_add_post_versus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/versus"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_add_post_home_team"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edt_add_post_home_team" />
 
             <EditText
                 android:id="@+id/edt_add_post_away_team"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/shape_all_edt_default_bg"
                 android:ems="10"
+                android:hint="@string/post_edt_hint_away"
                 android:inputType="text"
-                android:text="Name"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_add_post_versus"
+                app:layout_constraintStart_toEndOf="@+id/edt_add_post_home_team"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_game_date_time" />
 
             <EditText
                 android:id="@+id/edt_add_post_place"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/shape_all_edt_default_bg"
                 android:ems="10"
+                android:hint="@string/post_edt_hint_place"
                 android:inputType="text"
-                android:text="Name"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_home_team" />
@@ -142,11 +213,44 @@
                 android:id="@+id/tv_add_post_additional_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/medium"
                 android:text="@string/post_additional_info"
-                android:textSize="16sp"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_place" />
+
+            <ImageView
+                android:id="@+id/iv_add_post_essential_mark_additional_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/xtiny"
+                android:src="@drawable/vec_all_essential_mark_6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_additional_info"
+                app:layout_constraintStart_toEndOf="@+id/tv_add_post_additional_info"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_additional_info" />
+
+            <TextView
+                android:id="@+id/tv_add_post_additional_info_letter_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_additional_info_letter_count_limit"
+                app:layout_constraintEnd_toStartOf="@+id/tv_add_post_additional_info_letter_count_limit"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_additional_info_letter_count_limit"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/tv_add_post_additional_info_letter_count_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/post_letter_count_limit"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_additional_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_add_post_additional_info" />
 
             <ImageView
                 android:id="@+id/iv_add_post_essential_mark2"
@@ -161,11 +265,20 @@
             <EditText
                 android:id="@+id/edt_add_post_additional_info"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="170dp"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/selector_all_edt_bg"
                 android:ems="10"
-                android:inputType="text"
-                android:text="Name"
+                android:gravity="top|left"
+                android:hint="@string/post_edt_hint_additional_info"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="@dimen/small"
+                android:paddingTop="17dp"
+                android:paddingRight="@dimen/small"
+                android:paddingBottom="17dp"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_add_post_additional_info" />
@@ -174,8 +287,10 @@
                 android:id="@+id/tv_add_post_preference_gender_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/medium"
                 android:text="@string/post_preference_gender"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_additional_info" />
 
@@ -183,12 +298,19 @@
                 android:id="@+id/chipgroup_add_post_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/xsmall"
                 app:chipSpacingHorizontal="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_add_post_preference_gender_title"
                 app:singleLine="true"
                 app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_gender_regardless"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/regardless_of_gender" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_gender_female"
@@ -209,8 +331,10 @@
                 android:id="@+id/tv_add_post_preference_age_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/medium"
                 android:text="@string/post_preference_age"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey500"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chipgroup_add_post_gender" />
 
@@ -218,12 +342,19 @@
                 android:id="@+id/chipgroup_add_post_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="56dp"
+                android:layout_marginTop="@dimen/xsmall"
+                android:layout_marginBottom="@dimen/xlarge"
                 app:chipSpacingHorizontal="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_add_post_preference_age_title">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_add_post_age_regardless"
+                    style="@style/CustomePostGenderChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/regardless_of_age" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_teenager"
@@ -262,26 +393,6 @@
             </com.google.android.material.chip.ChipGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <ImageButton
-        android:id="@+id/imgbtn_add_post_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="14dp"
-        android:background="@null"
-        android:src="@drawable/shape_all_rect_r6"
-        app:layout_constraintStart_toStartOf="@+id/guideline_add_post_left"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/imgbtn_add_post_temporary_storage"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="14dp"
-        android:background="@null"
-        android:src="@drawable/shape_all_rect_r6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_add_post_right"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/layout_add_post_footer"

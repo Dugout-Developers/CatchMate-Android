@@ -15,13 +15,13 @@
     </style>
 
     <style name="CustomePostGenderChip" parent="Widget.Material3.Chip.Suggestion">
-        <item name="android:layout_height">33dp</item>
+        <item name="android:layout_height">34dp</item>
         <item name="checkedIconVisible">false</item>
         <item name="chipStrokeColor">@android:color/transparent</item>
         <item name="chipBackgroundColor">@color/color_post_gender_chip_bg</item>
         <item name="closeIconVisible">false</item>
         <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textAppearance">@style/Typography.Body02.SemiBold</item>
         <item name="android:textColor">@color/color_post_gender_chip_text</item>
         <item name="chipCornerRadius">20dp</item>
     </style>
