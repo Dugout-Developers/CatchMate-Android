@@ -26,11 +26,22 @@ class SignupFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutSignupFooter.btnFooterOne.setText(R.string.next)
+        initIndicator()
+        initFooterBtn()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initFooterBtn() {
+        binding.layoutSignupFooter.btnFooterOne.setText(R.string.next)
+    }
+
+    private fun initIndicator() {
+        binding.layoutSignupHeader.imgbtnOnboardingIndicator1.run {
+            setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+        }
     }
 }
