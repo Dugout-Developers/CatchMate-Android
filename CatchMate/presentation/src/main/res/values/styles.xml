@@ -25,4 +25,10 @@
         <item name="android:textColor">@color/color_post_gender_chip_text</item>
         <item name="chipCornerRadius">20dp</item>
     </style>
+
+    <style name="CustomNumberPicker" parent="ThemeOverlay.Material3">
+        <item name="colorControlNormal">@color/grey50</item>
+        <item name="android:textAppearance">@style/Typography.HeadLine03.Medium</item>
+        <item name="android:textColorPrimary">@color/grey800</item>
+    </style>
 </resources>
