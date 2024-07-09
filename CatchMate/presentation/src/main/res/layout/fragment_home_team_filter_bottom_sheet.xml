@@ -2,13 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/grey0">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:id="@+id/draghandleview_teambottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/xsmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +21,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/layout_button"
+        app:layout_constraintBottom_toTopOf="@+id/layout_team_filter_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/draghandleview_teambottomsheet">
@@ -34,309 +35,379 @@
                 android:id="@+id/layout_nc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/small"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_nc"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_nc"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_nc_dinos_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_nc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_nc_dinos" />
+                    android:text="@string/team_nc_dinos"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_nc"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_samsung"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_samsung"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_samsung"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_samsung_lions_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_samsung"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_samsung_lions" />
+                    android:text="@string/team_samsung_lions"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_samsung"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_ssg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_ssg"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_ssg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_ssg_landers_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_ssg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_ssg_landers" />
+                    android:text="@string/team_ssg_landers"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_ssg"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_doosan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_doosan"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_doosan"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_doosan_bears_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_doosan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_doosan_bears" />
+                    android:text="@string/team_doosan_bears"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_doosan"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_kt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_kt"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_kt"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_kt_wiz_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_kt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_kt_wiz" />
+                    android:text="@string/team_kt_wiz"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_kt"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_hanwha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_hanwha"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_hanwha"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_hanwha_eagles_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_hanwha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_hanwha_eagles" />
+                    android:text="@string/team_hanwha_eagles"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_hanwha"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_lotte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_lotte"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_lotte"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_lotte_giants_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_lotte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_lotte_giants" />
+                    android:text="@string/team_lotte_giants"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_lotte"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_kia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_kia"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_kia"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_kia_tigers_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_kia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_kia_tigers" />
+                    android:text="@string/team_kia_tigers"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_kia"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_lg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_lg"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_lg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_lg_twins_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_lg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_lg_twins" />
+                    android:text="@string/team_lg_twins"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_lg"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_kiwoom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/small"
+                android:layout_marginEnd="@dimen/small"
                 android:layout_marginBottom="2dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="11dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="11dp">
 
-                <ImageView
-                    android:id="@+id/iv_kiwoom"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/shape_unselected_logo" />
+                <ToggleButton
+                    android:id="@+id/toggle_kiwoom"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_kiwoom_heroes_bg"
+                    android:textOff="@null"
+                    android:textOn="@null" />
 
                 <TextView
                     android:id="@+id/tv_kiwoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="@dimen/small"
                     android:layout_weight="1"
-                    android:text="@string/team_kiwoom_heroes" />
+                    android:text="@string/team_kiwoom_heroes"
+                    android:textAppearance="@style/Typography.Body01.Medium" />
 
                 <CheckBox
                     android:id="@+id/cb_kiwoom"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_all_check_btn" />
             </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <include
-        android:id="@+id/layout_button"
+        android:id="@+id/layout_team_filter_footer"
         layout="@layout/layout_footer_one_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
