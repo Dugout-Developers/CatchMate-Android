@@ -4,5 +4,5 @@
     <corners android:radius="8dp"/>
     <size android:width="369dp"
         android:height="52dp"/>
-    <solid android:color="@color/brand500"/>
+    <solid android:color="@color/color_all_button"/>
 </shape>

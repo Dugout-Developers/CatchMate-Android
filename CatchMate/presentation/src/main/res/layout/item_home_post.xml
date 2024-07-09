@@ -116,7 +116,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
-                        android:text="@string/home_item_text" />
+                        android:text="@string/versus" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

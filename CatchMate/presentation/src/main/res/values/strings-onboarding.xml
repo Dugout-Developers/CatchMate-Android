@@ -4,8 +4,6 @@
     <string name="signup_nickname">닉네임</string>
     <string name="signup_birth">생년월일</string>
     <string name="signup_gender">성별</string>
-    <string name="signup_gender_female">여성</string>
-    <string name="signup_gender_male">남성</string>
 
     <string name="team_onboarding_title1">%s 님의</string>
     <string name="team_onboarding_title2">응원구단을 알려주세요</string>

@@ -12,7 +12,7 @@
     <item
         android:id="@+id/menuitem_post"
         android:icon="@drawable/vec_bottom_nav_post_20dp"
-        android:title="@string/home_menu_post" />
+        android:title="@string/posting" />
     <item
         android:id="@+id/menuitem_chatting"
         android:icon="@drawable/vec_bottom_nav_chat_20dp"
