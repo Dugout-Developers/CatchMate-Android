@@ -26,7 +26,10 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initFooterButton()
         initNumberPicker()
@@ -48,7 +51,7 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
         binding.npPostHeadCount.run {
             wrapSelectorWheel = false
             minValue = 0
-            maxValue = headCountArray.size -1
+            maxValue = headCountArray.size - 1
             displayedValues = headCountArray
             value = 0
         }
