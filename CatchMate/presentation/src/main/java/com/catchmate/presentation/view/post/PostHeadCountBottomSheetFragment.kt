@@ -43,7 +43,7 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
     private fun initFooterButton() {
         binding.layoutPostHeadCountFooter.btnFooterOne.run {
             isEnabled = true
-            setText(R.string.post_bottom_sheet_button_text)
+            setText(R.string.application)
         }
     }
 

@@ -16,7 +16,6 @@
     <string name="temporary_storage">임시저장</string>
     <string name="post_complete">작성 완료</string>
     <string name="post_register">직관 신청</string>
-    <string name="post_bottom_sheet_button_text">적용</string>
 
     <string name="post_edt_hint_title">제목을 입력해주세요</string>
     <string name="post_edt_hint_count">본인 포함 인원</string>
