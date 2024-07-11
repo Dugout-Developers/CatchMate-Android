@@ -25,11 +25,21 @@ class CheerStyleOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutCheerStyleOnboardingNext.btnFooterOne.setText(R.string.finish)
+        initHeader()
+        initFooterButton()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initFooterButton() {
+        binding.layoutCheerStyleOnboardingNext.btnFooterOne.setText(R.string.next)
+    }
+
+    private fun initHeader() {
+        binding.layoutCheerStyleOnboardingHeader
+            .imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
     }
 }

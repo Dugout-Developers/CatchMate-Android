@@ -2,7 +2,12 @@
     <string name="signup_title_1">딱 맞는 직관 친구 찾기를 위해</string>
     <string name="signup_title_2">정보를 입력해주세요</string>
     <string name="signup_nickname">닉네임</string>
+    <string name="signup_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="signup_nickname_count_limit">/10</string>
+    <string name="signup_nickname_unusable">이미 사용 중인 닉네임입니다</string>
+    <string name="signup_nickname_usable">사용 가능한 닉네임입니다</string>
     <string name="signup_birth">생년월일</string>
+    <string name="signup_birth_hint">생년월일을 입력해주세요 예)000000</string>
     <string name="signup_gender">성별</string>
 
     <string name="team_onboarding_title1">%s 님의</string>
@@ -21,5 +26,5 @@
 
 
     <string name="signup_complete_title">회원가입 완료</string>
-    <string name="signup_complete_sub_title">함께 할수록 재미있는 야구 직관\n캐치메이트에서 구해보세요!</string>
+    <string name="signup_complete_sub_title">함께할수록 더욱 재밌는 야구 직관\n캐치메이트에서 직관 친구를 구해보세요!</string>
 </resources>

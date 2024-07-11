@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintGuide_begin="@dimen/base"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="24dp" />
+        app:layout_constraintGuide_end="@dimen/base" />
 
     <include
         android:id="@+id/layout_cheer_style_onboarding_header"
@@ -34,9 +34,9 @@
         android:id="@+id/tv_cheer_style_onboarding_title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="@dimen/large"
         android:text="@string/team_onboarding_title1"
-        android:textSize="28sp"
+        android:textAppearance="@style/Typography.HeadLine01.Regular"
         app:layout_constraintStart_toStartOf="@+id/guideline_cheer_style_onboarding_left"
         app:layout_constraintTop_toBottomOf="@+id/layout_cheer_style_onboarding_header" />
 
@@ -44,8 +44,9 @@
         android:id="@+id/tv_cheer_style_onboarding_title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xstiny"
         android:text="@string/cheer_style_onboarding_title2"
-        android:textSize="28sp"
+        android:textAppearance="@style/Typography.HeadLine01.Regular"
         app:layout_constraintStart_toStartOf="@+id/guideline_cheer_style_onboarding_left"
         app:layout_constraintTop_toBottomOf="@+id/tv_cheer_style_onboarding_title1" />
 
@@ -63,7 +64,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/mlarge"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/layout_cheer_style_onboarding_next"
         app:layout_constraintEnd_toEndOf="@+id/guideline_cheer_style_onboarding_right"
@@ -107,7 +108,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_director" />
+                        android:text="@string/cheer_style_director"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -144,7 +147,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_mother_bird" />
+                        android:text="@string/cheer_style_mother_bird"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -182,7 +187,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_glutton" />
+                        android:text="@string/cheer_style_glutton"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -219,7 +226,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_cheer_leader" />
+                        android:text="@string/cheer_style_cheer_leader"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -259,7 +268,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_stone" />
+                        android:text="@string/cheer_style_stone"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -296,7 +307,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="@string/cheer_style_bodhisattva" />
+                        android:text="@string/cheer_style_bodhisattva"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

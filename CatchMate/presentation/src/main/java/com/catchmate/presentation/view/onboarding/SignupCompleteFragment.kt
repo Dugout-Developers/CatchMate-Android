@@ -25,11 +25,18 @@ class SignupCompleteFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutSignupCompleteButton.btnFooterOne.setText(R.string.complete)
+        initFooterButton()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initFooterButton() {
+        binding.layoutSignupCompleteButton.btnFooterOne.run {
+            setText(R.string.finish)
+            isEnabled = true
+        }
     }
 }
