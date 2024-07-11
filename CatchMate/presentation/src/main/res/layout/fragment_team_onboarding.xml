@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/team_onboarding_title1"
-        android:textSize="28sp"
+        android:textAppearance="@style/Typography.HeadLine01.Regular"
         app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
         app:layout_constraintTop_toBottomOf="@+id/layout_team_onboarding_header" />
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:text="@string/team_onboarding_title2"
-        android:textSize="28sp"
+        android:textAppearance="@style/Typography.HeadLine01.Regular"
         app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
         app:layout_constraintTop_toBottomOf="@+id/tv_team_onboarding_title1" />
 
