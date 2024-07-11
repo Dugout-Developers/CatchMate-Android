@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/grey0"
     tools:context=".view.home.HomeFilterFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -12,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="18dp"
+        app:layout_constraintGuide_begin="@dimen/main_grid_margin"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -21,50 +22,42 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="18dp" />
+        app:layout_constraintGuide_end="@dimen/main_grid_margin" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_home_filter_top"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/layout_header_home_filter"
+        layout="@layout/layout_header_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_home_filter_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/shape_all_rect_r6"
-        app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
-        app:layout_constraintTop_toTopOf="@+id/guideline_home_filter_top" />
-
-    <ImageView
-        android:id="@+id/iv_home_filter_save"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/shape_all_rect_r6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
-        app:layout_constraintTop_toTopOf="@+id/guideline_home_filter_top" />
 
     <TextView
         android:id="@+id/tv_home_filter_title_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="@dimen/smedium"
         android:text="@string/filter_title_date"
-        android:textSize="16sp"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
-        app:layout_constraintTop_toBottomOf="@+id/iv_home_filter_back" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_header_home_filter" />
 
     <EditText
         android:id="@+id/edt_home_filter_date"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="@dimen/layout_height"
+        android:layout_marginTop="@dimen/xsmall"
+        android:background="@drawable/selector_all_edt_bg"
         android:ems="10"
+        android:hint="@string/home_filter_date_time_hint"
         android:inputType="text"
-        android:text="Name"
+        android:paddingStart="@dimen/small"
+        android:paddingEnd="@dimen/small"
+        android:textAppearance="@style/Typography.Body02.SemiBold"
+        android:textColor="@color/grey800"
+        android:textColorHint="@color/grey400"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
         app:layout_constraintTop_toBottomOf="@+id/tv_home_filter_title_date" />
@@ -73,31 +66,31 @@
         android:id="@+id/tv_home_filter_title_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/medium"
         android:text="@string/filter_title_team"
-        android:textSize="16sp"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
         app:layout_constraintTop_toBottomOf="@+id/edt_home_filter_date" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_nc"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
         android:layout_marginTop="16dp"
-        android:background="@drawable/selector_nc_dinos_bg"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
         app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_samsung"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
         app:layout_constraintTop_toBottomOf="@+id/tv_home_filter_title_team" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_samsung"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_samsung_lions_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
         app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_ssg"
@@ -107,9 +100,9 @@
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_ssg"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_ssg_landers_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
         app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_doosan"
@@ -119,107 +112,140 @@
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_doosan"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_doosan_bears_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
         app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_ssg"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
+        app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_kt"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/toggle_home_filter_ssg"
         app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_ssg" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_kt"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/selector_kt_wiz_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_doosan"
         app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_hanwha"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
-        app:layout_constraintTop_toBottomOf="@+id/toggle_home_filter_nc" />
+        app:layout_constraintStart_toEndOf="@+id/toggle_home_filter_doosan"
+        app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_doosan" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_hanwha"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_hanwha_eagles_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
-        app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_lotte"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_kt"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
         app:layout_constraintStart_toEndOf="@+id/toggle_home_filter_kt"
         app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_kt" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_lotte"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_lotte_giants_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:layout_marginTop="@dimen/tiny"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
-        app:layout_constraintEnd_toStartOf="@+id/toggle_home_filter_kia"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@+id/toggle_home_filter_hanwha"
-        app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_hanwha" />
+        app:layout_constraintEnd_toEndOf="@+id/toggle_home_filter_nc"
+        app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
+        app:layout_constraintTop_toBottomOf="@+id/toggle_home_filter_nc" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_kia"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_kia_tigers_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
+        app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_lotte"
+        app:layout_constraintEnd_toEndOf="@+id/toggle_home_filter_samsung"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@+id/toggle_home_filter_lotte"
+        app:layout_constraintStart_toStartOf="@+id/toggle_home_filter_samsung"
         app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_lotte" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_lg"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/selector_lg_twins_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
-        app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
-        app:layout_constraintTop_toBottomOf="@+id/toggle_home_filter_kt" />
+        app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_kia"
+        app:layout_constraintEnd_toEndOf="@+id/toggle_home_filter_ssg"
+        app:layout_constraintStart_toStartOf="@+id/toggle_home_filter_ssg"
+        app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_kia" />
 
     <ToggleButton
         android:id="@+id/toggle_home_filter_kiwoom"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:background="@drawable/selector_kiwoom_heroes_bg"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
+        android:background="@drawable/selector_all_team_toggle"
         android:textOff="@null"
         android:textOn="@null"
-        app:layout_constraintStart_toStartOf="@+id/toggle_home_filter_hanwha"
+        app:layout_constraintBottom_toBottomOf="@+id/toggle_home_filter_lg"
+        app:layout_constraintEnd_toEndOf="@+id/toggle_home_filter_doosan"
+        app:layout_constraintStart_toStartOf="@+id/toggle_home_filter_doosan"
         app:layout_constraintTop_toTopOf="@+id/toggle_home_filter_lg" />
 
     <TextView
         android:id="@+id/tv_home_filter_title_head_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/medium"
         android:text="@string/filter_title_head_count"
-        android:textSize="16sp"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
         app:layout_constraintTop_toBottomOf="@+id/toggle_home_filter_lg" />
 
     <EditText
         android:id="@+id/edt_home_filter_head_count"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="@dimen/layout_height"
+        android:layout_marginTop="@dimen/xsmall"
+        android:background="@drawable/selector_all_edt_bg"
         android:ems="10"
-        android:inputType="text"
-        android:text="Name"
+        android:hint="@string/post_edt_hint_count"
+        android:inputType="number"
+        android:paddingStart="@dimen/small"
+        android:paddingEnd="@dimen/small"
+        android:singleLine="true"
+        android:textAppearance="@style/Typography.Body02.SemiBold"
+        android:textColor="@color/grey800"
+        android:textColorHint="@color/grey400"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_filter_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_filter_left"
         app:layout_constraintTop_toBottomOf="@+id/tv_home_filter_title_head_count" />
+
+    <TextView
+        android:id="@+id/tv_home_filter_head_count_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/small"
+        android:text="@string/post_edt_hint_count_unit"
+        android:textAppearance="@style/Typography.Body02.SemiBold"
+        android:textColor="@color/grey400"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_home_filter_head_count"
+        app:layout_constraintEnd_toEndOf="@+id/edt_home_filter_head_count"
+        app:layout_constraintTop_toTopOf="@+id/edt_home_filter_head_count" />
+
+    <include
+        android:id="@+id/layout_footer_home_filter"
+        layout="@layout/layout_footer_one_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
