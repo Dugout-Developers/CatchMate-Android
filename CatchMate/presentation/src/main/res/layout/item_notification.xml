@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/grey0"
     android:paddingLeft="18dp"
     android:paddingTop="16dp"
     android:paddingRight="18dp"
@@ -20,11 +21,13 @@
 
     <TextView
         android:id="@+id/tv_notification_item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginBottom="2dp"
+        android:textAppearance="@style/Typography.Body01.Medium"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/iv_notification_item_profile"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,6 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAppearance="@style/Typography.Body02.SemiBold"
+            android:textColor="@color/grey500"
             tools:text="06.09 | " />
 
         <TextView
@@ -55,6 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAppearance="@style/Typography.Body02.SemiBold"
+            android:textColor="@color/grey500"
             tools:text="17:00 | " />
 
         <TextView
@@ -62,6 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAppearance="@style/Typography.Body02.SemiBold"
+            android:textColor="@color/grey500"
             tools:text="잠실" />
     </LinearLayout>
 
