@@ -5,15 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catchmate.presentation.R
+import com.catchmate.presentation.databinding.FragmentHomeTeamFilterBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HomeTeamFilterBottomSheetFragment : BottomSheetDialogFragment() {
+    private var _binding: FragmentHomeTeamFilterBottomSheetBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_team_filter_bottom_sheet, container, false)
+        _binding = FragmentHomeTeamFilterBottomSheetBinding.inflate(inflater, container, false)
+        return binding.root
     }
-    // 체크박스마다 setOnCheckedChangeListener 달아서 이미지뷰 리소스를 변경하기
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initFooterButton()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initFooterButton() {
+        binding.layoutTeamFilterFooter.btnFooterOne.setText(R.string.application)
+    }
 }
