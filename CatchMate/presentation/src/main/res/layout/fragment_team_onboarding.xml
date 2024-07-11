@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintGuide_begin="@dimen/base"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="24dp" />
+        app:layout_constraintGuide_end="@dimen/base" />
 
     <include
         android:id="@+id/layout_team_onboarding_header"
@@ -35,7 +35,7 @@
         android:id="@+id/tv_team_onboarding_title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="50dp"
         android:text="@string/team_onboarding_title1"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
@@ -45,6 +45,7 @@
         android:id="@+id/tv_team_onboarding_title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="@string/team_onboarding_title2"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_team_onboarding_left"
@@ -63,7 +64,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/mlarge"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/layout_team_onboarding_footer"
         app:layout_constraintEnd_toStartOf="@+id/guideline_team_onboarding_right"
@@ -110,7 +111,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_nc_dinos" />
+                        android:text="@string/team_nc_dinos"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -149,7 +152,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_samsung_lions" />
+                        android:text="@string/team_samsung_lions"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -189,7 +194,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_ssg_landers" />
+                        android:text="@string/team_ssg_landers"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -230,7 +237,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_doosan_bears" />
+                        android:text="@string/team_doosan_bears"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -270,7 +279,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_kt_wiz" />
+                        android:text="@string/team_kt_wiz"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -310,7 +321,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_hanwha_eagles" />
+                        android:text="@string/team_hanwha_eagles"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -351,7 +364,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_lotte_giants" />
+                        android:text="@string/team_lotte_giants"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -391,7 +406,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_kia_tigers" />
+                        android:text="@string/team_kia_tigers"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -431,7 +448,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_lg_twins" />
+                        android:text="@string/team_lg_twins"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -474,7 +493,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/team_kiwoom_heroes" />
+                        android:text="@string/team_kiwoom_heroes"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -514,7 +535,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/pacifist" />
+                        android:text="@string/pacifist"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -554,7 +577,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="@string/baseball_beginner" />
+                        android:text="@string/baseball_beginner"
+                        android:textAppearance="@style/Typography.Body02.SemiBold"
+                        android:textColor="@color/grey700" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

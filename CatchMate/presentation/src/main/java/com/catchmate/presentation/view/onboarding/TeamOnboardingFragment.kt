@@ -26,11 +26,21 @@ class TeamOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutTeamOnboardingFooter.btnFooterOne.setText(R.string.next)
+        initIndicator()
+        initFooterBtn()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initIndicator() {
+        binding.layoutTeamOnboardingHeader.imgbtnOnboardingIndicator2
+            .setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+    }
+
+    private fun initFooterBtn() {
+        binding.layoutTeamOnboardingFooter.btnFooterOne.setText(R.string.next)
     }
 }
