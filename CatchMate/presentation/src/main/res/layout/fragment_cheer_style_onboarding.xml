@@ -90,7 +90,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
@@ -129,7 +129,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
@@ -169,7 +169,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
@@ -208,7 +208,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
@@ -250,7 +250,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
@@ -289,7 +289,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_signup_team_default_bg"
+                    android:background="@drawable/shape_all_team_toggle_default_bg"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="24dp"
