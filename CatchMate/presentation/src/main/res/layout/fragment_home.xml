@@ -4,51 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F9FA"
-    tools:context=".view.home.HomeFragment" >
+    android:background="@color/grey0"
+    tools:context=".view.home.HomeFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_home_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="18dp"
+        app:layout_constraintGuide_begin="@dimen/main_grid_margin"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_home_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="822dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_end="18dp" />
+        app:layout_constraintGuide_end="@dimen/main_grid_margin" />
 
-    <ImageView
-        android:id="@+id/iv_home_logo"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/layout_header_home"
+        layout="@layout/layout_header_home"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/vec_home_logo_text"
-        app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedsv_home"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:fillViewport="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
-        app:layout_constraintTop_toBottomOf="@+id/iv_home_logo">
+        app:layout_constraintTop_toBottomOf="@+id/layout_header_home">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginTop="@dimen/tiny"
+            android:layout_marginBottom="@dimen/tiny">
 
             <include
                 android:id="@+id/chip_home_all_filter"
@@ -67,7 +65,7 @@
                 android:layout_weight="1" />
 
             <include
-                android:id="@+id/chip_home_place_filter"
+                android:id="@+id/chip_home_team_filter"
                 layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,16 +74,25 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <View
+        android:id="@+id/divider_home_under_filter"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_posts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/xstiny"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
-        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home"
-        tools:itemCount="4"
+        app:layout_constraintTop_toBottomOf="@+id/divider_home_under_filter"
+        tools:itemCount="8"
         tools:listitem="@layout/item_home_post" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

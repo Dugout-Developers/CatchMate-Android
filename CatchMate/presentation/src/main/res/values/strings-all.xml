@@ -22,4 +22,5 @@
     <string name="next">다음</string>
     <string name="finish">완료</string>
     <string name="complete">확인</string>
+    <string name="application">적용</string>
 </resources>

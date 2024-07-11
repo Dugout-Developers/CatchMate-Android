@@ -9,31 +9,50 @@
         android:id="@+id/cv_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/grey50"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:padding="10dp">
 
             <ImageView
                 android:id="@+id/iv_filter_icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginRight="7dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/shape_all_rect_r6" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_filter_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginStart="@dimen/tiny"
+                android:textAppearance="@style/Typography.Body03.Medium"
+                android:textColor="@color/grey700"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_filter_icon"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="필터" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_filter_selected_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tiny"
+                android:textAppearance="@style/Typography.Body03.SemiBold"
+                android:textColor="@color/brand500"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_filter_name"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="07.03" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
