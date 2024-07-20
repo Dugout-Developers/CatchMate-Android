@@ -13,8 +13,9 @@ class HomeTeamFilterBottomSheetFragment : BottomSheetDialogFragment() {
     val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeTeamFilterBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
@@ -22,7 +23,7 @@ class HomeTeamFilterBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(
         view: View,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
         initFooterButton()

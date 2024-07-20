@@ -11,6 +11,7 @@ import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBindin
 class CheerStyleOnboardingFragment : Fragment() {
     private var _binding: FragmentCheerStyleOnboardingBinding? = null
     val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

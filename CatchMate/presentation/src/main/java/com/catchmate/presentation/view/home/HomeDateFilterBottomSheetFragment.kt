@@ -9,8 +9,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HomeDateFilterBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home_date_filter_bottom_sheet, container, false)
