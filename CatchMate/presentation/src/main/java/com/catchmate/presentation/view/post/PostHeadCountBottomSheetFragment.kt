@@ -20,7 +20,7 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
             "4명",
             "5명",
             "6명",
-            "7명", 
+            "7명",
             "8명",
         )
 
