@@ -41,6 +41,7 @@ class CheerStyleOnboardingFragment : Fragment() {
 
     private fun initHeader() {
         binding.layoutCheerStyleOnboardingHeader
-            .imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            .imgbtnOnboardingIndicator3
+            .setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
     }
 }
