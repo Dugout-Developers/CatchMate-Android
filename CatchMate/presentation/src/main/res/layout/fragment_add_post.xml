@@ -257,7 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:src="@drawable/vec_all_essential_mark"
+                android:src="@drawable/vec_all_essential_mark_6dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_add_post_additional_info"
                 app:layout_constraintStart_toEndOf="@+id/tv_add_post_additional_info"
                 app:layout_constraintTop_toTopOf="@+id/tv_add_post_additional_info" />

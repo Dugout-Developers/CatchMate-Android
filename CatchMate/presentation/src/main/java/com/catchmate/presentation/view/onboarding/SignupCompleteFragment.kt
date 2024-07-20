@@ -11,6 +11,7 @@ import com.catchmate.presentation.databinding.FragmentSignupCompleteBinding
 class SignupCompleteFragment : Fragment() {
     private var _binding: FragmentSignupCompleteBinding? = null
     val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

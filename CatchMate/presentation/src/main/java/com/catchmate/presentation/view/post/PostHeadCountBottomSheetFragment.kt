@@ -14,7 +14,14 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val headCountArray =
         arrayOf(
-            "1명", "2명", "3명", "4명", "5명", "6명", "7명", "8명",
+            "1명",
+            "2명",
+            "3명",
+            "4명",
+            "5명",
+            "6명",
+            "7명",
+            "8명",
         )
 
     override fun onCreateView(

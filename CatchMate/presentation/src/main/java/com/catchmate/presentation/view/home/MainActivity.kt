@@ -1,7 +1,7 @@
 package com.catchmate.presentation.view.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.catchmate.presentation.R
 
 class MainActivity : AppCompatActivity() {
