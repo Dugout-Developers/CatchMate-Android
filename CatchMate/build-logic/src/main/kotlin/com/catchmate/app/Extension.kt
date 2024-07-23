@@ -16,7 +16,8 @@ internal val Project.libraryExtension: CommonExtension<*, *, *, *>
     get() = extensions.getByType<LibraryExtension>()
 
 internal val Project.androidExtension: CommonExtension<*, *, *, *>
-    get() = runCatching { libraryExtension }
+    get() = 
+        runCatching { libraryExtension }
         .recoverCatching { applicationExtension }
         .onFailure { println("Could not find Library or Application extension from this project") }
         .getOrThrow()
