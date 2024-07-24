@@ -12,4 +12,5 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(libs.kakao.user)
+    implementation(libs.naver.user)
 }

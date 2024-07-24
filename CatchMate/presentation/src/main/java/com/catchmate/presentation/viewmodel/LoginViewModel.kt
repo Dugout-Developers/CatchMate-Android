@@ -24,4 +24,10 @@ class LoginViewModel
                 loginUseCase.loginWithKakao()
             }
         }
+
+        fun naverLogin() {
+            viewModelScope.launch {
+                loginUseCase.loginWithNaver()
+            }
+        }
     }
