@@ -32,6 +32,9 @@ circleimageview = "3.1.0"
 # Kakao
 kakao = "2.20.3"
 
+# Naver
+naver = "5.8.0"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -61,6 +64,8 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+
+naver-user = { group = "com.navercorp.nid", name = "oauth", version.ref = "naver" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
