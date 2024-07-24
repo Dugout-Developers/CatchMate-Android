@@ -10,16 +10,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-) : ViewModel() {
-    private val _loginResponse = MutableLiveData<String>()
-    val loginResponse: LiveData<String>
-        get() = _loginResponse
+class LoginViewModel
+    @Inject
+    constructor(
+        private val loginUseCase: LoginUseCase,
+    ) : ViewModel() {
+        private val _loginResponse = MutableLiveData<String>()
+        val loginResponse: LiveData<String>
+            get() = _loginResponse
 
-    fun kakaoLogin() {
-        viewModelScope.launch {
-            loginUseCase.loginWithKakao()
+        fun kakaoLogin() {
+            viewModelScope.launch {
+                loginUseCase.loginWithKakao()
+            }
         }
     }
-}

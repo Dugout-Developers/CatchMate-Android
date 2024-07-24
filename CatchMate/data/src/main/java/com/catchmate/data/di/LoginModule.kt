@@ -11,7 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object LoginModule {
     @Provides
-    fun provideLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository {
-        return loginRepositoryImpl
-    }
+    fun provideLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository = loginRepositoryImpl
 }
