@@ -32,6 +32,7 @@ class LoginFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initKakaoLoginBtn()
+        initNaverLoginBtn()
     }
 
     override fun onDestroyView() {
@@ -42,6 +43,12 @@ class LoginFragment : Fragment() {
     private fun initKakaoLoginBtn() {
         binding.btnLoginKakao.setOnClickListener {
             loginViewModel.kakaoLogin()
+        }
+    }
+
+    private fun initNaverLoginBtn() {
+        binding.imgbtnLoginNaver.setOnClickListener {
+            loginViewModel.naverLogin()
         }
     }
 }

@@ -11,4 +11,8 @@ class LoginUseCase
         fun loginWithKakao() {
             loginRepository.loginWithKakao()
         }
+
+        fun loginWithNaver() {
+            loginRepository.loginWithNaver()
+        }
     }
