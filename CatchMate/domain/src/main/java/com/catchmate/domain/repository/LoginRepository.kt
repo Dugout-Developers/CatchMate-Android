@@ -4,4 +4,6 @@ interface LoginRepository {
     fun loginWithKakao()
 
     fun loginWithNaver()
+
+    suspend fun loginWithGoogle()
 }

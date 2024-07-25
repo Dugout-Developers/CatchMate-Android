@@ -1,5 +1,6 @@
 package com.catchmate.presentation.viewmodel
 
+import android.credentials.GetCredentialException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,16 @@ class LoginViewModel
         fun naverLogin() {
             viewModelScope.launch {
                 loginUseCase.loginWithNaver()
+            }
+        }
+
+        fun googleLogin() {
+            viewModelScope.launch {
+                try {
+                    loginUseCase.loginWithGoogle()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }

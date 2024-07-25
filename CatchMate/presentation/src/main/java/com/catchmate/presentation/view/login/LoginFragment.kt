@@ -33,6 +33,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initKakaoLoginBtn()
         initNaverLoginBtn()
+        initGoogleLoginBtn()
     }
 
     override fun onDestroyView() {
@@ -49,6 +50,12 @@ class LoginFragment : Fragment() {
     private fun initNaverLoginBtn() {
         binding.imgbtnLoginNaver.setOnClickListener {
             loginViewModel.naverLogin()
+        }
+    }
+
+    private fun initGoogleLoginBtn() {
+        binding.imgbtnLoginGoogle.setOnClickListener {
+            loginViewModel.googleLogin()
         }
     }
 }
