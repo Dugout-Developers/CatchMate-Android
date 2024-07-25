@@ -15,4 +15,8 @@ class LoginUseCase
         fun loginWithNaver() {
             loginRepository.loginWithNaver()
         }
+
+        suspend fun loginWithGoogle() {
+            loginRepository.loginWithGoogle()
+        }
     }

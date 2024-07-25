@@ -30,4 +30,14 @@ class LoginViewModel
                 loginUseCase.loginWithNaver()
             }
         }
+
+        fun googleLogin() {
+            viewModelScope.launch {
+                try {
+                    loginUseCase.loginWithGoogle()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
