@@ -1,6 +1,5 @@
 package com.catchmate.presentation.viewmodel
 
-import android.credentials.GetCredentialException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

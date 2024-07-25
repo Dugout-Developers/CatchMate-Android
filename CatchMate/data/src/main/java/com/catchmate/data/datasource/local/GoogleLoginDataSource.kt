@@ -22,20 +22,23 @@ class GoogleLoginDataSource
             val credentialManager = CredentialManager.create(context)
 
             val googleIdOption: GetGoogleIdOption =
-                GetGoogleIdOption.Builder()
+                GetGoogleIdOption
+                    .Builder()
                     .setFilterByAuthorizedAccounts(false)
                     .setAutoSelectEnabled(true)
                     .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
                     .build()
 
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
+            val request =
+                GetCredentialRequest
+                    .Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build()
 
             return credentialManager.getCredential(context, request)
         }
 
-        fun handleSignIn(result: GetCredentialResponse){
+        fun handleSignIn(result: GetCredentialResponse) {
             val credential = result.credential
 
             if (credential is CustomCredential) {
@@ -46,7 +49,7 @@ class GoogleLoginDataSource
                         val email = googleIdTokenCredential.id
                         val profileUri = googleIdTokenCredential.profilePictureUri
 
-                        Log.i("GoogleInfoSuccess", "idToken : ${idToken}  email : ${email} profileUri : ${profileUri}")
+                        Log.i("GoogleInfoSuccess", "idToken : $idToken  email : $email profileUri : $profileUri")
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("GoogleInfoError", "Received an invalid google id token response", e)
                     }
