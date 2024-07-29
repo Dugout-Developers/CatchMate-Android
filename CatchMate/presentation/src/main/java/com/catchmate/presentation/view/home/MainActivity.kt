@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.homeFragment,
-                    R.id.myPageFragment, -> {
+                    R.id.myPageFragment -> {
                         bottomnavigationviewMain.apply {
                             alpha = 0f
                             visibility = View.VISIBLE
