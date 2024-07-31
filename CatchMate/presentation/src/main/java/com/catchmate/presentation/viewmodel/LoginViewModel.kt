@@ -19,26 +19,30 @@ class LoginViewModel
         private val loginUseCase: LoginUseCase,
         private val authUseCase: AuthUseCase,
     ) : ViewModel() {
+        private val _loginRequest = MutableLiveData<LoginRequest>()
+        val loginRequest: LiveData<LoginRequest>
+            get() = _loginRequest
+
         private val _loginResponse = MutableLiveData<LoginResponse>()
         val loginResponse: LiveData<LoginResponse>
             get() = _loginResponse
 
         fun kakaoLogin() {
             viewModelScope.launch {
-                loginUseCase.loginWithKakao()
+                _loginRequest.value = loginUseCase.loginWithKakao()
             }
         }
 
         fun naverLogin() {
             viewModelScope.launch {
-                loginUseCase.loginWithNaver()
+                _loginRequest.value = loginUseCase.loginWithNaver()
             }
         }
 
         fun googleLogin() {
             viewModelScope.launch {
                 try {
-                    loginUseCase.loginWithGoogle()
+                    _loginRequest.value = loginUseCase.loginWithGoogle()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

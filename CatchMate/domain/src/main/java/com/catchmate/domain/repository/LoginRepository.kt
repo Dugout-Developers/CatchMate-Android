@@ -1,9 +1,11 @@
 package com.catchmate.domain.repository
 
+import com.catchmate.domain.model.LoginRequest
+
 interface LoginRepository {
-    fun loginWithKakao()
+    suspend fun loginWithKakao(): LoginRequest
 
-    fun loginWithNaver()
+    suspend fun loginWithNaver(): LoginRequest
 
-    suspend fun loginWithGoogle()
+    suspend fun loginWithGoogle(): LoginRequest?
 }
