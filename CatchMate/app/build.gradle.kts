@@ -3,6 +3,7 @@ import java.util.Properties
 
 plugins {
     id("catchmate.android.application")
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties()
@@ -38,4 +39,7 @@ dependencies {
 
     implementation(libs.kakao.user)
     implementation(libs.naver.user)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }
