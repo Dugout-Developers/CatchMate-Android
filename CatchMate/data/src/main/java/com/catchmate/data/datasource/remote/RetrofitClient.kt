@@ -9,7 +9,8 @@ class RetrofitClient
     @Inject
     constructor() {
         val retrofit: Retrofit by lazy {
-            Retrofit.Builder()
+            Retrofit
+                .Builder()
                 .baseUrl(BuildConfig.SERVER_DOMAIN)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

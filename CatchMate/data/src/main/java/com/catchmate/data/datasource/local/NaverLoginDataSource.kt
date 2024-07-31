@@ -23,69 +23,71 @@ class NaverLoginDataSource
         @ApplicationContext private val context: Context,
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun loginWithNaver(): LoginRequestDTO = suspendCancellableCoroutine { continuation ->
-            val nidProfileCallback =
-                object : NidProfileCallback<NidProfileResponse> {
-                    override fun onError(
-                        errorCode: Int,
-                        message: String,
-                    ) {
-                        onFailure(errorCode, message)
-                        continuation.resumeWithException(Exception(message))
-                    }
+        suspend fun loginWithNaver(): LoginRequestDTO =
+            suspendCancellableCoroutine { continuation ->
+                val nidProfileCallback =
+                    object : NidProfileCallback<NidProfileResponse> {
+                        override fun onError(
+                            errorCode: Int,
+                            message: String,
+                        ) {
+                            onFailure(errorCode, message)
+                            continuation.resumeWithException(Exception(message))
+                        }
 
-                    override fun onFailure(
-                        httpStatus: Int,
-                        message: String,
-                    ) {
-                        loginFail()
-                        continuation.resumeWithException(Exception(message))
-                    }
+                        override fun onFailure(
+                            httpStatus: Int,
+                            message: String,
+                        ) {
+                            loginFail()
+                            continuation.resumeWithException(Exception(message))
+                        }
 
-                    override fun onSuccess(result: NidProfileResponse) {
-                        if (result.profile != null) {
-                            Log.d("NaverInfoSuccess", "providerId : ${result.profile?.id} profile : ${result.profile?.profileImage} email : ${result.profile?.email}")
-                            result.profile?.let {
-                                val loginRequestDTO = LoginRequestDTO(
-                                    email = it.email!!,
-                                    providerId = it.id!!,
-                                    provider = LoginPlatform.NAVER.toString().lowercase(),
-                                    picture = it.profileImage!!,
-                                    fcmToken =
-                                        runBlocking {
-                                            fcmTokenService.getToken()
-                                        },
-                                )
-                                continuation.resume(loginRequestDTO)
-                            } ?: continuation.resumeWithException(Exception("Profile is null"))
+                        override fun onSuccess(result: NidProfileResponse) {
+                            if (result.profile != null) {
+                                Log.d("NaverInfoSuccess", "providerId : ${result.profile?.id} email : ${result.profile?.email}")
+                                result.profile?.let {
+                                    val loginRequestDTO =
+                                        LoginRequestDTO(
+                                            email = it.email!!,
+                                            providerId = it.id!!,
+                                            provider = LoginPlatform.NAVER.toString().lowercase(),
+                                            picture = it.profileImage!!,
+                                            fcmToken =
+                                                runBlocking {
+                                                    fcmTokenService.getToken()
+                                                },
+                                        )
+                                    continuation.resume(loginRequestDTO)
+                                } ?: continuation.resumeWithException(Exception("Profile is null"))
+                            }
                         }
                     }
-                }
 
-            val oAuthLoginCallback =
-                object : OAuthLoginCallback {
-                    override fun onError(
-                        errorCode: Int,
-                        message: String,
-                    ) {
-                        onFailure(errorCode, message)
+                val oAuthLoginCallback =
+                    object : OAuthLoginCallback {
+                        override fun onError(
+                            errorCode: Int,
+                            message: String,
+                        ) {
+                            onFailure(errorCode, message)
+                        }
+
+                        override fun onFailure(
+                            httpStatus: Int,
+                            message: String,
+                        ) {
+                            loginFail()
+                        }
+
+                        override fun onSuccess() {
+                            Log.d("NaverLoginSuccess", "네이버 로그인 성공")
+                            NidOAuthLogin().callProfileApi(nidProfileCallback)
+                        }
                     }
 
-                    override fun onFailure(
-                        httpStatus: Int,
-                        message: String,
-                    ) {
-                        loginFail()
-                    }
-
-                    override fun onSuccess() {
-                        Log.d("NaverLoginSuccess", "네이버 로그인 성공")
-                        NidOAuthLogin().callProfileApi(nidProfileCallback)
-                    }
-                }
-
-            NaverIdLoginSDK.authenticate(context, oAuthLoginCallback)
-        }
+                NaverIdLoginSDK.authenticate(context, oAuthLoginCallback)
+            }
 
         private fun loginFail() {
             val errorCode = NaverIdLoginSDK.getLastErrorCode().code

@@ -16,7 +16,5 @@ class FCMTokenService : FirebaseMessagingService() {
         super.onMessageReceived(message)
     }
 
-    suspend fun getToken(): String {
-        return FirebaseMessaging.getInstance().token.await()
-    }
+    suspend fun getToken(): String = FirebaseMessaging.getInstance().token.await()
 }

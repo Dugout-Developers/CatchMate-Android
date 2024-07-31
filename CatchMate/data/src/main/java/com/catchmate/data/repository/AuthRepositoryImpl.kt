@@ -16,8 +16,8 @@ class AuthRepositoryImpl
     ) : AuthRepository {
         private val authApi = retrofitClient.createApi<AuthService>()
 
-        override suspend fun postLogin(loginRequest: LoginRequest): LoginResponse? {
-            return try {
+        override suspend fun postLogin(loginRequest: LoginRequest): LoginResponse? =
+            try {
                 val response = authApi.postLogin(AuthMapper.toLoginRequestDTO(loginRequest))
                 if (response.isSuccessful) {
                     Log.d("AuthRepository", "통신 성공 : ${response.code()}")
@@ -30,5 +30,4 @@ class AuthRepositoryImpl
                 e.printStackTrace()
                 null
             }
-        }
     }

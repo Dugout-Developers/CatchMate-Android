@@ -48,13 +48,21 @@ class LoginFragment : Fragment() {
     private fun initViewModel() {
         loginViewModel.loginRequest.observe(viewLifecycleOwner) { loginRequest ->
             if (loginRequest != null) {
-                Log.d("LoginFragment", "LoginRequest\n${loginRequest.email}\n${loginRequest.provider}\n${loginRequest.providerId}\n${loginRequest.picture}\n${loginRequest.fcmToken}")
+                Log.d(
+                    "LoginFragment",
+                    "LoginRequest\n${loginRequest.email}\n${loginRequest.provider}\n" +
+                            "${loginRequest.providerId}\n${loginRequest.picture}\n${loginRequest.fcmToken}"
+                )
                 loginViewModel.postLogin(loginRequest)
             }
         }
         loginViewModel.loginResponse.observe(viewLifecycleOwner) { loginResponse ->
             if (loginResponse != null) {
-                Log.d("LoginFragment", "LoginResponse\nacc:${loginResponse.accessToken}\n ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}")
+                Log.d(
+                    "LoginFragment",
+                    "LoginResponse\nacc:${loginResponse.accessToken}\n" +
+                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}"
+                )
                 when (loginResponse.isFirstLogin) {
                     true -> findNavController().navigate(R.id.signupFragment)
                     false -> findNavController().navigate(R.id.homeFragment)

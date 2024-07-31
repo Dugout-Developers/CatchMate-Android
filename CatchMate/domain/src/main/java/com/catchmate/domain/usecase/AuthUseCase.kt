@@ -10,7 +10,5 @@ class AuthUseCase
     constructor(
         private val authRepository: AuthRepository,
     ) {
-        suspend fun postLogin(loginRequest: LoginRequest): LoginResponse? {
-            return authRepository.postLogin(loginRequest)
-        }
+        suspend fun postLogin(loginRequest: LoginRequest): LoginResponse? = authRepository.postLogin(loginRequest)
     }

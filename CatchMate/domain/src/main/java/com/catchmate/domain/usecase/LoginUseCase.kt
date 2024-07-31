@@ -9,15 +9,9 @@ class LoginUseCase
     constructor(
         private val loginRepository: LoginRepository,
     ) {
-        suspend fun loginWithKakao(): LoginRequest {
-            return loginRepository.loginWithKakao()
-        }
+        suspend fun loginWithKakao(): LoginRequest = loginRepository.loginWithKakao()
 
-        suspend fun loginWithNaver(): LoginRequest {
-            return loginRepository.loginWithNaver()
-        }
+        suspend fun loginWithNaver(): LoginRequest = loginRepository.loginWithNaver()
 
-        suspend fun loginWithGoogle(): LoginRequest? {
-            return loginRepository.loginWithGoogle()
-        }
+        suspend fun loginWithGoogle(): LoginRequest? = loginRepository.loginWithGoogle()
     }
