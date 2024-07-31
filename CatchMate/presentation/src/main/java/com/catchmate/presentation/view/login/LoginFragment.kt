@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
                 Log.d(
                     "LoginFragment",
                     "LoginRequest\n${loginRequest.email}\n${loginRequest.provider}\n" +
-                            "${loginRequest.providerId}\n${loginRequest.picture}\n${loginRequest.fcmToken}"
+                        "${loginRequest.providerId}\n${loginRequest.picture}\n${loginRequest.fcmToken}",
                 )
                 loginViewModel.postLogin(loginRequest)
             }
@@ -61,7 +61,7 @@ class LoginFragment : Fragment() {
                 Log.d(
                     "LoginFragment",
                     "LoginResponse\nacc:${loginResponse.accessToken}\n" +
-                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}"
+                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}",
                 )
                 when (loginResponse.isFirstLogin) {
                     true -> findNavController().navigate(R.id.signupFragment)
