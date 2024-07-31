@@ -3,6 +3,8 @@ package com.catchmate.data.repository
 import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
+import com.catchmate.data.mapper.AuthMapper
+import com.catchmate.domain.model.LoginRequest
 import com.catchmate.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -13,16 +15,23 @@ class LoginRepositoryImpl
         private val naverLoginDataSource: NaverLoginDataSource,
         private val googleLoginDataSource: GoogleLoginDataSource,
     ) : LoginRepository {
-        override fun loginWithKakao() {
-            kakaoLoginDataSource.loginWithKakao()
+        override suspend fun loginWithKakao(): LoginRequest {
+            val loginRequestDTO = kakaoLoginDataSource.loginWithKakao()
+            return AuthMapper.toLoginRequest(loginRequestDTO)
         }
 
-        override fun loginWithNaver() {
-            naverLoginDataSource.loginWithNaver()
+        override suspend fun loginWithNaver(): LoginRequest {
+            val loginRequestDTO = naverLoginDataSource.loginWithNaver()
+            return AuthMapper.toLoginRequest(loginRequestDTO)
         }
 
-        override suspend fun loginWithGoogle() {
+        override suspend fun loginWithGoogle(): LoginRequest? {
             val result = googleLoginDataSource.getCredential()
-            googleLoginDataSource.handleSignIn(result)
+            val loginRequestDTO = googleLoginDataSource.handleSignIn(result)
+            return if (loginRequestDTO == null) {
+                loginRequestDTO
+            } else {
+                AuthMapper.toLoginRequest(loginRequestDTO)
+            }
         }
     }
