@@ -192,12 +192,16 @@
             android:id="@+id/chip_signup_female"
             style="@style/CustomGenderChip"
             android:gravity="center"
-            android:text="@string/female" />
+            android:text="@string/female"
+            android:textAlignment="center"
+            android:textAppearance="@style/Typography.Body02.SemiBold" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_signup_male"
             style="@style/CustomGenderChip"
-            android:text="@string/male" />
+            android:text="@string/male"
+            android:textAlignment="center"
+            android:textAppearance="@style/Typography.Body02.SemiBold" />
 
     </com.google.android.material.chip.ChipGroup>
 
