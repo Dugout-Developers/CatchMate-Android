@@ -57,7 +57,8 @@
         android:layout_marginStart="6dp"
         android:layout_marginBottom="4dp"
         android:text="@string/selectable_mark"
-        android:textSize="11sp"
+        android:textAppearance="@style/Typography.Caption01.SemiBold"
+        android:textColor="@color/grey500"
         app:layout_constraintBottom_toBottomOf="@+id/tv_cheer_style_onboarding_title2"
         app:layout_constraintStart_toEndOf="@+id/tv_cheer_style_onboarding_title2" />
 
@@ -73,245 +74,89 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_director"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_director"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_mother_bird"
+                app:cheerStyleExplainText="@string/cheer_style_director_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_director"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/csbv_cheer_style_onboarding_mother_bird"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_director"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_director"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_director"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_mother_bird"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_mother_bird"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
+                app:cheerStyleExplainText="@string/cheer_style_mother_bird_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_mother_bird"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_director"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@+id/csbv_cheer_style_onboarding_director"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_mother_bird"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_mother_bird"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_mother_bird"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_glutton"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_cheer_leader"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_cheer_leader"
+                android:layout_marginTop="@dimen/xsmall"
+                app:cheerStyleExplainText="@string/cheer_style_cheer_leader_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_cheer_leader"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
+                app:layout_constraintEnd_toStartOf="@+id/csbv_cheer_style_onboarding_glutton"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_cheer_style_onboarding_director">
+                app:layout_constraintTop_toBottomOf="@+id/csbv_cheer_style_onboarding_director" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_glutton"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_glutton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_glutton"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_cheer_leader"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_glutton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
+                app:cheerStyleExplainText="@string/cheer_style_glutton_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_glutton"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_glutton"
-                app:layout_constraintTop_toTopOf="@+id/cv_cheer_style_onboarding_glutton">
+                app:layout_constraintStart_toEndOf="@+id/csbv_cheer_style_onboarding_cheer_leader"
+                app:layout_constraintTop_toTopOf="@+id/csbv_cheer_style_onboarding_cheer_leader" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_cheer_leader"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_cheer_leader"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_cheer_leader"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_stone"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_stone"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="56dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
+                android:layout_marginTop="@dimen/xsmall"
+                android:layout_marginBottom="@dimen/xlarge"
+                app:cheerStyleExplainText="@string/cheer_style_stone_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_stone"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/cv_cheer_style_onboarding_cheer_bodhisattva"
+                app:layout_constraintEnd_toStartOf="@+id/csbv_cheer_style_onboarding_bodhisattva"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_cheer_style_onboarding_glutton">
+                app:layout_constraintTop_toBottomOf="@+id/csbv_cheer_style_onboarding_cheer_leader" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_stone"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_stone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_stone"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cheer_style_onboarding_cheer_bodhisattva"
-                android:layout_width="168dp"
+            <com.catchmate.presentation.view.onboarding.CheerStyleButtonView
+                android:id="@+id/csbv_cheer_style_onboarding_bodhisattva"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
+                app:cheerStyleExplainText="@string/cheer_style_bodhisattva_explain"
+                app:cheerStyleImage="@drawable/shape_all_rect_r6"
+                app:cheerStyleNameText="@string/cheer_style_bodhisattva"
+                app:cheerStyleToggleBg="@drawable/selector_all_team_toggle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toEndOf="@+id/cv_cheer_style_onboarding_stone"
-                app:layout_constraintTop_toTopOf="@+id/cv_cheer_style_onboarding_stone">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_all_team_toggle_default_bg"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="20dp">
-
-                    <ImageView
-                        android:id="@+id/iv_cheer_style_onboarding_cheer_bodhisattva"
-                        android:layout_width="88dp"
-                        android:layout_height="88dp"
-                        android:src="@drawable/shape_all_rect_r6" />
-
-                    <TextView
-                        android:id="@+id/tv_cheer_style_onboarding_cheer_bodhisattva"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:text="@string/cheer_style_bodhisattva"
-                        android:textAppearance="@style/Typography.Body02.SemiBold"
-                        android:textColor="@color/grey700" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintStart_toEndOf="@+id/csbv_cheer_style_onboarding_stone"
+                app:layout_constraintTop_toTopOf="@+id/csbv_cheer_style_onboarding_stone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
