@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
 
@@ -36,12 +37,22 @@ class CheerStyleOnboardingFragment : Fragment() {
     }
 
     private fun initFooterButton() {
-        binding.layoutCheerStyleOnboardingNext.btnFooterOne.setText(R.string.next)
+        binding.layoutCheerStyleOnboardingNext.btnFooterOne.apply {
+            setText(R.string.next)
+            isEnabled = true
+            setOnClickListener {
+                findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
+            }
+        }
     }
 
     private fun initHeader() {
-        binding.layoutCheerStyleOnboardingHeader
-            .imgbtnOnboardingIndicator3
-            .setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+        binding.layoutCheerStyleOnboardingHeader.apply {
+            imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            imgbtnOnboardingBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
+
     }
 }
