@@ -5,4 +5,11 @@
         <attr name="teamToggleBg" format="reference"/>
         <attr name="teamLogoImage" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="CheerStyleButtonView">
+        <attr name="cheerStyleToggleBg" format="reference"/>
+        <attr name="cheerStyleNameText" format="reference|string"/>
+        <attr name="cheerStyleExplainText" format="reference|string"/>
+        <attr name="cheerStyleImage" format="reference"/>
+    </declare-styleable>
 </resources>
