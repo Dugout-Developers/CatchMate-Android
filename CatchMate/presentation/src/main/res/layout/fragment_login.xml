@@ -42,13 +42,13 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/iv_login_logo" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_login_kakao"
-        style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_kakao_login_button"
+        android:stateListAnimator="@null"
         android:text="@string/login_kakao"
         android:textAppearance="@style/Typography.Body02.Medium"
         android:textColor="@color/grey900"
