@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupCompleteBinding
 
@@ -38,6 +39,9 @@ class SignupCompleteFragment : Fragment() {
         binding.layoutSignupCompleteButton.btnFooterOne.run {
             setText(R.string.finish)
             isEnabled = true
+            setOnClickListener {
+                findNavController().navigate(R.id.action_signupCompleteFragment_to_homeFragment)
+            }
         }
     }
 }
