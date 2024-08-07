@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TeamButtonView">
+        <attr name="teamNameText" format="reference|string"/>
+        <attr name="teamToggleBg" format="reference"/>
+        <attr name="teamLogoImage" format="reference"/>
+    </declare-styleable>
+</resources>
