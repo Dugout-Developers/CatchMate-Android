@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 
@@ -26,9 +27,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initAllFilter()
+
+        initHeader()
         initDateFilter()
         initTeamFilter()
+        initHeadCountFilter()
     }
 
     override fun onDestroyView() {
@@ -36,24 +39,32 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun initAllFilter() {
-        binding.chipHomeAllFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_hamburger_20dp)
-            tvFilterName.setText(R.string.home_filter_all)
+    private fun initHeader() {
+        binding.layoutHeaderHome.apply {
+            imgbtnHeaderHomeNotification.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+            }
         }
     }
 
     private fun initDateFilter() {
-        binding.chipHomeDateFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_down_arrow_20dp)
-            tvFilterName.setText(R.string.home_filter_date)
+        binding.hfvHomeDateFilter.setOnClickListener {
+            val dateFilterBottomSheet = HomeDateFilterBottomSheetFragment()
+            dateFilterBottomSheet.show(requireActivity().supportFragmentManager, dateFilterBottomSheet.tag)
         }
     }
 
     private fun initTeamFilter() {
-        binding.chipHomeTeamFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_down_arrow_20dp)
-            tvFilterName.setText(R.string.filter_title_team)
+        binding.hfvHomeTeamFilter.setOnClickListener {
+            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment()
+            teamFilterBottomSheet.show(requireActivity().supportFragmentManager, teamFilterBottomSheet.tag)
+        }
+    }
+
+    private fun initHeadCountFilter() {
+        binding.hfvHomeMemberCountFilter.setOnClickListener {
+            val headCountFilterBottomSheet = HomeHeadCountFilterBottomSheetFragment()
+            headCountFilterBottomSheet.show(requireActivity().supportFragmentManager, headCountFilterBottomSheet.tag)
         }
     }
 }

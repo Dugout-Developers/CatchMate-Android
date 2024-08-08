@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeTeamFilterBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -26,15 +25,10 @@ class HomeTeamFilterBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initFooterButton()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun initFooterButton() {
-        binding.layoutTeamFilterFooter.btnFooterOne.setText(R.string.application)
     }
 }

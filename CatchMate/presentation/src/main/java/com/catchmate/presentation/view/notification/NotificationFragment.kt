@@ -26,6 +26,8 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        initHeader()
     }
 
     override fun onDestroyView() {
@@ -36,7 +38,6 @@ class NotificationFragment : Fragment() {
     private fun initHeader() {
         binding.layoutHeaderNotification.run {
             tvHeaderTextTitle.setText(R.string.notification_title)
-            tvHeaderTextSub.visibility = View.GONE
         }
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TeamButtonView">
+        <attr name="teamNameText" format="reference|string"/>
+        <attr name="teamToggleBg" format="reference"/>
+        <attr name="teamLogoImage" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="CheerStyleButtonView">
+        <attr name="cheerStyleToggleBg" format="reference"/>
+        <attr name="cheerStyleNameText" format="reference|string"/>
+        <attr name="cheerStyleExplainText" format="reference|string"/>
+        <attr name="cheerStyleImage" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="HomeFilterView">
+        <attr name="homeFilterLayoutColor" format="reference|color"/>
+        <attr name="homeFilterNameText" format="reference|string"/>
+        <attr name="homeFilterImage" format="reference"/>
+    </declare-styleable>
+</resources>

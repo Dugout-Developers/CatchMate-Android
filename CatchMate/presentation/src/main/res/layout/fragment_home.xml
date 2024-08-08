@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey0"
+    android:background="@color/grey50"
     tools:context=".view.home.HomeFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -48,50 +48,42 @@
             android:layout_marginTop="@dimen/tiny"
             android:layout_marginBottom="@dimen/tiny">
 
-            <include
-                android:id="@+id/chip_home_all_filter"
-                layout="@layout/view_filter"
+            <com.catchmate.presentation.view.home.HomeFilterView
+                android:id="@+id/hfv_home_date_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1" />
+                android:layout_marginRight="@dimen/xsmall"
+                app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
+                app:homeFilterLayoutColor="@color/grey0"
+                app:homeFilterNameText="@string/home_filter_date" />
 
-            <include
-                android:id="@+id/chip_home_date_filter"
-                layout="@layout/view_filter"
+            <com.catchmate.presentation.view.home.HomeFilterView
+                android:id="@+id/hfv_home_team_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1" />
+                android:layout_marginRight="@dimen/xsmall"
+                app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
+                app:homeFilterLayoutColor="@color/grey0"
+                app:homeFilterNameText="@string/home_filter_team" />
 
-            <include
-                android:id="@+id/chip_home_team_filter"
-                layout="@layout/view_filter"
+            <com.catchmate.presentation.view.home.HomeFilterView
+                android:id="@+id/hfv_home_member_count_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
+                app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
+                app:homeFilterLayoutColor="@color/grey0"
+                app:homeFilterNameText="@string/home_filter_member_count" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <View
-        android:id="@+id/divider_home_under_filter"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_posts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/xstiny"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
-        app:layout_constraintTop_toBottomOf="@+id/divider_home_under_filter"
+        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home"
         tools:itemCount="8"
         tools:listitem="@layout/item_home_post" />
 

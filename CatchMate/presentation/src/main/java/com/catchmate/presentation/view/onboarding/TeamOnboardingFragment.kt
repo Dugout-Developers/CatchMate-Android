@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
 
@@ -26,7 +27,7 @@ class TeamOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initIndicator()
+        initHeader()
         initFooterBtn()
     }
 
@@ -35,12 +36,25 @@ class TeamOnboardingFragment : Fragment() {
         _binding = null
     }
 
-    private fun initIndicator() {
-        binding.layoutTeamOnboardingHeader.imgbtnOnboardingIndicator2
-            .setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+    private fun initHeader() {
+        binding.layoutTeamOnboardingHeader.apply {
+            imgbtnOnboardingIndicator2.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            imgbtnOnboardingIndicator1.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            imgbtnOnboardingBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
     }
 
     private fun initFooterBtn() {
-        binding.layoutTeamOnboardingFooter.btnFooterOne.setText(R.string.next)
+        binding.layoutTeamOnboardingFooter.btnFooterOne.apply {
+            setText(R.string.next)
+            isEnabled = true
+            setOnClickListener {
+                findNavController().navigate(R.id.action_teamOnboardingFragment_to_cheerStyleOnboardingFragment)
+            }
+        }
     }
 }
