@@ -31,7 +31,7 @@ class TeamButtonView : ConstraintLayout {
                 R.layout.view_team_button,
                 this,
                 false,
-            )
+            ),
         )
     }
 

@@ -32,7 +32,7 @@ class CheerStyleButtonView : ConstraintLayout {
                 R.layout.view_cheer_style_button,
                 this,
                 false,
-            )
+            ),
         )
     }
 

@@ -13,7 +13,6 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewHomeFilterBinding
 
 class HomeFilterView : ConstraintLayout {
-    var isFilterSet = false
     lateinit var layoutFilter: ConstraintLayout
     lateinit var tvFilterName: TextView
     lateinit var ivFilterDropdown: ImageView
@@ -31,7 +30,7 @@ class HomeFilterView : ConstraintLayout {
                 R.layout.view_home_filter,
                 this,
                 false,
-            )
+            ),
         )
     }
 
