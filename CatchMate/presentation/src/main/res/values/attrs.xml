@@ -12,4 +12,10 @@
         <attr name="cheerStyleExplainText" format="reference|string"/>
         <attr name="cheerStyleImage" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="HomeFilterView">
+        <attr name="homeFilterLayoutColor" format="reference|color"/>
+        <attr name="homeFilterNameText" format="reference|string"/>
+        <attr name="homeFilterImage" format="reference"/>
+    </declare-styleable>
 </resources>
