@@ -408,11 +408,19 @@
 
     <include
         android:id="@+id/layout_team_filter_footer"
-        layout="@layout/layout_footer_one_button"
+        layout="@layout/layout_footer_filter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_home_team_filter_bottom_sheet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_home_team_filter_bottom_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_end="34dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

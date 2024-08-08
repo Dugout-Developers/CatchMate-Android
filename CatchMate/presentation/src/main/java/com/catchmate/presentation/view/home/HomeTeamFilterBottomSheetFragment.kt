@@ -26,15 +26,11 @@ class HomeTeamFilterBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initFooterButton()
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun initFooterButton() {
-        binding.layoutTeamFilterFooter.btnFooterOne.setText(R.string.application)
     }
 }
