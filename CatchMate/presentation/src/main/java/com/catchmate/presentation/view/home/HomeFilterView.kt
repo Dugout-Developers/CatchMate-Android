@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewHomeFilterBinding
@@ -28,7 +27,11 @@ class HomeFilterView : ConstraintLayout {
 
     private val binding: ViewHomeFilterBinding by lazy {
         ViewHomeFilterBinding.bind(
-            LayoutInflater.from(context).inflate(R.layout.view_home_filter, this, false)
+            LayoutInflater.from(context).inflate(
+                R.layout.view_home_filter,
+                this,
+                false,
+            )
         )
     }
 

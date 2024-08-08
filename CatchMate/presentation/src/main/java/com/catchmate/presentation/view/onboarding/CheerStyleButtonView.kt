@@ -28,7 +28,11 @@ class CheerStyleButtonView : ConstraintLayout {
 
     private val binding: ViewCheerStyleButtonBinding by lazy {
         ViewCheerStyleButtonBinding.bind(
-            LayoutInflater.from(context).inflate(R.layout.view_cheer_style_button, this, false)
+            LayoutInflater.from(context).inflate(
+                R.layout.view_cheer_style_button,
+                this,
+                false,
+            )
         )
     }
 

@@ -27,7 +27,11 @@ class TeamButtonView : ConstraintLayout {
 
     private val binding: ViewTeamButtonBinding by lazy {
         ViewTeamButtonBinding.bind(
-            LayoutInflater.from(context).inflate(R.layout.view_team_button, this, false)
+            LayoutInflater.from(context).inflate(
+                R.layout.view_team_button,
+                this,
+                false,
+            )
         )
     }
 
@@ -39,11 +43,12 @@ class TeamButtonView : ConstraintLayout {
 
         teamTextView.setTextColor(ContextCompat.getColor(context, R.color.grey700))
         teamToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            val textColor = if (isChecked) {
-                ContextCompat.getColor(context, R.color.brand500)
-            } else {
-                ContextCompat.getColor(context, R.color.grey700)
-            }
+            val textColor =
+                if (isChecked) {
+                    ContextCompat.getColor(context, R.color.brand500)
+                } else {
+                    ContextCompat.getColor(context, R.color.grey700)
+                }
             teamTextView.setTextColor(textColor)
         }
     }

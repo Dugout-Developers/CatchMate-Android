@@ -53,6 +53,5 @@ class CheerStyleOnboardingFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-
     }
 }
