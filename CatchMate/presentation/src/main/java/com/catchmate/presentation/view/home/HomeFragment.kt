@@ -26,7 +26,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initAllFilter()
         initDateFilter()
         initTeamFilter()
     }
@@ -36,24 +35,14 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun initAllFilter() {
-        binding.chipHomeAllFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_hamburger_20dp)
-            tvFilterName.setText(R.string.home_filter_all)
         }
     }
 
     private fun initDateFilter() {
-        binding.chipHomeDateFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_down_arrow_20dp)
-            tvFilterName.setText(R.string.home_filter_date)
         }
     }
 
     private fun initTeamFilter() {
-        binding.chipHomeTeamFilter.run {
-            ivFilterIcon.setImageResource(R.drawable.vec_all_down_arrow_20dp)
-            tvFilterName.setText(R.string.filter_title_team)
         }
     }
 }

@@ -48,50 +48,25 @@
             android:layout_marginTop="@dimen/tiny"
             android:layout_marginBottom="@dimen/tiny">
 
-            <include
-                android:id="@+id/chip_home_all_filter"
-                layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1" />
 
-            <include
-                android:id="@+id/chip_home_date_filter"
-                layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1" />
 
-            <include
-                android:id="@+id/chip_home_team_filter"
-                layout="@layout/view_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <View
-        android:id="@+id/divider_home_under_filter"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_posts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/xstiny"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_home_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
-        app:layout_constraintTop_toBottomOf="@+id/divider_home_under_filter"
+        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home"
         tools:itemCount="8"
         tools:listitem="@layout/item_home_post" />
 
