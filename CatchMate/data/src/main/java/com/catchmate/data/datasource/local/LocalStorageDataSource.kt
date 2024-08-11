@@ -44,13 +44,9 @@ class LocalStorageDataSource
             }
         }
 
-        fun getAccessToken(): String {
-            return sharedPreferences.getString("accessToken", "") ?: ""
-        }
+        fun getAccessToken(): String = sharedPreferences.getString("accessToken", "") ?: ""
 
-        fun getRefreshToken(): String {
-            return sharedPreferences.getString("refreshToken", "") ?: ""
-        }
+        fun getRefreshToken(): String = sharedPreferences.getString("refreshToken", "") ?: ""
 
         fun removeTokens() {
             with(sharedPreferences.edit()) {

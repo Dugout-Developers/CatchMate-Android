@@ -16,9 +16,9 @@ class LocalDataUseCase
             localDataRepository.saveRefreshToken(refreshToken)
         }
 
-        fun getAccessToken() : String = localDataRepository.getAccessToken()
+        fun getAccessToken(): String = localDataRepository.getAccessToken()
 
-        fun getRefreshToken() : String = localDataRepository.getRefreshToken()
+        fun getRefreshToken(): String = localDataRepository.getRefreshToken()
 
         fun removeTokens() {
             localDataRepository.removeTokens()
