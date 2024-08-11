@@ -12,6 +12,7 @@ androidx-activity-ktx = "1.9.0"
 androidx-fragment-ktx = "1.8.1"
 androidx-credentials = "1.2.2"
 androidx-navigation = "2.7.7"
+androidx-security-crypto-ktx = "1.1.0-alpha06"
 
 # Kotlin
 kotlin = "1.8.20"
@@ -61,6 +62,7 @@ androidx-credentials = { group = "androidx.credentials", name = "credentials", v
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidx-credentials" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
+androidx-security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "androidx-security-crypto-ktx" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }

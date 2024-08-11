@@ -39,4 +39,6 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.retrofit)
+
+    implementation(libs.androidx.security.crypto.ktx)
 }
