@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
+import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import com.catchmate.presentation.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +20,7 @@ class LoginFragment : Fragment() {
     val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels()
+    private val localDataViewModel: LocalDataViewMdoel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +65,8 @@ class LoginFragment : Fragment() {
                     "LoginResponse\nacc:${loginResponse.accessToken}\n" +
                         "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}",
                 )
+                localDataViewModel.saveAccessToken(loginResponse.accessToken)
+                localDataViewModel.saveRefreshToken(loginResponse.refreshToken)
                 when (loginResponse.isFirstLogin) {
                     true -> findNavController().navigate(R.id.signupFragment)
                     false -> findNavController().navigate(R.id.homeFragment)
