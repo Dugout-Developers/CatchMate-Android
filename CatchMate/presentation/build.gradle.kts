@@ -9,6 +9,9 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {

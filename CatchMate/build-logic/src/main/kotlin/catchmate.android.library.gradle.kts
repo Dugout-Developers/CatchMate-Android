@@ -1,4 +1,5 @@
 import com.catchmate.app.configureHiltAndroid
+import com.catchmate.app.configureKotest
 import com.catchmate.app.configureKotlinAndroid
 
 plugins {
@@ -6,4 +7,5 @@ plugins {
 }
 
 configureKotlinAndroid()
+configureKotest()
 configureHiltAndroid()
