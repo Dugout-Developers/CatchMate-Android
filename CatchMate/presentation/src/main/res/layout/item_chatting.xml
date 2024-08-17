@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey0"
+    android:paddingStart="@dimen/main_grid_margin"
+    android:paddingTop="@dimen/small"
+    android:paddingEnd="@dimen/main_grid_margin"
+    android:paddingBottom="@dimen/small">
+
+    <ImageView
+        android:id="@+id/iv_chatting_item"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/shape_all_rect_r8" />
+
+    <TextView
+        android:id="@+id/tv_chatting_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xsmall"
+        android:ellipsize="end"
+        android:maxWidth="220dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@style/Typography.Body01.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/layout_chatting_item_info"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="카리나 시구 보러 같이 가실 분" />
+
+    <TextView
+        android:id="@+id/tv_chatting_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xstiny"
+        android:text="N"
+        android:textAppearance="@style/Typography.Caption01.SemiBold"
+        android:textColor="@color/brand500"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_item_title"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_item_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_item_title" />
+
+    <TextView
+        android:id="@+id/tv_chatting_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="@style/Typography.Caption01.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="@id/tv_chatting_item_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_chatting_item_title"
+        tools:text="1시간 전" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_chatting_item_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xsmall"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item"
+        app:layout_constraintTop_toBottomOf="@+id/tv_chatting_item_time">
+
+        <TextView
+            android:id="@+id/tv_chatting_item_last_chat"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/Typography.Body02.Medium"
+            android:textColor="@color/grey600"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_chatting_item_unread_message_count"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="저 롯데 팬은 아니고 카리나만 보러 가고 싶어요" />
+
+        <TextView
+            android:id="@+id/tv_chatting_item_unread_message_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_chatting_unread_message_count"
+            android:gravity="center"
+            android:textAppearance="@style/Typography.Body03.Medium"
+            android:textColor="@color/grey0"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/tv_chatting_item_last_chat"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
