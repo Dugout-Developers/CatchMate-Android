@@ -112,4 +112,9 @@
         android:name="com.catchmate.presentation.view.mypage.AccountManagementFragment"
         android:label="fragment_account_management"
         tools:layout="@layout/fragment_account_management" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.catchmate.presentation.view.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
 </navigation>
