@@ -16,6 +16,7 @@ class TeamButtonView : ConstraintLayout {
     lateinit var teamImageView: ImageView
     lateinit var teamToggleButton: ToggleButton
     lateinit var teamTextView: TextView
+
     constructor(context: Context) : super(context) {
         initView()
     }
@@ -26,17 +27,14 @@ class TeamButtonView : ConstraintLayout {
     }
 
     private val binding: ViewTeamButtonBinding by lazy {
-        ViewTeamButtonBinding.bind(
-            LayoutInflater.from(context).inflate(
-                R.layout.view_team_button,
-                this,
-                false,
-            ),
+        ViewTeamButtonBinding.inflate(
+            LayoutInflater.from(context),
+            this,
+            true,
         )
     }
 
     private fun initView() {
-        addView(binding.root)
         teamImageView = binding.ivTeamButton
         teamToggleButton = binding.toggleTeamButton
         teamTextView = binding.tvTeamButton
@@ -60,12 +58,17 @@ class TeamButtonView : ConstraintLayout {
 
     private fun setTypeArray(typedArray: TypedArray) {
         val teamName = typedArray.getText(R.styleable.TeamButtonView_teamNameText)
-        val teamToggleBg = typedArray.getResourceId(R.styleable.TeamButtonView_teamToggleBg, -1)
-        val teamLogoImage = typedArray.getResourceId(R.styleable.TeamButtonView_teamLogoImage, -1)
+        val teamToggleBg = typedArray.getResourceId(R.styleable.TeamButtonView_teamToggleBg, 0)
+        val teamLogoImage = typedArray.getResourceId(R.styleable.TeamButtonView_teamLogoImage, 0)
 
         teamTextView.text = teamName
-        teamToggleButton.setBackgroundResource(teamToggleBg)
-        teamImageView.setImageResource(teamLogoImage)
+        if (teamToggleBg != 0) {
+            teamToggleButton.setBackgroundResource(teamToggleBg)
+        }
+
+        if (teamLogoImage != 0) {
+            teamImageView.setImageResource(teamLogoImage)
+        }
 
         typedArray.recycle()
     }
