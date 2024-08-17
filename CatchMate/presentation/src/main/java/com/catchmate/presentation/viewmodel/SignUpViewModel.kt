@@ -1,5 +1,6 @@
 package com.catchmate.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,9 +18,9 @@ class SignUpViewModel
     constructor(
         private val signUpUseCase: SignUpUseCase,
     ) : ViewModel() {
-        private val _checkNicknameresponse = MutableLiveData<CheckNicknameResponse>()
-        val checkNicknameResponse
-            get() = _checkNicknameresponse
+        private val _checkNicknameResponse = MutableLiveData<CheckNicknameResponse>()
+        val checkNicknameResponse: LiveData<CheckNicknameResponse>
+            get() = _checkNicknameResponse
 
         private var _userResponse = MutableLiveData<UserResponse>()
         val userResponse
@@ -30,7 +31,7 @@ class SignUpViewModel
             nickName: String,
         ) {
             viewModelScope.launch {
-                _checkNicknameresponse.value = signUpUseCase.getNicknameAvailability(accessToken, nickName)
+                _checkNicknameResponse.value = signUpUseCase.getNicknameAvailability(accessToken, nickName)
             }
         }
 

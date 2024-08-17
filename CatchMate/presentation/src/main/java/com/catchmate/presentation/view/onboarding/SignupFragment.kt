@@ -179,7 +179,7 @@ class SignupFragment : Fragment() {
                             tvSignupNicknameAlert.visibility = View.INVISIBLE
                         }
                     }
-                }
+                },
             )
         }
     }

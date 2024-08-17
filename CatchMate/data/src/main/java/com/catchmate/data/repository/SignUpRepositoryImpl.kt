@@ -40,12 +40,13 @@ class SignUpRepositoryImpl
             userAdditionalInfoRequest: UserAdditionalInfoRequest,
         ): UserResponse? =
             try {
-                val response = signUpApi
-                    .patchUserAdditionalInfo(
-                        accessToken,
-                        SignUpMapper
-                            .toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest),
-                    )
+                val response =
+                    signUpApi
+                        .patchUserAdditionalInfo(
+                            accessToken,
+                            SignUpMapper
+                                .toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest),
+                        )
                 if (response.isSuccessful) {
                     Log.d("SignUpRepo", "통신 성공 ${response.code()}")
                     response.body()?.let { SignUpMapper.toUserResponse(it) } ?: throw Exception("Empty Response")

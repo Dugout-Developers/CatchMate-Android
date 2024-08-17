@@ -6,5 +6,5 @@ package com.catchmate.presentation
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    fun addition_isCorrect() {}
+    fun additionIsCorrect() {}
 }

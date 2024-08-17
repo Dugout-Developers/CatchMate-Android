@@ -97,7 +97,7 @@ class CheerStyleOnboardingFragment : Fragment() {
                             ?.tvCheerStyleName
                             ?.text
                             .toString()
-                            .replace(" 스타일", "",),
+                            .replace(" 스타일", ""),
                     )
                 patchUserAdditionalInfo(newUserInfo)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
