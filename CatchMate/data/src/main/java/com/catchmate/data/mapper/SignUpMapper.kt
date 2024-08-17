@@ -10,7 +10,7 @@ import com.catchmate.domain.model.UserResponse
 object SignUpMapper {
     fun toCheckNicknameResponse(checkNicknameResponseDTO: CheckNicknameResponseDTO): CheckNicknameResponse =
         CheckNicknameResponse(
-            available = checkNicknameResponseDTO.available
+            available = checkNicknameResponseDTO.available,
         )
 
     fun toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserAdditionalInfoRequestDTO =

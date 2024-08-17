@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.domain.model.UserResponse
-import com.catchmate.domain.usecase.AuthUseCase
 import com.catchmate.domain.usecase.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ class SignUpViewModel
     constructor(
         private val signUpUseCase: SignUpUseCase,
     ) : ViewModel() {
-        private var _checkNicknameresponse = MutableLiveData<CheckNicknameResponse>()
+        private val _checkNicknameresponse = MutableLiveData<CheckNicknameResponse>()
         val checkNicknameResponse
             get() = _checkNicknameresponse
 

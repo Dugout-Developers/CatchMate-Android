@@ -21,7 +21,7 @@ class CheerStyleOnboardingFragment : Fragment() {
     private var _binding: FragmentCheerStyleOnboardingBinding? = null
     val binding get() = _binding!!
 
-    private val signUpViewModel : SignUpViewModel by viewModels()
+    private val signUpViewModel: SignUpViewModel by viewModels()
     private val localDataViewModel: LocalDataViewMdoel by viewModels()
 
     private lateinit var userInfo: UserAdditionalInfoRequest
@@ -93,7 +93,11 @@ class CheerStyleOnboardingFragment : Fragment() {
                         userInfo.nickName,
                         userInfo.birthDate,
                         userInfo.favGudan,
-                        selectedButton?.tvCheerStyleName?.text.toString().replace(" 스타일", "")
+                        selectedButton
+                            ?.tvCheerStyleName
+                            ?.text
+                            .toString()
+                            .replace(" 스타일", "",),
                     )
                 patchUserAdditionalInfo(newUserInfo)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)

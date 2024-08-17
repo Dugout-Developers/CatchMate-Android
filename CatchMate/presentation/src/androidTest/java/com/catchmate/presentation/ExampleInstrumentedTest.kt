@@ -7,8 +7,5 @@ package com.catchmate.presentation
  */
 
 class ExampleInstrumentedTest {
-
-    fun useAppContext() {
-
-    }
+    fun useAppContext() {}
 }

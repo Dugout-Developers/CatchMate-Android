@@ -85,7 +85,7 @@ class SignupFragment : Fragment() {
                 val nickName = binding.edtSignupNickname.text.toString()
                 val birthDate = binding.edtSignupBirth.text.toString()
                 val gender = binding.chipgroupSignupGender.checkedChipId
-                
+
                 if (nickName.isNullOrEmpty()) {
                     return@setOnClickListener
                 }
@@ -96,13 +96,14 @@ class SignupFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                val userInfo = UserAdditionalInfoRequest(
-                    if (gender == R.id.chip_signup_male) "M" else "F",
-                    nickName,
-                    DateUtils.formatBirthDate(birthDate),
-                    "",
-                    "",
-                )
+                val userInfo =
+                    UserAdditionalInfoRequest(
+                        if (gender == R.id.chip_signup_male) "M" else "F",
+                        nickName,
+                        DateUtils.formatBirthDate(birthDate),
+                        "",
+                        "",
+                    )
                 val bundle = Bundle()
                 bundle.putSerializable("userInfo", userInfo)
 
@@ -144,39 +145,42 @@ class SignupFragment : Fragment() {
             }
 
             // 닉네임 edt 텍스트 변경 리스너
-            edtSignupNickname.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int,
-                ) {}
+            edtSignupNickname.addTextChangedListener(
+                object : TextWatcher {
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int,
+                    ) {}
 
-                override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int,
-                ) {
-                    tvSignupNicknameCount.text = count.toString()
-                    runnable?.let { handler.removeCallbacks(it) }
-                }
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int,
+                    ) {
+                        tvSignupNicknameCount.text = count.toString()
+                        runnable?.let { handler.removeCallbacks(it) }
+                    }
 
-                override fun afterTextChanged(s: Editable?) {
-                    val inputText = s?.toString()?.trim()
+                    override fun afterTextChanged(s: Editable?) {
+                        val inputText = s?.toString()?.trim()
 
-                    if (!inputText.isNullOrEmpty()) {
-                        runnable = kotlinx.coroutines.Runnable {
-                            s?.toString()?.let {
-                                checkNicknameAvailability(inputText)
-                            }
+                        if (!inputText.isNullOrEmpty()) {
+                            runnable =
+                                kotlinx.coroutines.Runnable {
+                                    s?.toString()?.let {
+                                        checkNicknameAvailability(inputText)
+                                    }
+                                }
+                            handler.postDelayed(runnable!!, 500)
+                        } else {
+                            tvSignupNicknameAlert.visibility = View.INVISIBLE
                         }
-                        handler.postDelayed(runnable!!, 500)
-                    } else {
-                        tvSignupNicknameAlert.visibility = View.INVISIBLE
                     }
                 }
-            })
+            )
         }
     }
 
@@ -199,7 +203,7 @@ class SignupFragment : Fragment() {
         }
     }
 
-    private fun checkNicknameAvailability(nickName: String){
+    private fun checkNicknameAvailability(nickName: String) {
         signUpViewModel.getNicknameAvailability(accessToken, nickName)
         signUpViewModel.checkNicknameResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
@@ -226,6 +230,8 @@ class SignupFragment : Fragment() {
         val birthDate = binding.edtSignupBirth.text.toString()
 
         binding.layoutSignupFooter.btnFooterOne.isEnabled =
-            nickName.isNotEmpty() && birthDate.isNotEmpty() && isNicknameValid
+            nickName.isNotEmpty() &&
+            birthDate.isNotEmpty() &&
+            isNicknameValid
     }
 }
