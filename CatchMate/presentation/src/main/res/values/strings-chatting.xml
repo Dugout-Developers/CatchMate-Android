@@ -1,3 +1,11 @@
 <resources>
     <string name="chatting_home_title">채팅</string>
+    <string name="chatting_room_chat_box_hint">내용을 입력해주세요</string>
+
+    <string name="chatting_setting_title">채팅방 설정</string>
+    <string name="chatting_setting_participant">참여자 정보</string>
+    <string name="chatting_setting_me_badge">나</string>
+    <string name="chatting_setting_kick_out">내보내기</string>
+
+    <string name="chatting_participant_alert">%s 님이 채팅에 참여했어요</string>
 </resources>
