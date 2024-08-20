@@ -30,4 +30,8 @@
         <attr name="chattingGameInfoHomeTeamImage" format="reference"/>
         <attr name="chattingGameInfoAwayTeamImage" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="ChattingParticipantAlertView">
+        <attr name="chattingParticipantAlertText" format="string"/>
+    </declare-styleable>
 </resources>
