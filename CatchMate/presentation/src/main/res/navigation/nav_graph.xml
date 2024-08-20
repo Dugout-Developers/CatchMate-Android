@@ -117,10 +117,27 @@
         android:name="com.catchmate.presentation.view.chatting.ChattingHomeFragment"
         android:label="fragment_chatting_home"
         tools:layout="@layout/fragment_chatting_home" >
+        <action
+            android:id="@+id/action_chattingHomeFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chattingRoomFragment"
+        android:name="com.catchmate.presentation.view.chatting.ChattingRoomFragment"
+        android:label="fragment_chatting_room"
+        tools:layout="@layout/fragment_chatting_room" >
+        <action
+            android:id="@+id/action_chattingRoomFragment_to_chattingSettingFragment"
+            app:destination="@id/chattingSettingFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.catchmate.presentation.view.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/chattingSettingFragment"
+        android:name="com.catchmate.presentation.view.chatting.ChattingSettingFragment"
+        android:label="fragment_chatting_setting"
+        tools:layout="@layout/fragment_chatting_setting" />
 </navigation>
