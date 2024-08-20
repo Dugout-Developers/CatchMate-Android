@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey0"
+    android:paddingLeft="@dimen/main_grid_margin"
+    android:paddingTop="@dimen/tiny"
+    android:paddingEnd="@dimen/main_grid_margin"
+    android:paddingBottom="@dimen/tiny">
+
+    <ImageView
+        android:id="@+id/iv_chatting_participant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/temporary_profile" />
+
+    <TextView
+        android:id="@+id/tv_chatting_participant_me_badge"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_chatting_me_badge_bg"
+        android:gravity="center"
+        android:text="@string/chatting_setting_me_badge"
+        android:textAppearance="@style/Typography.Caption01.SemiBold"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_participant"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_chatting_participant_leader_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xstiny"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_participant_me_badge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vec_chatting_participant_leader_badge_20dp" />
+
+    <TextView
+        android:id="@+id/tv_chatting_participant_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xstiny"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_participant_leader_badge"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="닉네임은열글자까지만" />
+
+    <TextView
+        android:id="@+id/tv_chatting_participant_kick_out"
+        android:layout_width="47dp"
+        android:layout_height="17dp"
+        android:background="@drawable/shape_all_rect_r2"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/chatting_setting_kick_out"
+        android:textAppearance="@style/Typography.Caption01.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
