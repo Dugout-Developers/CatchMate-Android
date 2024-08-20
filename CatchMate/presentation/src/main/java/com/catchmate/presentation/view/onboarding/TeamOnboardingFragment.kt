@@ -66,9 +66,9 @@ class TeamOnboardingFragment : Fragment() {
             )
 
         teamButtons.forEach { btn ->
-            btn.teamToggleButton.setOnCheckedChangeListener { buttonView, isChecked ->
+            btn.binding.toggleTeamButton.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    selectedButton?.teamToggleButton?.isChecked = false
+                    selectedButton?.binding?.toggleTeamButton?.isChecked = false
                     buttonView.isChecked = true
                     selectedButton = btn
                     binding.layoutTeamOnboardingFooter.btnFooterOne.isEnabled = true
@@ -100,7 +100,7 @@ class TeamOnboardingFragment : Fragment() {
                         userInfo.gender,
                         userInfo.nickName,
                         userInfo.birthDate,
-                        selectedButton?.teamTextView?.text.toString(),
+                        selectedButton?.binding?.tvTeamButton?.text.toString(),
                         "",
                     )
                 val bundle = Bundle()

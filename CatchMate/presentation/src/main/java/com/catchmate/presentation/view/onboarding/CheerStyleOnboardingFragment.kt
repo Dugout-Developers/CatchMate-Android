@@ -94,6 +94,7 @@ class CheerStyleOnboardingFragment : Fragment() {
                         userInfo.birthDate,
                         userInfo.favGudan,
                         selectedButton
+                            ?.binding
                             ?.tvCheerStyleName
                             ?.text
                             .toString()
@@ -126,9 +127,9 @@ class CheerStyleOnboardingFragment : Fragment() {
             )
 
         cheerStyleButtons.forEach { btn ->
-            btn.toggleCheerStyle.setOnCheckedChangeListener { buttonView, isChecked ->
+            btn.binding.toggleCheerStyle.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    selectedButton?.toggleCheerStyle?.isChecked = false
+                    selectedButton?.binding?.toggleCheerStyle?.isChecked = false
                     buttonView.isChecked = true
                     selectedButton = btn
                     binding.layoutCheerStyleOnboardingNext.btnFooterOne.isEnabled = true
