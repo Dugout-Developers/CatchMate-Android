@@ -31,4 +31,13 @@
         <item name="android:textAppearance">@style/Typography.HeadLine03.Medium</item>
         <item name="android:textColorPrimary">@color/grey800</item>
     </style>
+
+    <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorPrimary">@color/brand500</item>
+        <item name="colorSurfaceVariant">@color/brand50</item>
+    </style>
 </resources>
