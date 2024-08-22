@@ -28,6 +28,7 @@ class AddPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initHeader()
         initFooter()
+        initAdditionalInfoEdt()
     }
 
     override fun onDestroyView() {
@@ -47,5 +48,18 @@ class AddPostFragment : Fragment() {
 
     private fun initFooter() {
         binding.layoutAddPostFooter.btnFooterOne.setText(R.string.post_complete)
+    }
+
+    private fun initAdditionalInfoEdt() {
+        binding.edtAddPostAdditionalInfo.setOnTouchListener { v, event ->
+            if (v.id == R.id.edt_add_post_additional_info) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                if (event.action == android.view.MotionEvent.ACTION_UP) {
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            v.onTouchEvent(event)
+            true
+        }
     }
 }
