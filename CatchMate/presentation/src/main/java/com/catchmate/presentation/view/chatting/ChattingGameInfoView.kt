@@ -10,7 +10,7 @@ import com.catchmate.presentation.databinding.ViewChattingGameInfoBinding
 
 class ChattingGameInfoView(
     context: Context,
-    attrs: AttributeSet
+    attrs: AttributeSet,
 ) : ConstraintLayout(context, attrs) {
     private val binding: ViewChattingGameInfoBinding by lazy {
         ViewChattingGameInfoBinding.inflate(

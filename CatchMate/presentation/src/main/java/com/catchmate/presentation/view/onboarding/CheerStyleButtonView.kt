@@ -12,7 +12,7 @@ class CheerStyleButtonView(
     context: Context,
     attrs: AttributeSet,
 ) : ConstraintLayout(context, attrs) {
-     val binding: ViewCheerStyleButtonBinding by lazy {
+    val binding: ViewCheerStyleButtonBinding by lazy {
         ViewCheerStyleButtonBinding.inflate(
             LayoutInflater.from(context),
             this,

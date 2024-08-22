@@ -100,7 +100,11 @@ class TeamOnboardingFragment : Fragment() {
                         userInfo.gender,
                         userInfo.nickName,
                         userInfo.birthDate,
-                        selectedButton?.binding?.tvTeamButton?.text.toString(),
+                        selectedButton
+                            ?.binding
+                            ?.tvTeamButton
+                            ?.text
+                            .toString(),
                         "",
                     )
                 val bundle = Bundle()

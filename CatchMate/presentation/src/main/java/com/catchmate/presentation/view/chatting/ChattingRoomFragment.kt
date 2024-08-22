@@ -60,8 +60,7 @@ class ChattingRoomFragment : Fragment() {
 
                 override fun afterTextChanged(s: Editable?) {
                 }
-
-            }
+            },
         )
     }
 
