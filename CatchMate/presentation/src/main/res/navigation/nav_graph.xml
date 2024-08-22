@@ -108,11 +108,6 @@
         android:label="fragment_sent_join"
         tools:layout="@layout/fragment_sent_join" />
     <fragment
-        android:id="@+id/accountManagementFragment"
-        android:name="com.catchmate.presentation.view.mypage.AccountManagementFragment"
-        android:label="fragment_account_management"
-        tools:layout="@layout/fragment_account_management" />
-    <fragment
         android:id="@+id/chattingHomeFragment"
         android:name="com.catchmate.presentation.view.chatting.ChattingHomeFragment"
         android:label="fragment_chatting_home"
