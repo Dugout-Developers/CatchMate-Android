@@ -34,4 +34,14 @@
     <declare-styleable name="ChattingParticipantAlertView">
         <attr name="chattingParticipantAlertText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="MyPageUserProfileView">
+        <attr name="myPageUserProfileImage" format="reference"/>
+        <attr name="myPageUserProfileNicknameText" format="string"/>
+        <attr name="myPageUserProfileTeamBadgeColor" format="reference|color"/>
+        <attr name="myPageUserProfileTeamBadgeText" format="string"/>
+        <attr name="myPageUserProfileCheerStyleBadgeText" format="string"/>
+        <attr name="myPageUserProfileGenderBadgeText" format="string"/>
+        <attr name="myPageUserProfileAgeBadgeText" format="string"/>
+    </declare-styleable>
 </resources>
