@@ -31,6 +31,22 @@
         tools:text="Text" />
 
     <TextView
+        android:id="@+id/tv_header_text_unread_message_count_badge"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="@dimen/tiny"
+        android:background="@drawable/shape_chatting_unread_message_count"
+        android:gravity="center"
+        android:textAppearance="@style/Typography.Caption01.Medium"
+        android:textColor="@color/grey0"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_header_text_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2" />
+
+    <TextView
         android:id="@+id/tv_header_text_sub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
