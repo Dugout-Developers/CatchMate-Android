@@ -135,4 +135,10 @@
         android:name="com.catchmate.presentation.view.chatting.ChattingSettingFragment"
         android:label="fragment_chatting_setting"
         tools:layout="@layout/fragment_chatting_setting" />
+    <fragment
+        android:id="@+id/myPageSettingFragment"
+        android:name="com.catchmate.presentation.view.mypage.MyPageSettingFragment"
+        android:label="fragment_my_page_setting"
+        tools:layout="@layout/fragment_my_page_setting" >
+    </fragment>
 </navigation>
