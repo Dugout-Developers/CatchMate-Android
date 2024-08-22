@@ -11,11 +11,18 @@
     <string name="mypage_information">정보</string>
 
     <string name="mypage_setting">설정</string>
+
     <string name="mypage_setting_user_settings">사용자 설정</string>
     <string name="mypage_setting_user_info">계정 정보</string>
     <string name="mypage_setting_user_info_title">로그인 정보</string>
+
     <string name="mypage_setting_user_info_delete_account"><u>탈퇴하기</u></string>
+
     <string name="mypage_setting_notification_setting">알림 설정</string>
+    <string name="mypage_setting_notification_setting_all">전체 알림</string>
+    <string name="mypage_setting_notification_setting_chatting">채팅 알림</string>
+    <string name="mypage_setting_notification_setting_join">직관 신청 알림</string>
+    <string name="mypage_setting_notification_setting_event">이벤트 알림</string>
 
     <string name="edit_profile_title">프로필 편집</string>
 
