@@ -89,8 +89,8 @@
             android:id="@+id/action_myPageFragment_to_sentJoinFragment"
             app:destination="@id/sentJoinFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_accountManagementFragment"
-            app:destination="@id/accountManagementFragment" />
+            android:id="@+id/action_myPageFragment_to_myPageSettingFragment"
+            app:destination="@id/myPageSettingFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -140,6 +140,9 @@
         android:name="com.catchmate.presentation.view.mypage.MyPageSettingFragment"
         android:label="fragment_my_page_setting"
         tools:layout="@layout/fragment_my_page_setting" >
+        <action
+            android:id="@+id/action_myPageSettingFragment_to_accountInfoFragment"
+            app:destination="@id/accountInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountInfoFragment"
