@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".view.mypage.ReceivedJoinFragment" >
 
+    <include
+        android:id="@+id/layout_header_received_join"
+        layout="@layout/layout_header_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_received_join_left"
         android:layout_width="wrap_content"
@@ -14,35 +23,13 @@
         app:layout_constraintGuide_begin="18dp"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imgbtn_received_join_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="14dp"
-        android:background="@null"
-        android:src="@drawable/shape_all_rect_r6"
-        app:layout_constraintStart_toStartOf="@+id/guideline_received_join_left"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_received_join_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="@string/mypage_received_join"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgbtn_received_join_back"
-        app:layout_constraintStart_toEndOf="@+id/imgbtn_received_join_back"
-        app:layout_constraintTop_toTopOf="@+id/imgbtn_received_join_back" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_received_join_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline_received_join_left"
-        app:layout_constraintTop_toBottomOf="@+id/imgbtn_received_join_back"
+        app:layout_constraintTop_toBottomOf="@+id/layout_header_received_join"
         tools:listitem="@layout/item_received_join" />
 </androidx.constraintlayout.widget.ConstraintLayout>
