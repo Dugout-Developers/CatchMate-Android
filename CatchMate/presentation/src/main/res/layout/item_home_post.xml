@@ -127,7 +127,7 @@
                 tools:text="카리나 시구 보러 같이 가실 분" />
 
             <ToggleButton
-                android:id="@+id/imageButton"
+                android:id="@+id/btn_item_home_post_favorite"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="@dimen/smedium"
@@ -135,6 +135,7 @@
                 android:checked="true"
                 android:textOff="@null"
                 android:textOn="@null"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
