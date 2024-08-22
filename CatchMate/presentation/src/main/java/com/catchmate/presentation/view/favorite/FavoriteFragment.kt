@@ -37,7 +37,6 @@ class FavoriteFragment : Fragment() {
     private fun initHeader() {
         binding.layoutHeaderFavorite.apply {
             tvHeaderTextTitle.setText(R.string.favorite_title)
-            tvHeaderTextSub.visibility = View.GONE
             imgbtnHeaderTextBack.visibility = View.GONE
         }
     }

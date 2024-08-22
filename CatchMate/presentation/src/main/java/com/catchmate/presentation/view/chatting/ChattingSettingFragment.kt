@@ -38,7 +38,6 @@ class ChattingSettingFragment : Fragment() {
         binding.layoutHeaderChattingSetting.apply {
             tvHeaderTextTitle.setText(R.string.chatting_setting_title)
             imgbtnHeaderTextBack.setImageResource(R.drawable.vec_all_close_20dp)
-            tvHeaderTextSub.visibility = View.GONE
         }
     }
 }

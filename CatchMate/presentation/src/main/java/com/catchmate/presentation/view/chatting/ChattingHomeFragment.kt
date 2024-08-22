@@ -36,7 +36,6 @@ class ChattingHomeFragment : Fragment() {
     private fun initHeader() {
         binding.layoutHeaderChattingHome.apply {
             tvHeaderTextTitle.setText(R.string.chatting_home_title)
-            tvHeaderTextSub.visibility = View.GONE
             imgbtnHeaderTextBack.visibility = View.GONE
         }
     }

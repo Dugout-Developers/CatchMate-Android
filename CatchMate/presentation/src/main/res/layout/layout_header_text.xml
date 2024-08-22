@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/main_grid_margin"
         android:textAppearance="@style/Typography.Body02.Medium"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
