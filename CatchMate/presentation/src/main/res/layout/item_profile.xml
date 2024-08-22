@@ -19,85 +19,150 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="27dp"
-            android:paddingTop="20dp"
-            android:paddingRight="27dp"
-            android:paddingBottom="20dp">
-
-            <view
-                android:id="@+id/iv_profile_item"
-                class="de.hdodenhof.circleimageview.CircleImageView"
-                android:layout_width="78dp"
-                android:layout_height="78dp"
-                android:src="@drawable/vec_login_naver"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_profile_nickname"
+                android:id="@+id/tv_profile_item_new_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xsmall"
+                android:layout_marginRight="@dimen/xsmall"
+                android:text="@string/new_badge"
+                android:textAppearance="@style/Typography.Caption01.SemiBold"
+                android:textColor="@color/brand500"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_profile_item_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="@dimen/smedium"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_profile_item_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintGuide_end="@dimen/smedium" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_profile_item_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="27dp"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_profile_item_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_end="27dp" />
+
+            <view
+                android:id="@+id/iv_profile_item_image"
+                class="de.hdodenhof.circleimageview.CircleImageView"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/temporary_profile"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_profile_item_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_profile_item_left"
+                app:layout_constraintTop_toTopOf="@+id/guideline_profile_item_top" />
+
+            <TextView
+                android:id="@+id/tv_profile_item_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_profile_item"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_profile_item_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_profile_item_left"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_item_image"
                 tools:text="닉네임은열글자까지만" />
 
             <TextView
-                android:id="@+id/tv_profile_team"
+                android:id="@+id/tv_profile_item_team_badge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/shape_my_page_lotte_badge_bg"
-                android:paddingLeft="10dp"
-                android:paddingTop="4dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="4dp"
-                android:textColor="@color/grey0"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_profile_nickname"
-                tools:text="롯데자이언츠" />
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/shape_all_rect_r2"
+                android:backgroundTint="@color/hanwha_eagles"
+                android:paddingLeft="4dp"
+                android:paddingTop="1dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="1dp"
+                android:textAppearance="@style/Typography.Caption01.Medium"
+                android:textColor="@color/grey50"
+                app:layout_constraintEnd_toStartOf="@+id/tv_profile_item_cheer_style_badge"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@+id/guideline_profile_item_left"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_item_nickname"
+                tools:text="@string/team_hanwha_eagles" />
 
             <TextView
-                android:id="@+id/tv_profile_gender"
+                android:id="@+id/tv_profile_item_cheer_style_badge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="3dp"
-                android:background="@drawable/shape_all_rect_r20"
-                android:backgroundTint="#F7F8FA"
-                android:paddingLeft="10dp"
-                android:paddingTop="4dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="4dp"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toStartOf="@+id/tv_profile_age"
+                android:layout_marginLeft="@dimen/xstiny"
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/shape_all_rect_r2"
+                android:backgroundTint="@color/brand500"
+                android:paddingLeft="4dp"
+                android:paddingTop="1dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="1dp"
+                android:textAppearance="@style/Typography.Caption01.Medium"
+                android:textColor="@color/grey50"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_profile_item_right"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_profile_team"
-                tools:text="남성" />
+                app:layout_constraintStart_toEndOf="@+id/tv_profile_item_team_badge"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_item_nickname"
+                tools:text="@string/badge_cheer_leader" />
 
             <TextView
-                android:id="@+id/tv_profile_age"
+                android:id="@+id/tv_profile_item_gender_badge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/shape_all_rect_r20"
-                android:backgroundTint="#F7F8FA"
-                android:paddingLeft="10dp"
-                android:paddingTop="4dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="4dp"
-                android:textSize="11sp"
+                android:layout_marginEnd="@dimen/xstiny"
+                android:background="@drawable/shape_all_rect_r2"
+                android:backgroundTint="@color/grey100"
+                android:paddingLeft="@dimen/xstiny"
+                android:paddingTop="1dp"
+                android:paddingRight="@dimen/xstiny"
+                android:paddingBottom="1dp"
+                android:textAppearance="@style/Typography.Caption01.Medium"
+                android:textColor="@color/grey500"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_profile_item_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/tv_profile_item_age_badge"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_item_team_badge"
+                tools:text="@string/male" />
+
+            <TextView
+                android:id="@+id/tv_profile_item_age_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/shape_all_rect_r2"
+                android:backgroundTint="@color/grey100"
+                android:paddingLeft="@dimen/xstiny"
+                android:paddingTop="1dp"
+                android:paddingRight="@dimen/xstiny"
+                android:paddingBottom="1dp"
+                android:textAppearance="@style/Typography.Caption01.Medium"
+                android:textColor="@color/grey500"
+                app:layout_constraintBottom_toTopOf="@+id/guideline_profile_item_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@+id/tv_profile_gender"
-                app:layout_constraintTop_toBottomOf="@+id/tv_profile_team"
+                app:layout_constraintStart_toEndOf="@+id/tv_profile_item_gender_badge"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_item_team_badge"
                 tools:text="26세" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
