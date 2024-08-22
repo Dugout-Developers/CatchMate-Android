@@ -23,6 +23,7 @@
     <string name="post_edt_hint_game_date_time">경기 날짜 및 시간을 입력해주세요</string>
     <string name="post_edt_hint_home">홈 구단</string>
     <string name="post_edt_hint_away">원정 구단</string>
+    <string name="post_edt_hint_cheer_team">응원 구단 선택</string>
     <string name="post_edt_hint_place">구장 위치</string>
     <string name="post_edt_hint_additional_info">내용을 입력해주세요</string>
 
