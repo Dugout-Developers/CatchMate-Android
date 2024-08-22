@@ -38,6 +38,9 @@ class MyPageFragment : Fragment() {
     private fun initHeader() {
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
+            imgbtnSettingHeaderSetting.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment)
+            }
         }
     }
 }
