@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_all_rect_r8"
+    android:backgroundTint="@color/grey0"
+    android:padding="@dimen/xsmall">
+
+    <TextView
+        android:id="@+id/tv_chatting_game_info_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintEnd_toStartOf="@+id/tv_chatting_game_info_time"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="8월 18일 일요일 | " />
+
+    <TextView
+        android:id="@+id/tv_chatting_game_info_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_game_info_date"
+        app:layout_constraintEnd_toStartOf="@+id/tv_chatting_game_info_place"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_game_info_date"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_game_info_date"
+        tools:text="18:30 | " />
+
+    <TextView
+        android:id="@+id/tv_chatting_game_info_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Typography.Body02.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_game_info_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_game_info_time"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_game_info_time"
+        tools:text="잠실" />
+
+    <TextView
+        android:id="@+id/tv_chatting_game_info_versus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="29dp"
+        android:text="@string/versus"
+        android:textAppearance="@style/Typography.Body03.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_chatting_game_info_date" />
+
+    <ImageView
+        android:id="@+id/iv_chatting_game_info_home_team"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="@dimen/base"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_game_info_versus"
+        app:layout_constraintEnd_toStartOf="@+id/tv_chatting_game_info_versus"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_game_info_versus"
+        tools:srcCompat="@drawable/shape_kia_tigers_logo" />
+
+    <ImageView
+        android:id="@+id/iv_chatting_game_info_away_team"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/base"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_game_info_versus"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_game_info_versus"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_game_info_versus"
+        tools:srcCompat="@drawable/shape_hanwha_eagles_logo" />
+</androidx.constraintlayout.widget.ConstraintLayout>

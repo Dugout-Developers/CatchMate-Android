@@ -23,6 +23,7 @@
     <string name="post_edt_hint_game_date_time">경기 날짜 및 시간을 입력해주세요</string>
     <string name="post_edt_hint_home">홈 구단</string>
     <string name="post_edt_hint_away">원정 구단</string>
+    <string name="post_edt_hint_cheer_team">응원 구단 선택</string>
     <string name="post_edt_hint_place">구장 위치</string>
     <string name="post_edt_hint_additional_info">내용을 입력해주세요</string>
 
@@ -30,4 +31,11 @@
     <string name="post_game_time_2pm">14:00</string>
     <string name="post_game_time_5pm">17:00</string>
     <string name="post_game_time_6pm">18:30</string>
+
+    <string name="application_detail_dialog_hint">간단한 자기소개를 적어주세요</string>
+    <string name="application_detail_dialog_write_title">직관 신청을 보낼까요?</string>
+    <string name="application_detail_dialog_read_title">직관 신청을 보냈어요</string>
+    <string name="application_detail_dialog_cancel_menu">신청 취소</string>
+    <string name="application_detail_dialog_join_menu">신청</string>
+
 </resources>

@@ -14,6 +14,11 @@
     <string name="badge_lotte_giants">롯데자이언츠</string>
 
     <string name="badge_cheer_leader">응원단장</string>
+    <string name="badge_glutton">먹보</string>
+    <string name="badge_director">감독</string>
+    <string name="badge_mother_bird">어미새</string>
+    <string name="badge_stone">돌하르방</string>
+    <string name="badge_bodhisattva">보살</string>
 
     <string name="female">여성</string>
     <string name="male">남성</string>

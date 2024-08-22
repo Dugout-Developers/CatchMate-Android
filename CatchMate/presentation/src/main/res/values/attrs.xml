@@ -18,4 +18,30 @@
         <attr name="homeFilterNameText" format="reference|string"/>
         <attr name="homeFilterImage" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="ChattingDateView">
+        <attr name="chattingDateText" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="ChattingGameInfoView">
+        <attr name="chattingGameInfoDateText" format="string"/>
+        <attr name="chattingGameInfoTimeText" format="string"/>
+        <attr name="chattingGameInfoPlaceText" format="string"/>
+        <attr name="chattingGameInfoHomeTeamImage" format="reference"/>
+        <attr name="chattingGameInfoAwayTeamImage" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="ChattingParticipantAlertView">
+        <attr name="chattingParticipantAlertText" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="MyPageUserProfileView">
+        <attr name="myPageUserProfileImage" format="reference"/>
+        <attr name="myPageUserProfileNicknameText" format="string"/>
+        <attr name="myPageUserProfileTeamBadgeColor" format="reference|color"/>
+        <attr name="myPageUserProfileTeamBadgeText" format="string"/>
+        <attr name="myPageUserProfileCheerStyleBadgeText" format="string"/>
+        <attr name="myPageUserProfileGenderBadgeText" format="string"/>
+        <attr name="myPageUserProfileAgeBadgeText" format="string"/>
+    </declare-styleable>
 </resources>

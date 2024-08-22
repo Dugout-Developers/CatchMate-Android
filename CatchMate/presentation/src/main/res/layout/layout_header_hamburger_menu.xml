@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/grey0">
 
     <ImageButton
         android:id="@+id/imgbtn_header_menu_back"
@@ -23,11 +24,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/tab_bar_grid_margin"
+        android:maxWidth="250dp"
+        android:singleLine="true"
         android:textAppearance="@style/Typography.HeadLine03.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgbtn_header_menu_back"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Text" />
+
+    <TextView
+        android:id="@+id/tv_header_menu_member_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tiny"
+        android:textAppearance="@style/Typography.Caption01.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_header_menu_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="3" />
 
     <ImageButton
         android:id="@+id/imgbtn_header_menu_menu"

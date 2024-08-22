@@ -4,29 +4,16 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewTeamButtonBinding
 
-class TeamButtonView : ConstraintLayout {
-    lateinit var teamImageView: ImageView
-    lateinit var teamToggleButton: ToggleButton
-    lateinit var teamTextView: TextView
-
-    constructor(context: Context) : super(context) {
-        initView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initView()
-        getAttrs(attrs)
-    }
-
-    private val binding: ViewTeamButtonBinding by lazy {
+class TeamButtonView(
+    context: Context,
+    attrs: AttributeSet,
+) : ConstraintLayout(context, attrs) {
+    val binding: ViewTeamButtonBinding by lazy {
         ViewTeamButtonBinding.inflate(
             LayoutInflater.from(context),
             this,
@@ -34,20 +21,21 @@ class TeamButtonView : ConstraintLayout {
         )
     }
 
-    private fun initView() {
-        teamImageView = binding.ivTeamButton
-        teamToggleButton = binding.toggleTeamButton
-        teamTextView = binding.tvTeamButton
+    init {
+        initView()
+        getAttrs(attrs)
+    }
 
-        teamTextView.setTextColor(ContextCompat.getColor(context, R.color.grey700))
-        teamToggleButton.setOnCheckedChangeListener { _, isChecked ->
+    private fun initView() {
+        binding.tvTeamButton.setTextColor(ContextCompat.getColor(context, R.color.grey700))
+        binding.toggleTeamButton.setOnCheckedChangeListener { _, isChecked ->
             val textColor =
                 if (isChecked) {
                     ContextCompat.getColor(context, R.color.brand500)
                 } else {
                     ContextCompat.getColor(context, R.color.grey700)
                 }
-            teamTextView.setTextColor(textColor)
+            binding.tvTeamButton.setTextColor(textColor)
         }
     }
 
@@ -61,13 +49,13 @@ class TeamButtonView : ConstraintLayout {
         val teamToggleBg = typedArray.getResourceId(R.styleable.TeamButtonView_teamToggleBg, 0)
         val teamLogoImage = typedArray.getResourceId(R.styleable.TeamButtonView_teamLogoImage, 0)
 
-        teamTextView.text = teamName
+        binding.tvTeamButton.text = teamName
         if (teamToggleBg != 0) {
-            teamToggleButton.setBackgroundResource(teamToggleBg)
+            binding.toggleTeamButton.setBackgroundResource(teamToggleBg)
         }
 
         if (teamLogoImage != 0) {
-            teamImageView.setImageResource(teamLogoImage)
+            binding.ivTeamButton.setImageResource(teamLogoImage)
         }
 
         typedArray.recycle()

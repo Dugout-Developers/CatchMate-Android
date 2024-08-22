@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbarSize="0dp"
@@ -192,6 +192,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/edt_add_post_game_date_time" />
 
             <EditText
+                android:id="@+id/editTextText"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/layout_height"
+                android:layout_marginTop="@dimen/tiny"
+                android:background="@drawable/shape_all_rect_r8_grey50"
+                android:ems="10"
+                android:hint="@string/post_edt_hint_cheer_team"
+                android:inputType="text"
+                android:paddingLeft="@dimen/small"
+                android:paddingRight="@dimen/small"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey800"
+                android:textColorHint="@color/grey400"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_home_team" />
+
+            <EditText
                 android:id="@+id/edt_add_post_place"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/layout_height"
@@ -207,7 +225,7 @@
                 android:textColorHint="@color/grey400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_add_post_home_team" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextText" />
 
             <TextView
                 android:id="@+id/tv_add_post_additional_info"
@@ -272,10 +290,13 @@
                 android:gravity="top|left"
                 android:hint="@string/post_edt_hint_additional_info"
                 android:inputType="text|textMultiLine"
+                android:maxLength="300"
+                android:overScrollMode="always"
                 android:paddingLeft="@dimen/small"
                 android:paddingTop="17dp"
                 android:paddingRight="@dimen/small"
                 android:paddingBottom="17dp"
+                android:scrollbars="vertical"
                 android:textAppearance="@style/Typography.Body02.Medium"
                 android:textColor="@color/grey800"
                 android:textColorHint="@color/grey400"
@@ -392,7 +413,7 @@
                     android:text="@string/fifties" />
             </com.google.android.material.chip.ChipGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <include
         android:id="@+id/layout_add_post_footer"
