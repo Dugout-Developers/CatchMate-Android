@@ -154,7 +154,7 @@ class AddPostFragment :
                             .findViewById<Chip>(
                                 binding.chipgroupAddPostGender.checkedChipId,
                             ).text
-                                .toString()
+                            .toString()
                     } else {
                         null
                     }
@@ -164,11 +164,11 @@ class AddPostFragment :
                             .findViewById<Chip>(
                                 binding.chipgroupAddPostAge.checkedChipIds[0],
                             ).text
-                                .toString()
-                                .replace(
-                                    Regex("[^0-9]"),
-                                    "",
-                                ).toInt()
+                            .toString()
+                            .replace(
+                                Regex("[^0-9]"),
+                                "",
+                            ).toInt()
                     } else {
                         null
                     }
@@ -282,15 +282,15 @@ class AddPostFragment :
             tvAddPostPlace.setOnClickListener {
                 if (addPostViewModel.homeTeamName.value !=
                     getString(
-                        R.string.team_lotte_giants
+                        R.string.team_lotte_giants,
                     ) &&
                     addPostViewModel.homeTeamName.value !=
                     getString(
-                        R.string.team_hanwha_eagles
+                        R.string.team_hanwha_eagles,
                     ) &&
                     addPostViewModel.homeTeamName.value !=
                     getString(
-                        R.string.team_samsung_lions
+                        R.string.team_samsung_lions,
                     )
                 ) {
                     initPlaceTextView()
