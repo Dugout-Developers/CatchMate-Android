@@ -1,5 +1,6 @@
 package com.catchmate.presentation.view.onboarding
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +18,6 @@ import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupBinding
 import com.catchmate.presentation.util.DateUtils
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,14 +27,17 @@ class SignupFragment : Fragment() {
     val binding get() = _binding!!
 
     private val signUpViewModel: SignUpViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
+    private lateinit var userInfo: UserAdditionalInfoRequest
 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
 
     private var isNicknameValid = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userInfo = getUserInfo()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +53,6 @@ class SignupFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        getTokens()
         initHeader()
         initFooterBtn()
         initNickNameViews()
@@ -63,20 +65,12 @@ class SignupFragment : Fragment() {
         _binding = null
     }
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-            }
+    private fun getUserInfo(): UserAdditionalInfoRequest =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("userInfo", UserAdditionalInfoRequest::class.java)!!
+        } else {
+            arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
         }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
-    }
 
     private fun initFooterBtn() {
         binding.layoutSignupFooter.btnFooterOne.apply {
@@ -96,16 +90,21 @@ class SignupFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                val userInfo =
+                val newUserInfo =
                     UserAdditionalInfoRequest(
+                        userInfo.email,
+                        userInfo.provider,
+                        userInfo.providerId,
                         if (gender == R.id.chip_signup_male) "M" else "F",
+                        userInfo.picture,
+                        userInfo.fcmToken,
                         nickName,
                         DateUtils.formatBirthDate(birthDate),
                         "",
                         "",
                     )
                 val bundle = Bundle()
-                bundle.putSerializable("userInfo", userInfo)
+                bundle.putSerializable("userInfo", newUserInfo)
 
                 findNavController().navigate(R.id.action_signupFragment_to_teamOnboardingFragment, bundle)
             }
@@ -205,7 +204,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun checkNicknameAvailability(nickName: String) {
-        signUpViewModel.getNicknameAvailability(accessToken, nickName)
+        signUpViewModel.getNicknameAvailability(nickName)
         signUpViewModel.checkNicknameResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 binding.tvSignupNicknameAlert.apply {
