@@ -120,10 +120,10 @@ class PostPlayTeamBottomSheetFragment(
             setOnClickListener {
                 teamSelectedListener?.onTeamSelected(
                     selectedButton
-                    ?.binding
-                    ?.tvTeamToggleCheckButton
-                    ?.text
-                    .toString(),
+                        ?.binding
+                        ?.tvTeamToggleCheckButton
+                        ?.text
+                        .toString(),
                     teamType,
                 )
                 dismiss()

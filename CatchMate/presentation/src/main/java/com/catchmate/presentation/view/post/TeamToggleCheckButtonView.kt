@@ -48,7 +48,7 @@ class TeamToggleCheckButtonView(
         if (teamLogo != 0) binding.ivTeamToggleCheckButton.setImageResource(teamLogo)
 
         binding.tvTeamToggleCheckButton.text = teamName
-        
+
         typedArray.recycle()
     }
 }

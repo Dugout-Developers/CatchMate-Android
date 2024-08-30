@@ -138,9 +138,10 @@ class AddPostFragment :
             setText(R.string.post_complete)
             setOnClickListener {
                 val title = binding.edtAddPostTitle.text.toString()
-                val peopleCount = binding.tvAddPostPeopleCount.text
-                    .toString()
-                    .toInt()
+                val peopleCount =
+                    binding.tvAddPostPeopleCount.text
+                        .toString()
+                        .toInt()
                 val dateTime = addPostViewModel.gameDateTime.value.toString()
                 val homeTeam = addPostViewModel.homeTeamName.value.toString()
                 val awayTeam = addPostViewModel.awayTeamName.value.toString()
@@ -149,26 +150,25 @@ class AddPostFragment :
                 val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
                 val preferGender =
                     if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
-                        binding.root.findViewById<Chip>(
-                            binding.chipgroupAddPostGender.checkedChipId,
-                        )
-                            .text
-                            .toString()
+                        binding.root
+                            .findViewById<Chip>(
+                                binding.chipgroupAddPostGender.checkedChipId,
+                            ).text
+                                .toString()
                     } else {
                         null
                     }
                 val preferAge =
                     if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                        binding.root.findViewById<Chip>(
-                            binding.chipgroupAddPostAge.checkedChipIds[0],
-                        )
-                            .text
-                            .toString()
-                            .replace(
-                                Regex("[^0-9]"),
-                                "",
-                            )
-                            .toInt()
+                        binding.root
+                            .findViewById<Chip>(
+                                binding.chipgroupAddPostAge.checkedChipIds[0],
+                            ).text
+                                .toString()
+                                .replace(
+                                    Regex("[^0-9]"),
+                                    "",
+                                ).toInt()
                     } else {
                         null
                     }
@@ -280,8 +280,19 @@ class AddPostFragment :
                 cheerTeamBottomSheet.show(requireActivity().supportFragmentManager, cheerTeamBottomSheet.tag)
             }
             tvAddPostPlace.setOnClickListener {
-                if (addPostViewModel.homeTeamName.value != getString(R.string.team_lotte_giants) && addPostViewModel.homeTeamName.value != getString(R.string.team_hanwha_eagles)
-                    && addPostViewModel.homeTeamName.value != getString(R.string.team_samsung_lions)) {
+                if (addPostViewModel.homeTeamName.value !=
+                    getString(
+                        R.string.team_lotte_giants
+                    ) &&
+                    addPostViewModel.homeTeamName.value !=
+                    getString(
+                        R.string.team_hanwha_eagles
+                    ) &&
+                    addPostViewModel.homeTeamName.value !=
+                    getString(
+                        R.string.team_samsung_lions
+                    )
+                ) {
                     initPlaceTextView()
                     return@setOnClickListener
                 }
