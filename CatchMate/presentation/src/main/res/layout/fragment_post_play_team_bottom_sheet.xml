@@ -5,7 +5,7 @@
     android:id="@+id/layout_post_play_team_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey0"
+    android:background="@drawable/shape_all_bottom_sheet_bg"
     android:minHeight="600dp"
     tools:context=".view.post.PostPlayTeamBottomSheetFragment">
 
