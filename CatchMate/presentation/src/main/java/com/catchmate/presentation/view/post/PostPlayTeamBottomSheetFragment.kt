@@ -5,18 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentPostPlayTeamBottomSheetBinding
+import com.catchmate.presentation.interaction.OnTeamSelectedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class PostPlayTeamBottomSheetFragment : BottomSheetDialogFragment() {
+class PostPlayTeamBottomSheetFragment(
+    val firstTeam: String?,
+    val secondTeam: String?,
+) : BottomSheetDialogFragment() {
     private var _binding: FragmentPostPlayTeamBottomSheetBinding? = null
     val binding get() = _binding!!
 
+    var teamSelectedListener: OnTeamSelectedListener? = null
     var selectedButton: TeamToggleCheckButtonView? = null
+    lateinit var teamType: String
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -35,9 +40,13 @@ class PostPlayTeamBottomSheetFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initTeamButtons()
+        initFooter()
     }
 
     override fun onDestroyView() {
@@ -87,10 +96,36 @@ class PostPlayTeamBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
 
+            // 디폴트 버튼 설정
+            if (firstTeam != null && btn.binding.tvTeamToggleCheckButton.text == firstTeam) {
+                btn.binding.toggleTeamToggleCheckButton.isChecked = true
+            }
+
+            // 비활성화 버튼 설정
+            if (secondTeam != null && btn.binding.tvTeamToggleCheckButton.text == secondTeam) {
+                btn.isEnabled = false
+                btn.binding.tvTeamToggleCheckButton.isEnabled = false
+            }
+
             // 버튼 전체 클릭 시 체크 상태 반영되도록
             btn.setOnClickListener {
                 btn.binding.toggleTeamToggleCheckButton.isChecked = !btn.binding.toggleTeamToggleCheckButton.isChecked
             }
         }
+    }
+
+    private fun initFooter() {
+        binding.layoutFooterPlayTeamBottomSheet.btnFooterOne.apply {
+            text = getString(R.string.complete)
+            setOnClickListener {
+                teamSelectedListener?.onTeamSelected(selectedButton?.binding?.tvTeamToggleCheckButton?.text.toString(), teamType)
+                dismiss()
+            }
+        }
+    }
+
+    fun setOnTeamSelectedListener(listener: OnTeamSelectedListener, teamType: String) {
+        teamSelectedListener = listener
+        this.teamType = teamType
     }
 }
