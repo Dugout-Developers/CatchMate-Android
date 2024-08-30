@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
@@ -65,11 +66,32 @@ class LoginFragment : Fragment() {
                     "LoginResponse\nacc:${loginResponse.accessToken}\n" +
                         "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}",
                 )
-                localDataViewModel.saveAccessToken(loginResponse.accessToken)
-                localDataViewModel.saveRefreshToken(loginResponse.refreshToken)
+
                 when (loginResponse.isFirstLogin) {
-                    true -> findNavController().navigate(R.id.signupFragment)
-                    false -> findNavController().navigate(R.id.homeFragment)
+                    true -> {
+                        val loginRequest = loginViewModel.loginRequest.value!!
+                        val userInfo =
+                            UserAdditionalInfoRequest(
+                                loginRequest.email,
+                                loginRequest.provider,
+                                loginRequest.providerId,
+                                "",
+                                loginRequest.picture,
+                                loginRequest.fcmToken,
+                                "",
+                                "",
+                                "",
+                                "",
+                            )
+                        val bundle = Bundle()
+                        bundle.putSerializable("userInfo", userInfo)
+                        findNavController().navigate(R.id.signupFragment, bundle)
+                    }
+                    false -> {
+                        localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
+                        localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)
+                        findNavController().navigate(R.id.homeFragment)
+                    }
                 }
             }
         }
