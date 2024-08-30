@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentPostDateTimeBottomSheetBinding
 import com.catchmate.presentation.interaction.OnDateTimeSelectedListener
-import com.catchmate.presentation.util.DateUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

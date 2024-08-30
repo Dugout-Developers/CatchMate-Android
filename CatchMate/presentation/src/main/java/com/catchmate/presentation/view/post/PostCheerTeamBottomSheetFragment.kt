@@ -28,7 +28,10 @@ class PostCheerTeamBottomSheetFragment(
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initTeamToggleCheckButtonResources(homeTeam, binding.ttcbvPostCheerTeamHome)
         initTeamToggleCheckButtonResources(awayTeam, binding.ttcbvPostCheerTeamAway)
@@ -45,7 +48,7 @@ class PostCheerTeamBottomSheetFragment(
         val teamButtons: List<TeamToggleCheckButtonView> =
             listOf(
                 binding.ttcbvPostCheerTeamHome,
-                binding.ttcbvPostCheerTeamAway
+                binding.ttcbvPostCheerTeamAway,
             )
 
         teamButtons.forEach { btn ->
@@ -81,7 +84,13 @@ class PostCheerTeamBottomSheetFragment(
 
     private fun initFooter() {
         binding.layoutFooterPostCheerTeam.btnFooterOne.setOnClickListener {
-            cheerTeamSelectedListener?.onCheerTeamSelected(selectedButton?.binding?.tvTeamToggleCheckButton?.text.toString())
+            cheerTeamSelectedListener?.onCheerTeamSelected(
+                selectedButton
+                    ?.binding
+                    ?.tvTeamToggleCheckButton
+                    ?.text
+                    .toString(),
+            )
             dismiss()
         }
     }
@@ -90,7 +99,10 @@ class PostCheerTeamBottomSheetFragment(
         cheerTeamSelectedListener = listener
     }
 
-    private fun initTeamToggleCheckButtonResources(teamName: String, buttonView: TeamToggleCheckButtonView) {
+    private fun initTeamToggleCheckButtonResources(
+        teamName: String,
+        buttonView: TeamToggleCheckButtonView,
+    ) {
         buttonView.binding.tvTeamToggleCheckButton.text = teamName
         when (teamName) {
             "다이노스" -> {

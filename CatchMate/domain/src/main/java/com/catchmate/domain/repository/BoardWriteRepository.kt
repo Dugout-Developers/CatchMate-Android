@@ -4,5 +4,8 @@ import com.catchmate.domain.model.BoardWriteRequest
 import com.catchmate.domain.model.BoardWriteResponse
 
 interface BoardWriteRepository {
-    suspend fun postBoardWrite(accessToken: String, boardWriteRequest: BoardWriteRequest): BoardWriteResponse?
+    suspend fun postBoardWrite(
+        accessToken: String,
+        boardWriteRequest: BoardWriteRequest,
+    ): BoardWriteResponse?
 }

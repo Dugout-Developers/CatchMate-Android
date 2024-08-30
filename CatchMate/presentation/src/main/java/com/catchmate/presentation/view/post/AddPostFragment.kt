@@ -26,12 +26,18 @@ import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
+class AddPostFragment :
+    Fragment(),
+    OnPeopleCountSelectedListener,
+    OnDateTimeSelectedListener,
+    OnTeamSelectedListener,
+    OnCheerTeamSelectedListener,
+    OnPlaceSelectedListener {
     private var _binding: FragmentAddPostBinding? = null
     val binding get() = _binding!!
 
-    private val addPostViewModel : AddPostViewModel by viewModels()
-    private val localDataViewModel : LocalDataViewMdoel by viewModels()
+    private val addPostViewModel: AddPostViewModel by viewModels()
+    private val localDataViewModel: LocalDataViewMdoel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
@@ -84,7 +90,8 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
         binding.layoutAddPostHeader.run {
             imgbtnHeaderTextBack.setOnClickListener {
                 val navOptions =
-                    NavOptions.Builder()
+                    NavOptions
+                        .Builder()
                         .setPopUpTo(R.id.addPostFragment, true)
                         .build()
                 findNavController().navigate(R.id.action_addPostFragment_to_homeFragment, null, navOptions)
@@ -131,7 +138,9 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
             setText(R.string.post_complete)
             setOnClickListener {
                 val title = binding.edtAddPostTitle.text.toString()
-                val peopleCount = binding.tvAddPostPeopleCount.text.toString().toInt()
+                val peopleCount = binding.tvAddPostPeopleCount.text
+                    .toString()
+                    .toInt()
                 val dateTime = addPostViewModel.gameDateTime.value.toString()
                 val homeTeam = addPostViewModel.homeTeamName.value.toString()
                 val awayTeam = addPostViewModel.awayTeamName.value.toString()
@@ -140,13 +149,26 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
                 val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
                 val preferGender =
                     if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
-                        binding.root.findViewById<Chip>(binding.chipgroupAddPostGender.checkedChipId).text.toString()
+                        binding.root.findViewById<Chip>(
+                            binding.chipgroupAddPostGender.checkedChipId,
+                        )
+                            .text
+                            .toString()
                     } else {
                         null
                     }
                 val preferAge =
                     if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                        binding.root.findViewById<Chip>(binding.chipgroupAddPostAge.checkedChipIds[0]).text.toString().replace(Regex("[^0-9]"), "").toInt()
+                        binding.root.findViewById<Chip>(
+                            binding.chipgroupAddPostAge.checkedChipIds[0],
+                        )
+                            .text
+                            .toString()
+                            .replace(
+                                Regex("[^0-9]"),
+                                "",
+                            )
+                            .toInt()
                     } else {
                         null
                     }
@@ -228,12 +250,20 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
                 dateTimeBottomSheet.show(requireActivity().supportFragmentManager, dateTimeBottomSheet.tag)
             }
             tvAddPostHomeTeam.setOnClickListener {
-                val playTeamBottomSheet = PostPlayTeamBottomSheetFragment(addPostViewModel.homeTeamName.value, addPostViewModel.awayTeamName.value)
+                val playTeamBottomSheet =
+                    PostPlayTeamBottomSheetFragment(
+                        addPostViewModel.homeTeamName.value,
+                        addPostViewModel.awayTeamName.value,
+                    )
                 playTeamBottomSheet.setOnTeamSelectedListener(this@AddPostFragment, "home")
                 playTeamBottomSheet.show(requireActivity().supportFragmentManager, playTeamBottomSheet.tag)
             }
             tvAddPostAwayTeam.setOnClickListener {
-                val playTeamBottomSheet = PostPlayTeamBottomSheetFragment(addPostViewModel.awayTeamName.value, addPostViewModel.homeTeamName.value)
+                val playTeamBottomSheet =
+                    PostPlayTeamBottomSheetFragment(
+                        addPostViewModel.awayTeamName.value,
+                        addPostViewModel.homeTeamName.value,
+                    )
                 playTeamBottomSheet.setOnTeamSelectedListener(this@AddPostFragment, "away")
                 playTeamBottomSheet.show(requireActivity().supportFragmentManager, playTeamBottomSheet.tag)
             }
@@ -241,15 +271,17 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
                 if (addPostViewModel.homeTeamName.value == null || addPostViewModel.awayTeamName.value == null) {
                     return@setOnClickListener
                 }
-                val cheerTeamBottomSheet = PostCheerTeamBottomSheetFragment(
-                    addPostViewModel.homeTeamName.value!!,
-                    addPostViewModel.awayTeamName.value!!,
-                )
+                val cheerTeamBottomSheet =
+                    PostCheerTeamBottomSheetFragment(
+                        addPostViewModel.homeTeamName.value!!,
+                        addPostViewModel.awayTeamName.value!!,
+                    )
                 cheerTeamBottomSheet.setOnCheerTeamSelectedListener(this@AddPostFragment)
                 cheerTeamBottomSheet.show(requireActivity().supportFragmentManager, cheerTeamBottomSheet.tag)
             }
             tvAddPostPlace.setOnClickListener {
-                if (addPostViewModel.homeTeamName.value != getString(R.string.team_lotte_giants) && addPostViewModel.homeTeamName.value != getString(R.string.team_hanwha_eagles) && addPostViewModel.homeTeamName.value != getString(R.string.team_samsung_lions)) {
+                if (addPostViewModel.homeTeamName.value != getString(R.string.team_lotte_giants) && addPostViewModel.homeTeamName.value != getString(R.string.team_hanwha_eagles)
+                    && addPostViewModel.homeTeamName.value != getString(R.string.team_samsung_lions)) {
                     initPlaceTextView()
                     return@setOnClickListener
                 }
@@ -300,12 +332,18 @@ class AddPostFragment : Fragment(), OnPeopleCountSelectedListener {
         checkInputFieldsAreEmpty()
     }
 
-    override fun onDateTimeSelected(date: String, time: String) {
+    override fun onDateTimeSelected(
+        date: String,
+        time: String,
+    ) {
         addPostViewModel.setGameDate(DateUtils.formatGameDateTime(date, time))
         checkInputFieldsAreEmpty()
     }
 
-    override fun onTeamSelected(teamName: String, teamType: String) {
+    override fun onTeamSelected(
+        teamName: String,
+        teamType: String,
+    ) {
         if (teamType == "home") {
             addPostViewModel.setHomeTeamName(teamName)
         } else {

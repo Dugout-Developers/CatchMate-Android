@@ -1,5 +1,8 @@
 package com.catchmate.presentation.interaction
 
 interface OnTeamSelectedListener {
-    fun onTeamSelected(teamName: String, teamType: String)
+    fun onTeamSelected(
+        teamName: String,
+        teamType: String,
+    )
 }

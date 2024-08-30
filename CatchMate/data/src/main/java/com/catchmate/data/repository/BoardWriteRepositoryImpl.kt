@@ -13,7 +13,7 @@ class BoardWriteRepositoryImpl
     @Inject
     constructor(
         retrofitClient: RetrofitClient,
-    ): BoardWriteRepository {
+    ) : BoardWriteRepository {
         private val boardWriteApi = retrofitClient.createApi<BoardWriteService>()
 
         override suspend fun postBoardWrite(

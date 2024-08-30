@@ -118,13 +118,23 @@ class PostPlayTeamBottomSheetFragment(
         binding.layoutFooterPlayTeamBottomSheet.btnFooterOne.apply {
             text = getString(R.string.complete)
             setOnClickListener {
-                teamSelectedListener?.onTeamSelected(selectedButton?.binding?.tvTeamToggleCheckButton?.text.toString(), teamType)
+                teamSelectedListener?.onTeamSelected(
+                    selectedButton
+                    ?.binding
+                    ?.tvTeamToggleCheckButton
+                    ?.text
+                    .toString(),
+                    teamType,
+                )
                 dismiss()
             }
         }
     }
 
-    fun setOnTeamSelectedListener(listener: OnTeamSelectedListener, teamType: String) {
+    fun setOnTeamSelectedListener(
+        listener: OnTeamSelectedListener,
+        teamType: String,
+    ) {
         teamSelectedListener = listener
         this.teamType = teamType
     }

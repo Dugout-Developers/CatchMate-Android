@@ -17,7 +17,10 @@ object DateUtils {
         }
     }
 
-    fun formatGameDateTime(date: String, time: String): String {
+    fun formatGameDateTime(
+        date: String,
+        time: String,
+    ): String {
         return date + "T" + time + "00.000Z"
     }
 
