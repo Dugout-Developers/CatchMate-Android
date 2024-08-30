@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_footer_one"
-        style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -15,6 +14,8 @@
         android:layout_marginBottom="38dp"
         android:background="@drawable/shape_all_submit_button"
         android:enabled="false"
+        android:gravity="center"
+        android:stateListAnimator="@null"
         android:textAppearance="@style/Typography.Body01.SemiBold"
         android:textColor="@color/grey0"
         app:layout_constraintBottom_toBottomOf="parent"
