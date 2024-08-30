@@ -8,7 +8,7 @@
         android:id="@+id/toggle_team_toggle_check_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/selector_nc_dinos_bg"
+        android:background="@null"
         android:stateListAnimator="@null"
         android:textOff="@null"
         android:textOn="@null"
@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/xsmall"
         android:textAppearance="@style/Typography.Body01.Medium"
+        android:textColor="@color/color_team_toggle_check_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/toggle_team_toggle_check_button"
         app:layout_constraintTop_toTopOf="parent" />
