@@ -30,7 +30,21 @@
     <string name="post_game_time_title">경기 시간</string>
     <string name="post_game_time_2pm">14:00</string>
     <string name="post_game_time_5pm">17:00</string>
-    <string name="post_game_time_6pm">18:30</string>
+    <string name="post_game_time_6pm">18:00</string>
+    <string name="post_game_time_6pm_30">18:30</string>
+
+    <string name="post_place_nc">창원</string>
+    <string name="post_place_ssg">인천</string>
+    <string name="post_place_doosan_lg">잠실</string>
+    <string name="post_place_kt">수원</string>
+    <string name="post_place_kia">광주</string>
+    <string name="post_place_kiwoom">고척</string>
+    <string name="post_place_lotte_first">사직</string>
+    <string name="post_place_lotte_second">울산</string>
+    <string name="post_place_hanwha_first">대전</string>
+    <string name="post_place_hanwha_second">청주</string>
+    <string name="post_place_samsung_first">대구</string>
+    <string name="post_place_samsung_second">포항</string>
 
     <string name="application_detail_dialog_hint">간단한 자기소개를 적어주세요</string>
     <string name="application_detail_dialog_write_title">직관 신청을 보낼까요?</string>

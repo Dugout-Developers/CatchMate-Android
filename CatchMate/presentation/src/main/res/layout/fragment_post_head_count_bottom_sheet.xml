@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.post.PostHeadCountBottomSheetFragment" >
+    android:background="@drawable/shape_all_bottom_sheet_bg"
+    tools:context=".view.post.PostHeadCountBottomSheetFragment">
 
     <ImageView
         android:id="@+id/iv_post_head_count_handle"

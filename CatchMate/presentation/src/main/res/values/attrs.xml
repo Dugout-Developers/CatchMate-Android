@@ -44,4 +44,10 @@
         <attr name="myPageUserProfileGenderBadgeText" format="string"/>
         <attr name="myPageUserProfileAgeBadgeText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="TeamToggleCheckButtonView">
+        <attr name="teamToggleCheckButtonToggleBg" format="reference"/>
+        <attr name="teamToggleCheckButtonLogoImage" format="reference"/>
+        <attr name="teamToggleCheckButtonTeamNameText" format="string"/>
+    </declare-styleable>
 </resources>

@@ -65,7 +65,14 @@
         android:id="@+id/addPostFragment"
         android:name="com.catchmate.presentation.view.post.AddPostFragment"
         android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <action
+            android:id="@+id/action_addPostFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+        <action
+            android:id="@+id/action_addPostFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/readPostFragment"
         android:name="com.catchmate.presentation.view.post.ReadPostFragment"

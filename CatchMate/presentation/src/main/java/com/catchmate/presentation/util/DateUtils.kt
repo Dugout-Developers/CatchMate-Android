@@ -1,5 +1,9 @@
 package com.catchmate.presentation.util
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 object DateUtils {
     fun formatBirthDate(inputDate: String): String {
         val year = inputDate.substring(0..1)
@@ -11,5 +15,22 @@ object DateUtils {
         } else {
             "19$year-$month-$day"
         }
+    }
+
+    fun formatGameDateTime(
+        date: String,
+        time: String,
+    ): String = date + "T" + time + "00.000Z"
+
+    fun formatPlayDate(dateTime: String): String {
+        val (date, time) = dateTime.split("T")
+
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate: Date = inputDateFormat.parse(date)
+        val outputDateFormat = SimpleDateFormat("M월 d일 E요일", Locale.getDefault())
+
+        val formattedTime = time.substring(0, 5)
+
+        return outputDateFormat.format(formattedDate) + " | " + formattedTime
     }
 }

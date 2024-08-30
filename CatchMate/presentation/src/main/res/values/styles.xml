@@ -14,8 +14,11 @@
         <item name="rippleColor">@android:color/transparent</item>
     </style>
 
-    <style name="CustomePostGenderChip" parent="Widget.Material3.Chip.Suggestion">
-        <item name="android:layout_height">34dp</item>
+    <style name="CustomPostGenderChip" parent="Widget.Material3.Chip.Suggestion">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="checkedIconVisible">false</item>
         <item name="chipStrokeColor">@android:color/transparent</item>
         <item name="chipBackgroundColor">@color/color_post_gender_chip_bg</item>

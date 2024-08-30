@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_post_play_team_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey0">
+    android:background="@drawable/shape_all_bottom_sheet_bg"
+    android:minHeight="600dp"
+    tools:context=".view.post.PostPlayTeamBottomSheetFragment">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:id="@+id/draghandleview_teambottomsheet"
+        android:id="@+id/draghandle_play_team_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/tiny"
@@ -16,15 +20,15 @@
         app:srcCompat="@drawable/vec_all_bottom_sheet_handle_62dp" />
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedsv_team"
+        android:id="@+id/sv_play_team_bottom_sheet"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/base"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/layout_team_filter_footer"
+        app:layout_constraintBottom_toTopOf="@+id/layout_footer_play_team_bottom_sheet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/draghandleview_teambottomsheet">
+        app:layout_constraintTop_toBottomOf="@+id/draghandle_play_team_bottom_sheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,7 +38,7 @@
             android:paddingBottom="36dp">
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_nc"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_nc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,121 +49,121 @@
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_nc_dinos_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_samsung"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_samsung"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_nc"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_nc"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_samsung_lions"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_samsung_lions_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_ssg"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_ssg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_samsung"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_samsung"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_ssg_landers"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_ssg_landers_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_doosan"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_doosan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_ssg"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_ssg"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_doosan_bears"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_doosan_bears_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_kt"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_kt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_doosan"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_doosan"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_kt_wiz"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_kt_wiz_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_hanwha"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_hanwha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_kt"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_kt"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_hanwha_eagles"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_hanwha_eagles_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_lotte"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_lotte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_hanwha"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_hanwha"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_lotte_giants"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_lotte_giants_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_kia"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_kia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_lotte"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_lotte"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_kia_tigers"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_kia_tigers_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_lg"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_lg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_kia"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_kia"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_lg_twins"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_lg_twins_bg" />
 
             <com.catchmate.presentation.view.post.TeamToggleCheckButtonView
-                android:id="@+id/ttcbv_team_filter_kiwoom"
+                android:id="@+id/ttcbv_play_team_bottom_sheet_kiwoom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ttcbv_team_filter_lg"
+                app:layout_constraintTop_toBottomOf="@+id/ttcbv_play_team_bottom_sheet_lg"
+                app:teamToggleCheckButtonLogoImage="@drawable/vec_all_essential_mark_6dp"
                 app:teamToggleCheckButtonTeamNameText="@string/team_kiwoom_heroes"
                 app:teamToggleCheckButtonToggleBg="@drawable/selector_kiwoom_heroes_bg" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <include
-        android:id="@+id/layout_team_filter_footer"
-        layout="@layout/layout_footer_filter"
+        android:id="@+id/layout_footer_play_team_bottom_sheet"
+        layout="@layout/layout_footer_one_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_home_team_filter_bottom_sheet"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_home_team_filter_bottom_sheet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_end="34dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
