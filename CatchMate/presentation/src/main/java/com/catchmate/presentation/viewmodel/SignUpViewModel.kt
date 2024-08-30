@@ -27,20 +27,18 @@ class SignUpViewModel
             get() = _userResponse
 
         fun getNicknameAvailability(
-            accessToken: String,
             nickName: String,
         ) {
             viewModelScope.launch {
-                _checkNicknameResponse.value = signUpUseCase.getNicknameAvailability(accessToken, nickName)
+                _checkNicknameResponse.value = signUpUseCase.getNicknameAvailability(nickName)
             }
         }
 
         fun patchUserAdditionalInfo(
-            accessToken: String,
             userAdditionalInfoRequest: UserAdditionalInfoRequest,
         ) {
             viewModelScope.launch {
-                _userResponse.value = signUpUseCase.patchUserAdditionalInfo(accessToken, userAdditionalInfoRequest)
+                _userResponse.value = signUpUseCase.patchUserAdditionalInfo(userAdditionalInfoRequest)
             }
         }
     }

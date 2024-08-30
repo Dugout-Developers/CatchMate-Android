@@ -17,12 +17,9 @@ class SignUpRepositoryImpl
     ) : SignUpRepository {
         private val signUpApi = retrofitClient.createApi<SignUpService>()
 
-        override suspend fun getNicknameAvailability(
-            accessToken: String,
-            nickName: String,
-        ): CheckNicknameResponse? =
+        override suspend fun getNicknameAvailability(nickName: String): CheckNicknameResponse? =
             try {
-                val response = signUpApi.getNicknameAvailability(accessToken, nickName)
+                val response = signUpApi.getNicknameAvailability(nickName)
                 if (response.isSuccessful) {
                     Log.d("AuthRepo", "통신 성공 : ${response.code()}")
                     response.body()?.let { SignUpMapper.toCheckNicknameResponse(it) } ?: throw Exception("Empty Response")
@@ -35,15 +32,11 @@ class SignUpRepositoryImpl
                 null
             }
 
-        override suspend fun patchUserAdditionalInfo(
-            accessToken: String,
-            userAdditionalInfoRequest: UserAdditionalInfoRequest,
-        ): UserResponse? =
+        override suspend fun patchUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
             try {
                 val response =
                     signUpApi
                         .patchUserAdditionalInfo(
-                            accessToken,
                             SignUpMapper
                                 .toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest),
                         )

@@ -6,12 +6,10 @@ import com.catchmate.domain.model.UserResponse
 
 interface SignUpRepository {
     suspend fun getNicknameAvailability(
-        accessToken: String,
         nickName: String,
     ): CheckNicknameResponse?
 
     suspend fun patchUserAdditionalInfo(
-        accessToken: String,
         userAdditionalInfoRequest: UserAdditionalInfoRequest,
     ): UserResponse?
 }
