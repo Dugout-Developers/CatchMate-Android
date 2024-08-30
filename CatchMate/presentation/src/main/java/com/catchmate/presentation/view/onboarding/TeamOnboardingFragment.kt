@@ -97,7 +97,12 @@ class TeamOnboardingFragment : Fragment() {
             setOnClickListener {
                 val newUserInfo =
                     UserAdditionalInfoRequest(
+                        userInfo.email,
+                        userInfo.provider,
+                        userInfo.providerId,
                         userInfo.gender,
+                        userInfo.picture,
+                        userInfo.fcmToken,
                         userInfo.nickName,
                         userInfo.birthDate,
                         selectedButton
