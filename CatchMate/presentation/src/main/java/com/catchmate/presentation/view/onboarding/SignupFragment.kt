@@ -160,7 +160,8 @@ class SignupFragment : Fragment() {
                         before: Int,
                         count: Int,
                     ) {
-                        tvSignupNicknameCount.text = count.toString()
+                        val currentLength = s?.length ?: 0
+                        tvSignupNicknameCount.text = currentLength.toString()
                         runnable?.let { handler.removeCallbacks(it) }
                     }
 
