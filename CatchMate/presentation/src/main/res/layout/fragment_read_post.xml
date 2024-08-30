@@ -330,35 +330,35 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_read_post_age_1"
-            style="@style/CustomePostGenderChip"
+            style="@style/CustomPostGenderChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="false"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_read_post_age_2"
-            style="@style/CustomePostGenderChip"
+            style="@style/CustomPostGenderChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="false"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_read_post_age_3"
-            style="@style/CustomePostGenderChip"
+            style="@style/CustomPostGenderChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="false"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_read_post_age_4"
-            style="@style/CustomePostGenderChip"
+            style="@style/CustomPostGenderChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="false"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_read_post_gender"
-            style="@style/CustomePostGenderChip"
+            style="@style/CustomPostGenderChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="false"/>
