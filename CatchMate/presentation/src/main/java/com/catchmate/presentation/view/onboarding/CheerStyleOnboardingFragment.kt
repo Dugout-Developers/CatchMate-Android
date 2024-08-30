@@ -25,8 +25,6 @@ class CheerStyleOnboardingFragment : Fragment() {
     private val localDataViewModel: LocalDataViewMdoel by viewModels()
 
     private lateinit var userInfo: UserAdditionalInfoRequest
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
 
     private var selectedButton: CheerStyleButtonView? = null
 
@@ -50,7 +48,6 @@ class CheerStyleOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        getTokens()
         initHeader()
         initFooterButton()
         initCheerStyleButtons()
@@ -68,28 +65,18 @@ class CheerStyleOnboardingFragment : Fragment() {
             arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
         }
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
-    }
-
     private fun initFooterButton() {
         binding.layoutCheerStyleOnboardingNext.btnFooterOne.apply {
             setText(R.string.next)
             setOnClickListener {
                 val newUserInfo =
                     UserAdditionalInfoRequest(
+                        userInfo.email,
+                        userInfo.provider,
+                        userInfo.providerId,
                         userInfo.gender,
+                        userInfo.picture,
+                        userInfo.fcmToken,
                         userInfo.nickName,
                         userInfo.birthDate,
                         userInfo.favGudan,
@@ -141,10 +128,12 @@ class CheerStyleOnboardingFragment : Fragment() {
     }
 
     private fun patchUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
-        signUpViewModel.patchUserAdditionalInfo(accessToken, userAdditionalInfoRequest)
+        signUpViewModel.patchUserAdditionalInfo(userAdditionalInfoRequest)
         signUpViewModel.userResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("response", response.userId.toString())
+                Log.d("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
+                localDataViewModel.saveAccessToken(response.accessToken)
+                localDataViewModel.saveRefreshToken(response.refreshToken)
             }
         }
     }
