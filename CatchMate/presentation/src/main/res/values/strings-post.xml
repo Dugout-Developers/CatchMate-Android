@@ -30,7 +30,8 @@
     <string name="post_game_time_title">경기 시간</string>
     <string name="post_game_time_2pm">14:00</string>
     <string name="post_game_time_5pm">17:00</string>
-    <string name="post_game_time_6pm">18:30</string>
+    <string name="post_game_time_6pm">18:00</string>
+    <string name="post_game_time_6pm_30">18:30</string>
 
     <string name="application_detail_dialog_hint">간단한 자기소개를 적어주세요</string>
     <string name="application_detail_dialog_write_title">직관 신청을 보낼까요?</string>
