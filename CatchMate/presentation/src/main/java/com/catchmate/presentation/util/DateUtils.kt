@@ -20,7 +20,7 @@ object DateUtils {
     fun formatGameDateTime(
         date: String,
         time: String,
-    ): String = date + "T" + time + "00.000Z"
+    ): String = date + " " + time + "00"
 
     fun formatPlayDate(dateTime: String): String {
         val (date, time) = dateTime.split("T")
