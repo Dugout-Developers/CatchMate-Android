@@ -3,17 +3,21 @@ package com.catchmate.presentation.view.home
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
+import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
+
+    private val localDataViewModel: LocalDataViewMdoel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +27,26 @@ class MainActivity : AppCompatActivity() {
 
         initNavController()
         initBottomNavigationView()
+
+        getTokens()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun getTokens() {
+        localDataViewModel.getAccessToken()
+        localDataViewModel.accessToken.observe(this) { accessToken ->
+            if (accessToken.isNullOrEmpty()) {
+                Log.e("메인a", "accesstoken null or empty")
+                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.loginFragment)
+            } else {
+                Log.e("메인a", "accesstoken not null or empty")
+                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
+            }
+        }
     }
 
     private fun initNavController() {
