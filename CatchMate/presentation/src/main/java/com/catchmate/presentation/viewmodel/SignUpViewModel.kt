@@ -26,17 +26,13 @@ class SignUpViewModel
         val userResponse
             get() = _userResponse
 
-        fun getNicknameAvailability(
-            nickName: String,
-        ) {
+        fun getNicknameAvailability(nickName: String) {
             viewModelScope.launch {
                 _checkNicknameResponse.value = signUpUseCase.getNicknameAvailability(nickName)
             }
         }
 
-        fun postUserAdditionalInfo(
-            userAdditionalInfoRequest: UserAdditionalInfoRequest,
-        ) {
+        fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
             viewModelScope.launch {
                 _userResponse.value = signUpUseCase.postUserAdditionalInfo(userAdditionalInfoRequest)
             }
