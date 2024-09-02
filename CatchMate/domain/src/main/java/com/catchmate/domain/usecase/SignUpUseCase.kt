@@ -12,7 +12,7 @@ class SignUpUseCase
         private val signUpRepository: SignUpRepository,
     ) {
         suspend fun getNicknameAvailability(nickName: String): CheckNicknameResponse? {
-            signUpRepository.getNicknameAvailability(nickName)
+            return signUpRepository.getNicknameAvailability(nickName)
         }
 
         suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
