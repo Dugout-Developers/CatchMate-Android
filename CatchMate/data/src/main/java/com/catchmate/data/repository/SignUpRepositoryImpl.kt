@@ -8,6 +8,7 @@ import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.domain.model.UserResponse
 import com.catchmate.domain.repository.SignUpRepository
+import org.json.JSONObject
 import javax.inject.Inject
 
 class SignUpRepositoryImpl
@@ -17,12 +18,9 @@ class SignUpRepositoryImpl
     ) : SignUpRepository {
         private val signUpApi = retrofitClient.createApi<SignUpService>()
 
-        override suspend fun getNicknameAvailability(
-            accessToken: String,
-            nickName: String,
-        ): CheckNicknameResponse? =
+        override suspend fun getNicknameAvailability(nickName: String): CheckNicknameResponse? =
             try {
-                val response = signUpApi.getNicknameAvailability(accessToken, nickName)
+                val response = signUpApi.getNicknameAvailability(nickName)
                 if (response.isSuccessful) {
                     Log.d("AuthRepo", "통신 성공 : ${response.code()}")
                     response.body()?.let { SignUpMapper.toCheckNicknameResponse(it) } ?: throw Exception("Empty Response")
@@ -35,15 +33,11 @@ class SignUpRepositoryImpl
                 null
             }
 
-        override suspend fun patchUserAdditionalInfo(
-            accessToken: String,
-            userAdditionalInfoRequest: UserAdditionalInfoRequest,
-        ): UserResponse? =
+        override suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
             try {
                 val response =
                     signUpApi
-                        .patchUserAdditionalInfo(
-                            accessToken,
+                        .postUserAdditionalInfo(
                             SignUpMapper
                                 .toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest),
                         )
@@ -51,7 +45,8 @@ class SignUpRepositoryImpl
                     Log.d("SignUpRepo", "통신 성공 ${response.code()}")
                     response.body()?.let { SignUpMapper.toUserResponse(it) } ?: throw Exception("Empty Response")
                 } else {
-                    Log.d("SignUpRepo", "통신 실패 ${response.code()}")
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Log.d("SignUpRepo", "통신 실패 ${response.code()}\n$stringToJson")
                     null
                 }
             } catch (e: Exception) {

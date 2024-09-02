@@ -16,7 +16,7 @@ class CheerStyleButtonView(
         ViewCheerStyleButtonBinding.inflate(
             LayoutInflater.from(context),
             this,
-            false,
+            true,
         )
     }
 
@@ -39,5 +39,6 @@ class CheerStyleButtonView(
         binding.tvCheerStyleExplain.text = cheerStyleExplainText
         binding.toggleCheerStyle.setBackgroundResource(cheerStyleToggleBg)
         binding.ivCheerStyle.setImageResource(cheerStyleImage)
+        typedArray.recycle()
     }
 }

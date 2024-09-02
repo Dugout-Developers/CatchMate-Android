@@ -11,13 +11,10 @@ class SignUpUseCase
     constructor(
         private val signUpRepository: SignUpRepository,
     ) {
-        suspend fun getNicknameAvailability(
-            accessToken: String,
-            nickName: String,
-        ): CheckNicknameResponse? = signUpRepository.getNicknameAvailability(accessToken, nickName)
+        suspend fun getNicknameAvailability(nickName: String): CheckNicknameResponse? {
+            signUpRepository.getNicknameAvailability(nickName)
+        }
 
-        suspend fun patchUserAdditionalInfo(
-            accessToken: String,
-            userAdditionalInfoRequest: UserAdditionalInfoRequest,
-        ): UserResponse? = signUpRepository.patchUserAdditionalInfo(accessToken, userAdditionalInfoRequest)
+        suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
+            signUpRepository.postUserAdditionalInfo(userAdditionalInfoRequest)
     }

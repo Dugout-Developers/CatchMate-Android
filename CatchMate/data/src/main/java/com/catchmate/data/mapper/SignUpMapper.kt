@@ -15,7 +15,12 @@ object SignUpMapper {
 
     fun toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserAdditionalInfoRequestDTO =
         UserAdditionalInfoRequestDTO(
+            email = userAdditionalInfoRequest.email,
+            provider = userAdditionalInfoRequest.provider,
+            providerId = userAdditionalInfoRequest.providerId,
             gender = userAdditionalInfoRequest.gender,
+            picture = userAdditionalInfoRequest.picture,
+            fcmToken = userAdditionalInfoRequest.fcmToken,
             nickName = userAdditionalInfoRequest.nickName,
             birthDate = userAdditionalInfoRequest.birthDate,
             favGudan = userAdditionalInfoRequest.favGudan,
@@ -24,7 +29,12 @@ object SignUpMapper {
 
     fun toUserAdditionalInfoRequest(userAdditionalInfoRequestDTO: UserAdditionalInfoRequestDTO): UserAdditionalInfoRequest =
         UserAdditionalInfoRequest(
+            email = userAdditionalInfoRequestDTO.email,
+            provider = userAdditionalInfoRequestDTO.provider,
+            providerId = userAdditionalInfoRequestDTO.providerId,
             gender = userAdditionalInfoRequestDTO.gender,
+            picture = userAdditionalInfoRequestDTO.picture,
+            fcmToken = userAdditionalInfoRequestDTO.fcmToken,
             nickName = userAdditionalInfoRequestDTO.nickName,
             birthDate = userAdditionalInfoRequestDTO.birthDate,
             favGudan = userAdditionalInfoRequestDTO.favGudan,
@@ -33,6 +43,8 @@ object SignUpMapper {
 
     fun toUserResponse(userResponseDTO: UserResponseDTO): UserResponse =
         UserResponse(
+            accessToken = userResponseDTO.accessToken,
+            refreshToken = userResponseDTO.refreshToken,
             userId = userResponseDTO.userId,
             createdAt = userResponseDTO.createdAt,
         )
