@@ -9,7 +9,7 @@ interface SignUpRepository {
         nickName: String,
     ): CheckNicknameResponse?
 
-    suspend fun patchUserAdditionalInfo(
+    suspend fun postUserAdditionalInfo(
         userAdditionalInfoRequest: UserAdditionalInfoRequest,
     ): UserResponse?
 }

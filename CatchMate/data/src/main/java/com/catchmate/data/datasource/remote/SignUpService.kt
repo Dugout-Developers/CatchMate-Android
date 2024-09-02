@@ -6,7 +6,7 @@ import com.catchmate.data.dto.UserResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface SignUpService {
@@ -15,8 +15,8 @@ interface SignUpService {
         @Query("nickName") nickName: String,
     ): Response<CheckNicknameResponseDTO?>
 
-    @PATCH("user/additional-info")
-    suspend fun patchUserAdditionalInfo(
+    @POST("user/additional-info")
+    suspend fun postUserAdditionalInfo(
         @Body userAdditionalInfoRequestDTO: UserAdditionalInfoRequestDTO,
     ): Response<UserResponseDTO?>
 }

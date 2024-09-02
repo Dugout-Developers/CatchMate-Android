@@ -15,7 +15,7 @@ class SignUpUseCase
             nickName: String,
         ): CheckNicknameResponse? = signUpRepository.getNicknameAvailability(nickName)
 
-        suspend fun patchUserAdditionalInfo(
+        suspend fun postUserAdditionalInfo(
             userAdditionalInfoRequest: UserAdditionalInfoRequest,
-        ): UserResponse? = signUpRepository.patchUserAdditionalInfo(userAdditionalInfoRequest)
+        ): UserResponse? = signUpRepository.postUserAdditionalInfo(userAdditionalInfoRequest)
     }

@@ -87,7 +87,7 @@ class CheerStyleOnboardingFragment : Fragment() {
                             .toString()
                             .replace(" 스타일", ""),
                     )
-                patchUserAdditionalInfo(newUserInfo)
+                postUserAdditionalInfo(newUserInfo)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
         }
@@ -127,8 +127,8 @@ class CheerStyleOnboardingFragment : Fragment() {
         }
     }
 
-    private fun patchUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
-        signUpViewModel.patchUserAdditionalInfo(userAdditionalInfoRequest)
+    private fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
+        signUpViewModel.postUserAdditionalInfo(userAdditionalInfoRequest)
         signUpViewModel.userResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")

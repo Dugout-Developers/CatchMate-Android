@@ -32,11 +32,11 @@ class SignUpRepositoryImpl
                 null
             }
 
-        override suspend fun patchUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
+        override suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
             try {
                 val response =
                     signUpApi
-                        .patchUserAdditionalInfo(
+                        .postUserAdditionalInfo(
                             SignUpMapper
                                 .toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest),
                         )

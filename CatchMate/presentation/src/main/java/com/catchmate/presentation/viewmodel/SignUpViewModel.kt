@@ -34,11 +34,11 @@ class SignUpViewModel
             }
         }
 
-        fun patchUserAdditionalInfo(
+        fun postUserAdditionalInfo(
             userAdditionalInfoRequest: UserAdditionalInfoRequest,
         ) {
             viewModelScope.launch {
-                _userResponse.value = signUpUseCase.patchUserAdditionalInfo(userAdditionalInfoRequest)
+                _userResponse.value = signUpUseCase.postUserAdditionalInfo(userAdditionalInfoRequest)
             }
         }
     }
