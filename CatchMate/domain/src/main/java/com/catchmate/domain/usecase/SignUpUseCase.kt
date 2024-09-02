@@ -5,6 +5,7 @@ import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.domain.model.UserResponse
 import com.catchmate.domain.repository.SignUpRepository
 import javax.inject.Inject
+
 class SignUpUseCase
     @Inject
     constructor(
@@ -17,4 +18,3 @@ class SignUpUseCase
         suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
             signUpRepository.postUserAdditionalInfo(userAdditionalInfoRequest)
     }
-
