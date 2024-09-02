@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                 when (destination.id) {
                     R.id.homeFragment,
                     R.id.myPageFragment,
+                    R.id.favoriteFragment,
+                    R.id.chattingHomeFragment,
                     -> {
                         bottomnavigationviewMain.apply {
                             alpha = 0f
@@ -66,13 +68,13 @@ class MainActivity : AppCompatActivity() {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
                     }
                     R.id.menuitem_favorite -> {
-                        Log.d("navigation", "찜")
+                        binding.fragmentcontainerviewMain.findNavController().navigate(R.id.favoriteFragment)
                     }
                     R.id.menuitem_post -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.addPostFragment)
                     }
                     R.id.menuitem_chatting -> {
-                        Log.d("navigation", "채팅")
+                        binding.fragmentcontainerviewMain.findNavController().navigate(R.id.chattingHomeFragment)
                     }
                     else -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.myPageFragment)
