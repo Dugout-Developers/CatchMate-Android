@@ -14,6 +14,7 @@
         android:id="@+id/cv_liked_footer"
         android:layout_width="67dp"
         android:layout_height="52dp"
+        android:layout_marginBottom="38dp"
         app:cardBackgroundColor="@color/grey50"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
@@ -31,18 +32,19 @@
             android:textOn="@null" />
     </androidx.cardview.widget.CardView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_liked_footer_register"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/gutter"
         android:background="@drawable/shape_all_submit_button"
+        android:gravity="center"
         android:textAppearance="@style/Typography.Body01.SemiBold"
         android:textColor="@color/grey0"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/cv_liked_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cv_liked_footer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/complete" />
+        tools:text="@string/post_register" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
