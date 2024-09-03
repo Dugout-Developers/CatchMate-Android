@@ -52,4 +52,8 @@
     <string name="application_detail_dialog_cancel_menu">신청 취소</string>
     <string name="application_detail_dialog_join_menu">신청</string>
 
+    <string name="post_read_date">일시</string>
+    <string name="post_read_place">구장</string>
+    <string name="post_read_people_count">인원</string>
+    <string name="post_read_additional_info">추가 정보</string>
 </resources>
