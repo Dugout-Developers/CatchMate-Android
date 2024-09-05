@@ -13,7 +13,7 @@ class BoardReadRepositoryImpl
     @Inject
     constructor(
         retrofitClient: RetrofitClient,
-    ): BoardReadRepository {
+    ) : BoardReadRepository {
         private val boardReadApi = retrofitClient.createApi<BoardReadService>()
 
         override suspend fun getBoard(

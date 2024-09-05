@@ -71,9 +71,7 @@ class ReadPostFragment : Fragment() {
         _binding = null
     }
 
-    private fun getBoardId(): Long {
-        return arguments?.getLong("boardId")!!
-    }
+    private fun getBoardId(): Long = arguments?.getLong("boardId")!!
 
     private fun getTokens() {
         localDataViewModel.getAccessToken()
@@ -146,6 +144,7 @@ class ReadPostFragment : Fragment() {
             }
         }
     }
+
     private fun initViewModel() {
         readPostViewModel.boardReadResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
@@ -167,13 +166,23 @@ class ReadPostFragment : Fragment() {
             initTeamInfoViews(post.homeTeam, post.homeTeam == post.cheerTeam, ivReadPostHomeTeamBg, ivReadPostHomeTeamLogo)
             initTeamInfoViews(post.awayTeam, post.awayTeam == post.cheerTeam, ivReadPostAwayTeamBg, ivReadPostAwayTeamLogo)
             tvReadPostWriterNickname.text = post.writer.nickName
-            DrawableCompat.setTint(tvReadPostWriterTeam.background, ResourceUtil.convertTeamColor(requireContext(), post.writer.favGudan, true))
+            DrawableCompat
+                .setTint(
+                    tvReadPostWriterTeam.background,
+                    ResourceUtil
+                        .convertTeamColor(
+                            requireContext(),
+                            post.writer.favGudan,
+                            true,
+                        ),
+                )
             tvReadPostWriterTeam.text = post.writer.favGudan
             tvReadPostWriterCheerStyle.text = post.writer.watchStyle
             tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.writer.gender)
             tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.writer.birthDate)
             tvReadPostAdditionalInfo.text = post.addInfo
-            Glide.with(this@ReadPostFragment)
+            Glide
+                .with(this@ReadPostFragment)
                 .load(post.writer.picture)
                 .into(ivReadPostWriterProfile)
 

@@ -157,10 +157,10 @@ class AddPostFragment :
                     if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
                         GenderUtils.convertPostGender(
                             binding.root
-                            .findViewById<Chip>(
-                                binding.chipgroupAddPostGender.checkedChipId,
-                            ).text
-                            .toString(),
+                                .findViewById<Chip>(
+                                    binding.chipgroupAddPostGender.checkedChipId,
+                                ).text
+                                .toString(),
                         )
                     } else {
                         null
@@ -172,7 +172,7 @@ class AddPostFragment :
                                 .findViewById<Chip>(
                                     binding.chipgroupAddPostAge.checkedChipIds[0],
                                 ).text
-                                .toString()
+                                .toString(),
                         )
                     } else {
                         null
@@ -191,8 +191,6 @@ class AddPostFragment :
                         preferAge,
                         additionalInfo,
                     )
-
-                Log.d("Board Write", "${boardWriteRequest.title}\n${boardWriteRequest.gameDate}\n${boardWriteRequest.homeTeam}\n${boardWriteRequest.awayTeam}\n${boardWriteRequest.cheerTeam}\n${boardWriteRequest.addInfo}\n${boardWriteRequest.location}\n${boardWriteRequest.maxPerson}\n${boardWriteRequest.preferAge}\n${boardWriteRequest.preferGender}\n${localDataViewModel.accessToken.value}")
 
                 addPostViewModel.postBoardWrite(
                     localDataViewModel.accessToken.value!!,

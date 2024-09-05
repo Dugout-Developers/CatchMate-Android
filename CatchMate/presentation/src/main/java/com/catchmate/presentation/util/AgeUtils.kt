@@ -6,16 +6,16 @@ import java.time.format.DateTimeFormatter
 
 object AgeUtils {
     // 10-50대면 숫자만, 전연령이면 0을 반환
-    fun convertPostAge(age: String): Int {
-        return if (age != "전연령") {
-            age.replace(
-                Regex("[^0-9]"),
-                "",
-            ).toInt()
+    fun convertPostAge(age: String): Int =
+        if (age != "전연령") {
+            age
+                .replace(
+                    Regex("[^0-9]"),
+                    "",
+                ).toInt()
         } else {
             0
         }
-    }
 
     fun convertBirthDateToAge(birthDate: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

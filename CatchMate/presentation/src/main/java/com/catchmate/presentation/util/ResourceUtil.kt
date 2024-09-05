@@ -6,8 +6,8 @@ import androidx.core.content.ContextCompat
 import com.catchmate.presentation.R
 
 object ResourceUtil {
-    fun convertTeamLogo(teamName: String): Int {
-        return when (teamName) {
+    fun convertTeamLogo(teamName: String): Int =
+        when (teamName) {
             "다이노스" -> R.drawable.vec_all_nc_dinos_logo
             "라이온즈" -> R.drawable.vec_all_samsung_lions_logo
             "랜더스" -> R.drawable.vec_all_ssg_landers_logo
@@ -19,9 +19,12 @@ object ResourceUtil {
             "트윈스" -> R.drawable.vec_all_lg_twins_logo
             else -> R.drawable.vec_all_kiwoom_heroes_logo
         }
-    }
 
-    fun convertTeamColor(context: Context, teamName: String, isCheerTeam: Boolean): Int {
+    fun convertTeamColor(
+        context: Context,
+        teamName: String,
+        isCheerTeam: Boolean,
+    ): Int {
         return if (isCheerTeam) {
             when (teamName) {
                 "다이노스" -> ContextCompat.getColor(context, R.color.nc_dinos)
@@ -40,7 +43,10 @@ object ResourceUtil {
         }
     }
 
-    fun setTeamLogoOpacity(imageView: ImageView, isCheerTeam: Boolean) {
+    fun setTeamLogoOpacity(
+        imageView: ImageView,
+        isCheerTeam: Boolean,
+    ) {
         if (!isCheerTeam) {
             imageView.alpha = 0.6f
         } else {
