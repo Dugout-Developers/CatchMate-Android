@@ -20,10 +20,10 @@ object DateUtils {
     fun formatGameDateTime(
         date: String,
         time: String,
-    ): String = date + " " + time + "00"
+    ): String = "$date $time:00"
 
     fun formatPlayDate(dateTime: String): String {
-        val (date, time) = dateTime.split("T")
+        val (date, time) = dateTime.split(" ", "T")
 
         val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedDate: Date = inputDateFormat.parse(date)
