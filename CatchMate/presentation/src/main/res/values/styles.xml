@@ -43,4 +43,12 @@
         <item name="colorPrimary">@color/brand500</item>
         <item name="colorSurfaceVariant">@color/brand50</item>
     </style>
+
+    <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/shape_all_rect_r8_grey0</item>
+        <item name="android:backgroundTint">@color/grey0</item>
+        <item name="android:fontFamily">@style/Typography.Body02.Medium</item>
+        <item name="android:textColor">@color/grey800</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

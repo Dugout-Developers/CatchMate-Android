@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_homeFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -77,7 +80,11 @@
         android:id="@+id/readPostFragment"
         android:name="com.catchmate.presentation.view.post.ReadPostFragment"
         android:label="fragment_read_post"
-        tools:layout="@layout/fragment_read_post" />
+        tools:layout="@layout/fragment_read_post" >
+        <action
+            android:id="@+id/action_readPostFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.catchmate.presentation.view.mypage.MyPageFragment"
@@ -90,14 +97,14 @@
             android:id="@+id/action_myPageFragment_to_editProfileFragment2"
             app:destination="@id/editProfileFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_myPostFragment"
-            app:destination="@id/myPostFragment" />
-        <action
             android:id="@+id/action_myPageFragment_to_sentJoinFragment"
             app:destination="@id/sentJoinFragment" />
         <action
             android:id="@+id/action_myPageFragment_to_myPageSettingFragment"
             app:destination="@id/myPageSettingFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_receivedJoinFragment"
+            app:destination="@id/receivedJoinFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -164,4 +171,9 @@
         android:name="com.catchmate.presentation.view.mypage.NotificationSettingFragment"
         android:label="fragment_notification_setting"
         tools:layout="@layout/fragment_notification_setting" />
+    <fragment
+        android:id="@+id/receivedJoinFragment"
+        android:name="com.catchmate.presentation.view.mypage.ReceivedJoinFragment"
+        android:label="fragment_received_join"
+        tools:layout="@layout/fragment_received_join" />
 </navigation>
