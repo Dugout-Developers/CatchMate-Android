@@ -131,6 +131,9 @@ class AddPostFragment :
         addPostViewModel.boardWriteResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.e("boardWriteResponse", response.boardId.toString())
+                val bundle = Bundle()
+                bundle.putLong("boardId", response.boardId)
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
             }
         }
     }
@@ -188,6 +191,8 @@ class AddPostFragment :
                         preferAge,
                         additionalInfo,
                     )
+
+                Log.d("Board Write", "${boardWriteRequest.title}\n${boardWriteRequest.gameDate}\n${boardWriteRequest.homeTeam}\n${boardWriteRequest.awayTeam}\n${boardWriteRequest.cheerTeam}\n${boardWriteRequest.addInfo}\n${boardWriteRequest.location}\n${boardWriteRequest.maxPerson}\n${boardWriteRequest.preferAge}\n${boardWriteRequest.preferGender}\n${localDataViewModel.accessToken.value}")
 
                 addPostViewModel.postBoardWrite(
                     localDataViewModel.accessToken.value!!,
