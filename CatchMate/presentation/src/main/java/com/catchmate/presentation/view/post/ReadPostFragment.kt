@@ -19,6 +19,7 @@ import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +55,8 @@ class ReadPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getTokens()
         initViewModel()
+        initFooter()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -79,9 +82,30 @@ class ReadPostFragment : Fragment() {
             }
         }
     }
+
+    private fun initFooter() {
+        binding.layoutReadPostFooter.apply {
+            cvLikedFooter.setOnClickListener {
+                toggleLikedFooterLiked.isChecked = !toggleLikedFooterLiked.isChecked
+            }
+            toggleLikedFooterLiked.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    readPostViewModel.postBoardLike(accessToken, boardId, 1)
+                } else {
+                    readPostViewModel.postBoardLike(accessToken, boardId, 0)
+                }
+            }
+        }
+    }
     private fun initViewModel() {
         readPostViewModel.boardReadResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
+        }
+
+        readPostViewModel.boardLikeResponse.observe(viewLifecycleOwner) { code ->
+            if (code != null) {
+                Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
