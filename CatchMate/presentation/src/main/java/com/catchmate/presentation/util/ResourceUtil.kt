@@ -24,8 +24,8 @@ object ResourceUtil {
         context: Context,
         teamName: String,
         isCheerTeam: Boolean,
-    ): Int {
-        return if (isCheerTeam) {
+    ): Int =
+        if (isCheerTeam) {
             when (teamName) {
                 "다이노스" -> ContextCompat.getColor(context, R.color.nc_dinos)
                 "라이온즈" -> ContextCompat.getColor(context, R.color.samsung_lions)
@@ -41,7 +41,6 @@ object ResourceUtil {
         } else {
             ContextCompat.getColor(context, R.color.grey0)
         }
-    }
 
     fun setTeamLogoOpacity(
         imageView: ImageView,
