@@ -56,4 +56,12 @@
     <string name="post_read_place">구장</string>
     <string name="post_read_people_count">인원</string>
     <string name="post_read_additional_info">추가 정보</string>
+    <string name="post_read_toast_msg">게시글을 저장했어요</string>
+
+    <string name="post_read_writer_menu_up">끌어올리기</string>
+    <string name="post_read_writer_menu_update">게시글 수정</string>
+    <string name="post_read_writer_menu_delete">게시글 삭제</string>
+    <string name="post_read_user_menu_liked">찜하기</string>
+    <string name="post_read_user_menu_share">공유하기</string>
+    <string name="post_read_user_menu_report">신고하기</string>
 </resources>
