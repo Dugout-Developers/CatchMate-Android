@@ -1,14 +1,21 @@
 package com.catchmate.presentation.view.post
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.BoardReadResponse
 import com.catchmate.presentation.R
@@ -55,6 +62,7 @@ class ReadPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getTokens()
         initViewModel()
+        initHeader()
         initFooter()
     }
 
@@ -79,6 +87,47 @@ class ReadPostFragment : Fragment() {
         localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
             if (refreshToken != null) {
                 this.refreshToken = refreshToken
+            }
+        }
+    }
+
+    private fun initHeader() {
+        binding.layoutReadPostHeader.apply {
+            imgbtnHeaderKebabMenuBack.setOnClickListener {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.readPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_readPostFragment_to_homeFragment, null, navOptions)
+            }
+            imgbtnHeaderKebabMenu.setOnClickListener {
+                val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)
+                popup.menuInflater.inflate(R.menu.menu_read_post_writer, popup.menu)
+
+                popup.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.menuitem_post_up -> {
+                            Log.e("끌올", "끌올")
+                            true
+                        }
+                        R.id.menuitem_post_update -> {
+                            Log.e("수정", "수정")
+                            true
+                        }
+                        R.id.menuitem_post_delete -> {
+                            Log.e("삭제", "삭제")
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                val deletePostItem = popup.menu.findItem(R.id.menuitem_post_delete)
+                val s = SpannableString(deletePostItem.title)
+                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.system_red)), 0, s.length, 0)
+                deletePostItem.title = s
+
+                popup.show()
             }
         }
     }
