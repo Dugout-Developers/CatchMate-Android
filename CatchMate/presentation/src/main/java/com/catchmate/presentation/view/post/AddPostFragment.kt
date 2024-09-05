@@ -19,7 +19,9 @@ import com.catchmate.presentation.interaction.OnDateTimeSelectedListener
 import com.catchmate.presentation.interaction.OnPeopleCountSelectedListener
 import com.catchmate.presentation.interaction.OnPlaceSelectedListener
 import com.catchmate.presentation.interaction.OnTeamSelectedListener
+import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.DateUtils
+import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import com.google.android.material.chip.Chip
@@ -150,25 +152,25 @@ class AddPostFragment :
                 val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
                 val preferGender =
                     if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
-                        binding.root
+                        GenderUtils.convertPostGender(
+                            binding.root
                             .findViewById<Chip>(
                                 binding.chipgroupAddPostGender.checkedChipId,
                             ).text
-                            .toString()
+                            .toString(),
+                        )
                     } else {
                         null
                     }
                 val preferAge =
                     if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                        binding.root
-                            .findViewById<Chip>(
-                                binding.chipgroupAddPostAge.checkedChipIds[0],
-                            ).text
-                            .toString()
-                            .replace(
-                                Regex("[^0-9]"),
-                                "",
-                            ).toInt()
+                        AgeUtils.convertPostAge(
+                            binding.root
+                                .findViewById<Chip>(
+                                    binding.chipgroupAddPostAge.checkedChipIds[0],
+                                ).text
+                                .toString()
+                        )
                     } else {
                         null
                     }
