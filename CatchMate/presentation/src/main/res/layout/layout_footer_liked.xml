@@ -39,6 +39,7 @@
         android:layout_marginStart="@dimen/gutter"
         android:background="@drawable/shape_all_submit_button"
         android:gravity="center"
+        android:stateListAnimator="@null"
         android:textAppearance="@style/Typography.Body01.SemiBold"
         android:textColor="@color/grey0"
         app:layout_constraintBottom_toBottomOf="@+id/cv_liked_footer"
