@@ -18,7 +18,7 @@ class HomeFilterView(
         ViewHomeFilterBinding.inflate(
             LayoutInflater.from(context),
             this,
-            false,
+            true,
         )
     }
 
