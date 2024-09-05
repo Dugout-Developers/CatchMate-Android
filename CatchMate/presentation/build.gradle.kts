@@ -31,4 +31,5 @@ dependencies {
     implementation(libs.legacy.support.v4)
 
     implementation(libs.circleimageview)
+    implementation(libs.glide)
 }
