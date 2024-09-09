@@ -1,7 +1,9 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.BuildConfig
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,10 +13,21 @@ import javax.inject.Inject
 class RetrofitClient
     @Inject
     constructor() {
+    private val logging =
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+    private val okHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+
         val retrofit: Retrofit by lazy {
             Retrofit
                 .Builder()
                 .baseUrl(BuildConfig.SERVER_DOMAIN)
+                .client(okHttpClient)
                 .addConverterFactory(nullOnEmptyConverterFactory)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
