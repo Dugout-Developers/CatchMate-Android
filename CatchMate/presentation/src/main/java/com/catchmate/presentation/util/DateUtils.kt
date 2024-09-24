@@ -33,4 +33,16 @@ object DateUtils {
 
         return outputDateFormat.format(formattedDate) + " | " + formattedTime
     }
+
+    fun formatISODateTime(dateTime: String): Pair<String, String> {
+        val (date, time) = dateTime.split("T")
+
+        val inputDateFormat = SimpleDateFormat("yyyy-mm-dd")
+
+        val formattedDate = inputDateFormat.parse(date)
+
+        val outputDateFormat = SimpleDateFormat("M월 d일 E요일", Locale.KOREAN)
+
+        return Pair(outputDateFormat.format(formattedDate), time.substring(0, 5))
+    }
 }
