@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -163,8 +162,9 @@ class ReadPostFragment : Fragment() {
             tvReadPostDate.text = DateUtils.formatPlayDate(post.gameDate)
             tvReadPostPlace.text = post.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
-            initTeamInfoViews(post.homeTeam, post.homeTeam == post.cheerTeam, ivReadPostHomeTeamBg, ivReadPostHomeTeamLogo)
-            initTeamInfoViews(post.awayTeam, post.awayTeam == post.cheerTeam, ivReadPostAwayTeamBg, ivReadPostAwayTeamLogo)
+            val isCheerTeam = post.homeTeam == post.cheerTeam
+            ResourceUtil.setTeamViewResources(post.homeTeam, isCheerTeam, ivReadPostHomeTeamBg, ivReadPostHomeTeamLogo, "read", requireContext())
+            ResourceUtil.setTeamViewResources(post.awayTeam, !isCheerTeam, ivReadPostAwayTeamBg, ivReadPostAwayTeamLogo, "read", requireContext())
             tvReadPostWriterNickname.text = post.writer.nickName
             DrawableCompat
                 .setTint(
@@ -174,6 +174,7 @@ class ReadPostFragment : Fragment() {
                             requireContext(),
                             post.writer.favGudan,
                             true,
+                            "read",
                         ),
                 )
             tvReadPostWriterTeam.text = post.writer.favGudan
@@ -188,19 +189,5 @@ class ReadPostFragment : Fragment() {
 
             // 선호 나이대, 성별 정보 추후 서버 로직 정리되면 반영
         }
-    }
-
-    private fun initTeamInfoViews(
-        teamName: String,
-        isCheerTeam: Boolean,
-        backgroundView: ImageView,
-        logoView: ImageView,
-    ) {
-        // 로고 설정
-        logoView.setImageResource(ResourceUtil.convertTeamLogo(teamName))
-        ResourceUtil.setTeamLogoOpacity(logoView, isCheerTeam)
-
-        // 배경색 설정
-        DrawableCompat.setTint(backgroundView.background, ResourceUtil.convertTeamColor(requireContext(), teamName, isCheerTeam))
     }
 }
