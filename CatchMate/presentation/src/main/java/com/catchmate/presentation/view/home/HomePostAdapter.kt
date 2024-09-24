@@ -30,7 +30,7 @@ class HomePostAdapter(
     }
 
     inner class HomePostViewHolder(
-        itemBinding: ItemHomePostBinding
+        itemBinding: ItemHomePostBinding,
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         val cvItemLayout: CardView
         val tvItemCount: TextView

@@ -16,7 +16,7 @@ class HomeViewModel
     constructor(
         private val boardListUseCase: BoardListUseCase,
     ) : ViewModel() {
-        private var _boardListResonse: MutableLiveData<List<BoardListResponse>> = MutableLiveData()
+        private val _boardListResonse: MutableLiveData<List<BoardListResponse>> = MutableLiveData()
         val boardListResponse: LiveData<List<BoardListResponse>>
             get() = _boardListResonse
 

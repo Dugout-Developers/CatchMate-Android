@@ -136,8 +136,9 @@ class HomeFragment :
                         dy: Int,
                     ) {
                         super.onScrolled(recyclerView, dx, dy)
-                        val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
-                            .findLastCompletelyVisibleItemPosition()
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
                         if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
