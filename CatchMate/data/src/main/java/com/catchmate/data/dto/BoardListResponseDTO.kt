@@ -7,6 +7,7 @@ data class BoardListResponseDTO(
     val location: String,
     val homeTeam: String,
     val awayTeam: String,
+    val cheerTeam: String,
     val currentPerson: Int,
     val maxPerson: Int,
 )

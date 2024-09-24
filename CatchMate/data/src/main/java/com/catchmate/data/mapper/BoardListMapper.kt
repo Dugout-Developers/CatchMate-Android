@@ -13,6 +13,7 @@ object BoardListMapper {
                 location = boardListResponseDTO.location,
                 homeTeam = boardListResponseDTO.homeTeam,
                 awayTeam = boardListResponseDTO.awayTeam,
+                cheerTeam = boardListResponseDTO.cheerTeam,
                 currentPerson = boardListResponseDTO.currentPerson,
                 maxPerson = boardListResponseDTO.maxPerson,
             )
