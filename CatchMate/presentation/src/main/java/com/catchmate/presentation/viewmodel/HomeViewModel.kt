@@ -16,9 +16,9 @@ class HomeViewModel
     constructor(
         private val boardListUseCase: BoardListUseCase,
     ) : ViewModel() {
-        private val _boardListResonse: MutableLiveData<List<BoardListResponse>> = MutableLiveData()
+        private val _boardListResponse = MutableLiveData<List<BoardListResponse>>()
         val boardListResponse: LiveData<List<BoardListResponse>>
-            get() = _boardListResonse
+            get() = _boardListResponse
 
         fun getBoardList(
             accessToken: String,
@@ -28,7 +28,7 @@ class HomeViewModel
             gameDate: String = "9999-99-99",
         ) {
             viewModelScope.launch {
-                _boardListResonse.value = boardListUseCase.getBoardList(accessToken, pageNum, gudans, people, gameDate)
+                _boardListResponse.value = boardListUseCase.getBoardList(accessToken, pageNum, gudans, people, gameDate)
             }
         }
     }
