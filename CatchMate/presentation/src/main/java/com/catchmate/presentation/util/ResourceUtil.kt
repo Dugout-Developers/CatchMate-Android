@@ -3,6 +3,7 @@ package com.catchmate.presentation.util
 import android.content.Context
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.catchmate.presentation.R
 
 object ResourceUtil {
@@ -24,6 +25,7 @@ object ResourceUtil {
         context: Context,
         teamName: String,
         isCheerTeam: Boolean,
+        currentPage: String,
     ): Int =
         if (isCheerTeam) {
             when (teamName) {
@@ -39,7 +41,11 @@ object ResourceUtil {
                 else -> ContextCompat.getColor(context, R.color.kiwoom_heroes)
             }
         } else {
-            ContextCompat.getColor(context, R.color.grey0)
+            if (currentPage == "home") {
+                ContextCompat.getColor(context, R.color.grey50)
+            } else {
+                ContextCompat.getColor(context, R.color.grey0)
+            }
         }
 
     fun setTeamLogoOpacity(
@@ -51,5 +57,21 @@ object ResourceUtil {
         } else {
             imageView.alpha = 1.0f
         }
+    }
+
+    fun setTeamViewResources(
+        teamName: String,
+        isCheerTeam: Boolean,
+        backgroundView: ImageView,
+        logoView: ImageView,
+        currentPage: String,
+        context: Context,
+    ) {
+        // 로고 설정
+        logoView.setImageResource(convertTeamLogo(teamName))
+        setTeamLogoOpacity(logoView, isCheerTeam)
+
+        // 배경색 설정
+        DrawableCompat.setTint(backgroundView.background, convertTeamColor(context, teamName, isCheerTeam, currentPage))
     }
 }
