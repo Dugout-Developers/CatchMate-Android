@@ -18,7 +18,9 @@ import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), OnPostItemClickListener {
+class HomeFragment :
+    Fragment(),
+    OnPostItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
 
@@ -126,22 +128,29 @@ class HomeFragment : Fragment(), OnPostItemClickListener {
         binding.rvHomePosts.apply {
             adapter = HomePostAdapter(requireContext(), layoutInflater, this@HomeFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-                    val itemTotalCount = recyclerView.adapter!!.itemCount
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
+                            .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
 
-                    if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
-                        if (isNextPageExist) {
-                            homeViewModel.getBoardList(
-                                pageNum = page++,
-                                accessToken = accessToken,
-                            )
+                        if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
+                            if (isNextPageExist) {
+                                homeViewModel.getBoardList(
+                                    pageNum = page++,
+                                    accessToken = accessToken,
+                                )
+                            }
                         }
                     }
-                }
-            })
+                },
+            )
         }
     }
 

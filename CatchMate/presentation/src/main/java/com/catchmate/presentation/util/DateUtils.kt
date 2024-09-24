@@ -1,11 +1,8 @@
 package com.catchmate.presentation.util
 
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 object DateUtils {
     fun formatBirthDate(inputDate: String): String {

@@ -22,7 +22,8 @@ import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
-import com.catchmate.presentation.util.ResourceUtil
+import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
+import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -163,19 +164,32 @@ class ReadPostFragment : Fragment() {
             tvReadPostPlace.text = post.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.homeTeam == post.cheerTeam
-            ResourceUtil.setTeamViewResources(post.homeTeam, isCheerTeam, ivReadPostHomeTeamBg, ivReadPostHomeTeamLogo, "read", requireContext())
-            ResourceUtil.setTeamViewResources(post.awayTeam, !isCheerTeam, ivReadPostAwayTeamBg, ivReadPostAwayTeamLogo, "read", requireContext())
+            setTeamViewResources(
+                post.homeTeam,
+                isCheerTeam,
+                ivReadPostHomeTeamBg,
+                ivReadPostHomeTeamLogo,
+                "read",
+                requireContext(),
+            )
+            setTeamViewResources(
+                post.awayTeam,
+                !isCheerTeam,
+                ivReadPostAwayTeamBg,
+                ivReadPostAwayTeamLogo,
+                "read",
+                requireContext(),
+            )
             tvReadPostWriterNickname.text = post.writer.nickName
             DrawableCompat
                 .setTint(
                     tvReadPostWriterTeam.background,
-                    ResourceUtil
-                        .convertTeamColor(
-                            requireContext(),
-                            post.writer.favGudan,
-                            true,
-                            "read",
-                        ),
+                    convertTeamColor(
+                        requireContext(),
+                        post.writer.favGudan,
+                        true,
+                        "read",
+                    ),
                 )
             tvReadPostWriterTeam.text = post.writer.favGudan
             tvReadPostWriterCheerStyle.text = post.writer.watchStyle

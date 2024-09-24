@@ -29,7 +29,9 @@ class HomePostAdapter(
         notifyDataSetChanged()
     }
 
-    inner class HomePostViewHolder(itemBinding: ItemHomePostBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class HomePostViewHolder(
+        itemBinding: ItemHomePostBinding
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
         val cvItemLayout: CardView
         val tvItemCount: TextView
         val tvItemDate: TextView
@@ -68,9 +70,7 @@ class HomePostAdapter(
         return HomePostViewHolder(itemBinding)
     }
 
-    override fun getItemCount(): Int {
-        return postList.size
-    }
+    override fun getItemCount(): Int = postList.size
 
     override fun onBindViewHolder(
         holder: HomePostViewHolder,

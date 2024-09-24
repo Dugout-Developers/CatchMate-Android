@@ -13,25 +13,25 @@ import javax.inject.Inject
 class RetrofitClient
     @Inject
     constructor() {
-    private val logging =
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        private val logging =
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
 
-    private val okHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .build()
-
-        val retrofit: Retrofit by lazy {
-            Retrofit
-                .Builder()
-                .baseUrl(BuildConfig.SERVER_DOMAIN)
-                .client(okHttpClient)
-                .addConverterFactory(nullOnEmptyConverterFactory)
-                .addConverterFactory(GsonConverterFactory.create())
+        private val okHttpClient =
+            OkHttpClient.Builder()
+                .addInterceptor(logging)
                 .build()
-        }
+
+            val retrofit: Retrofit by lazy {
+                Retrofit
+                    .Builder()
+                    .baseUrl(BuildConfig.SERVER_DOMAIN)
+                    .client(okHttpClient)
+                    .addConverterFactory(nullOnEmptyConverterFactory)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            }
 
         inline fun <reified T> createApi(): T = retrofit.create(T::class.java)
 
