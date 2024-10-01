@@ -11,7 +11,6 @@ class BoardWriteUseCase
         private val boardWriteRepository: BoardWriteRepository,
     ) {
         suspend fun postBoardWrite(
-            accessToken: String,
             boardWriteRequest: BoardWriteRequest,
-        ): BoardWriteResponse? = boardWriteRepository.postBoardWrite(accessToken, boardWriteRequest)
+        ): BoardWriteResponse? = boardWriteRepository.postBoardWrite(boardWriteRequest)
     }

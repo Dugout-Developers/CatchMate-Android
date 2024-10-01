@@ -27,21 +27,19 @@ class ReadPostViewModel
             get() = _boardLikeResponse
 
         fun getBoard(
-            accessToken: String,
             boardId: Long,
         ) {
             viewModelScope.launch {
-                _boardReadResponse.value = boardReadUseCase.getBoard(accessToken, boardId)
+                _boardReadResponse.value = boardReadUseCase.getBoard(boardId)
             }
         }
 
         fun postBoardLike(
-            accessToken: String,
             boardId: Long,
             flag: Int,
         ) {
             viewModelScope.launch {
-                _boardLikeResponse.value = boardLikeUseCase.postBoardLike(accessToken, boardId, flag)
+                _boardLikeResponse.value = boardLikeUseCase.postBoardLike(boardId, flag)
             }
         }
     }

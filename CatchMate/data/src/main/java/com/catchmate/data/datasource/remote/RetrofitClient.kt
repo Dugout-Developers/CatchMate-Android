@@ -1,6 +1,7 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.BuildConfig
+import com.catchmate.data.datasource.local.LocalStorageDataSource
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,29 +13,16 @@ import javax.inject.Inject
 
 class RetrofitClient
     @Inject
-    constructor() {
+    constructor(
+        localStorageDataSource: LocalStorageDataSource,
+    ) {
         private val logging =
             HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
-        private val okHttpClient =
-            OkHttpClient
-                .Builder()
-                .addInterceptor(logging)
-                .build()
-
-        val retrofit: Retrofit by lazy {
-            Retrofit
-                .Builder()
-                .baseUrl(BuildConfig.SERVER_DOMAIN)
-                .client(okHttpClient)
-                .addConverterFactory(nullOnEmptyConverterFactory)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        }
-
-        inline fun <reified T> createApi(): T = retrofit.create(T::class.java)
+        private val authInterceptor =
+            AuthInterceptor(localStorageDataSource)
 
         private val nullOnEmptyConverterFactory =
             object : Converter.Factory() {
@@ -56,4 +44,23 @@ class RetrofitClient
                         if (value.contentLength() != 0L) nextResponseBodyConverter.convert(value) else null
                 }
             }
+
+        private val okHttpClient =
+            OkHttpClient
+                .Builder()
+                .addInterceptor(authInterceptor)
+                .addInterceptor(logging)
+                .build()
+
+        val retrofit: Retrofit by lazy {
+            Retrofit
+                .Builder()
+                .baseUrl(BuildConfig.SERVER_DOMAIN)
+                .client(okHttpClient)
+                .addConverterFactory(nullOnEmptyConverterFactory)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+
+        inline fun <reified T> createApi(): T = retrofit.create(T::class.java)
     }

@@ -9,8 +9,7 @@ class BoardLikeUseCase
         private val boardLikeRepository: BoardLikeRepository,
     ) {
         suspend fun postBoardLike(
-            accessToken: String,
             boardId: Long,
             flag: Int,
-        ): Int? = boardLikeRepository.postBoardLike(accessToken, boardId, flag)
+        ): Int? = boardLikeRepository.postBoardLike(boardId, flag)
     }

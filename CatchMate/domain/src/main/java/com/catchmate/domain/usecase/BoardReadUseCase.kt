@@ -10,7 +10,6 @@ class BoardReadUseCase
         private val boardReadRepository: BoardReadRepository,
     ) {
         suspend fun getBoard(
-            accessToken: String,
             boardId: Long,
-        ): BoardReadResponse? = boardReadRepository.getBoard(accessToken, boardId)
+        ): BoardReadResponse? = boardReadRepository.getBoard(boardId)
     }

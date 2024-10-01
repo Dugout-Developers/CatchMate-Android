@@ -15,12 +15,11 @@ class BoardLikeRepositoryImpl
         private val boardLikeApi = retrofitClient.createApi<BoardLikeService>()
 
         override suspend fun postBoardLike(
-            accessToken: String,
             boardId: Long,
             flag: Int,
         ): Int? =
             try {
-                val response = boardLikeApi.postBoardLike(accessToken, boardId, flag)
+                val response = boardLikeApi.postBoardLike(boardId, flag)
                 if (response.isSuccessful) {
                     Log.d("BoardLikeRepository", "통신 성공 : ${response.code()}")
                     response.code()

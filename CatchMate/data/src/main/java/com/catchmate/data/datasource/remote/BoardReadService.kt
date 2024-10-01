@@ -9,7 +9,6 @@ import retrofit2.http.Path
 interface BoardReadService {
     @GET("board/{boardId}")
     suspend fun getBoard(
-        @Header("AccessToken") accessToken: String,
         @Path("boardId") boardId: Long,
     ): Response<BoardReadResponseDTO?>
 }

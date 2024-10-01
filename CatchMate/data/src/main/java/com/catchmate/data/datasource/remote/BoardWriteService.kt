@@ -10,7 +10,6 @@ import retrofit2.http.POST
 interface BoardWriteService {
     @POST("board/write")
     suspend fun postBoardWrite(
-        @Header("AccessToken") accessToken: String,
         @Body boardWriteRequestDTO: BoardWriteRequestDTO,
     ): Response<BoardWriteResponseDTO?>
 }

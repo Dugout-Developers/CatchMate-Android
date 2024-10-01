@@ -193,7 +193,6 @@ class AddPostFragment :
                     )
 
                 addPostViewModel.postBoardWrite(
-                    localDataViewModel.accessToken.value!!,
                     boardWriteRequest,
                 )
             }

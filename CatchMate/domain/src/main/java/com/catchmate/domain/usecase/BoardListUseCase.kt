@@ -10,7 +10,6 @@ class BoardListUseCase
         private val boardListRepository: BoardListRepository,
     ) {
         suspend fun getBoardList(
-            accessToken: String,
             pageNum: Long,
             gudans: String,
             people: Int,

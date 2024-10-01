@@ -21,7 +21,6 @@ class HomeViewModel
             get() = _boardListResponse
 
         fun getBoardList(
-            accessToken: String,
             pageNum: Long,
             gudans: String = "",
             people: Int = 0,

@@ -17,14 +17,13 @@ class BoardListRepositoryImpl
         private val boardListApi = retrofitClient.createApi<BoardListService>()
 
         override suspend fun getBoardList(
-            accessToken: String,
             pageNum: Long,
             gudans: String,
             people: Int,
             gameDate: String,
         ): List<BoardListResponse>? =
             try {
-                val response = boardListApi.getBoardList(accessToken, pageNum, gudans, people, gameDate)
+                val response = boardListApi.getBoardList(pageNum, gudans, people, gameDate)
                 if (response.isSuccessful) {
                     Log.d("BoardListRepository", "통신 성공")
                     response.body()?.let { BoardListMapper.toBoardListResponse(it) } ?: throw Exception("Empty Response")

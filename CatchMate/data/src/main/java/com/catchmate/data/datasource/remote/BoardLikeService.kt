@@ -9,7 +9,6 @@ import retrofit2.http.Query
 interface BoardLikeService {
     @POST("board/like/{boardId}")
     suspend fun postBoardLike(
-        @Header("AccessToken") accessToken: String,
         @Path("boardId") boardId: Long,
         @Query("flag") flag: Int,
     ): Response<Int>

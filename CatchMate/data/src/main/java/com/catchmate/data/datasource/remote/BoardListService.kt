@@ -10,7 +10,6 @@ import retrofit2.http.Query
 interface BoardListService {
     @GET("board/page/{pageNum}")
     suspend fun getBoardList(
-        @Header("AccessToken") accessToken: String,
         @Path("pageNum") pageNum: Long,
         @Query("gudans") gudans: String,
         @Query("people") people: Int,

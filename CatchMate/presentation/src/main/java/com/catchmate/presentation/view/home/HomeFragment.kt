@@ -88,7 +88,6 @@ class HomeFragment :
     private fun initViewModel() {
         homeViewModel.getBoardList(
             pageNum = page++,
-            accessToken = accessToken,
         )
         homeViewModel.boardListResponse.observe(viewLifecycleOwner) { response ->
             if (response.isNotEmpty()) {
@@ -145,7 +144,6 @@ class HomeFragment :
                             if (isNextPageExist) {
                                 homeViewModel.getBoardList(
                                     pageNum = page++,
-                                    accessToken = accessToken,
                                 )
                             }
                         }

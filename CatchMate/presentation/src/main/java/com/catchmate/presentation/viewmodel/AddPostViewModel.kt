@@ -46,11 +46,10 @@ class AddPostViewModel
         }
 
         fun postBoardWrite(
-            accessToken: String,
             boardWriteRequest: BoardWriteRequest,
         ) {
             viewModelScope.launch {
-                _boardWriteResponse.value = boardWriteUseCase.postBoardWrite(accessToken, boardWriteRequest)
+                _boardWriteResponse.value = boardWriteUseCase.postBoardWrite(boardWriteRequest)
             }
         }
     }

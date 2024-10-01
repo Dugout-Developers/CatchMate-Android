@@ -18,11 +18,10 @@ class BoardWriteRepositoryImpl
         private val boardWriteApi = retrofitClient.createApi<BoardWriteService>()
 
         override suspend fun postBoardWrite(
-            accessToken: String,
             boardWriteRequest: BoardWriteRequest,
         ): BoardWriteResponse? =
             try {
-                val response = boardWriteApi.postBoardWrite(accessToken, BoardWriteMapper.toBoardWriteRequestDTO(boardWriteRequest))
+                val response = boardWriteApi.postBoardWrite(BoardWriteMapper.toBoardWriteRequestDTO(boardWriteRequest))
                 if (response.isSuccessful) {
                     Log.d("BoardWriteRepository", "통신 성공 : ${response.code()}")
                     response.body()?.let { BoardWriteMapper.toBoardWriteResponse(it) } ?: throw Exception("Empty Response")
