@@ -6,7 +6,7 @@ import com.catchmate.data.datasource.remote.SignUpService
 import com.catchmate.data.mapper.SignUpMapper
 import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
-import com.catchmate.domain.model.UserResponse
+import com.catchmate.domain.model.UserAdditionalInfoResponse
 import com.catchmate.domain.repository.SignUpRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class SignUpRepositoryImpl
                 null
             }
 
-        override suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserResponse? =
+        override suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserAdditionalInfoResponse? =
             try {
                 val response =
                     signUpApi
@@ -43,7 +43,7 @@ class SignUpRepositoryImpl
                         )
                 if (response.isSuccessful) {
                     Log.d("SignUpRepo", "통신 성공 ${response.code()}")
-                    response.body()?.let { SignUpMapper.toUserResponse(it) } ?: throw Exception("Empty Response")
+                    response.body()?.let { SignUpMapper.toUserAdditionalInfoResponse(it) } ?: throw Exception("Empty Response")
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Log.d("SignUpRepo", "통신 실패 ${response.code()}\n$stringToJson")

@@ -129,7 +129,7 @@ class CheerStyleOnboardingFragment : Fragment() {
 
     private fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
         signUpViewModel.postUserAdditionalInfo(userAdditionalInfoRequest)
-        signUpViewModel.userResponse.observe(viewLifecycleOwner) { response ->
+        signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
                 localDataViewModel.saveAccessToken(response.accessToken)

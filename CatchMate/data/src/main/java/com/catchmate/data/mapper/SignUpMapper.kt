@@ -2,10 +2,10 @@ package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.CheckNicknameResponseDTO
 import com.catchmate.data.dto.UserAdditionalInfoRequestDTO
-import com.catchmate.data.dto.UserResponseDTO
+import com.catchmate.data.dto.UserAdditionalInfoResponseDTO
 import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
-import com.catchmate.domain.model.UserResponse
+import com.catchmate.domain.model.UserAdditionalInfoResponse
 
 object SignUpMapper {
     fun toCheckNicknameResponse(checkNicknameResponseDTO: CheckNicknameResponseDTO): CheckNicknameResponse =
@@ -41,11 +41,11 @@ object SignUpMapper {
             watchStyle = userAdditionalInfoRequestDTO.watchStyle,
         )
 
-    fun toUserResponse(userResponseDTO: UserResponseDTO): UserResponse =
-        UserResponse(
-            accessToken = userResponseDTO.accessToken,
-            refreshToken = userResponseDTO.refreshToken,
-            userId = userResponseDTO.userId,
-            createdAt = userResponseDTO.createdAt,
+    fun toUserAdditionalInfoResponse(userAdditionalInfoResponseDTO: UserAdditionalInfoResponseDTO): UserAdditionalInfoResponse =
+        UserAdditionalInfoResponse(
+            accessToken = userAdditionalInfoResponseDTO.accessToken,
+            refreshToken = userAdditionalInfoResponseDTO.refreshToken,
+            userId = userAdditionalInfoResponseDTO.userId,
+            createdAt = userAdditionalInfoResponseDTO.createdAt,
         )
 }
