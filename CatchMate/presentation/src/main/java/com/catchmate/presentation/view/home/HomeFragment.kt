@@ -15,6 +15,7 @@ import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +27,7 @@ class HomeFragment :
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
@@ -64,6 +66,7 @@ class HomeFragment :
     private fun getTokens() {
         localDataViewModel.getAccessToken()
         localDataViewModel.getRefreshToken()
+        localDataViewModel.getUserId()
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
             if (accessToken != null) {
                 this.accessToken = accessToken
@@ -73,6 +76,11 @@ class HomeFragment :
         localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
             if (refreshToken != null) {
                 this.refreshToken = refreshToken
+            }
+        }
+        localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
+            if (userId == -1L) {
+                getUserProfile()
             }
         }
     }
@@ -150,6 +158,15 @@ class HomeFragment :
                     }
                 },
             )
+        }
+    }
+
+    private fun getUserProfile() {
+        userViewModel.getUserProfile()
+        userViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                localDataViewModel.saveUserId(response.userId)
+            }
         }
     }
 
