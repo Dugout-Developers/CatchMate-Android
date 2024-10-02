@@ -17,9 +17,7 @@ class BoardWriteRepositoryImpl
     ) : BoardWriteRepository {
         private val boardWriteApi = retrofitClient.createApi<BoardWriteService>()
 
-        override suspend fun postBoardWrite(
-            boardWriteRequest: BoardWriteRequest,
-        ): BoardWriteResponse? =
+        override suspend fun postBoardWrite(boardWriteRequest: BoardWriteRequest): BoardWriteResponse? =
             try {
                 val response = boardWriteApi.postBoardWrite(BoardWriteMapper.toBoardWriteRequestDTO(boardWriteRequest))
                 if (response.isSuccessful) {

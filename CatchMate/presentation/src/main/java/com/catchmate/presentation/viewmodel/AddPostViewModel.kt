@@ -45,9 +45,7 @@ class AddPostViewModel
             _gameDateTime.value = gameDateTime
         }
 
-        fun postBoardWrite(
-            boardWriteRequest: BoardWriteRequest,
-        ) {
+        fun postBoardWrite(boardWriteRequest: BoardWriteRequest) {
             viewModelScope.launch {
                 _boardWriteResponse.value = boardWriteUseCase.postBoardWrite(boardWriteRequest)
             }

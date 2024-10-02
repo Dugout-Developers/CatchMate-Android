@@ -10,7 +10,6 @@ class BoardWriteUseCase
     constructor(
         private val boardWriteRepository: BoardWriteRepository,
     ) {
-        suspend fun postBoardWrite(
-            boardWriteRequest: BoardWriteRequest,
-        ): BoardWriteResponse? = boardWriteRepository.postBoardWrite(boardWriteRequest)
+        suspend fun postBoardWrite(boardWriteRequest: BoardWriteRequest): BoardWriteResponse? =
+            boardWriteRepository.postBoardWrite(boardWriteRequest)
     }

@@ -16,9 +16,7 @@ class BoardReadRepositoryImpl
     ) : BoardReadRepository {
         private val boardReadApi = retrofitClient.createApi<BoardReadService>()
 
-        override suspend fun getBoard(
-            boardId: Long,
-        ): BoardReadResponse? =
+        override suspend fun getBoard(boardId: Long): BoardReadResponse? =
             try {
                 val response = boardReadApi.getBoard(boardId)
                 if (response.isSuccessful) {

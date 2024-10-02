@@ -26,9 +26,7 @@ class ReadPostViewModel
         val boardLikeResponse: LiveData<Int>
             get() = _boardLikeResponse
 
-        fun getBoard(
-            boardId: Long,
-        ) {
+        fun getBoard(boardId: Long) {
             viewModelScope.launch {
                 _boardReadResponse.value = boardReadUseCase.getBoard(boardId)
             }

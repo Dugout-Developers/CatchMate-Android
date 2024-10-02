@@ -36,17 +36,18 @@ class HomeViewModel
             gameDate: String = "9999-99-99",
         ) {
             viewModelScope.launch {
-                val result =  boardListUseCase.getBoardList(pageNum, gudans, people, gameDate)
+                val result = boardListUseCase.getBoardList(pageNum, gudans, people, gameDate)
 
-                result.onSuccess { boardList ->
-                    _boardListResponse.value = boardList
-                }.onFailure { exception ->
-                    if (exception is ReissueFailureException) {
-                        _navigateToLogin.value = true
-                    } else {
-                        _errorMessage.value = exception.message
+                result
+                    .onSuccess { boardList ->
+                        _boardListResponse.value = boardList
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
                     }
-                }
             }
         }
     }

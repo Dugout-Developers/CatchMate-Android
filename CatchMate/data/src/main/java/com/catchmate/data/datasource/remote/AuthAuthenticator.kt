@@ -24,9 +24,10 @@ class AuthAuthenticator
                     localStorageDataSource.getRefreshToken()
                 }
 
-            val reissueResponse = runBlocking {
-                authRetrofitClient.retrofit.postReissue(refreshToken)
-            }
+            val reissueResponse =
+                runBlocking {
+                    authRetrofitClient.retrofit.postReissue(refreshToken)
+                }
 
             return if (reissueResponse.isSuccessful) {
                 val newAccessToken = reissueResponse.body()?.accessToken

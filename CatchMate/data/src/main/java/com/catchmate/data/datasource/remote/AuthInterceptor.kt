@@ -12,9 +12,10 @@ class AuthInterceptor
         private val localStorageDataSource: LocalStorageDataSource,
     ) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
-            val accessToken = runBlocking {
-                localStorageDataSource.getAccessToken()
-            }
+            val accessToken =
+                runBlocking {
+                    localStorageDataSource.getAccessToken()
+                }
 
             val request =
                 chain

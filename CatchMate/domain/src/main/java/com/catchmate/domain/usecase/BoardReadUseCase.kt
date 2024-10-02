@@ -9,7 +9,5 @@ class BoardReadUseCase
     constructor(
         private val boardReadRepository: BoardReadRepository,
     ) {
-        suspend fun getBoard(
-            boardId: Long,
-        ): BoardReadResponse? = boardReadRepository.getBoard(boardId)
+        suspend fun getBoard(boardId: Long): BoardReadResponse? = boardReadRepository.getBoard(boardId)
     }
