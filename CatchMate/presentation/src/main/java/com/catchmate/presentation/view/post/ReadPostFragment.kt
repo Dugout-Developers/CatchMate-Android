@@ -79,7 +79,7 @@ class ReadPostFragment : Fragment() {
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
             if (accessToken != null) {
                 this.accessToken = accessToken
-                readPostViewModel.getBoard(accessToken, boardId)
+                readPostViewModel.getBoard(boardId)
             }
         }
         localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
@@ -137,9 +137,9 @@ class ReadPostFragment : Fragment() {
             }
             toggleLikedFooterLiked.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    readPostViewModel.postBoardLike(accessToken, boardId, 1)
+                    readPostViewModel.run { postBoardLike( boardId, 1) }
                 } else {
-                    readPostViewModel.postBoardLike(accessToken, boardId, 0)
+                    readPostViewModel.postBoardLike(boardId, 0)
                 }
             }
         }

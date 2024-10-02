@@ -8,5 +8,5 @@ interface BoardListRepository {
         gudans: String,
         people: Int,
         gameDate: String,
-    ): List<BoardListResponse>?
+    ): Result<List<BoardListResponse>>
 }

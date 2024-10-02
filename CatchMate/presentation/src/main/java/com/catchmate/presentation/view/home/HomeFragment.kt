@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -97,15 +98,35 @@ class HomeFragment :
         homeViewModel.getBoardList(
             pageNum = page++,
         )
-        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isNotEmpty()) {
-                Log.e("게시글 목록 존재", response.size.toString())
-                isNextPageExist = true
-                val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                adapter.updatePostList(response)
-            } else {
-                Log.e("게시글 목록 더이상 없음", response.size.toString())
-                isNextPageExist = false
+        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { boardList ->
+            boardList?.let {
+                if (boardList.isNotEmpty()) {
+                    Log.e("게시글 목록 존재", boardList.size.toString())
+                    isNextPageExist = true
+                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
+                    adapter.updatePostList(boardList)
+                } else {
+                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
+                    Log.e("게시글 목록 더이상 없음", boardList.size.toString())
+                    isNextPageExist = false
+                }
+            }
+        }
+
+        homeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.homeFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment, null, navOptions)
+            }
+        }
+
+        homeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
