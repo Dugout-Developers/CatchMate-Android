@@ -21,6 +21,10 @@ class LocalDataViewMdoel
         val refreshToken: LiveData<String>
             get() = _refreshToken
 
+        private var _userId = MutableLiveData<Long>()
+        val userId: LiveData<Long>
+            get() = _userId
+
         fun saveAccessToken(accessToken: String) {
             localDataUseCase.saveAccessToken(accessToken)
         }
@@ -29,11 +33,19 @@ class LocalDataViewMdoel
             localDataUseCase.saveRefreshToken(refreshToken)
         }
 
+        fun saveUserId(userId: Long) {
+            localDataUseCase.saveUserId(userId)
+        }
+
         fun getAccessToken() {
             _accessToken.value = localDataUseCase.getAccessToken()
         }
 
         fun getRefreshToken() {
             _refreshToken.value = localDataUseCase.getRefreshToken()
+        }
+
+        fun getUserId() {
+            _userId.value = localDataUseCase.getUserId()
         }
     }

@@ -16,11 +16,21 @@ class LocalDataUseCase
             localDataRepository.saveRefreshToken(refreshToken)
         }
 
+        fun saveUserId(userId: Long) {
+            localDataRepository.saveUserId(userId)
+        }
+
         fun getAccessToken(): String = localDataRepository.getAccessToken()
 
         fun getRefreshToken(): String = localDataRepository.getRefreshToken()
 
+        fun getUserId(): Long = localDataRepository.getUserId()
+
         fun removeTokens() {
             localDataRepository.removeTokens()
+        }
+
+        fun removeUserId() {
+            localDataRepository.removeUserId()
         }
     }

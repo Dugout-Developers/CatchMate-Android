@@ -5,9 +5,15 @@ interface LocalDataRepository {
 
     fun saveRefreshToken(refreshToken: String)
 
+    fun saveUserId(userId: Long)
+
     fun getAccessToken(): String
 
     fun getRefreshToken(): String
 
+    fun getUserId(): Long
+
     fun removeTokens()
+
+    fun removeUserId()
 }
