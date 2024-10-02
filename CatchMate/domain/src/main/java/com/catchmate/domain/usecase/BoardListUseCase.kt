@@ -10,10 +10,9 @@ class BoardListUseCase
         private val boardListRepository: BoardListRepository,
     ) {
         suspend fun getBoardList(
-            accessToken: String,
             pageNum: Long,
             gudans: String,
             people: Int,
             gameDate: String,
-        ): List<BoardListResponse>? = boardListRepository.getBoardList(accessToken, pageNum, gudans, people, gameDate)
+        ): Result<List<BoardListResponse>> = boardListRepository.getBoardList(pageNum, gudans, people, gameDate)
     }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
-import com.catchmate.domain.model.UserResponse
+import com.catchmate.domain.model.UserAdditionalInfoResponse
 import com.catchmate.domain.usecase.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,9 +22,9 @@ class SignUpViewModel
         val checkNicknameResponse: LiveData<CheckNicknameResponse>
             get() = _checkNicknameResponse
 
-        private var _userResponse = MutableLiveData<UserResponse>()
-        val userResponse
-            get() = _userResponse
+        private var _userAdditionalInfoResponse = MutableLiveData<UserAdditionalInfoResponse>()
+        val userAdditionalInfoResponse
+            get() = _userAdditionalInfoResponse
 
         fun getNicknameAvailability(nickName: String) {
             viewModelScope.launch {
@@ -34,7 +34,7 @@ class SignUpViewModel
 
         fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
             viewModelScope.launch {
-                _userResponse.value = signUpUseCase.postUserAdditionalInfo(userAdditionalInfoRequest)
+                _userAdditionalInfoResponse.value = signUpUseCase.postUserAdditionalInfo(userAdditionalInfoRequest)
             }
         }
     }

@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto
 
-data class UserResponse(
+data class UserAdditionalInfoResponseDTO(
     val accessToken: String,
     val refreshToken: String,
     val userId: Long,

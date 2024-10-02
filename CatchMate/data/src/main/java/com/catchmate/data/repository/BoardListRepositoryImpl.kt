@@ -4,6 +4,7 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardListService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardListMapper
+import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.BoardListResponse
 import com.catchmate.domain.repository.BoardListRepository
 import org.json.JSONObject
@@ -17,24 +18,24 @@ class BoardListRepositoryImpl
         private val boardListApi = retrofitClient.createApi<BoardListService>()
 
         override suspend fun getBoardList(
-            accessToken: String,
             pageNum: Long,
             gudans: String,
             people: Int,
             gameDate: String,
-        ): List<BoardListResponse>? =
+        ): Result<List<BoardListResponse>> =
             try {
-                val response = boardListApi.getBoardList(accessToken, pageNum, gudans, people, gameDate)
+                val response = boardListApi.getBoardList(pageNum, gudans, people, gameDate)
                 if (response.isSuccessful) {
                     Log.d("BoardListRepository", "통신 성공")
-                    response.body()?.let { BoardListMapper.toBoardListResponse(it) } ?: throw Exception("Empty Response")
+                    val body = response.body()?.let { BoardListMapper.toBoardListResponse(it) }
+                    Result.success(body ?: emptyList())
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Log.d("BoardListRepository", "통신 실패 : ${response.code()} - $stringToJson")
-                    null
+                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
                 }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
             } catch (e: Exception) {
-                e.printStackTrace()
-                null
+                Result.failure(e)
             }
     }

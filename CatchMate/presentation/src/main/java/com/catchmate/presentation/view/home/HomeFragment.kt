@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +28,7 @@ class HomeFragment :
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
@@ -64,6 +67,7 @@ class HomeFragment :
     private fun getTokens() {
         localDataViewModel.getAccessToken()
         localDataViewModel.getRefreshToken()
+        localDataViewModel.getUserId()
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
             if (accessToken != null) {
                 this.accessToken = accessToken
@@ -73,6 +77,11 @@ class HomeFragment :
         localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
             if (refreshToken != null) {
                 this.refreshToken = refreshToken
+            }
+        }
+        localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
+            if (userId == -1L) {
+                getUserProfile()
             }
         }
     }
@@ -88,17 +97,36 @@ class HomeFragment :
     private fun initViewModel() {
         homeViewModel.getBoardList(
             pageNum = page++,
-            accessToken = accessToken,
         )
-        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isNotEmpty()) {
-                Log.e("게시글 목록 존재", response.size.toString())
-                isNextPageExist = true
-                val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                adapter.updatePostList(response)
-            } else {
-                Log.e("게시글 목록 더이상 없음", response.size.toString())
-                isNextPageExist = false
+        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { boardList ->
+            boardList?.let {
+                if (boardList.isNotEmpty()) {
+                    Log.e("게시글 목록 존재", boardList.size.toString())
+                    isNextPageExist = true
+                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
+                    adapter.updatePostList(boardList)
+                } else {
+                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
+                    Log.e("게시글 목록 더이상 없음", boardList.size.toString())
+                    isNextPageExist = false
+                }
+            }
+        }
+
+        homeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.homeFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment, null, navOptions)
+            }
+        }
+
+        homeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
@@ -145,13 +173,21 @@ class HomeFragment :
                             if (isNextPageExist) {
                                 homeViewModel.getBoardList(
                                     pageNum = page++,
-                                    accessToken = accessToken,
                                 )
                             }
                         }
                     }
                 },
             )
+        }
+    }
+
+    private fun getUserProfile() {
+        userViewModel.getUserProfile()
+        userViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                localDataViewModel.saveUserId(response.userId)
+            }
         }
     }
 

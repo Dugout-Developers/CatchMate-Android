@@ -43,6 +43,9 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.retrofit)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.security.crypto.ktx)
 }

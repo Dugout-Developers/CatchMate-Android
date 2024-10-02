@@ -17,11 +17,21 @@ class LocalDataRepositoryImpl
             localStorageDataSource.saveRefreshToken(refreshToken)
         }
 
+        override fun saveUserId(userId: Long) {
+            localStorageDataSource.saveUserId(userId)
+        }
+
         override fun getAccessToken(): String = localStorageDataSource.getAccessToken()
 
         override fun getRefreshToken(): String = localStorageDataSource.getRefreshToken()
 
+        override fun getUserId(): Long = localStorageDataSource.getUserId()
+
         override fun removeTokens() {
             localStorageDataSource.removeTokens()
+        }
+
+        override fun removeUserId() {
+            localStorageDataSource.removeUserId()
         }
     }

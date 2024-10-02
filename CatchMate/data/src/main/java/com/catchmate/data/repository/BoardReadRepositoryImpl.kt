@@ -16,12 +16,9 @@ class BoardReadRepositoryImpl
     ) : BoardReadRepository {
         private val boardReadApi = retrofitClient.createApi<BoardReadService>()
 
-        override suspend fun getBoard(
-            accessToken: String,
-            boardId: Long,
-        ): BoardReadResponse? =
+        override suspend fun getBoard(boardId: Long): BoardReadResponse? =
             try {
-                val response = boardReadApi.getBoard(accessToken, boardId)
+                val response = boardReadApi.getBoard(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardReadRepository", "통신 성공 : ${response.code()}")
                     response.body()?.let { BoardReadMapper.toBoardReadResponse(it) } ?: throw Exception("Empty Response")
