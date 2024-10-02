@@ -15,6 +15,7 @@ class RetrofitClient
     @Inject
     constructor(
         localStorageDataSource: LocalStorageDataSource,
+        authAuthenticator: AuthAuthenticator,
     ) {
         private val logging =
             HttpLoggingInterceptor().apply {
@@ -50,6 +51,7 @@ class RetrofitClient
                 .Builder()
                 .addInterceptor(authInterceptor)
                 .addInterceptor(logging)
+                .authenticator(authAuthenticator)
                 .build()
 
         val retrofit: Retrofit by lazy {
