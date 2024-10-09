@@ -14,11 +14,7 @@ class EnrollUseCase
         suspend fun postEnroll(
             boardId: Long,
             enrollRequest: EnrollRequest,
-        ): EnrollResponse? =
-            enrollRepository.postEnroll(boardId, enrollRequest)
+        ): EnrollResponse? = enrollRepository.postEnroll(boardId, enrollRequest)
 
-        suspend fun postEnrollCancel(
-            enrollId: Long,
-        ): EnrollCancelResponse? =
-            enrollRepository.postEnrollCancel(enrollId)
+        suspend fun postEnrollCancel(enrollId: Long): EnrollCancelResponse? = enrollRepository.postEnrollCancel(enrollId)
     }

@@ -10,7 +10,5 @@ interface EnrollRepository {
         enrollRequest: EnrollRequest,
     ): EnrollResponse?
 
-    suspend fun postEnrollCancel(
-        enrollId: Long,
-    ): EnrollCancelResponse?
+    suspend fun postEnrollCancel(enrollId: Long): EnrollCancelResponse?
 }

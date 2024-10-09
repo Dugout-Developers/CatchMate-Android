@@ -304,7 +304,7 @@ class ReadPostFragment : Fragment() {
                 setOnClickListener {
                     readPostViewModel.postEnroll(
                         boardId,
-                        EnrollRequest(edtApplicationDetailDialogExplain.text.toString())
+                        EnrollRequest(edtApplicationDetailDialogExplain.text.toString()),
                     )
                     dialog.dismiss()
                 }
@@ -314,12 +314,12 @@ class ReadPostFragment : Fragment() {
                 if (edtApplicationDetailDialogExplain.text.toString().isNotEmpty()) {
                     tvApplicationDetailDialogSubmit.isClickable = true
                     tvApplicationDetailDialogSubmit.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.brand500)
+                        ContextCompat.getColor(requireContext(), R.color.brand500,)
                     )
                 } else {
                     tvApplicationDetailDialogSubmit.isClickable = false
                     tvApplicationDetailDialogSubmit.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.grey500)
+                        ContextCompat.getColor(requireContext(), R.color.grey500,)
                     )
                 }
             }
