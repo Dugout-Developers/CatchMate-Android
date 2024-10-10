@@ -15,7 +15,7 @@
         class="de.hdodenhof.circleimageview.CircleImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/vec_login_naver"
+        android:src="@drawable/temporary_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

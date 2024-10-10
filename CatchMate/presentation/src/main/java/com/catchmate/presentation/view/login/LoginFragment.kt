@@ -98,19 +98,19 @@ class LoginFragment : Fragment() {
     }
 
     private fun initKakaoLoginBtn() {
-        binding.btnLoginKakao.setOnClickListener {
+        binding.cvLoginKakao.setOnClickListener {
             loginViewModel.kakaoLogin()
         }
     }
 
     private fun initNaverLoginBtn() {
-        binding.imgbtnLoginNaver.setOnClickListener {
+        binding.ivLoginNaver.setOnClickListener {
             loginViewModel.naverLogin()
         }
     }
 
     private fun initGoogleLoginBtn() {
-        binding.imgbtnLoginGoogle.setOnClickListener {
+        binding.ivLoginGoogle.setOnClickListener {
             loginViewModel.googleLogin()
         }
     }
