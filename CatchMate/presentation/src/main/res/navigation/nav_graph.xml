@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_readPostFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
