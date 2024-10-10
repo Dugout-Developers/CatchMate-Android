@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.model.BoardEditRequest
 import com.catchmate.domain.model.BoardWriteRequest
 import com.catchmate.domain.model.BoardWriteResponse
 import com.catchmate.domain.usecase.BoardWriteUseCase
@@ -33,6 +34,10 @@ class AddPostViewModel
         val boardWriteResponse: LiveData<BoardWriteResponse>
             get() = _boardWriteResponse
 
+        private var _boardEditResponse = MutableLiveData<BoardWriteResponse>()
+        val boardEditResponse: LiveData<BoardWriteResponse>
+            get() = _boardEditResponse
+
         fun setHomeTeamName(teamName: String) {
             _homeTeamName.value = teamName
         }
@@ -48,6 +53,12 @@ class AddPostViewModel
         fun postBoardWrite(boardWriteRequest: BoardWriteRequest) {
             viewModelScope.launch {
                 _boardWriteResponse.value = boardWriteUseCase.postBoardWrite(boardWriteRequest)
+            }
+        }
+
+        fun putBoard(boardEditRequest: BoardEditRequest) {
+            viewModelScope.launch {
+                _boardEditResponse.value = boardWriteUseCase.putBoard(boardEditRequest)
             }
         }
     }

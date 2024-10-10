@@ -124,7 +124,9 @@ class ReadPostFragment : Fragment() {
                             true
                         }
                         R.id.menuitem_post_update -> {
-                            Log.e("수정", "수정")
+                            val bundle = Bundle()
+                            bundle.putSerializable("boardInfo", readPostViewModel.boardReadResponse.value)
+                            findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             true
                         }
                         R.id.menuitem_post_delete -> {
