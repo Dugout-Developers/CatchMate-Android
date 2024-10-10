@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_home_head_count_filter_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grey0"
+    android:background="@drawable/shape_all_bottom_sheet_bg"
     tools:context=".view.home.HomeHeadCountFilterBottomSheetFragment">
 
     <ImageView
