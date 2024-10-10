@@ -48,6 +48,7 @@ class CheerStyleOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        initTitle()
         initHeader()
         initFooterButton()
         initCheerStyleButtons()
@@ -64,6 +65,11 @@ class CheerStyleOnboardingFragment : Fragment() {
         } else {
             arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
         }
+
+    private fun initTitle() {
+        val title = getString(R.string.team_onboarding_title1)
+        binding.tvCheerStyleOnboardingTitle1.text = title.format(userInfo.nickName)
+    }
 
     private fun initFooterButton() {
         binding.layoutCheerStyleOnboardingNext.btnFooterOne.apply {

@@ -6,10 +6,10 @@
 
     <ImageView
         android:id="@+id/iv_signup_complete_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
         android:layout_marginTop="231dp"
-        android:src="@drawable/shape_all_rect_r6"
+        android:src="@drawable/img_signup_complete_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
