@@ -1,7 +1,9 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.BoardDeleteRequestDTO
 import com.catchmate.data.dto.BoardReadResponseDTO
 import com.catchmate.data.dto.WriterDTO
+import com.catchmate.domain.model.BoardDeleteRequest
 import com.catchmate.domain.model.BoardReadResponse
 import com.catchmate.domain.model.Writer
 
@@ -32,5 +34,10 @@ object BoardReadMapper {
             watchStyle = writerDTO.watchStyle,
             gender = writerDTO.gender,
             birthDate = writerDTO.birthDate,
+        )
+
+    fun toBoardDeleteRequestDTO(boardDeleteRequest: BoardDeleteRequest): BoardDeleteRequestDTO =
+        BoardDeleteRequestDTO(
+            boardId = boardDeleteRequest.boardId
         )
 }
