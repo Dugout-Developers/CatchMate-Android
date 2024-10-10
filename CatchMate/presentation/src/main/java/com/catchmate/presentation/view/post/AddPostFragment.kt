@@ -213,7 +213,7 @@ class AddPostFragment :
             if (isEditMode) {
                 val boardEditRequest =
                     BoardEditRequest(
-                        boardInfo?.boardId ?:0,
+                        boardInfo?.boardId ?: 0,
                         title,
                         dateTime,
                         place,

@@ -38,6 +38,6 @@ object BoardReadMapper {
 
     fun toBoardDeleteRequestDTO(boardDeleteRequest: BoardDeleteRequest): BoardDeleteRequestDTO =
         BoardDeleteRequestDTO(
-            boardId = boardDeleteRequest.boardId
+            boardId = boardDeleteRequest.boardId,
         )
 }

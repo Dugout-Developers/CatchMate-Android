@@ -14,6 +14,5 @@ class BoardWriteUseCase
         suspend fun postBoardWrite(boardWriteRequest: BoardWriteRequest): BoardWriteResponse? =
             boardWriteRepository.postBoardWrite(boardWriteRequest)
 
-        suspend fun putBoard(boardEditRequest: BoardEditRequest): BoardWriteResponse? =
-            boardWriteRepository.putBoard(boardEditRequest)
+        suspend fun putBoard(boardEditRequest: BoardEditRequest): BoardWriteResponse? = boardWriteRepository.putBoard(boardEditRequest)
     }
