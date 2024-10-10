@@ -17,12 +17,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.BoardDeleteRequest
 import com.catchmate.domain.model.BoardReadResponse
 import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
@@ -126,7 +128,7 @@ class ReadPostFragment : Fragment() {
                             true
                         }
                         R.id.menuitem_post_delete -> {
-                            Log.e("삭제", "삭제")
+                            showBoardDeleteDialog()
                             true
                         }
                         else -> false
@@ -171,6 +173,7 @@ class ReadPostFragment : Fragment() {
     private fun initViewModel() {
         readPostViewModel.boardReadResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
+            initKebabMenuVisibility(response.writer.userId)
         }
 
         readPostViewModel.boardLikeResponse.observe(viewLifecycleOwner) { code ->
@@ -199,6 +202,16 @@ class ReadPostFragment : Fragment() {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
             }
         }
+        readPostViewModel.boardDeleteResponse.observe(viewLifecycleOwner) { code ->
+            if (code == 200) {
+                Log.d("삭제 성공", "")
+                findNavController().popBackStack()
+            }
+        }
+    }
+
+    private fun initKebabMenuVisibility(writerUserId: Long) {
+        binding.layoutReadPostHeader.imgbtnHeaderKebabMenu.visibility = if (writerUserId == userId) View.VISIBLE else View.INVISIBLE
     }
 
     private fun setPostData(post: BoardReadResponse) {
@@ -294,13 +307,13 @@ class ReadPostFragment : Fragment() {
             tvApplicationDetailDialogTitle.setText(R.string.application_detail_dialog_write_title)
 
             tvApplicationDetailDialogCancel.apply {
-                setText(R.string.application_detail_dialog_cancel_menu)
+                setText(R.string.dialog_button_cancel)
                 setOnClickListener {
                     dialog.dismiss()
                 }
             }
             tvApplicationDetailDialogSubmit.apply {
-                setText(R.string.application_detail_dialog_enroll_menu)
+                setText(R.string.dialog_button_enroll)
                 setOnClickListener {
                     readPostViewModel.postEnroll(
                         boardId,
@@ -320,6 +333,39 @@ class ReadPostFragment : Fragment() {
                     tvApplicationDetailDialogSubmit.isClickable = false
                     tvApplicationDetailDialogSubmit.setTextColor(
                         ContextCompat.getColor(requireContext(), R.color.grey500),
+                    )
+                }
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun showBoardDeleteDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.post_read_writer_menu_delete_dialog_title)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.dialog_button_delete)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    readPostViewModel.deleteBoard(
+                        BoardDeleteRequest(boardId),
                     )
                 }
             }
