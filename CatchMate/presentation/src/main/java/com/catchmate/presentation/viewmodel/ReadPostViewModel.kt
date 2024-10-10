@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.model.BoardDeleteRequest
 import com.catchmate.domain.model.BoardReadResponse
 import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollResponse
@@ -39,6 +40,10 @@ class ReadPostViewModel
         val enrollResponse: LiveData<EnrollResponse>
             get() = _enrollResponse
 
+        private val _boardDeleteResponse = MutableLiveData<Int>()
+        val boardDeleteResponse: LiveData<Int>
+            get() = _boardDeleteResponse
+
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
                 _boardReadResponse.value = boardReadUseCase.getBoard(boardId)
@@ -65,5 +70,11 @@ class ReadPostViewModel
 
         fun setBoardEnrollState(state: EnrollState) {
             _boardEnrollState.value = state
+        }
+
+        fun deleteBoard(boardDeleteResponse: BoardDeleteRequest) {
+            viewModelScope.launch {
+                _boardDeleteResponse.value = boardReadUseCase.deleteBoard(boardDeleteResponse)
+            }
         }
     }

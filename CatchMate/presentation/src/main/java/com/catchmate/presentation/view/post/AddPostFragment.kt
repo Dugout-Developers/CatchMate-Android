@@ -1,5 +1,6 @@
 package com.catchmate.presentation.view.post
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.BoardEditRequest
+import com.catchmate.domain.model.BoardReadResponse
 import com.catchmate.domain.model.BoardWriteRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -43,6 +46,13 @@ class AddPostFragment :
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
+    private var boardInfo: BoardReadResponse? = null
+    private var isEditMode = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        boardInfo = getBoardInfo()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +68,11 @@ class AddPostFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        boardInfo?.let {
+            isEditMode = true
+            setBoardData(it)
+        }
+
         getTokens()
         initViewModel()
         initHeader()
@@ -72,6 +87,29 @@ class AddPostFragment :
         super.onDestroyView()
         _binding = null
     }
+
+    private fun setBoardData(response: BoardReadResponse) {
+        binding.apply {
+            edtAddPostTitle.setText(response.title)
+            tvAddPostPeopleCount.text = response.maxPerson.toString()
+            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameDate))
+            addPostViewModel.setHomeTeamName(response.homeTeam)
+            addPostViewModel.setAwayTeamName(response.awayTeam)
+            tvAddPostCheerTeam.text = response.cheerTeam
+            tvAddPostPlace.text = response.location
+            edtAddPostAdditionalInfo.setText(response.addInfo)
+            tvAddPostAdditionalInfoLetterCount.text = response.addInfo.length.toString()
+            layoutAddPostFooter.btnFooterOne.isEnabled = true
+            // 성별, 나이대 반영 필
+        }
+    }
+
+    private fun getBoardInfo(): BoardReadResponse? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("boardInfo", BoardReadResponse::class.java)
+        } else {
+            arguments?.getSerializable("boardInfo") as BoardReadResponse
+        }
 
     private fun getTokens() {
         localDataViewModel.getAccessToken()
@@ -91,12 +129,16 @@ class AddPostFragment :
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
             imgbtnHeaderTextBack.setOnClickListener {
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.addPostFragment, true)
-                        .build()
-                findNavController().navigate(R.id.action_addPostFragment_to_homeFragment, null, navOptions)
+                if (isEditMode) {
+                    findNavController().popBackStack()
+                } else {
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_homeFragment, null, navOptions)
+                }
             }
             tvHeaderTextTitle.visibility = View.GONE
             tvHeaderTextSub.visibility = View.VISIBLE
@@ -127,57 +169,65 @@ class AddPostFragment :
                 binding.tvAddPostGameDateTime.text = DateUtils.formatPlayDate(gameDateTime)
             }
         }
-
-        addPostViewModel.boardWriteResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.e("boardWriteResponse", response.boardId.toString())
-                val bundle = Bundle()
-                bundle.putLong("boardId", response.boardId)
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
-            }
-        }
     }
 
     private fun initFooter() {
-        binding.layoutAddPostFooter.btnFooterOne.apply {
-            setText(R.string.post_complete)
-            setOnClickListener {
-                val title = binding.edtAddPostTitle.text.toString()
-                val peopleCount =
-                    binding.tvAddPostPeopleCount.text
-                        .toString()
-                        .toInt()
-                val dateTime = addPostViewModel.gameDateTime.value.toString()
-                val homeTeam = addPostViewModel.homeTeamName.value.toString()
-                val awayTeam = addPostViewModel.awayTeamName.value.toString()
-                val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
-                val place = binding.tvAddPostPlace.text.toString()
-                val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
-                val preferGender =
-                    if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
-                        GenderUtils.convertPostGender(
-                            binding.root
-                                .findViewById<Chip>(
-                                    binding.chipgroupAddPostGender.checkedChipId,
-                                ).text
-                                .toString(),
-                        )
-                    } else {
-                        null
-                    }
-                val preferAge =
-                    if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                        AgeUtils.convertPostAge(
-                            binding.root
-                                .findViewById<Chip>(
-                                    binding.chipgroupAddPostAge.checkedChipIds[0],
-                                ).text
-                                .toString(),
-                        )
-                    } else {
-                        null
-                    }
+        binding.layoutAddPostFooter.btnFooterOne.setText(R.string.post_complete)
+        binding.layoutAddPostFooter.btnFooterOne.setOnClickListener {
+            val title = binding.edtAddPostTitle.text.toString()
+            val peopleCount =
+                binding.tvAddPostPeopleCount.text
+                    .toString()
+                    .toInt()
+            val dateTime = addPostViewModel.gameDateTime.value.toString()
+            val homeTeam = addPostViewModel.homeTeamName.value.toString()
+            val awayTeam = addPostViewModel.awayTeamName.value.toString()
+            val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
+            val place = binding.tvAddPostPlace.text.toString()
+            val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
+            val preferGender =
+                if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
+                    GenderUtils.convertPostGender(
+                        binding.root
+                            .findViewById<Chip>(
+                                binding.chipgroupAddPostGender.checkedChipId,
+                            ).text
+                            .toString(),
+                    )
+                } else {
+                    null
+                }
+            val preferAge =
+                if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
+                    AgeUtils.convertPostAge(
+                        binding.root
+                            .findViewById<Chip>(
+                                binding.chipgroupAddPostAge.checkedChipIds[0],
+                            ).text
+                            .toString(),
+                    )
+                } else {
+                    null
+                }
 
+            if (isEditMode) {
+                val boardEditRequest =
+                    BoardEditRequest(
+                        boardInfo?.boardId ?: 0,
+                        title,
+                        dateTime,
+                        place,
+                        homeTeam,
+                        awayTeam,
+                        cheerTeam,
+                        boardInfo?.currentPerson ?: 0,
+                        boardInfo?.maxPerson ?: 0,
+                        preferGender,
+                        preferAge,
+                        additionalInfo,
+                    )
+                putBoard(boardEditRequest)
+            } else {
                 val boardWriteRequest =
                     BoardWriteRequest(
                         title,
@@ -191,10 +241,33 @@ class AddPostFragment :
                         preferAge,
                         additionalInfo,
                     )
+                postBoardWrite(boardWriteRequest)
+            }
+        }
+    }
 
-                addPostViewModel.postBoardWrite(
-                    boardWriteRequest,
-                )
+    private fun postBoardWrite(boardWriteRequest: BoardWriteRequest) {
+        addPostViewModel.postBoardWrite(
+            boardWriteRequest,
+        )
+        addPostViewModel.boardWriteResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.e("boardWriteResponse", response.boardId.toString())
+                val bundle = Bundle()
+                bundle.putLong("boardId", response.boardId)
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
+            }
+        }
+    }
+
+    private fun putBoard(boardEditRequest: BoardEditRequest) {
+        addPostViewModel.putBoard(boardEditRequest)
+        addPostViewModel.boardEditResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("boardEditResponse", response.boardId.toString())
+                val bundle = Bundle()
+                bundle.putLong("boardId", response.boardId)
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
             }
         }
     }

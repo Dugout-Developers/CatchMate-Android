@@ -22,6 +22,12 @@ object DateUtils {
         time: String,
     ): String = "$date $time:00"
 
+    fun formatGameDateTimeEditBoard(dateTime: String): String {
+        val (date, time) = dateTime.split("T")
+        val newTime = time.substringBefore(".")
+        return "$date $newTime"
+    }
+
     fun formatPlayDate(dateTime: String): String {
         val (date, time) = dateTime.split(" ", "T")
 
