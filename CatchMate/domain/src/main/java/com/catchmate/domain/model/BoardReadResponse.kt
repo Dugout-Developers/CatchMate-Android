@@ -16,4 +16,4 @@ data class BoardReadResponse(
     val preferGender: String? = null,
     val preferAge: Int? = null,
     val addInfo: String,
-): Serializable
+) : Serializable
