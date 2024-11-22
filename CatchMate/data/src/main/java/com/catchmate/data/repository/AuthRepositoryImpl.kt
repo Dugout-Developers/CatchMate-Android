@@ -4,8 +4,8 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.AuthService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
+import com.catchmate.data.mapper.SignUpMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.DeleteLogoutResponse
 import com.catchmate.domain.model.GetCheckNicknameResponse
 import com.catchmate.domain.model.PostLoginRequest
 import com.catchmate.domain.model.PostLoginResponse
@@ -41,23 +41,6 @@ class AuthRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("AuthRepo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { AuthMapper.toGetCheckNicknameResponse(it) } ?: throw NullPointerException("Null Response")
-                    Result.success(body)
-                } else {
-                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
-                }
-            } catch (e: ReissueFailureException) {
-                Result.failure(e)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-
-        override suspend fun deleteAuthLogout(refreshToken: String): Result<DeleteLogoutResponse> =
-            try {
-                val response = authApi.deleteAuthLogout(refreshToken)
-                if (response.isSuccessful) {
-                    Log.d("AuthRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { AuthMapper.toDeleteLogoutResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
