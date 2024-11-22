@@ -2,7 +2,7 @@ package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.data.dto.PostLoginResponseDTO
-import com.catchmate.data.dto.ReissueResponseDTO
+import com.catchmate.data.dto.PostReissueResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -15,7 +15,7 @@ interface AuthService {
     ): Response<PostLoginResponseDTO?>
 
     @POST("auth/reissue")
-    suspend fun postReissue(
+    suspend fun postAuthReissue(
         @Header("RefreshToken") refreshToken: String,
-    ): Response<ReissueResponseDTO?>
+    ): Response<PostReissueResponseDTO?>
 }

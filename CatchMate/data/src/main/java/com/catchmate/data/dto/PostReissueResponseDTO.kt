@@ -1,5 +1,5 @@
 package com.catchmate.data.dto
 
-data class ReissueResponseDTO(
+data class PostReissueResponseDTO(
     val accessToken: String,
 )
