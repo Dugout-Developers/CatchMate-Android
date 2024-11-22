@@ -1,5 +1,6 @@
 package com.catchmate.domain.usecase
 
+import com.catchmate.domain.model.BoardListResponse
 import com.catchmate.domain.repository.BoardLikeRepository
 import javax.inject.Inject
 
@@ -12,4 +13,6 @@ class BoardLikeUseCase
             boardId: Long,
             flag: Int,
         ): Int? = boardLikeRepository.postBoardLike(boardId, flag)
+
+        suspend fun getBoardLikedList(): Result<List<BoardListResponse>> = boardLikeRepository.getBoardLikedList()
     }
