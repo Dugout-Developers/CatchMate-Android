@@ -14,7 +14,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.BoardDeleteRequest
@@ -106,12 +105,7 @@ class ReadPostFragment : Fragment() {
     private fun initHeader() {
         binding.layoutReadPostHeader.apply {
             imgbtnHeaderKebabMenuBack.setOnClickListener {
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.readPostFragment, true)
-                        .build()
-                findNavController().navigate(R.id.action_readPostFragment_to_homeFragment, null, navOptions)
+                findNavController().popBackStack()
             }
             imgbtnHeaderKebabMenu.setOnClickListener {
                 val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)
