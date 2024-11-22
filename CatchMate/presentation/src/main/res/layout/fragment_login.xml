@@ -24,10 +24,10 @@
 
     <ImageView
         android:id="@+id/iv_login_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="145dp"
-        android:src="@drawable/shape_all_rect_r6"
+        android:layout_width="57dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="166dp"
+        android:src="@drawable/vec_colored_logo"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toTopOf="parent" />
