@@ -38,6 +38,7 @@ class TeamOnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        initTitle()
         initHeader()
         initFooterBtn()
         initTeamButtons()
@@ -46,6 +47,11 @@ class TeamOnboardingFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initTitle() {
+        val title = getString(R.string.team_onboarding_title1)
+        binding.tvTeamOnboardingTitle1.text = title.format(userInfo.nickName)
     }
 
     private fun initTeamButtons() {

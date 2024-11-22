@@ -24,10 +24,10 @@
 
     <ImageView
         android:id="@+id/iv_login_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="145dp"
-        android:src="@drawable/shape_all_rect_r6"
+        android:layout_width="57dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="166dp"
+        android:src="@drawable/vec_colored_logo"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,20 +42,40 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/iv_login_logo" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_login_kakao"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_login_kakao"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/shape_kakao_login_button"
-        android:stateListAnimator="@null"
-        android:text="@string/login_kakao"
-        android:textAppearance="@style/Typography.Body02.Medium"
-        android:textColor="@color/grey900"
-        app:cornerRadius="8dp"
+        android:layout_marginTop="@dimen/tiny"
+        app:cardBackgroundColor="#FDDC3F"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
-        app:layout_constraintTop_toBottomOf="@+id/iv_login_tip" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_login_tip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_login_kakao"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/vec_login_kakao" />
+
+            <TextView
+                android:id="@+id/tv_login_kakao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/xtiny"
+                android:text="@string/login_kakao"
+                android:textAppearance="@style/Typography.Body02.Medium"
+                android:textColor="@color/grey900" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/divider_login_left"
@@ -73,14 +93,14 @@
         android:id="@+id/tv_login_divider_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/base"
         android:gravity="center"
         android:text="@string/login_divider_text"
         android:textAppearance="@style/Typography.Body03.Medium"
         android:textColor="@color/grey500"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login_kakao" />
+        app:layout_constraintTop_toBottomOf="@+id/cv_login_kakao" />
 
     <View
         android:id="@+id/divider_login_right"
@@ -94,6 +114,26 @@
         app:layout_constraintStart_toEndOf="@+id/tv_login_divider_text"
         app:layout_constraintTop_toTopOf="@+id/tv_login_divider_text" />
 
+    <ImageView
+        android:id="@+id/iv_login_naver"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginRight="@dimen/base"
+        android:src="@drawable/shape_all_login_logo_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/divider_login_center"
+        app:layout_constraintEnd_toStartOf="@+id/divider_login_center"
+        app:layout_constraintTop_toTopOf="@+id/divider_login_center" />
+
+    <ImageView
+        android:id="@+id/iv_login_naver_logo"
+        android:layout_width="18dp"
+        android:layout_height="16dp"
+        android:src="@drawable/vec_login_naver"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_login_naver"
+        app:layout_constraintEnd_toEndOf="@+id/iv_login_naver"
+        app:layout_constraintStart_toStartOf="@+id/iv_login_naver"
+        app:layout_constraintTop_toTopOf="@+id/iv_login_naver" />
+
     <View
         android:id="@+id/divider_login_center"
         android:layout_width="1dp"
@@ -104,27 +144,25 @@
         app:layout_constraintStart_toStartOf="@+id/tv_login_divider_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_login_divider_text" />
 
-    <ImageButton
-        android:id="@+id/imgbtn_login_naver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base"
-        android:background="@null"
-        android:src="@drawable/vec_login_naver"
-        app:layout_constraintBottom_toBottomOf="@+id/divider_login_center"
-        app:layout_constraintEnd_toStartOf="@+id/divider_login_center"
-        app:layout_constraintTop_toTopOf="@+id/divider_login_center" />
-
-    <ImageButton
-        android:id="@+id/imgbtn_login_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/base"
-        android:background="@null"
-        android:src="@drawable/vec_login_naver"
+    <ImageView
+        android:id="@+id/iv_login_google"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/base"
+        android:src="@drawable/shape_all_login_logo_circle"
         app:layout_constraintBottom_toBottomOf="@+id/divider_login_center"
         app:layout_constraintStart_toEndOf="@+id/divider_login_center"
         app:layout_constraintTop_toTopOf="@+id/divider_login_center" />
+
+    <ImageView
+        android:id="@+id/iv_login_google_logo"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/vec_login_google"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_login_google"
+        app:layout_constraintEnd_toEndOf="@+id/iv_login_google"
+        app:layout_constraintStart_toStartOf="@+id/iv_login_google"
+        app:layout_constraintTop_toTopOf="@+id/iv_login_google" />
 
     <TextView
         android:id="@+id/tv_login_sneak_peek"

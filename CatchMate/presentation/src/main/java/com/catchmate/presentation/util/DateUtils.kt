@@ -43,7 +43,7 @@ object DateUtils {
     fun formatISODateTime(dateTime: String): Pair<String, String> {
         val (date, time) = dateTime.split("T")
 
-        val inputDateFormat = SimpleDateFormat("yyyy-mm-dd")
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         val formattedDate = inputDateFormat.parse(date)
 
@@ -55,11 +55,11 @@ object DateUtils {
     fun formatISODateTimeToDateTime(dateTime: String): Pair<String, String> {
         val (date, time) = dateTime.split("T")
 
-        val inputDateFormat = SimpleDateFormat("yyyy-mm-dd")
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         val formattedDate = inputDateFormat.parse(date)
 
-        val outputDateFormat = SimpleDateFormat("mm.dd", Locale.KOREAN)
+        val outputDateFormat = SimpleDateFormat("MM.dd", Locale.KOREAN)
 
         return Pair(outputDateFormat.format(formattedDate), time.substring(0, 5))
     }

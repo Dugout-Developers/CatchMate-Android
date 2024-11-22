@@ -37,6 +37,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:textAppearance="@style/Typography.Body02.SemiBold"
+        android:textColor="@color/grey700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/toggle_team_button"
         app:layout_constraintStart_toStartOf="@+id/toggle_team_button"
