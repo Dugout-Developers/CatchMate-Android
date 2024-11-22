@@ -149,7 +149,14 @@
         android:id="@+id/favoriteFragment"
         android:name="com.catchmate.presentation.view.favorite.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chattingSettingFragment"
         android:name="com.catchmate.presentation.view.chatting.ChattingSettingFragment"
