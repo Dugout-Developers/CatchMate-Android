@@ -1,5 +1,5 @@
 package com.catchmate.domain.model
 
-data class CheckNicknameResponse(
+data class GetCheckNicknameResponse(
     val available: Boolean,
 )

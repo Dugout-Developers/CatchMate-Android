@@ -1,7 +1,9 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.data.dto.PostLoginResponseDTO
+import com.catchmate.domain.model.GetCheckNicknameResponse
 import com.catchmate.domain.model.PostLoginRequest
 import com.catchmate.domain.model.PostLoginResponse
 
@@ -29,5 +31,10 @@ object AuthMapper {
             accessToken = postLoginResponseDTO.accessToken,
             refreshToken = postLoginResponseDTO.refreshToken,
             isFirstLogin = postLoginResponseDTO.isFirstLogin,
+        )
+
+    fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
+        GetCheckNicknameResponse(
+        available = getCheckNicknameResponseDTO.available,
         )
 }

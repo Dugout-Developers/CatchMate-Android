@@ -204,8 +204,8 @@ class SignupFragment : Fragment() {
     }
 
     private fun checkNicknameAvailability(nickName: String) {
-        signUpViewModel.getNicknameAvailability(nickName)
-        signUpViewModel.checkNicknameResponse.observe(viewLifecycleOwner) { response ->
+        signUpViewModel.getAuthCheckNickname(nickName)
+        signUpViewModel.getCheckNicknameResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 binding.tvSignupNicknameAlert.apply {
                     visibility = View.VISIBLE

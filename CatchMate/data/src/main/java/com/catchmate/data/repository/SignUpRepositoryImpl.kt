@@ -4,7 +4,6 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.SignUpService
 import com.catchmate.data.mapper.SignUpMapper
-import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.domain.model.UserAdditionalInfoResponse
 import com.catchmate.domain.repository.SignUpRepository
@@ -17,21 +16,6 @@ class SignUpRepositoryImpl
         retrofitClient: RetrofitClient,
     ) : SignUpRepository {
         private val signUpApi = retrofitClient.createApi<SignUpService>()
-
-        override suspend fun getNicknameAvailability(nickName: String): CheckNicknameResponse? =
-            try {
-                val response = signUpApi.getNicknameAvailability(nickName)
-                if (response.isSuccessful) {
-                    Log.d("AuthRepo", "통신 성공 : ${response.code()}")
-                    response.body()?.let { SignUpMapper.toCheckNicknameResponse(it) } ?: throw Exception("Empty Response")
-                } else {
-                    Log.d("AuthRepo", "통신 실패 : ${response.code()}")
-                    null
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
 
         override suspend fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserAdditionalInfoResponse? =
             try {

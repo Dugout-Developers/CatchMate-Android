@@ -1,5 +1,5 @@
 package com.catchmate.data.dto
 
-data class CheckNicknameResponseDTO(
+data class GetCheckNicknameResponseDTO(
     val available: Boolean,
 )

@@ -1,18 +1,11 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.CheckNicknameResponseDTO
 import com.catchmate.data.dto.UserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.UserAdditionalInfoResponseDTO
-import com.catchmate.domain.model.CheckNicknameResponse
 import com.catchmate.domain.model.UserAdditionalInfoRequest
 import com.catchmate.domain.model.UserAdditionalInfoResponse
 
 object SignUpMapper {
-    fun toCheckNicknameResponse(checkNicknameResponseDTO: CheckNicknameResponseDTO): CheckNicknameResponse =
-        CheckNicknameResponse(
-            available = checkNicknameResponseDTO.available,
-        )
-
     fun toUserAdditionalInfoRequestDTO(userAdditionalInfoRequest: UserAdditionalInfoRequest): UserAdditionalInfoRequestDTO =
         UserAdditionalInfoRequestDTO(
             email = userAdditionalInfoRequest.email,
