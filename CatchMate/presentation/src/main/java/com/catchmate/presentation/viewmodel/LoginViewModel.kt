@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catchmate.domain.model.LoginRequest
-import com.catchmate.domain.model.LoginResponse
-import com.catchmate.domain.usecase.AuthUseCase
-import com.catchmate.domain.usecase.LoginUseCase
+import com.catchmate.domain.model.PostLoginRequest
+import com.catchmate.domain.model.PostLoginResponse
+import com.catchmate.domain.usecase.auth.PostAuthLoginUseCase
+import com.catchmate.domain.usecase.auth.SocialLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,42 +16,42 @@ import javax.inject.Inject
 class LoginViewModel
     @Inject
     constructor(
-        private val loginUseCase: LoginUseCase,
-        private val authUseCase: AuthUseCase,
+        private val socialLoginUseCase: SocialLoginUseCase,
+        private val postAuthLoginUseCase: PostAuthLoginUseCase,
     ) : ViewModel() {
-        private val _loginRequest = MutableLiveData<LoginRequest>()
-        val loginRequest: LiveData<LoginRequest>
-            get() = _loginRequest
+        private val _postLoginRequest = MutableLiveData<PostLoginRequest>()
+        val postLoginRequest: LiveData<PostLoginRequest>
+            get() = _postLoginRequest
 
-        private val _loginResponse = MutableLiveData<LoginResponse>()
-        val loginResponse: LiveData<LoginResponse>
-            get() = _loginResponse
+        private val _postLoginResponse = MutableLiveData<PostLoginResponse>()
+        val postLoginResponse: LiveData<PostLoginResponse>
+            get() = _postLoginResponse
 
         fun kakaoLogin() {
             viewModelScope.launch {
-                _loginRequest.value = loginUseCase.loginWithKakao()
+                _postLoginRequest.value = socialLoginUseCase.loginWithKakao()
             }
         }
 
         fun naverLogin() {
             viewModelScope.launch {
-                _loginRequest.value = loginUseCase.loginWithNaver()
+                _postLoginRequest.value = socialLoginUseCase.loginWithNaver()
             }
         }
 
         fun googleLogin() {
             viewModelScope.launch {
                 try {
-                    _loginRequest.value = loginUseCase.loginWithGoogle()
+                    _postLoginRequest.value = socialLoginUseCase.loginWithGoogle()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
 
-        fun postLogin(loginRequest: LoginRequest) {
+        fun postAuthLogin(postLoginRequest: PostLoginRequest) {
             viewModelScope.launch {
-                _loginResponse.value = authUseCase.postLogin(loginRequest)
+                _postLoginResponse.value = postAuthLoginUseCase.postAuthLogin(postLoginRequest)
             }
         }
     }

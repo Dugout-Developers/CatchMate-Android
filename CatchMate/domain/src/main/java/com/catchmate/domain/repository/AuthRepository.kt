@@ -1,8 +1,8 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.LoginRequest
-import com.catchmate.domain.model.LoginResponse
+import com.catchmate.domain.model.PostLoginRequest
+import com.catchmate.domain.model.PostLoginResponse
 
 interface AuthRepository {
-    suspend fun postLogin(loginRequest: LoginRequest): LoginResponse?
+    suspend fun postAuthLogin(postLoginRequest: PostLoginRequest): PostLoginResponse?
 }

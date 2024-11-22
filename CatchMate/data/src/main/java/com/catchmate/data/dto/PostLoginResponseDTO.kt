@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto
 
-data class LoginResponse(
+data class PostLoginResponseDTO(
     val accessToken: String?,
     val refreshToken: String?,
     val isFirstLogin: Boolean,

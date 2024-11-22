@@ -3,7 +3,7 @@ package com.catchmate.data.datasource.local
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.LoginRequestDTO
+import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.domain.model.LoginPlatform
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -23,7 +23,7 @@ class NaverLoginDataSource
         @ApplicationContext private val context: Context,
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun loginWithNaver(): LoginRequestDTO =
+        suspend fun loginWithNaver(): PostLoginRequestDTO =
             suspendCancellableCoroutine { continuation ->
                 val nidProfileCallback =
                     object : NidProfileCallback<NidProfileResponse> {
@@ -47,8 +47,8 @@ class NaverLoginDataSource
                             if (result.profile != null) {
                                 Log.d("NaverInfoSuccess", "providerId : ${result.profile?.id} email : ${result.profile?.email}")
                                 result.profile?.let {
-                                    val loginRequestDTO =
-                                        LoginRequestDTO(
+                                    val postLoginRequestDTO =
+                                        PostLoginRequestDTO(
                                             email = it.email!!,
                                             providerId = it.id!!,
                                             provider = LoginPlatform.NAVER.toString().lowercase(),
@@ -58,7 +58,7 @@ class NaverLoginDataSource
                                                     fcmTokenService.getToken()
                                                 },
                                         )
-                                    continuation.resume(loginRequestDTO)
+                                    continuation.resume(postLoginRequestDTO)
                                 } ?: continuation.resumeWithException(Exception("Profile is null"))
                             }
                         }

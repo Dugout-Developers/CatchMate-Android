@@ -3,7 +3,7 @@ package com.catchmate.data.datasource.local
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.LoginRequestDTO
+import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.domain.model.LoginPlatform
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -24,7 +24,7 @@ class KakaoLoginDataSource
         private val isKakaoTalkLoginAvailable: Boolean
             get() = userApiClient.isKakaoTalkLoginAvailable(context)
 
-        suspend fun loginWithKakao(): LoginRequestDTO =
+        suspend fun loginWithKakao(): PostLoginRequestDTO =
             suspendCancellableCoroutine { continuation ->
                 val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                     if (error != null) {
@@ -42,8 +42,8 @@ class KakaoLoginDataSource
                             } else if (user != null) {
                                 Log.d("KakaoInfoSuccess", "providerId : ${user.id}")
                                 user.let {
-                                    val loginRequestDTO =
-                                        LoginRequestDTO(
+                                    val postLoginRequestDTO =
+                                        PostLoginRequestDTO(
                                             email = it.kakaoAccount?.email!!,
                                             providerId = it.id.toString(),
                                             provider = LoginPlatform.KAKAO.toString().lowercase(),
@@ -53,7 +53,7 @@ class KakaoLoginDataSource
                                                     fcmTokenService.getToken()
                                                 },
                                         )
-                                    continuation.resume(loginRequestDTO)
+                                    continuation.resume(postLoginRequestDTO)
                                 }
                             } else {
                                 continuation.resumeWithException(Exception("Profile is null"))

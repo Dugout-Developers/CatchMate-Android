@@ -1,7 +1,7 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.LoginRequestDTO
-import com.catchmate.data.dto.LoginResponseDTO
+import com.catchmate.data.dto.PostLoginRequestDTO
+import com.catchmate.data.dto.PostLoginResponseDTO
 import com.catchmate.data.dto.ReissueResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
@@ -10,9 +10,9 @@ import retrofit2.http.POST
 
 interface AuthService {
     @POST("auth/login")
-    suspend fun postLogin(
-        @Body loginRequestDTO: LoginRequestDTO,
-    ): Response<LoginResponseDTO?>
+    suspend fun postAuthLogin(
+        @Body loginRequestDTO: PostLoginRequestDTO,
+    ): Response<PostLoginResponseDTO?>
 
     @POST("auth/reissue")
     suspend fun postReissue(

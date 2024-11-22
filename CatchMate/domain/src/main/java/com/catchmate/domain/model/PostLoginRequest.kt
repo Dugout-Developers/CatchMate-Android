@@ -1,6 +1,6 @@
-package com.catchmate.data.dto
+package com.catchmate.domain.model
 
-data class LoginRequestDTO(
+data class PostLoginRequest(
     val email: String,
     val providerId: String,
     val provider: String,
