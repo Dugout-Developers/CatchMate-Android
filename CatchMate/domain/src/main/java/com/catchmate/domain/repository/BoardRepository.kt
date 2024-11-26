@@ -11,9 +11,14 @@ import com.catchmate.domain.model.PutBoardResponse
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>
 
+    suspend fun postBoardLike(
+        boardId: Long,
+        flag: Int,
+    ): Result<Int>
+
     suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse>
 
-    suspend fun getBoardList(
+    suspend fun getBoardPaging(
         pageNum: Long,
         gudans: String,
         people: Int,

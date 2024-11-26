@@ -40,6 +40,22 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
+        override suspend fun postBoardLike(boardId: Long, flag: Int): Result<Int> =
+            try {
+                val response = boardApi.postBoardLike(boardId, flag)
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공 : ${response.code()}")
+                    Result.success(response.code())
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
         override suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse> =
             try {
                 val response = boardApi.putBoard(BoardMapper.toPutBoardRequestDTO(putBoardRequest))
@@ -57,7 +73,7 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getBoardList(
+        override suspend fun getBoardPaging(
             pageNum: Long,
             gudans: String,
             people: Int,

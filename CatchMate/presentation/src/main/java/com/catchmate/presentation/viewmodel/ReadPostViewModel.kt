@@ -10,10 +10,10 @@ import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollResponse
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.usecase.BoardLikeUseCase
 import com.catchmate.domain.usecase.EnrollUseCase
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
+import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,16 +24,16 @@ class ReadPostViewModel
     constructor(
         private val getBoardUseCase: GetBoardUseCase,
         private val deleteBoardUseCase: DeleteBoardUseCase,
-        private val boardLikeUseCase: BoardLikeUseCase,
+        private val postBoardLikeUseCase: PostBoardLikeUseCase,
         private val enrollUseCase: EnrollUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
         val getBoardResponse: LiveData<GetBoardResponse>
             get() = _getBoardResponse
 
-        private val _boardLikeResponse = MutableLiveData<Int>()
-        val boardLikeResponse: LiveData<Int>
-            get() = _boardLikeResponse
+        private val _postBoardLikeResponse = MutableLiveData<Int>()
+        val postBoardLikeResponse: LiveData<Int>
+            get() = _postBoardLikeResponse
 
         private val _boardEnrollState = MutableLiveData<EnrollState>()
         val boardEnrollState: LiveData<EnrollState>
@@ -76,7 +76,17 @@ class ReadPostViewModel
             flag: Int,
         ) {
             viewModelScope.launch {
-                _boardLikeResponse.value = boardLikeUseCase.postBoardLike(boardId, flag)
+                val result = postBoardLikeUseCase.postBoardLike(boardId, flag)
+                result
+                    .onSuccess { response ->
+                        _postBoardLikeResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
             }
         }
 

@@ -14,5 +14,5 @@ class GetBoardPagingUseCase
             gudans: String,
             people: Int,
             gameDate: String,
-        ): Result<List<GetBoardPagingResponse>> = boardRepository.getBoardList(pageNum, gudans, people, gameDate)
+        ): Result<List<GetBoardPagingResponse>> = boardRepository.getBoardPaging(pageNum, gudans, people, gameDate)
     }

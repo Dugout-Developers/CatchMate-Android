@@ -22,6 +22,12 @@ interface BoardService {
         @Body postBoardRequestDTO: PostBoardRequestDTO,
     ): Response<PostBoardResponseDTO?>
 
+    @POST("board/like/{boardId}")
+    suspend fun postBoardLike(
+        @Path("boardId") boardId: Long,
+        @Query("flag") flag: Int,
+    ): Response<Int>
+
     @PUT("board/edit")
     suspend fun putBoard(
         @Body putBoardRequestDTO: PutBoardRequestDTO,
