@@ -1,13 +1,13 @@
-package com.catchmate.domain.usecase
+package com.catchmate.domain.usecase.user
 
 import com.catchmate.domain.model.GetUserProfileResponse
 import com.catchmate.domain.repository.UserRepository
 import javax.inject.Inject
 
-class UserUseCase
+class GetUserProfileUseCase
     @Inject
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend fun getUserProfile(): GetUserProfileResponse? = userRepository.getUserProfile()
+        suspend fun getUserProfile(): Result<GetUserProfileResponse> = userRepository.getUserProfile()
     }

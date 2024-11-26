@@ -4,17 +4,17 @@ import com.catchmate.data.dto.GetUserProfileResponseDTO
 import com.catchmate.domain.model.GetUserProfileResponse
 
 object UserMapper {
-    fun toUserProfileResponse(userProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
+    fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
         GetUserProfileResponse(
-            userId = userProfileResponseDTO.userId,
-            email = userProfileResponseDTO.email,
-            picture = userProfileResponseDTO.picture,
-            gender = userProfileResponseDTO.gender,
-            pushAgreement = userProfileResponseDTO.pushAgreement,
-            nickName = userProfileResponseDTO.nickName,
-            favoriteGudan = userProfileResponseDTO.favoriteGudan,
-            description = userProfileResponseDTO.description,
-            birthDate = userProfileResponseDTO.birthDate,
-            watchStyle = userProfileResponseDTO.watchStyle,
+            userId = getUserProfileResponseDTO.userId,
+            email = getUserProfileResponseDTO.email,
+            picture = getUserProfileResponseDTO.picture,
+            gender = getUserProfileResponseDTO.gender,
+            pushAgreement = getUserProfileResponseDTO.pushAgreement,
+            nickName = getUserProfileResponseDTO.nickName,
+            favoriteGudan = getUserProfileResponseDTO.favoriteGudan,
+            description = getUserProfileResponseDTO.description,
+            birthDate = getUserProfileResponseDTO.birthDate,
+            watchStyle = getUserProfileResponseDTO.watchStyle,
         )
 }

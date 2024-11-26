@@ -16,7 +16,6 @@ import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
-import com.catchmate.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +27,6 @@ class HomeFragment :
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewMdoel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
@@ -183,8 +181,8 @@ class HomeFragment :
     }
 
     private fun getUserProfile() {
-        userViewModel.getUserProfile()
-        userViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+        homeViewModel.getUserProfile()
+        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             response?.let {
                 localDataViewModel.saveUserId(response.userId)
             }
