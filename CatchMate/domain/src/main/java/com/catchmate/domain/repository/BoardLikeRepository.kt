@@ -1,6 +1,6 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 
 interface BoardLikeRepository {
     suspend fun postBoardLike(
@@ -8,5 +8,5 @@ interface BoardLikeRepository {
         flag: Int,
     ): Int?
 
-    suspend fun getBoardLikedList(): Result<List<BoardListResponse>>
+    suspend fun getBoardLikedList(): Result<List<GetBoardPagingResponse>>
 }

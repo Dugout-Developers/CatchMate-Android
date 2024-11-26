@@ -93,10 +93,10 @@ class HomeFragment :
     }
 
     private fun initViewModel() {
-        homeViewModel.getBoardList(
+        homeViewModel.getBoardPaging(
             pageNum = page++,
         )
-        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { boardList ->
+        homeViewModel.getBoardPagingResponse.observe(viewLifecycleOwner) { boardList ->
             boardList?.let {
                 if (boardList.isNotEmpty()) {
                     Log.e("게시글 목록 존재", boardList.size.toString())
@@ -169,7 +169,7 @@ class HomeFragment :
 
                         if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
                             if (isNextPageExist) {
-                                homeViewModel.getBoardList(
+                                homeViewModel.getBoardPaging(
                                     pageNum = page++,
                                 )
                             }

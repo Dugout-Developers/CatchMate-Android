@@ -5,7 +5,7 @@ import com.catchmate.data.datasource.remote.BoardLikeService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardListMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.repository.BoardLikeRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class BoardLikeRepositoryImpl
                 null
             }
 
-        override suspend fun getBoardLikedList(): Result<List<BoardListResponse>> =
+        override suspend fun getBoardLikedList(): Result<List<GetBoardPagingResponse>> =
             try {
                 val response = boardLikeApi.getBoardLikedList()
                 if (response.isSuccessful) {

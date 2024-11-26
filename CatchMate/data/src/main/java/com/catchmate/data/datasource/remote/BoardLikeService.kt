@@ -1,6 +1,6 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.BoardListResponseDTO
+import com.catchmate.data.dto.GetBoardPagingResponseDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,5 +15,5 @@ interface BoardLikeService {
     ): Response<Int>
 
     @GET("board/likes")
-    suspend fun getBoardLikedList(): Response<List<BoardListResponseDTO>>
+    suspend fun getBoardLikedList(): Response<List<GetBoardPagingResponseDTO>>
 }

@@ -11,7 +11,7 @@ import android.widget.ToggleButton
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
@@ -28,9 +28,9 @@ class FavoritePostAdapter(
     private val onPostItemToggleClickListener: OnPostItemToggleClickListener,
     private val onPostItemAllRemovedListener: OnPostItemAllRemovedListener,
 ) : RecyclerView.Adapter<FavoritePostAdapter.FavoritePostViewHolder>() {
-    private var likedList: MutableList<BoardListResponse> = mutableListOf()
+    private var likedList: MutableList<GetBoardPagingResponse> = mutableListOf()
 
-    fun updateLikedList(newList: List<BoardListResponse>) {
+    fun updateLikedList(newList: List<GetBoardPagingResponse>) {
         likedList.clear()
         newList.forEach { boardListResponse ->
             likedList.add(boardListResponse)

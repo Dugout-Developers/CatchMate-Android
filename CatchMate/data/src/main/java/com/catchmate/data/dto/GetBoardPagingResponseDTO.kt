@@ -1,6 +1,6 @@
 package com.catchmate.data.dto
 
-data class BoardListResponseDTO(
+data class GetBoardPagingResponseDTO(
     val boardId: Long,
     val title: String,
     val gameDate: String,

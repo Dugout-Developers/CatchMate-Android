@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
@@ -20,9 +20,9 @@ class HomePostAdapter(
     private val layoutInflater: LayoutInflater,
     private val onPostItemClickListener: OnPostItemClickListener,
 ) : RecyclerView.Adapter<HomePostAdapter.HomePostViewHolder>() {
-    private var postList: MutableList<BoardListResponse> = mutableListOf()
+    private var postList: MutableList<GetBoardPagingResponse> = mutableListOf()
 
-    fun updatePostList(newList: List<BoardListResponse>) {
+    fun updatePostList(newList: List<GetBoardPagingResponse>) {
         newList.forEach { boardListResponse ->
             postList.add(boardListResponse)
         }

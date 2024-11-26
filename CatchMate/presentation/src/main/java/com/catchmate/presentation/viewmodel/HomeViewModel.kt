@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.GetUserProfileResponse
-import com.catchmate.domain.usecase.BoardListUseCase
+import com.catchmate.domain.usecase.board.GetBoardPagingUseCase
 import com.catchmate.domain.usecase.user.GetUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,15 +18,15 @@ class HomeViewModel
     @Inject
     constructor(
         private val getUserProfileUseCase: GetUserProfileUseCase,
-        private val boardListUseCase: BoardListUseCase,
+        private val getBoardPagingUseCase: GetBoardPagingUseCase,
     ) : ViewModel() {
         private val _userProfile = MutableLiveData<GetUserProfileResponse>()
         val userProfile: LiveData<GetUserProfileResponse>
             get() = _userProfile
 
-        private val _boardListResponse = MutableLiveData<List<BoardListResponse>?>()
-        val boardListResponse: LiveData<List<BoardListResponse>?>
-            get() = _boardListResponse
+        private val _getBoardPagingResponse = MutableLiveData<List<GetBoardPagingResponse>>()
+        val getBoardPagingResponse: LiveData<List<GetBoardPagingResponse>>
+            get() = _getBoardPagingResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -52,18 +52,17 @@ class HomeViewModel
             }
         }
 
-        fun getBoardList(
+        fun getBoardPaging(
             pageNum: Long,
             gudans: String = "",
             people: Int = 0,
             gameDate: String = "9999-99-99",
         ) {
             viewModelScope.launch {
-                val result = boardListUseCase.getBoardList(pageNum, gudans, people, gameDate)
-
+                val result = getBoardPagingUseCase.getBoardPaging(pageNum, gudans, people, gameDate)
                 result
                     .onSuccess { boardList ->
-                        _boardListResponse.value = boardList
+                        _getBoardPagingResponse.value = boardList
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

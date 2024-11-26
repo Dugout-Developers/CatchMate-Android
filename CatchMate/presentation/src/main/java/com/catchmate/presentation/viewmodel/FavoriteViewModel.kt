@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.BoardListResponse
+import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.usecase.BoardLikeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,8 +17,8 @@ class FavoriteViewModel
     constructor(
         private val boardLikeUseCase: BoardLikeUseCase,
     ) : ViewModel() {
-        private val _boardListResponse = MutableLiveData<List<BoardListResponse>>()
-        val boardListResponse: LiveData<List<BoardListResponse>>
+        private val _boardListResponse = MutableLiveData<List<GetBoardPagingResponse>>()
+        val boardListResponse: LiveData<List<GetBoardPagingResponse>>
             get() = _boardListResponse
 
         private val _errorMessage = MutableLiveData<String>()

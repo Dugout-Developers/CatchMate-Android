@@ -1,6 +1,6 @@
 package com.catchmate.domain.model
 
-data class BoardListResponse(
+data class GetBoardPagingResponse(
     val boardId: Long,
     val title: String,
     val gameDate: String,
