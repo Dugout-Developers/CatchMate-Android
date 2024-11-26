@@ -1,6 +1,6 @@
 package com.catchmate.data.dto
 
-data class UserAdditionalInfoRequestDTO(
+data class PostUserAdditionalInfoRequestDTO(
     val email: String,
     val provider: String,
     val providerId: String,

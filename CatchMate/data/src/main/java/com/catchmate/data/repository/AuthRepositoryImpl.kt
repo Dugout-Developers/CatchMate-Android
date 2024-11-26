@@ -4,7 +4,6 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.AuthService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
-import com.catchmate.data.mapper.SignUpMapper
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.GetCheckNicknameResponse
 import com.catchmate.domain.model.PostLoginRequest

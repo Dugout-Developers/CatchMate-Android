@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.UserAdditionalInfoRequest
+import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
 
@@ -15,7 +15,7 @@ class TeamOnboardingFragment : Fragment() {
     private var _binding: FragmentTeamOnboardingBinding? = null
     val binding get() = _binding!!
 
-    private lateinit var userInfo: UserAdditionalInfoRequest
+    private lateinit var userInfo: PostUserAdditionalInfoRequest
 
     private var selectedButton: TeamButtonView? = null
 
@@ -102,7 +102,7 @@ class TeamOnboardingFragment : Fragment() {
             setText(R.string.next)
             setOnClickListener {
                 val newUserInfo =
-                    UserAdditionalInfoRequest(
+                    PostUserAdditionalInfoRequest(
                         userInfo.email,
                         userInfo.provider,
                         userInfo.providerId,
@@ -125,10 +125,10 @@ class TeamOnboardingFragment : Fragment() {
         }
     }
 
-    private fun getUserInfo(): UserAdditionalInfoRequest =
+    private fun getUserInfo(): PostUserAdditionalInfoRequest =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("userInfo", UserAdditionalInfoRequest::class.java)!!
+            arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
         } else {
-            arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
+            arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
         }
 }
