@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.BoardDeleteRequest
+import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollState
@@ -198,7 +198,7 @@ class ReadPostFragment : Fragment() {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
             }
         }
-        readPostViewModel.boardDeleteResponse.observe(viewLifecycleOwner) { code ->
+        readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { code ->
             if (code == 200) {
                 Log.d("삭제 성공", "")
                 findNavController().popBackStack()
@@ -361,7 +361,7 @@ class ReadPostFragment : Fragment() {
                 )
                 setOnClickListener {
                     readPostViewModel.deleteBoard(
-                        BoardDeleteRequest(boardId),
+                        DeleteBoardRequest(boardId),
                     )
                 }
             }

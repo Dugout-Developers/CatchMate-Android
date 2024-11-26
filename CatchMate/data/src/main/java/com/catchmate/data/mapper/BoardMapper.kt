@@ -1,5 +1,6 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.DeleteBoardRequestDTO
 import com.catchmate.data.dto.GetBoardPagingResponseDTO
 import com.catchmate.data.dto.GetBoardResponseDTO
 import com.catchmate.data.dto.PostBoardRequestDTO
@@ -7,6 +8,7 @@ import com.catchmate.data.dto.PostBoardResponseDTO
 import com.catchmate.data.dto.PutBoardRequestDTO
 import com.catchmate.data.dto.PutBoardResponseDTO
 import com.catchmate.data.dto.WriterDTO
+import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.PutBoardRequest
@@ -88,7 +90,7 @@ object BoardMapper {
             addInfo = responseDTO.addInfo,
         )
 
-    fun toWriter(writerDTO: WriterDTO): Writer =
+    private fun toWriter(writerDTO: WriterDTO): Writer =
         Writer(
             userId = writerDTO.userId,
             nickName = writerDTO.nickName,
@@ -97,5 +99,10 @@ object BoardMapper {
             watchStyle = writerDTO.watchStyle,
             gender = writerDTO.gender,
             birthDate = writerDTO.birthDate,
+        )
+
+    fun toDeleteBoardRequestDTO(request: DeleteBoardRequest): DeleteBoardRequestDTO =
+        DeleteBoardRequestDTO(
+            boardId = request.boardId,
         )
 }

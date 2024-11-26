@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.DeleteBoardRequestDTO
 import com.catchmate.data.dto.GetBoardResponseDTO
 import com.catchmate.data.dto.GetBoardPagingResponseDTO
 import com.catchmate.data.dto.PutBoardRequestDTO
@@ -8,6 +9,7 @@ import com.catchmate.data.dto.PostBoardResponseDTO
 import com.catchmate.data.dto.PutBoardResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -37,4 +39,9 @@ interface BoardService {
     suspend fun getBoard(
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
+
+    @DELETE("board/remove")
+    suspend fun deleteBoard(
+        @Body deleteBoardRequest: DeleteBoardRequestDTO,
+    ): Response<Int>
 }

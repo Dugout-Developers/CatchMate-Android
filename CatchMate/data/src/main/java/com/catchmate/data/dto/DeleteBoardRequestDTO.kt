@@ -1,5 +1,5 @@
 package com.catchmate.data.dto
 
-data class BoardDeleteRequestDTO(
+data class DeleteBoardRequestDTO(
     val boardId: Long,
 )

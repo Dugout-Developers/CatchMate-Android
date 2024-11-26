@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.BoardDeleteRequest
-import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollResponse
 import com.catchmate.domain.model.EnrollState
+import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.usecase.BoardLikeUseCase
-import com.catchmate.domain.usecase.BoardReadUseCase
 import com.catchmate.domain.usecase.EnrollUseCase
+import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class ReadPostViewModel
     @Inject
     constructor(
         private val getBoardUseCase: GetBoardUseCase,
-        private val boardReadUseCase: BoardReadUseCase,
+        private val deleteBoardUseCase: DeleteBoardUseCase,
         private val boardLikeUseCase: BoardLikeUseCase,
         private val enrollUseCase: EnrollUseCase,
     ) : ViewModel() {
@@ -43,9 +43,9 @@ class ReadPostViewModel
         val enrollResponse: LiveData<EnrollResponse>
             get() = _enrollResponse
 
-        private val _boardDeleteResponse = MutableLiveData<Int>()
-        val boardDeleteResponse: LiveData<Int>
-            get() = _boardDeleteResponse
+        private val _deleteBoardResponse = MutableLiveData<Int>()
+        val deleteBoardResponse: LiveData<Int>
+            get() = _deleteBoardResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -93,9 +93,19 @@ class ReadPostViewModel
             _boardEnrollState.value = state
         }
 
-        fun deleteBoard(boardDeleteResponse: BoardDeleteRequest) {
+        fun deleteBoard(deleteBoardRequest: DeleteBoardRequest) {
             viewModelScope.launch {
-                _boardDeleteResponse.value = boardReadUseCase.deleteBoard(boardDeleteResponse)
+                val result = deleteBoardUseCase.deleteBoard(deleteBoardRequest)
+                result
+                    .onSuccess { response ->
+                        _deleteBoardResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
             }
         }
     }

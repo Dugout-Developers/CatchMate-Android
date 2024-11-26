@@ -1,5 +1,6 @@
 package com.catchmate.domain.repository
 
+import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
@@ -20,4 +21,6 @@ interface BoardRepository {
     ): Result<List<GetBoardPagingResponse>>
 
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
+
+    suspend fun deleteBoard(boardDeleteRequest: DeleteBoardRequest): Result<Int>
 }

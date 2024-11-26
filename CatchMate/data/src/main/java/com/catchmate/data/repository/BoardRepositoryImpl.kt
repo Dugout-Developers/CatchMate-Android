@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
@@ -85,6 +86,22 @@ class BoardRepositoryImpl
                     Log.d("BoardRepo", "통신 성공")
                     val body = response.body()?.let { BoardMapper.toGetBoardResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun deleteBoard(deleteBoardRequest: DeleteBoardRequest): Result<Int> =
+            try {
+                val response = boardApi.deleteBoard(BoardMapper.toDeleteBoardRequestDTO(deleteBoardRequest))
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공")
+                    Result.success(response.code())
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))

@@ -1,5 +1,5 @@
 package com.catchmate.domain.model
 
-data class BoardDeleteRequest(
+data class DeleteBoardRequest(
     val boardId: Long,
 )
