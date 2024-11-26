@@ -2,7 +2,7 @@ package com.catchmate.domain.model
 
 import java.io.Serializable
 
-data class BoardReadResponse(
+data class GetBoardResponse(
     val boardId: Long,
     val writer: Writer,
     val title: String,

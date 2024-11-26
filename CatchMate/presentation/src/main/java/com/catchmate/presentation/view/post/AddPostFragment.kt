@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.BoardReadResponse
+import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -46,7 +46,7 @@ class AddPostFragment :
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
-    private var boardInfo: BoardReadResponse? = null
+    private var boardInfo: GetBoardResponse? = null
     private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +88,7 @@ class AddPostFragment :
         _binding = null
     }
 
-    private fun setBoardData(response: BoardReadResponse) {
+    private fun setBoardData(response: GetBoardResponse) {
         binding.apply {
             edtAddPostTitle.setText(response.title)
             tvAddPostPeopleCount.text = response.maxPerson.toString()
@@ -104,11 +104,11 @@ class AddPostFragment :
         }
     }
 
-    private fun getBoardInfo(): BoardReadResponse? =
+    private fun getBoardInfo(): GetBoardResponse? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("boardInfo", BoardReadResponse::class.java)
+            arguments?.getSerializable("boardInfo", GetBoardResponse::class.java)
         } else {
-            arguments?.getSerializable("boardInfo") as BoardReadResponse
+            arguments?.getSerializable("boardInfo") as GetBoardResponse
         }
 
     private fun getTokens() {

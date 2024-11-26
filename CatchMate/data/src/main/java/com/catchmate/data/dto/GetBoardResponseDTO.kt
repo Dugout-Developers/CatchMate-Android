@@ -1,6 +1,6 @@
 package com.catchmate.data.dto
 
-data class BoardReadResponseDTO(
+data class GetBoardResponseDTO(
     val boardId: Long,
     val writer: WriterDTO,
     val title: String,

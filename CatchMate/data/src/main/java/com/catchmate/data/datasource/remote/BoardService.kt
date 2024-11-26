@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.GetBoardResponseDTO
 import com.catchmate.data.dto.GetBoardPagingResponseDTO
 import com.catchmate.data.dto.PutBoardRequestDTO
 import com.catchmate.data.dto.PostBoardRequestDTO
@@ -31,4 +32,9 @@ interface BoardService {
         @Query("people") people: Int,
         @Query("gameDate") gameDate: String,
     ): Response<List<GetBoardPagingResponseDTO>?>
+
+    @GET("board/{boardId}")
+    suspend fun getBoard(
+        @Path("boardId") boardId: Long,
+    ): Response<GetBoardResponseDTO?>
 }

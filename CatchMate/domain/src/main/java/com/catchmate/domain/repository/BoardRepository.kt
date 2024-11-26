@@ -1,6 +1,7 @@
 package com.catchmate.domain.repository
 
 import com.catchmate.domain.model.GetBoardPagingResponse
+import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
 import com.catchmate.domain.model.PutBoardRequest
@@ -17,4 +18,6 @@ interface BoardRepository {
         people: Int,
         gameDate: String,
     ): Result<List<GetBoardPagingResponse>>
+
+    suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
 }

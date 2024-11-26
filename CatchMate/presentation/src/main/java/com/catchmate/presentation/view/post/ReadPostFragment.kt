@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.BoardDeleteRequest
-import com.catchmate.domain.model.BoardReadResponse
+import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.EnrollRequest
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.presentation.R
@@ -119,7 +119,7 @@ class ReadPostFragment : Fragment() {
                         }
                         R.id.menuitem_post_update -> {
                             val bundle = Bundle()
-                            bundle.putSerializable("boardInfo", readPostViewModel.boardReadResponse.value)
+                            bundle.putSerializable("boardInfo", readPostViewModel.getBoardResponse.value)
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             true
                         }
@@ -167,7 +167,7 @@ class ReadPostFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        readPostViewModel.boardReadResponse.observe(viewLifecycleOwner) { response ->
+        readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
             initKebabMenuVisibility(response.writer.userId)
         }
@@ -210,7 +210,7 @@ class ReadPostFragment : Fragment() {
         binding.layoutReadPostHeader.imgbtnHeaderKebabMenu.visibility = if (writerUserId == userId) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun setPostData(post: BoardReadResponse) {
+    private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
             tvReadPostDate.text = DateUtils.formatPlayDate(post.gameDate)
@@ -276,7 +276,7 @@ class ReadPostFragment : Fragment() {
         val dialog = builder.create()
 
         dialogBinding.apply {
-            val post = readPostViewModel.boardReadResponse.value!!
+            val post = readPostViewModel.getBoardResponse.value!!
 
             val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameDate)
             tvApplicationDetailDialogDate.text = dateTimePair.first
