@@ -1,6 +1,6 @@
 package com.catchmate.domain.model
 
-data class BoardWriteRequest(
+data class PostBoardRequest(
     val title: String,
     val gameDate: String,
     val location: String,

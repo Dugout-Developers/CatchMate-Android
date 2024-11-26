@@ -1,29 +1,13 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.BoardEditRequestDTO
-import com.catchmate.data.dto.BoardWriteRequestDTO
-import com.catchmate.data.dto.BoardWriteResponseDTO
+import com.catchmate.data.dto.PostBoardResponseDTO
 import com.catchmate.domain.model.BoardEditRequest
-import com.catchmate.domain.model.BoardWriteRequest
-import com.catchmate.domain.model.BoardWriteResponse
+import com.catchmate.domain.model.PostBoardResponse
 
 object BoardWriteMapper {
-    fun toBoardWriteRequestDTO(boardWriteRequest: BoardWriteRequest): BoardWriteRequestDTO =
-        BoardWriteRequestDTO(
-            title = boardWriteRequest.title,
-            gameDate = boardWriteRequest.gameDate,
-            location = boardWriteRequest.location,
-            homeTeam = boardWriteRequest.homeTeam,
-            awayTeam = boardWriteRequest.awayTeam,
-            maxPerson = boardWriteRequest.maxPerson,
-            cheerTeam = boardWriteRequest.cheerTeam,
-            preferGender = boardWriteRequest.preferGender,
-            preferAge = boardWriteRequest.preferAge,
-            addInfo = boardWriteRequest.addInfo,
-        )
-
-    fun toBoardWriteResponse(boardWriteResponseDTO: BoardWriteResponseDTO): BoardWriteResponse =
-        BoardWriteResponse(
+    fun toBoardWriteResponse(boardWriteResponseDTO: PostBoardResponseDTO): PostBoardResponse =
+        PostBoardResponse(
             boardId = boardWriteResponseDTO.boardId,
         )
 

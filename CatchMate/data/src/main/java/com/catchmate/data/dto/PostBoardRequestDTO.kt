@@ -1,6 +1,6 @@
 package com.catchmate.data.dto
 
-data class BoardWriteRequestDTO(
+data class PostBoardRequestDTO(
     val title: String,
     val gameDate: String,
     val location: String,

@@ -14,7 +14,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.BoardEditRequest
 import com.catchmate.domain.model.BoardReadResponse
-import com.catchmate.domain.model.BoardWriteRequest
+import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
@@ -229,7 +229,7 @@ class AddPostFragment :
                 putBoard(boardEditRequest)
             } else {
                 val boardWriteRequest =
-                    BoardWriteRequest(
+                    PostBoardRequest(
                         title,
                         dateTime,
                         place,
@@ -246,11 +246,11 @@ class AddPostFragment :
         }
     }
 
-    private fun postBoardWrite(boardWriteRequest: BoardWriteRequest) {
-        addPostViewModel.postBoardWrite(
+    private fun postBoardWrite(boardWriteRequest: PostBoardRequest) {
+        addPostViewModel.postBoard(
             boardWriteRequest,
         )
-        addPostViewModel.boardWriteResponse.observe(viewLifecycleOwner) { response ->
+        addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.e("boardWriteResponse", response.boardId.toString())
                 val bundle = Bundle()

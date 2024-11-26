@@ -1,8 +1,7 @@
 package com.catchmate.domain.usecase
 
 import com.catchmate.domain.model.BoardEditRequest
-import com.catchmate.domain.model.BoardWriteRequest
-import com.catchmate.domain.model.BoardWriteResponse
+import com.catchmate.domain.model.PostBoardResponse
 import com.catchmate.domain.repository.BoardWriteRepository
 import javax.inject.Inject
 
@@ -11,8 +10,5 @@ class BoardWriteUseCase
     constructor(
         private val boardWriteRepository: BoardWriteRepository,
     ) {
-        suspend fun postBoardWrite(boardWriteRequest: BoardWriteRequest): BoardWriteResponse? =
-            boardWriteRepository.postBoardWrite(boardWriteRequest)
-
-        suspend fun putBoard(boardEditRequest: BoardEditRequest): BoardWriteResponse? = boardWriteRepository.putBoard(boardEditRequest)
+        suspend fun putBoard(boardEditRequest: BoardEditRequest): PostBoardResponse? = boardWriteRepository.putBoard(boardEditRequest)
     }

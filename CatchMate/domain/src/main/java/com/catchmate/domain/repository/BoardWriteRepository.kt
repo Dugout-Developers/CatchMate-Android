@@ -1,11 +1,8 @@
 package com.catchmate.domain.repository
 
 import com.catchmate.domain.model.BoardEditRequest
-import com.catchmate.domain.model.BoardWriteRequest
-import com.catchmate.domain.model.BoardWriteResponse
+import com.catchmate.domain.model.PostBoardResponse
 
 interface BoardWriteRepository {
-    suspend fun postBoardWrite(boardWriteRequest: BoardWriteRequest): BoardWriteResponse?
-
-    suspend fun putBoard(boardEditRequest: BoardEditRequest): BoardWriteResponse?
+    suspend fun putBoard(boardEditRequest: BoardEditRequest): PostBoardResponse?
 }

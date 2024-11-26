@@ -1,5 +1,5 @@
 package com.catchmate.domain.model
 
-data class BoardWriteResponse(
+data class PostBoardResponse(
     val boardId: Long,
 )
