@@ -7,6 +7,8 @@ import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
+import com.catchmate.domain.model.PutBoardRequest
+import com.catchmate.domain.model.PutBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -24,6 +26,23 @@ class BoardRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { BoardMapper.toPostBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse> =
+            try {
+                val response = boardApi.putBoard(BoardMapper.toPutBoardRequestDTO(putBoardRequest))
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { BoardMapper.toPutBoardResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto
 
-data class BoardEditRequest(
+data class PutBoardRequestDTO(
     val boardId: Long,
     val title: String,
     val gameDate: String,

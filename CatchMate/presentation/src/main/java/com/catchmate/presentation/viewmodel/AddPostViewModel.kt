@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.BoardEditRequest
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.usecase.BoardWriteUseCase
+import com.catchmate.domain.model.PutBoardRequest
+import com.catchmate.domain.model.PutBoardResponse
 import com.catchmate.domain.usecase.board.PostBoardUseCase
+import com.catchmate.domain.usecase.board.PutBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class AddPostViewModel
     @Inject
     constructor(
         private val postBoardUseCase: PostBoardUseCase,
-        private val boardWriteUseCase: BoardWriteUseCase,
+        private val putBoardUseCase: PutBoardUseCase,
     ) : ViewModel() {
         private var _homeTeamName = MutableLiveData<String>()
         val homeTeamName: LiveData<String>
@@ -45,9 +46,9 @@ class AddPostViewModel
         val postBoardResponse: LiveData<PostBoardResponse>
             get() = _postBoardResponse
 
-        private var _boardEditResponse = MutableLiveData<PostBoardResponse>()
-        val boardEditResponse: LiveData<PostBoardResponse>
-            get() = _boardEditResponse
+        private var _putBoardResponse = MutableLiveData<PutBoardResponse>()
+        val putBoardResponse: LiveData<PutBoardResponse>
+            get() = _putBoardResponse
 
         fun setHomeTeamName(teamName: String) {
             _homeTeamName.value = teamName
@@ -77,9 +78,19 @@ class AddPostViewModel
             }
         }
 
-        fun putBoard(boardEditRequest: BoardEditRequest) {
+        fun putBoard(putBoardRequest: PutBoardRequest) {
             viewModelScope.launch {
-                _boardEditResponse.value = boardWriteUseCase.putBoard(boardEditRequest)
+                val result = putBoardUseCase.putBoard(putBoardRequest)
+                result
+                    .onSuccess { response ->
+                        _putBoardResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
             }
         }
     }
