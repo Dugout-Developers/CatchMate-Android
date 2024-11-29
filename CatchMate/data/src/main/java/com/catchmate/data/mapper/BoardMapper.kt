@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.DeleteBoardRequestDTO
 import com.catchmate.data.dto.GetBoardPagingResponseDTO
 import com.catchmate.data.dto.GetBoardResponseDTO
+import com.catchmate.data.dto.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.PostBoardRequestDTO
 import com.catchmate.data.dto.PostBoardResponseDTO
 import com.catchmate.data.dto.PutBoardRequestDTO
@@ -11,6 +12,7 @@ import com.catchmate.data.dto.WriterDTO
 import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.GetBoardPagingResponse
+import com.catchmate.domain.model.GetLikedBoardResponse
 import com.catchmate.domain.model.PutBoardRequest
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
@@ -105,4 +107,19 @@ object BoardMapper {
         DeleteBoardRequestDTO(
             boardId = request.boardId,
         )
+
+    fun toGetLikedBoardResponse(responseDTO: List<GetLikedBoardResponseDTO>): List<GetLikedBoardResponse> =
+        responseDTO.map { board ->
+            GetLikedBoardResponse(
+                boardId = board.boardId,
+                title = board.title,
+                gameDate = board.gameDate,
+                location = board.location,
+                homeTeam = board.homeTeam,
+                awayTeam = board.awayTeam,
+                cheerTeam = board.cheerTeam,
+                currentPerson = board.currentPerson,
+                maxPerson = board.maxPerson,
+            )
+        }
 }

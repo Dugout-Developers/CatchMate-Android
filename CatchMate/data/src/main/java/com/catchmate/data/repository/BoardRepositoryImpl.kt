@@ -8,6 +8,7 @@ import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.GetLikedBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
 import com.catchmate.domain.model.PutBoardRequest
@@ -102,6 +103,23 @@ class BoardRepositoryImpl
                     Log.d("BoardRepo", "통신 성공")
                     val body = response.body()?.let { BoardMapper.toGetBoardResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun getLikedBoard(): Result<List<GetLikedBoardResponse>> =
+            try {
+                val response = boardApi.getLikedBoard()
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공")
+                    val body = response.body()?.let { BoardMapper.toGetLikedBoardResponse(it) }
+                    Result.success(body ?: emptyList())
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))

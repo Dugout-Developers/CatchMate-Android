@@ -172,7 +172,7 @@ class ReadPostFragment : Fragment() {
             initKebabMenuVisibility(response.writer.userId)
         }
 
-        readPostViewModel.boardLikeResponse.observe(viewLifecycleOwner) { code ->
+        readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
             if (code != null) {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
             }

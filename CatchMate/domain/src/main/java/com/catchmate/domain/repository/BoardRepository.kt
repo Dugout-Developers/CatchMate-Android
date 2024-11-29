@@ -3,6 +3,7 @@ package com.catchmate.domain.repository
 import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardPagingResponse
 import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.GetLikedBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
 import com.catchmate.domain.model.PostBoardResponse
 import com.catchmate.domain.model.PutBoardRequest
@@ -26,6 +27,8 @@ interface BoardRepository {
     ): Result<List<GetBoardPagingResponse>>
 
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
+
+    suspend fun getLikedBoard(): Result<List<GetLikedBoardResponse>>
 
     suspend fun deleteBoard(boardDeleteRequest: DeleteBoardRequest): Result<Int>
 }

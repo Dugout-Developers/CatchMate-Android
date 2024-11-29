@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetBoardPagingResponse
-import com.catchmate.domain.usecase.BoardLikeUseCase
+import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.usecase.board.GetLikedBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,11 +17,11 @@ class FavoriteViewModel
     @Inject
     constructor(
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
-        private val boardLikeUseCase: BoardLikeUseCase,
+        private val getLikedBoardUseCase: GetLikedBoardUseCase,
     ) : ViewModel() {
-        private val _boardListResponse = MutableLiveData<List<GetBoardPagingResponse>>()
-        val boardListResponse: LiveData<List<GetBoardPagingResponse>>
-            get() = _boardListResponse
+        private val _getLikedBoardResponse = MutableLiveData<List<GetLikedBoardResponse>>()
+        val getLikedBoardResponse: LiveData<List<GetLikedBoardResponse>>
+            get() = _getLikedBoardResponse
 
         private val _errorMessage = MutableLiveData<String>()
         val errorMessage: LiveData<String>
@@ -54,13 +54,12 @@ class FavoriteViewModel
             }
         }
 
-        fun getBoardLikedList() {
+        fun getLikedBoard() {
             viewModelScope.launch {
-                val result = boardLikeUseCase.getBoardLikedList()
-
+                val result = getLikedBoardUseCase.getLikedBoard()
                 result
-                    .onSuccess { boardLikedList ->
-                        _boardListResponse.value = boardLikedList
+                    .onSuccess { likedBoards ->
+                        _getLikedBoardResponse.value = likedBoards
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

@@ -3,6 +3,7 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.DeleteBoardRequestDTO
 import com.catchmate.data.dto.GetBoardResponseDTO
 import com.catchmate.data.dto.GetBoardPagingResponseDTO
+import com.catchmate.data.dto.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.PutBoardRequestDTO
 import com.catchmate.data.dto.PostBoardRequestDTO
 import com.catchmate.data.dto.PostBoardResponseDTO
@@ -45,6 +46,9 @@ interface BoardService {
     suspend fun getBoard(
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
+
+    @GET("board/likes")
+    suspend fun getLikedBoard(): Response<List<GetLikedBoardResponseDTO>?>
 
     @DELETE("board/remove")
     suspend fun deleteBoard(
