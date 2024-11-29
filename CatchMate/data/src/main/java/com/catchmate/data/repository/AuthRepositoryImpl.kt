@@ -40,7 +40,8 @@ class AuthRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("AuthRepo", "통신 성공 : ${response.code()}")
                     val body =
-                        response.body()
+                        response
+                            .body()
                             ?.let { responseBody ->
                                 AuthMapper.toGetCheckNicknameResponse(responseBody)
                             }

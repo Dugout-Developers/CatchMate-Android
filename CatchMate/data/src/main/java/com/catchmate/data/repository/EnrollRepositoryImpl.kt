@@ -45,7 +45,8 @@ class EnrollRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("EnrollRepo", "통신 성공")
                     val body =
-                        response.body()
+                        response
+                            .body()
                             ?.let { responseBody ->
                                 EnrollMapper.toPatchEnrollRejectResponse(responseBody)
                             }

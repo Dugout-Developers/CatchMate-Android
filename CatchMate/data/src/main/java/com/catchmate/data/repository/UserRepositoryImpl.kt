@@ -25,7 +25,8 @@ class UserRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body =
-                        response.body()
+                        response
+                            .body()
                             ?.let { responseBody ->
                                 UserMapper.toGetUserProfileResponse(responseBody)
                             }
@@ -49,7 +50,8 @@ class UserRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("User - post add info", "통신 성공 : ${response.code()}")
                     val body =
-                        response.body()
+                        response
+                            .body()
                             ?.let { responseBody ->
                                 UserMapper.toPostUserAdditionalInfoResponse(responseBody)
                             }
