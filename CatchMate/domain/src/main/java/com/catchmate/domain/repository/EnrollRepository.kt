@@ -1,6 +1,6 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.EnrollCancelResponse
+import com.catchmate.domain.model.PatchEnrollRejectResponse
 import com.catchmate.domain.model.PostEnrollRequest
 import com.catchmate.domain.model.PostEnrollResponse
 
@@ -10,5 +10,5 @@ interface EnrollRepository {
         postEnrollRequest: PostEnrollRequest,
     ): Result<PostEnrollResponse>
 
-    suspend fun postEnrollCancel(enrollId: Long): EnrollCancelResponse?
+    suspend fun patchEnrollReject(enrollId: Long): Result<PatchEnrollRejectResponse>
 }

@@ -1,9 +1,9 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.EnrollCancelResponseDTO
+import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
-import com.catchmate.domain.model.EnrollCancelResponse
+import com.catchmate.domain.model.PatchEnrollRejectResponse
 import com.catchmate.domain.model.PostEnrollRequest
 import com.catchmate.domain.model.PostEnrollResponse
 
@@ -19,9 +19,9 @@ object EnrollMapper {
             requestAt = responseDTO.requestAt,
         )
 
-    fun toEnrollCancelResponse(enrollCancelResponseDTO: EnrollCancelResponseDTO): EnrollCancelResponse =
-        EnrollCancelResponse(
-            enrollId = enrollCancelResponseDTO.enrollId,
-            deletedAt = enrollCancelResponseDTO.deletedAt,
+    fun toPatchEnrollRejectResponse(responseDTO: PatchEnrollRejectResponseDTO): PatchEnrollRejectResponse =
+        PatchEnrollRejectResponse(
+            enrollId = responseDTO.enrollId,
+            acceptStatus = responseDTO.acceptStatus,
         )
 }
