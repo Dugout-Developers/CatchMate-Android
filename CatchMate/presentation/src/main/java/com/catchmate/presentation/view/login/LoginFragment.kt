@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +21,7 @@ class LoginFragment : Fragment() {
     val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -15,7 +15,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +26,7 @@ class HomeFragment :
     val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String

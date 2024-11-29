@@ -17,9 +17,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.DeleteBoardRequest
+import com.catchmate.domain.model.EnrollState
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostEnrollRequest
-import com.catchmate.domain.model.EnrollState
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
@@ -29,7 +29,7 @@ import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -43,7 +43,7 @@ class ReadPostFragment : Fragment() {
     private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String

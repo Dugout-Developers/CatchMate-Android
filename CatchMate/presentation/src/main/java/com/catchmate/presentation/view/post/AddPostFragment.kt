@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.PutBoardRequest
 import com.catchmate.domain.model.GetBoardResponse
 import com.catchmate.domain.model.PostBoardRequest
+import com.catchmate.domain.model.PutBoardRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
@@ -26,7 +26,7 @@ import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +42,7 @@ class AddPostFragment :
     val binding get() = _binding!!
 
     private val addPostViewModel: AddPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String

@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +22,7 @@ class CheerStyleOnboardingFragment : Fragment() {
     val binding get() = _binding!!
 
     private val signUpViewModel: SignUpViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var userInfo: PostUserAdditionalInfoRequest
 
