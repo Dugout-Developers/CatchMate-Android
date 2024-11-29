@@ -1,4 +1,4 @@
-package com.catchmate.domain.usecase
+package com.catchmate.domain.usecase.local
 
 import com.catchmate.domain.repository.LocalDataRepository
 import javax.inject.Inject

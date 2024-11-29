@@ -3,7 +3,7 @@ package com.catchmate.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.catchmate.domain.usecase.LocalDataUseCase
+import com.catchmate.domain.usecase.local.LocalDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
