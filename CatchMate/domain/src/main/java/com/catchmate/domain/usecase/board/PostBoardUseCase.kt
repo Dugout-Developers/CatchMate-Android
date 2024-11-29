@@ -10,6 +10,5 @@ class PostBoardUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse> =
-            boardRepository.postBoard(postBoardRequest)
+        suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse> = boardRepository.postBoard(postBoardRequest)
     }

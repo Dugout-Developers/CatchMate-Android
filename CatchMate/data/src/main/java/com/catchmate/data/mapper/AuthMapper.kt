@@ -35,6 +35,6 @@ object AuthMapper {
 
     fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
         GetCheckNicknameResponse(
-        available = getCheckNicknameResponseDTO.available,
+            available = getCheckNicknameResponseDTO.available,
         )
 }

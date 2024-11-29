@@ -41,7 +41,10 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun postBoardLike(boardId: Long, flag: Int): Result<Int> =
+        override suspend fun postBoardLike(
+            boardId: Long,
+            flag: Int,
+        ): Result<Int> =
             try {
                 val response = boardApi.postBoardLike(boardId, flag)
                 if (response.isSuccessful) {
@@ -78,7 +81,7 @@ class BoardRepositoryImpl
             pageNum: Long,
             gudans: String,
             people: Int,
-            gameDate: String
+            gameDate: String,
         ): Result<List<GetBoardPagingResponse>> =
             try {
                 val response = boardApi.getBoardPaging(pageNum, gudans, people, gameDate)

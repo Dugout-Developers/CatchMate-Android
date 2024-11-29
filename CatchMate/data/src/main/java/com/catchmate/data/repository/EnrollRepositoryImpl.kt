@@ -44,7 +44,12 @@ class EnrollRepositoryImpl
                 val response = enrollApi.patchEnrollReject(enrollId)
                 if (response.isSuccessful) {
                     Log.d("EnrollRepo", "통신 성공")
-                    val body = response.body()?.let { EnrollMapper.toPatchEnrollRejectResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response.body()
+                            ?.let { responseBody ->
+                                EnrollMapper.toPatchEnrollRejectResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

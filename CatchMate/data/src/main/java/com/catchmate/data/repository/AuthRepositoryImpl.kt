@@ -39,7 +39,12 @@ class AuthRepositoryImpl
                 val response = authApi.getAuthCheckNickname(nickName)
                 if (response.isSuccessful) {
                     Log.d("AuthRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { AuthMapper.toGetCheckNicknameResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response.body()
+                            ?.let { responseBody ->
+                                AuthMapper.toGetCheckNicknameResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

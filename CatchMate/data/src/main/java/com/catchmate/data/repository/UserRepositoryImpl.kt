@@ -24,7 +24,12 @@ class UserRepositoryImpl
                 val response = userApi.getUserProfile()
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { UserMapper.toGetUserProfileResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response.body()
+                            ?.let { responseBody ->
+                                UserMapper.toGetUserProfileResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -36,12 +41,19 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun postUserAdditionalInfo(postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest): Result<PostUserAdditionalInfoResponse> =
+        override suspend fun postUserAdditionalInfo(
+            postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest,
+        ): Result<PostUserAdditionalInfoResponse> =
             try {
                 val response = userApi.postUserAdditionalInfo(UserMapper.toPostUserAdditionalInfoRequestDTO(postUserAdditionalInfoRequest))
                 if (response.isSuccessful) {
                     Log.d("User - post add info", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { UserMapper.toPostUserAdditionalInfoResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response.body()
+                            ?.let { responseBody ->
+                                UserMapper.toPostUserAdditionalInfoResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
