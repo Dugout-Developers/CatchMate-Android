@@ -1,11 +1,13 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.DeleteLogoutResponseDTO
 import com.catchmate.data.dto.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.data.dto.PostLoginResponseDTO
 import com.catchmate.data.dto.PostReissueResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -26,4 +28,9 @@ interface AuthService {
     suspend fun getAuthCheckNickname(
         @Query("nickName") nickName: String,
     ): Response<GetCheckNicknameResponseDTO?>
+
+    @DELETE("auth/logout")
+    suspend fun deleteAuthLogout(
+        @Header("RefreshToken") refreshToken: String,
+    ): Response<DeleteLogoutResponseDTO?>
 }
