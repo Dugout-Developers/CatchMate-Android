@@ -16,7 +16,7 @@ import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.viewmodel.FavoriteViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class FavoriteFragment :
     private var _binding: FragmentFavoriteBinding? = null
     val binding get() = _binding!!
 
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private lateinit var accessToken: String
@@ -82,13 +82,13 @@ class FavoriteFragment :
     }
 
     private fun initViewModel() {
-        favoriteViewModel.getBoardLikedList()
-        favoriteViewModel.boardListResponse.observe(viewLifecycleOwner) { boardLikedList ->
-            if (boardLikedList.isNotEmpty()) {
+        favoriteViewModel.getLikedBoard()
+        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { likedList ->
+            if (likedList.isNotEmpty()) {
                 binding.layoutFavoriteNoList.visibility = View.GONE
                 binding.rvFavoritePost.visibility = View.VISIBLE
                 val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-                adapter.updateLikedList(boardLikedList)
+                adapter.updateLikedList(likedList)
             } else {
                 binding.layoutFavoriteNoList.visibility = View.VISIBLE
                 binding.rvFavoritePost.visibility = View.GONE

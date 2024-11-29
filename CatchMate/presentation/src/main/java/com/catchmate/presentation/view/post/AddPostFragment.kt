@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.BoardEditRequest
-import com.catchmate.domain.model.BoardReadResponse
-import com.catchmate.domain.model.BoardWriteRequest
+import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.PostBoardRequest
+import com.catchmate.domain.model.PutBoardRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
@@ -26,7 +26,7 @@ import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,11 +42,11 @@ class AddPostFragment :
     val binding get() = _binding!!
 
     private val addPostViewModel: AddPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
-    private var boardInfo: BoardReadResponse? = null
+    private var boardInfo: GetBoardResponse? = null
     private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +88,7 @@ class AddPostFragment :
         _binding = null
     }
 
-    private fun setBoardData(response: BoardReadResponse) {
+    private fun setBoardData(response: GetBoardResponse) {
         binding.apply {
             edtAddPostTitle.setText(response.title)
             tvAddPostPeopleCount.text = response.maxPerson.toString()
@@ -104,11 +104,11 @@ class AddPostFragment :
         }
     }
 
-    private fun getBoardInfo(): BoardReadResponse? =
+    private fun getBoardInfo(): GetBoardResponse? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("boardInfo", BoardReadResponse::class.java)
+            arguments?.getSerializable("boardInfo", GetBoardResponse::class.java)
         } else {
-            arguments?.getSerializable("boardInfo") as BoardReadResponse
+            arguments?.getSerializable("boardInfo") as GetBoardResponse
         }
 
     private fun getTokens() {
@@ -212,7 +212,7 @@ class AddPostFragment :
 
             if (isEditMode) {
                 val boardEditRequest =
-                    BoardEditRequest(
+                    PutBoardRequest(
                         boardInfo?.boardId ?: 0,
                         title,
                         dateTime,
@@ -229,7 +229,7 @@ class AddPostFragment :
                 putBoard(boardEditRequest)
             } else {
                 val boardWriteRequest =
-                    BoardWriteRequest(
+                    PostBoardRequest(
                         title,
                         dateTime,
                         place,
@@ -246,11 +246,11 @@ class AddPostFragment :
         }
     }
 
-    private fun postBoardWrite(boardWriteRequest: BoardWriteRequest) {
-        addPostViewModel.postBoardWrite(
+    private fun postBoardWrite(boardWriteRequest: PostBoardRequest) {
+        addPostViewModel.postBoard(
             boardWriteRequest,
         )
-        addPostViewModel.boardWriteResponse.observe(viewLifecycleOwner) { response ->
+        addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.e("boardWriteResponse", response.boardId.toString())
                 val bundle = Bundle()
@@ -260,9 +260,9 @@ class AddPostFragment :
         }
     }
 
-    private fun putBoard(boardEditRequest: BoardEditRequest) {
-        addPostViewModel.putBoard(boardEditRequest)
-        addPostViewModel.boardEditResponse.observe(viewLifecycleOwner) { response ->
+    private fun putBoard(putBoardRequest: PutBoardRequest) {
+        addPostViewModel.putBoard(putBoardRequest)
+        addPostViewModel.putBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("boardEditResponse", response.boardId.toString())
                 val bundle = Bundle()

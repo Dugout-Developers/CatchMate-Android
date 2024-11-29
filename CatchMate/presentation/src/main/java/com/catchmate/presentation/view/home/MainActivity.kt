@@ -9,7 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
 
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

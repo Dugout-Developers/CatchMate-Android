@@ -14,7 +14,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.UserAdditionalInfoRequest
+import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupBinding
 import com.catchmate.presentation.util.DateUtils
@@ -27,7 +27,7 @@ class SignupFragment : Fragment() {
     val binding get() = _binding!!
 
     private val signUpViewModel: SignUpViewModel by viewModels()
-    private lateinit var userInfo: UserAdditionalInfoRequest
+    private lateinit var userInfo: PostUserAdditionalInfoRequest
 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
@@ -65,11 +65,11 @@ class SignupFragment : Fragment() {
         _binding = null
     }
 
-    private fun getUserInfo(): UserAdditionalInfoRequest =
+    private fun getUserInfo(): PostUserAdditionalInfoRequest =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("userInfo", UserAdditionalInfoRequest::class.java)!!
+            arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
         } else {
-            arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
+            arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
         }
 
     private fun initFooterBtn() {
@@ -91,7 +91,7 @@ class SignupFragment : Fragment() {
                 }
 
                 val newUserInfo =
-                    UserAdditionalInfoRequest(
+                    PostUserAdditionalInfoRequest(
                         userInfo.email,
                         userInfo.provider,
                         userInfo.providerId,
@@ -204,8 +204,8 @@ class SignupFragment : Fragment() {
     }
 
     private fun checkNicknameAvailability(nickName: String) {
-        signUpViewModel.getNicknameAvailability(nickName)
-        signUpViewModel.checkNicknameResponse.observe(viewLifecycleOwner) { response ->
+        signUpViewModel.getAuthCheckNickname(nickName)
+        signUpViewModel.getCheckNicknameResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 binding.tvSignupNicknameAlert.apply {
                     visibility = View.VISIBLE

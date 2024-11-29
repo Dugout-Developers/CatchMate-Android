@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.UserAdditionalInfoRequest
+import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,9 +22,9 @@ class CheerStyleOnboardingFragment : Fragment() {
     val binding get() = _binding!!
 
     private val signUpViewModel: SignUpViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
-    private lateinit var userInfo: UserAdditionalInfoRequest
+    private lateinit var userInfo: PostUserAdditionalInfoRequest
 
     private var selectedButton: CheerStyleButtonView? = null
 
@@ -59,11 +59,11 @@ class CheerStyleOnboardingFragment : Fragment() {
         _binding = null
     }
 
-    private fun getUserInfo(): UserAdditionalInfoRequest =
+    private fun getUserInfo(): PostUserAdditionalInfoRequest =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("userInfo", UserAdditionalInfoRequest::class.java)!!
+            arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
         } else {
-            arguments?.getSerializable("userInfo") as UserAdditionalInfoRequest
+            arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
         }
 
     private fun initTitle() {
@@ -76,7 +76,7 @@ class CheerStyleOnboardingFragment : Fragment() {
             setText(R.string.next)
             setOnClickListener {
                 val newUserInfo =
-                    UserAdditionalInfoRequest(
+                    PostUserAdditionalInfoRequest(
                         userInfo.email,
                         userInfo.provider,
                         userInfo.providerId,
@@ -132,7 +132,7 @@ class CheerStyleOnboardingFragment : Fragment() {
         }
     }
 
-    private fun postUserAdditionalInfo(userAdditionalInfoRequest: UserAdditionalInfoRequest) {
+    private fun postUserAdditionalInfo(userAdditionalInfoRequest: PostUserAdditionalInfoRequest) {
         signUpViewModel.postUserAdditionalInfo(userAdditionalInfoRequest)
         signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {

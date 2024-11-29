@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.UserAdditionalInfoRequest
+import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +21,7 @@ class LoginFragment : Fragment() {
     val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,17 +49,17 @@ class LoginFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        loginViewModel.loginRequest.observe(viewLifecycleOwner) { loginRequest ->
-            if (loginRequest != null) {
+        loginViewModel.postLoginRequest.observe(viewLifecycleOwner) { request ->
+            if (request != null) {
                 Log.d(
                     "LoginFragment",
-                    "LoginRequest\n${loginRequest.email}\n${loginRequest.provider}\n" +
-                        "${loginRequest.providerId}\n${loginRequest.picture}\n${loginRequest.fcmToken}",
+                    "LoginRequest\n${request.email}\n${request.provider}\n" +
+                        "${request.providerId}\n${request.picture}\n${request.fcmToken}",
                 )
-                loginViewModel.postLogin(loginRequest)
+                loginViewModel.postAuthLogin(request)
             }
         }
-        loginViewModel.loginResponse.observe(viewLifecycleOwner) { loginResponse ->
+        loginViewModel.postLoginResponse.observe(viewLifecycleOwner) { loginResponse ->
             if (loginResponse != null) {
                 Log.d(
                     "LoginFragment",
@@ -69,15 +69,15 @@ class LoginFragment : Fragment() {
 
                 when (loginResponse.isFirstLogin) {
                     true -> {
-                        val loginRequest = loginViewModel.loginRequest.value!!
+                        val postLoginRequest = loginViewModel.postLoginRequest.value!!
                         val userInfo =
-                            UserAdditionalInfoRequest(
-                                loginRequest.email,
-                                loginRequest.provider,
-                                loginRequest.providerId,
+                            PostUserAdditionalInfoRequest(
+                                postLoginRequest.email,
+                                postLoginRequest.provider,
+                                postLoginRequest.providerId,
                                 "",
-                                loginRequest.picture,
-                                loginRequest.fcmToken,
+                                postLoginRequest.picture,
+                                postLoginRequest.fcmToken,
                                 "",
                                 "",
                                 "",

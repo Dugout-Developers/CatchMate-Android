@@ -1,33 +1,40 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.LoginRequestDTO
-import com.catchmate.data.dto.LoginResponseDTO
-import com.catchmate.domain.model.LoginRequest
-import com.catchmate.domain.model.LoginResponse
+import com.catchmate.data.dto.GetCheckNicknameResponseDTO
+import com.catchmate.data.dto.PostLoginRequestDTO
+import com.catchmate.data.dto.PostLoginResponseDTO
+import com.catchmate.domain.model.GetCheckNicknameResponse
+import com.catchmate.domain.model.PostLoginRequest
+import com.catchmate.domain.model.PostLoginResponse
 
 object AuthMapper {
-    fun toLoginRequestDTO(loginRequest: LoginRequest): LoginRequestDTO =
-        LoginRequestDTO(
-            providerId = loginRequest.providerId,
-            provider = loginRequest.provider,
-            email = loginRequest.email,
-            picture = loginRequest.picture,
-            fcmToken = loginRequest.fcmToken,
+    fun toPostLoginRequestDTO(postLoginRequest: PostLoginRequest): PostLoginRequestDTO =
+        PostLoginRequestDTO(
+            providerId = postLoginRequest.providerId,
+            provider = postLoginRequest.provider,
+            email = postLoginRequest.email,
+            picture = postLoginRequest.picture,
+            fcmToken = postLoginRequest.fcmToken,
         )
 
-    fun toLoginRequest(loginRequestDTO: LoginRequestDTO): LoginRequest =
-        LoginRequest(
-            providerId = loginRequestDTO.providerId,
-            provider = loginRequestDTO.provider,
-            email = loginRequestDTO.email,
-            picture = loginRequestDTO.picture,
-            fcmToken = loginRequestDTO.fcmToken,
+    fun toPostLoginRequest(postLoginRequestDTO: PostLoginRequestDTO): PostLoginRequest =
+        PostLoginRequest(
+            providerId = postLoginRequestDTO.providerId,
+            provider = postLoginRequestDTO.provider,
+            email = postLoginRequestDTO.email,
+            picture = postLoginRequestDTO.picture,
+            fcmToken = postLoginRequestDTO.fcmToken,
         )
 
-    fun toLoginResponse(loginResponseDTO: LoginResponseDTO): LoginResponse =
-        LoginResponse(
-            accessToken = loginResponseDTO.accessToken,
-            refreshToken = loginResponseDTO.refreshToken,
-            isFirstLogin = loginResponseDTO.isFirstLogin,
+    fun toPostLoginResponse(postLoginResponseDTO: PostLoginResponseDTO): PostLoginResponse =
+        PostLoginResponse(
+            accessToken = postLoginResponseDTO.accessToken,
+            refreshToken = postLoginResponseDTO.refreshToken,
+            isFirstLogin = postLoginResponseDTO.isFirstLogin,
+        )
+
+    fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
+        GetCheckNicknameResponse(
+            available = getCheckNicknameResponseDTO.available,
         )
 }

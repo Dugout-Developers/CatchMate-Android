@@ -26,7 +26,7 @@ class AuthAuthenticator
 
             val reissueResponse =
                 runBlocking {
-                    authRetrofitClient.retrofit.postReissue(refreshToken)
+                    authRetrofitClient.retrofit.postAuthReissue(refreshToken)
                 }
 
             return if (reissueResponse.isSuccessful) {

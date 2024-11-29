@@ -8,7 +8,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import com.catchmate.data.BuildConfig
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.LoginRequestDTO
+import com.catchmate.data.dto.PostLoginRequestDTO
 import com.catchmate.domain.model.LoginPlatform
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -44,7 +44,7 @@ class GoogleLoginDataSource
             return credentialManager.getCredential(context, request)
         }
 
-        fun handleSignIn(result: GetCredentialResponse): LoginRequestDTO? {
+        fun handleSignIn(result: GetCredentialResponse): PostLoginRequestDTO? {
             val credential = result.credential
 
             return if (credential is CustomCredential) {
@@ -56,7 +56,7 @@ class GoogleLoginDataSource
                         val profileUri = googleIdTokenCredential.profilePictureUri
 
                         Log.i("GoogleInfoSuccess", "idToken : $idToken  email : $email profileUri : $profileUri")
-                        LoginRequestDTO(
+                        PostLoginRequestDTO(
                             email = email,
                             providerId = idToken,
                             provider = LoginPlatform.GOOGLE.toString().lowercase(),

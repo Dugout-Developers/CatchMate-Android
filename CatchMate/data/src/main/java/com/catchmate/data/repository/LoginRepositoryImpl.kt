@@ -4,7 +4,7 @@ import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
 import com.catchmate.data.mapper.AuthMapper
-import com.catchmate.domain.model.LoginRequest
+import com.catchmate.domain.model.PostLoginRequest
 import com.catchmate.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -15,23 +15,23 @@ class LoginRepositoryImpl
         private val naverLoginDataSource: NaverLoginDataSource,
         private val googleLoginDataSource: GoogleLoginDataSource,
     ) : LoginRepository {
-        override suspend fun loginWithKakao(): LoginRequest {
-            val loginRequestDTO = kakaoLoginDataSource.loginWithKakao()
-            return AuthMapper.toLoginRequest(loginRequestDTO)
+        override suspend fun loginWithKakao(): PostLoginRequest {
+            val postLoginRequestDTO = kakaoLoginDataSource.loginWithKakao()
+            return AuthMapper.toPostLoginRequest(postLoginRequestDTO)
         }
 
-        override suspend fun loginWithNaver(): LoginRequest {
-            val loginRequestDTO = naverLoginDataSource.loginWithNaver()
-            return AuthMapper.toLoginRequest(loginRequestDTO)
+        override suspend fun loginWithNaver(): PostLoginRequest {
+            val postLoginRequestDTO = naverLoginDataSource.loginWithNaver()
+            return AuthMapper.toPostLoginRequest(postLoginRequestDTO)
         }
 
-        override suspend fun loginWithGoogle(): LoginRequest? {
+        override suspend fun loginWithGoogle(): PostLoginRequest? {
             val result = googleLoginDataSource.getCredential()
-            val loginRequestDTO = googleLoginDataSource.handleSignIn(result)
-            return if (loginRequestDTO == null) {
-                loginRequestDTO
+            val postLoginRequestDTO = googleLoginDataSource.handleSignIn(result)
+            return if (postLoginRequestDTO == null) {
+                null
             } else {
-                AuthMapper.toLoginRequest(loginRequestDTO)
+                AuthMapper.toPostLoginRequest(postLoginRequestDTO)
             }
         }
     }

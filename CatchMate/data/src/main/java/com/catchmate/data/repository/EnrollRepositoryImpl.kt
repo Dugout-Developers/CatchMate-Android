@@ -4,9 +4,10 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.EnrollService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.EnrollMapper
-import com.catchmate.domain.model.EnrollCancelResponse
-import com.catchmate.domain.model.EnrollRequest
-import com.catchmate.domain.model.EnrollResponse
+import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.PatchEnrollRejectResponse
+import com.catchmate.domain.model.PostEnrollRequest
+import com.catchmate.domain.model.PostEnrollResponse
 import com.catchmate.domain.repository.EnrollRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -20,36 +21,44 @@ class EnrollRepositoryImpl
 
         override suspend fun postEnroll(
             boardId: Long,
-            enrollRequest: EnrollRequest,
-        ): EnrollResponse? =
+            postEnrollRequest: PostEnrollRequest,
+        ): Result<PostEnrollResponse> =
             try {
-                val response = enrollApi.postEnroll(boardId, EnrollMapper.toEnrollRequestDTO(enrollRequest))
+                val response = enrollApi.postEnroll(boardId, EnrollMapper.toPostEnrollRequestDTO(postEnrollRequest))
                 if (response.isSuccessful) {
                     Log.d("EnrollRepo", "통신 성공")
-                    response.body()?.let { EnrollMapper.toEnrollResponse(it) } ?: throw Exception("Empty Response")
+                    val body = response.body()?.let { EnrollMapper.toPostEnrollResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Log.e("EnrollRepo", "통신 실패 : ${response.code()}\n$stringToJson")
-                    null
+                    Result.failure(Exception("EnrollRepo 통신 실패 : ${response.code()} - $stringToJson"))
                 }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
             } catch (e: Exception) {
-                e.printStackTrace()
-                null
+                Result.failure(e)
             }
 
-        override suspend fun postEnrollCancel(enrollId: Long): EnrollCancelResponse? =
+        override suspend fun patchEnrollReject(enrollId: Long): Result<PatchEnrollRejectResponse> =
             try {
-                val response = enrollApi.postEnrollCancel(enrollId)
+                val response = enrollApi.patchEnrollReject(enrollId)
                 if (response.isSuccessful) {
                     Log.d("EnrollRepo", "통신 성공")
-                    response.body()?.let { EnrollMapper.toEnrollCancelResponse(it) } ?: throw Exception("Empty Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let { responseBody ->
+                                EnrollMapper.toPatchEnrollRejectResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
+                    Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Log.e("EnrollRepo", "통신 실패 : ${response.code()}\n$stringToJson")
-                    null
+                    Result.failure(Exception("EnrollRepo 통신 실패 : ${response.code()} - $stringToJson"))
                 }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
             } catch (e: Exception) {
-                e.printStackTrace()
-                null
+                Result.failure(e)
             }
     }

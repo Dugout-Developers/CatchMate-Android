@@ -15,8 +15,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewMdoel
-import com.catchmate.presentation.viewmodel.UserViewModel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +26,7 @@ class HomeFragment :
     val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewMdoel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private lateinit var accessToken: String
     private lateinit var refreshToken: String
@@ -95,10 +93,10 @@ class HomeFragment :
     }
 
     private fun initViewModel() {
-        homeViewModel.getBoardList(
+        homeViewModel.getBoardPaging(
             pageNum = page++,
         )
-        homeViewModel.boardListResponse.observe(viewLifecycleOwner) { boardList ->
+        homeViewModel.getBoardPagingResponse.observe(viewLifecycleOwner) { boardList ->
             boardList?.let {
                 if (boardList.isNotEmpty()) {
                     Log.e("게시글 목록 존재", boardList.size.toString())
@@ -171,7 +169,7 @@ class HomeFragment :
 
                         if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
                             if (isNextPageExist) {
-                                homeViewModel.getBoardList(
+                                homeViewModel.getBoardPaging(
                                     pageNum = page++,
                                 )
                             }
@@ -183,8 +181,8 @@ class HomeFragment :
     }
 
     private fun getUserProfile() {
-        userViewModel.getUserProfile()
-        userViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+        homeViewModel.getUserProfile()
+        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             response?.let {
                 localDataViewModel.saveUserId(response.userId)
             }
