@@ -1,22 +1,22 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.EnrollCancelResponseDTO
-import com.catchmate.data.dto.EnrollRequestDTO
-import com.catchmate.data.dto.EnrollResponseDTO
+import com.catchmate.data.dto.PostEnrollRequestDTO
+import com.catchmate.data.dto.PostEnrollResponseDTO
 import com.catchmate.domain.model.EnrollCancelResponse
-import com.catchmate.domain.model.EnrollRequest
-import com.catchmate.domain.model.EnrollResponse
+import com.catchmate.domain.model.PostEnrollRequest
+import com.catchmate.domain.model.PostEnrollResponse
 
 object EnrollMapper {
-    fun toEnrollRequestDTO(enrollRequest: EnrollRequest): EnrollRequestDTO =
-        EnrollRequestDTO(
-            description = enrollRequest.description,
+    fun toPostEnrollRequestDTO(request: PostEnrollRequest): PostEnrollRequestDTO =
+        PostEnrollRequestDTO(
+            description = request.description,
         )
 
-    fun toEnrollResponse(enrollResponseDTO: EnrollResponseDTO): EnrollResponse =
-        EnrollResponse(
-            enrollId = enrollResponseDTO.enrollId,
-            requestAt = enrollResponseDTO.requestAt,
+    fun toPostEnrollResponse(responseDTO: PostEnrollResponseDTO): PostEnrollResponse =
+        PostEnrollResponse(
+            enrollId = responseDTO.enrollId,
+            requestAt = responseDTO.requestAt,
         )
 
     fun toEnrollCancelResponse(enrollCancelResponseDTO: EnrollCancelResponseDTO): EnrollCancelResponse =

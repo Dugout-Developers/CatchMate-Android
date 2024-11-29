@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.EnrollRequest
-import com.catchmate.domain.model.EnrollResponse
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.usecase.EnrollUseCase
+import com.catchmate.domain.model.PostEnrollRequest
+import com.catchmate.domain.model.PostEnrollResponse
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
+import com.catchmate.domain.usecase.enroll.PostEnrollUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class ReadPostViewModel
         private val getBoardUseCase: GetBoardUseCase,
         private val deleteBoardUseCase: DeleteBoardUseCase,
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
-        private val enrollUseCase: EnrollUseCase,
+        private val postEnrollUseCase: PostEnrollUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
         val getBoardResponse: LiveData<GetBoardResponse>
@@ -39,9 +39,9 @@ class ReadPostViewModel
         val boardEnrollState: LiveData<EnrollState>
             get() = _boardEnrollState
 
-        private val _enrollResponse = MutableLiveData<EnrollResponse>()
-        val enrollResponse: LiveData<EnrollResponse>
-            get() = _enrollResponse
+        private val _postEnrollResponse = MutableLiveData<PostEnrollResponse>()
+        val postEnrollResponse: LiveData<PostEnrollResponse>
+            get() = _postEnrollResponse
 
         private val _deleteBoardResponse = MutableLiveData<Int>()
         val deleteBoardResponse: LiveData<Int>
@@ -92,10 +92,20 @@ class ReadPostViewModel
 
         fun postEnroll(
             boardId: Long,
-            enrollRequest: EnrollRequest,
+            postEnrollRequest: PostEnrollRequest,
         ) {
             viewModelScope.launch {
-                _enrollResponse.value = enrollUseCase.postEnroll(boardId, enrollRequest)
+                val result = postEnrollUseCase.postEnroll(boardId, postEnrollRequest)
+                result
+                    .onSuccess { response ->
+                        _postEnrollResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
             }
         }
 

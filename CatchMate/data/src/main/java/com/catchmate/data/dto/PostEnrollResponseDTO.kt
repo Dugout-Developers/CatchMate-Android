@@ -1,6 +1,6 @@
 package com.catchmate.data.dto
 
-data class EnrollResponseDTO(
+data class PostEnrollResponseDTO(
     val enrollId: Long,
     val requestAt: String,
 )

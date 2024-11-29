@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.EnrollRequest
+import com.catchmate.domain.model.PostEnrollRequest
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
@@ -193,7 +193,7 @@ class ReadPostFragment : Fragment() {
                 }
             }
         }
-        readPostViewModel.enrollResponse.observe(viewLifecycleOwner) { response ->
+        readPostViewModel.postEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
             }
@@ -313,7 +313,7 @@ class ReadPostFragment : Fragment() {
                 setOnClickListener {
                     readPostViewModel.postEnroll(
                         boardId,
-                        EnrollRequest(edtApplicationDetailDialogExplain.text.toString()),
+                        PostEnrollRequest(edtApplicationDetailDialogExplain.text.toString()),
                     )
                     dialog.dismiss()
                 }

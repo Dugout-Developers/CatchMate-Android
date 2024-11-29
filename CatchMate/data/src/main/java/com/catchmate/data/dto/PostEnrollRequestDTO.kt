@@ -1,5 +1,5 @@
 package com.catchmate.data.dto
 
-data class EnrollRequestDTO(
+data class PostEnrollRequestDTO(
     val description: String,
 )
