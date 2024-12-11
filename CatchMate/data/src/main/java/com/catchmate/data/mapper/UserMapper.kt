@@ -1,9 +1,13 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.GetUserProfileResponseDTO
+import com.catchmate.data.dto.PatchUserProfileRequestDTO
+import com.catchmate.data.dto.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
 import com.catchmate.domain.model.GetUserProfileResponse
+import com.catchmate.domain.model.PatchUserProfileRequest
+import com.catchmate.domain.model.PatchUserProfileResponse
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.PostUserAdditionalInfoResponse
 
@@ -40,6 +44,20 @@ object UserMapper {
         PostUserAdditionalInfoResponse(
             accessToken = responseDTO.accessToken,
             refreshToken = responseDTO.refreshToken,
+            userId = responseDTO.userId,
+            createdAt = responseDTO.createdAt,
+        )
+
+    fun toPatchUserProfileRequestDTO(request: PatchUserProfileRequest): PatchUserProfileRequestDTO =
+        PatchUserProfileRequestDTO(
+            nickName = request.nickName,
+            description = request.description,
+            favGudan = request.favGudan,
+            watchStyle = request.watchStyle,
+        )
+
+    fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =
+        PatchUserProfileResponse(
             userId = responseDTO.userId,
             createdAt = responseDTO.createdAt,
         )
