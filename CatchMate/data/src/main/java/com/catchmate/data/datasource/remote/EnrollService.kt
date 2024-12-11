@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
@@ -20,4 +21,9 @@ interface EnrollService {
     suspend fun patchEnrollReject(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollRejectResponseDTO?>
+
+    @PATCH("enroll/{enrollId}/accept")
+    suspend fun patchEnrollAccept(
+        @Path("enrollId") enrollId: Long,
+    ): Response<PatchEnrollAcceptResponseDTO?>
 }
