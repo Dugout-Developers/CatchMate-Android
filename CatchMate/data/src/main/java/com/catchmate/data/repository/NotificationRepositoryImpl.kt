@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.NotificationService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.NotificationMapper
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.DeleteReceivedNotificationResponse
 import com.catchmate.domain.model.GetReceivedNotificationListResponse
 import com.catchmate.domain.model.GetReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
@@ -51,6 +52,29 @@ class NotificationRepositoryImpl
                             .body()
                             ?.let { responseBody ->
                                 NotificationMapper.toGetReceivedNotificationResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("NotiRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun deleteReceivedNotification(notificationId: Long): Result<DeleteReceivedNotificationResponse> =
+            try {
+                val response = notificationApi.deleteReceivedNotification(notificationId)
+                if (response.isSuccessful) {
+                    Log.d("NotiRepo", "통신 성공 : ${response.code()}")
+                    val body =
+                        response
+                            .body()
+                            ?.let { responseBody ->
+                                NotificationMapper.toDeleteReceivedNotificationResponse(responseBody)
                             }
                             ?: throw NullPointerException("Null Response")
                     Result.success(body)
