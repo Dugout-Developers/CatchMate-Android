@@ -1,11 +1,13 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
 import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -26,4 +28,7 @@ interface EnrollService {
     suspend fun patchEnrollAccept(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollAcceptResponseDTO?>
+
+    @GET("enroll/request")
+    suspend fun getRequestedEnrollList(): Response<GetRequestedEnrollListResponseDTO?>
 }
