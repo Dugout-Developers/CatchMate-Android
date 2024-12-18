@@ -22,7 +22,7 @@ interface UserService {
     @GET("user/profile/{profileUserId}")
     suspend fun getUserProfileById(
         @Path("profileUserId") profileUserId: Long,
-    ):Response<GetUserProfileByIdResponseDTO?>
+    ): Response<GetUserProfileByIdResponseDTO?>
 
     @POST("user/additional-info")
     suspend fun postUserAdditionalInfo(

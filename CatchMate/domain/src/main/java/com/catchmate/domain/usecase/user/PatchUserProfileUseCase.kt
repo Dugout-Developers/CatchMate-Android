@@ -10,7 +10,6 @@ class PatchUserProfileUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend fun patchUserProfile(
-            request: PatchUserProfileRequest,
-        ): Result<PatchUserProfileResponse> = userRepository.patchUserProfile(request)
+        suspend fun patchUserProfile(request: PatchUserProfileRequest): Result<PatchUserProfileResponse> =
+            userRepository.patchUserProfile(request)
     }

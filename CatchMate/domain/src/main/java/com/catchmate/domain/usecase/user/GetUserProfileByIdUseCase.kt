@@ -9,7 +9,6 @@ class GetUserProfileByIdUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend fun getUserProfileById(
-            profileUserId: Long,
-        ): Result<GetUserProfileByIdResponse> = userRepository.getUserProfileById(profileUserId)
+        suspend fun getUserProfileById(profileUserId: Long): Result<GetUserProfileByIdResponse> =
+            userRepository.getUserProfileById(profileUserId)
     }
