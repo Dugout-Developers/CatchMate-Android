@@ -1,9 +1,17 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.GetUserProfileResponseDTO
+import com.catchmate.data.dto.PatchUserAlarmResponseDTO
+import com.catchmate.data.dto.PatchUserProfileRequestDTO
+import com.catchmate.data.dto.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
+import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
+import com.catchmate.domain.model.PatchUserAlarmResponse
+import com.catchmate.domain.model.PatchUserProfileRequest
+import com.catchmate.domain.model.PatchUserProfileResponse
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.PostUserAdditionalInfoResponse
 
@@ -42,5 +50,39 @@ object UserMapper {
             refreshToken = responseDTO.refreshToken,
             userId = responseDTO.userId,
             createdAt = responseDTO.createdAt,
+        )
+
+    fun toPatchUserProfileRequestDTO(request: PatchUserProfileRequest): PatchUserProfileRequestDTO =
+        PatchUserProfileRequestDTO(
+            nickName = request.nickName,
+            description = request.description,
+            favGudan = request.favGudan,
+            watchStyle = request.watchStyle,
+        )
+
+    fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =
+        PatchUserProfileResponse(
+            userId = responseDTO.userId,
+            createdAt = responseDTO.createdAt,
+        )
+
+    fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
+        PatchUserAlarmResponse(
+            userId = responseDTO.userId,
+            pushAgreement = responseDTO.pushAgreement,
+            createdAt = responseDTO.createdAt,
+        )
+
+    fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =
+        GetUserProfileByIdResponse(
+            userId = responseDTO.userId,
+            email = responseDTO.email,
+            picture = responseDTO.picture,
+            gender = responseDTO.gender,
+            pushAgreement = responseDTO.pushAgreement,
+            nickName = responseDTO.nickName,
+            favoriteGudan = responseDTO.favoriteGudan,
+            birthDate = responseDTO.birthDate,
+            watchStyle = responseDTO.watchStyle,
         )
 }
