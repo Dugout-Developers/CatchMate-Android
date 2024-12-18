@@ -53,7 +53,7 @@ object EnrollMapper {
 
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =
         GetRequestedEnrollListResponse(
-            content = responseDTO.content.map { toEnrollContent(it) }
+            content = responseDTO.content.map { toEnrollContent(it) },
         )
 
     private fun toEnrollContent(dto: EnrollContentDTO): EnrollContent =
@@ -92,7 +92,7 @@ object EnrollMapper {
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
         GetReceivedEnrollResponse(
-            content = responseDTO.content.map { toReceivedEnrollContent(it) }
+            content = responseDTO.content.map { toReceivedEnrollContent(it) },
         )
 
     private fun toReceivedEnrollContent(dto: ReceivedEnrollContentDTO): ReceivedEnrollContent =
@@ -108,7 +108,7 @@ object EnrollMapper {
 
     fun toGetAllReceivedEnrollResponse(responseDTO: GetAllReceivedEnrollResponseDTO): GetAllReceivedEnrollResponse =
         GetAllReceivedEnrollResponse(
-            content = responseDTO.content.map { toReceivedEnrollContent(it) }
+            content = responseDTO.content.map { toReceivedEnrollContent(it) },
         )
 
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =
