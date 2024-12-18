@@ -1,6 +1,7 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.GetAllReceivedEnrollResponseDTO
+import com.catchmate.data.dto.GetEnrollNewCountResponseDTO
 import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
 import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
@@ -41,5 +42,8 @@ interface EnrollService {
     ): Response<GetReceivedEnrollResponseDTO?>
 
     @GET("enroll/receive/all")
-    suspend fun getAllReceivedEnroll(): Response<GetAllReceivedEnrollResponseDTO>
+    suspend fun getAllReceivedEnroll(): Response<GetAllReceivedEnrollResponseDTO?>
+
+    @GET("enroll/new-count")
+    suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
 }
