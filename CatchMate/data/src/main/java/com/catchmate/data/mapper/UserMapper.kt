@@ -1,11 +1,13 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.GetUserProfileResponseDTO
 import com.catchmate.data.dto.PatchUserAlarmResponseDTO
 import com.catchmate.data.dto.PatchUserProfileRequestDTO
 import com.catchmate.data.dto.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
+import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
 import com.catchmate.domain.model.PatchUserAlarmResponse
 import com.catchmate.domain.model.PatchUserProfileRequest
@@ -69,5 +71,18 @@ object UserMapper {
             userId = responseDTO.userId,
             pushAgreement = responseDTO.pushAgreement,
             createdAt = responseDTO.createdAt,
+        )
+
+    fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =
+        GetUserProfileByIdResponse(
+            userId = responseDTO.userId,
+            email = responseDTO.email,
+            picture = responseDTO.picture,
+            gender = responseDTO.gender,
+            pushAgreement = responseDTO.pushAgreement,
+            nickName = responseDTO.nickName,
+            favoriteGudan = responseDTO.favoriteGudan,
+            birthDate = responseDTO.birthDate,
+            watchStyle = responseDTO.watchStyle,
         )
 }
