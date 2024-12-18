@@ -3,19 +3,23 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.EnrollBoardInfoDTO
 import com.catchmate.data.dto.EnrollContentDTO
 import com.catchmate.data.dto.EnrollUserInfoDTO
+import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
 import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
+import com.catchmate.data.dto.ReceivedEnrollContentDTO
 import com.catchmate.domain.model.EnrollBoardInfo
 import com.catchmate.domain.model.EnrollContent
 import com.catchmate.domain.model.EnrollUserInfo
+import com.catchmate.domain.model.GetReceivedEnrollResponse
 import com.catchmate.domain.model.GetRequestedEnrollListResponse
 import com.catchmate.domain.model.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.PatchEnrollRejectResponse
 import com.catchmate.domain.model.PostEnrollRequest
 import com.catchmate.domain.model.PostEnrollResponse
+import com.catchmate.domain.model.ReceivedEnrollContent
 
 object EnrollMapper {
     fun toPostEnrollRequestDTO(request: PostEnrollRequest): PostEnrollRequestDTO =
@@ -78,5 +82,21 @@ object EnrollMapper {
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
             addInfo = dto.addInfo,
+        )
+
+    fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
+        GetReceivedEnrollResponse(
+            content = responseDTO.content.map { toReceivedEnrollContent(it) }
+        )
+
+    private fun toReceivedEnrollContent(dto: ReceivedEnrollContentDTO): ReceivedEnrollContent =
+        ReceivedEnrollContent(
+            enrollId = dto.enrollId,
+            acceptStatus = dto.acceptStatus,
+            description = dto.description,
+            requestDate = dto.requestDate,
+            userInfo = toEnrollUserInfo(dto.userInfo),
+            boardInfo = toEnrollBoardInfo(dto.boardInfo),
+            new = dto.new,
         )
 }
