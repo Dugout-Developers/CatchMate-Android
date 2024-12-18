@@ -9,5 +9,6 @@ class GetReceivedNotificationListUseCase
     constructor(
         private val notificationRepository: NotificationRepository,
     ) {
-        suspend fun getReceivedNotificationList(): Result<GetReceivedNotificationListResponse> = notificationRepository.getReceivedNotificationList()
+        suspend fun getReceivedNotificationList(): Result<GetReceivedNotificationListResponse> =
+            notificationRepository.getReceivedNotificationList()
     }

@@ -9,7 +9,6 @@ class DeleteReceivedNotificationUseCase
     constructor(
         private val notificationRepository: NotificationRepository,
     ) {
-        suspend fun deleteReceivedNotification(
-            notificationId: Long,
-        ): Result<DeleteReceivedNotificationResponse> = notificationRepository.deleteReceivedNotification(notificationId)
+        suspend fun deleteReceivedNotification(notificationId: Long): Result<DeleteReceivedNotificationResponse> =
+            notificationRepository.deleteReceivedNotification(notificationId)
     }

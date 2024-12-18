@@ -16,7 +16,7 @@ class NotificationRepositoryImpl
     @Inject
     constructor(
         retrofitClient: RetrofitClient,
-    ) :NotificationRepository {
+    ) : NotificationRepository {
         private val notificationApi = retrofitClient.createApi<NotificationService>()
 
         override suspend fun getReceivedNotificationList(): Result<GetReceivedNotificationListResponse> =
