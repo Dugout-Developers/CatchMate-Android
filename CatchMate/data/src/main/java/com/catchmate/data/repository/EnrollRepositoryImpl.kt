@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.EnrollService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.EnrollMapper
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.GetReceivedEnrollResponse
 import com.catchmate.domain.model.GetRequestedEnrollListResponse
 import com.catchmate.domain.model.PatchEnrollAcceptResponse
@@ -121,6 +122,29 @@ class EnrollRepositoryImpl
                             .body()
                             ?.let { responseBody ->
                                 EnrollMapper.toGetReceivedEnrollResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("EnrollRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun getAllReceivedEnroll(): Result<GetAllReceivedEnrollResponse> =
+            try {
+                val response = enrollApi.getAllReceivedEnroll()
+                if (response.isSuccessful) {
+                    Log.d("EnrollRepo", "통신 성공 : ${response.code()}")
+                    val body =
+                        response
+                            .body()
+                            ?.let { responseBody ->
+                                EnrollMapper.toGetAllReceivedEnrollResponse(responseBody)
                             }
                             ?: throw NullPointerException("Null Response")
                     Result.success(body)

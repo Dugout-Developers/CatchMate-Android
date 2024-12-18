@@ -1,5 +1,6 @@
 package com.catchmate.domain.repository
 
+import com.catchmate.domain.model.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.GetReceivedEnrollResponse
 import com.catchmate.domain.model.GetRequestedEnrollListResponse
 import com.catchmate.domain.model.PatchEnrollAcceptResponse
@@ -20,4 +21,6 @@ interface EnrollRepository {
     suspend fun getRequestedEnrollList(): Result<GetRequestedEnrollListResponse>
 
     suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse>
+
+    suspend fun getAllReceivedEnroll(): Result<GetAllReceivedEnrollResponse>
 }

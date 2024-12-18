@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.EnrollBoardInfoDTO
 import com.catchmate.data.dto.EnrollContentDTO
 import com.catchmate.data.dto.EnrollUserInfoDTO
+import com.catchmate.data.dto.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
 import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
@@ -13,6 +14,7 @@ import com.catchmate.data.dto.ReceivedEnrollContentDTO
 import com.catchmate.domain.model.EnrollBoardInfo
 import com.catchmate.domain.model.EnrollContent
 import com.catchmate.domain.model.EnrollUserInfo
+import com.catchmate.domain.model.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.GetReceivedEnrollResponse
 import com.catchmate.domain.model.GetRequestedEnrollListResponse
 import com.catchmate.domain.model.PatchEnrollAcceptResponse
@@ -98,5 +100,10 @@ object EnrollMapper {
             userInfo = toEnrollUserInfo(dto.userInfo),
             boardInfo = toEnrollBoardInfo(dto.boardInfo),
             new = dto.new,
+        )
+
+    fun toGetAllReceivedEnrollResponse(responseDTO: GetAllReceivedEnrollResponseDTO): GetAllReceivedEnrollResponse =
+        GetAllReceivedEnrollResponse(
+            content = responseDTO.content.map { toReceivedEnrollContent(it) }
         )
 }
