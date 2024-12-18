@@ -1,5 +1,6 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.EnrollBoardInfoDTO
 import com.catchmate.data.dto.EnrollContentDTO
 import com.catchmate.data.dto.EnrollUserInfoDTO
@@ -12,6 +13,7 @@ import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
 import com.catchmate.data.dto.ReceivedEnrollContentDTO
+import com.catchmate.domain.model.DeleteEnrollResponse
 import com.catchmate.domain.model.EnrollBoardInfo
 import com.catchmate.domain.model.EnrollContent
 import com.catchmate.domain.model.EnrollUserInfo
@@ -112,5 +114,11 @@ object EnrollMapper {
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =
         GetEnrollNewCountResponse(
             newEnrollListCount = responseDTO.newEnrollListCount,
+        )
+
+    fun toDeleteEnrollResponse(responseDTO: DeleteEnrollResponseDTO): DeleteEnrollResponse =
+        DeleteEnrollResponse(
+            enrollId = responseDTO.enrollId,
+            deleteAt = responseDTO.deleteAt,
         )
 }

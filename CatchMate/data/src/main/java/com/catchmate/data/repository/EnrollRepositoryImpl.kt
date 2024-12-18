@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.EnrollService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.EnrollMapper
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.DeleteEnrollResponse
 import com.catchmate.domain.model.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.GetEnrollNewCountResponse
 import com.catchmate.domain.model.GetReceivedEnrollResponse
@@ -169,6 +170,29 @@ class EnrollRepositoryImpl
                             .body()
                             ?.let { responseBody ->
                                 EnrollMapper.toGetEnrollNewCountResponse(responseBody)
+                            }
+                            ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("EnrollRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun deleteEnroll(enrollId: Long): Result<DeleteEnrollResponse> =
+            try {
+                val response = enrollApi.deleteEnroll(enrollId)
+                if (response.isSuccessful) {
+                    Log.d("EnrollRepo", "통신 성공 : ${response.code()}")
+                    val body =
+                        response
+                            .body()
+                            ?.let { responseBody ->
+                                EnrollMapper.toDeleteEnrollResponse(responseBody)
                             }
                             ?: throw NullPointerException("Null Response")
                     Result.success(body)

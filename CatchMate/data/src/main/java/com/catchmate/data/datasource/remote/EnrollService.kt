@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.GetEnrollNewCountResponseDTO
 import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
@@ -10,6 +11,7 @@ import com.catchmate.data.dto.PostEnrollRequestDTO
 import com.catchmate.data.dto.PostEnrollResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -46,4 +48,9 @@ interface EnrollService {
 
     @GET("enroll/new-count")
     suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
+
+    @DELETE("enroll/cancel/{enrollId}")
+    suspend fun deleteEnroll(
+        @Path("enrollId") enrollId: Long,
+    ): Response<DeleteEnrollResponseDTO>
 }
