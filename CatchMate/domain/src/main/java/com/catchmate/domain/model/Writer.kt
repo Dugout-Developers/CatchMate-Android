@@ -1,5 +1,7 @@
 package com.catchmate.domain.model
 
+import java.io.Serializable
+
 data class Writer(
     val userId: Long,
     val nickName: String,
@@ -8,4 +10,4 @@ data class Writer(
     val watchStyle: String,
     val gender: String,
     val birthDate: String,
-)
+) : Serializable
