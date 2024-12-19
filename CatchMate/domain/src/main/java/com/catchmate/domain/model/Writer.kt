@@ -1,7 +1,9 @@
 package com.catchmate.domain.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Writer(
     val userId: Long,
     val nickName: String,
@@ -10,4 +12,4 @@ data class Writer(
     val watchStyle: String,
     val gender: String,
     val birthDate: String,
-) : Serializable
+): Parcelable

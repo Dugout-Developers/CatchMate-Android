@@ -34,8 +34,8 @@ class MyPostFragment : Fragment() {
 
     private fun getUserInfo(): Writer? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("userInfo", Writer::class.java)
+            arguments?.getParcelable("userInfo", Writer::class.java)
         } else {
-            arguments?.getSerializable("userInfo") as Writer
+            arguments?.getParcelable("userInfo") as Writer?
         }
 }

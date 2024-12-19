@@ -144,7 +144,7 @@ class ReadPostFragment : Fragment() {
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
             val bundle = Bundle()
-            bundle.putSerializable("userInfo", readPostViewModel.getBoardResponse.value?.writer)
+            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.writer)
             findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
