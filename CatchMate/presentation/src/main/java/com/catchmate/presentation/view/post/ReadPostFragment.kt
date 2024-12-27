@@ -71,6 +71,7 @@ class ReadPostFragment : Fragment() {
         initViewModel()
         initHeader()
         initFooter()
+        initWriterInfoLayout()
     }
 
     override fun onDestroyView() {
@@ -137,6 +138,14 @@ class ReadPostFragment : Fragment() {
 
                 popup.show()
             }
+        }
+    }
+
+    private fun initWriterInfoLayout() {
+        binding.layoutReadPostWriterInfo.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.writer)
+            findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
 
