@@ -27,7 +27,10 @@ class MyPostFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_my_post, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("Writer", "${writer?.userId} / ${writer?.nickName}")
     }
