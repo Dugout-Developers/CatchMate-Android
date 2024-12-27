@@ -12,4 +12,4 @@ data class Writer(
     val watchStyle: String,
     val gender: String,
     val birthDate: String,
-): Parcelable
+) : Parcelable
