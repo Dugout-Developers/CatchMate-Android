@@ -9,6 +9,6 @@ data class PostUserAdditionalInfoRequestDTO(
     val gender: String,
     val nickName: String,
     val birthDate: String,
-    val favoriteClubId: String,
+    val favoriteClubId: Int,
     val watchStyle: String,
 )
