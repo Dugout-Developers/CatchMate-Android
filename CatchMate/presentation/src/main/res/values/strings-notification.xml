@@ -1,3 +1,4 @@
 <resources>
     <string name="notification_title">알림</string>
+    <string name="notification_no_list_message">받은 알림이 없어요</string>
 </resources>
