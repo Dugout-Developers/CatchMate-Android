@@ -104,11 +104,11 @@ class TeamOnboardingFragment : Fragment() {
                 val newUserInfo =
                     PostUserAdditionalInfoRequest(
                         userInfo.email,
-                        userInfo.provider,
                         userInfo.providerId,
-                        userInfo.gender,
-                        userInfo.picture,
+                        userInfo.provider,
+                        userInfo.profileImageUrl,
                         userInfo.fcmToken,
+                        userInfo.gender,
                         userInfo.nickName,
                         userInfo.birthDate,
                         selectedButton

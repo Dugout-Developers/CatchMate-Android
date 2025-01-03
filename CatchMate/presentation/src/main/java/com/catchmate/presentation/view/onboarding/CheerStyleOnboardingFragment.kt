@@ -31,7 +31,7 @@ class CheerStyleOnboardingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userInfo = getUserInfo()
-        Log.e("userInfo", "${userInfo.nickName},${userInfo.gender},${userInfo.birthDate},${userInfo.favGudan}")
+        Log.e("userInfo", "${userInfo.nickName},${userInfo.gender},${userInfo.birthDate},${userInfo.favoriteClubId}")
     }
 
     override fun onCreateView(
@@ -78,14 +78,14 @@ class CheerStyleOnboardingFragment : Fragment() {
                 val newUserInfo =
                     PostUserAdditionalInfoRequest(
                         userInfo.email,
-                        userInfo.provider,
                         userInfo.providerId,
-                        userInfo.gender,
-                        userInfo.picture,
+                        userInfo.provider,
+                        userInfo.profileImageUrl,
                         userInfo.fcmToken,
+                        userInfo.gender,
                         userInfo.nickName,
                         userInfo.birthDate,
-                        userInfo.favGudan,
+                        userInfo.favoriteClubId,
                         selectedButton
                             ?.binding
                             ?.tvCheerStyleName

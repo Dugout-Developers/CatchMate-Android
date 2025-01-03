@@ -33,22 +33,22 @@ object UserMapper {
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =
         PostUserAdditionalInfoRequestDTO(
             email = request.email,
-            provider = request.provider,
             providerId = request.providerId,
-            gender = request.gender,
-            picture = request.picture,
+            provider = request.provider,
+            profileImageUrl = request.profileImageUrl,
             fcmToken = request.fcmToken,
+            gender = request.gender,
             nickName = request.nickName,
             birthDate = request.birthDate,
-            favGudan = request.favGudan,
+            favoriteClubId = request.favoriteClubId,
             watchStyle = request.watchStyle,
         )
 
     fun toPostUserAdditionalInfoResponse(responseDTO: PostUserAdditionalInfoResponseDTO): PostUserAdditionalInfoResponse =
         PostUserAdditionalInfoResponse(
+            userId = responseDTO.userId,
             accessToken = responseDTO.accessToken,
             refreshToken = responseDTO.refreshToken,
-            userId = responseDTO.userId,
             createdAt = responseDTO.createdAt,
         )
 
