@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.Club
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
@@ -111,11 +112,7 @@ class TeamOnboardingFragment : Fragment() {
                         userInfo.gender,
                         userInfo.nickName,
                         userInfo.birthDate,
-                        selectedButton
-                            ?.binding
-                            ?.tvTeamButton
-                            ?.text
-                            .toString(),
+                        getSelectedTeamId(selectedButton?.binding?.tvTeamButton?.text.toString()),
                         "",
                     )
                 val bundle = Bundle()
@@ -130,5 +127,21 @@ class TeamOnboardingFragment : Fragment() {
             arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
         } else {
             arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
+        }
+
+    private fun getSelectedTeamId(teamName: String): Int =
+        when (teamName) {
+            getString(R.string.team_kia_tigers) -> Club.KIA.id
+            getString(R.string.team_samsung_lions) -> Club.SAMSUNG.id
+            getString(R.string.team_lg_twins) -> Club.LG.id
+            getString(R.string.team_doosan_bears) -> Club.DOOSAN.id
+            getString(R.string.team_kt_wiz) -> Club.KT.id
+            getString(R.string.team_ssg_landers) -> Club.SSG.id
+            getString(R.string.team_lotte_giants) -> Club.LOTTE.id
+            getString(R.string.team_hanwha_eagles) -> Club.HANWHA.id
+            getString(R.string.team_nc_dinos) -> Club.NC.id
+            getString(R.string.team_kiwoom_heroes) -> Club.KIWOOM.id
+            getString(R.string.pacifist) -> Club.PACIFIST.id
+            else -> Club.BEGINNER.id
         }
 }
