@@ -93,15 +93,15 @@ class SignupFragment : Fragment() {
                 val newUserInfo =
                     PostUserAdditionalInfoRequest(
                         userInfo.email,
-                        userInfo.provider,
                         userInfo.providerId,
-                        if (gender == R.id.chip_signup_male) "M" else "F",
-                        userInfo.picture,
+                        userInfo.provider,
+                        userInfo.profileImageUrl,
                         userInfo.fcmToken,
+                        if (gender == R.id.chip_signup_male) "M" else "F",
                         nickName,
                         DateUtils.formatBirthDate(birthDate),
-                        "",
-                        "",
+                        -1,
+                        null,
                     )
                 val bundle = Bundle()
                 bundle.putSerializable("userInfo", newUserInfo)
