@@ -96,11 +96,14 @@ object UserMapper {
         GetUserProfileByIdResponse(
             userId = responseDTO.userId,
             email = responseDTO.email,
-            picture = responseDTO.picture,
+            profileImageUrl = responseDTO.profileImageUrl,
             gender = responseDTO.gender,
-            pushAgreement = responseDTO.pushAgreement,
+            allAlarm = responseDTO.allAlarm,
+            chatAlarm = responseDTO.chatAlarm,
+            enrollAlarm = responseDTO.enrollAlarm,
+            eventAlarm = responseDTO.eventAlarm,
             nickName = responseDTO.nickName,
-            favoriteGudan = responseDTO.favoriteGudan,
+            favoriteClub = toFavoriteClub(responseDTO.favoriteClub),
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
         )
