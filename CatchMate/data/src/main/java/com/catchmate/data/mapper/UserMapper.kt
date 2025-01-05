@@ -8,6 +8,7 @@ import com.catchmate.data.dto.PatchUserProfileRequestDTO
 import com.catchmate.data.dto.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
+import com.catchmate.data.dto.UserProfileRequestDTO
 import com.catchmate.domain.model.FavoriteClub
 import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
@@ -16,6 +17,7 @@ import com.catchmate.domain.model.PatchUserProfileRequest
 import com.catchmate.domain.model.PatchUserProfileResponse
 import com.catchmate.domain.model.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.UserProfileRequest
 
 object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
@@ -66,16 +68,20 @@ object UserMapper {
 
     fun toPatchUserProfileRequestDTO(request: PatchUserProfileRequest): PatchUserProfileRequestDTO =
         PatchUserProfileRequestDTO(
+            request = toUserProfileRequestDTO(request.request),
+            profileImage = request.profileImage,
+        )
+
+    private fun toUserProfileRequestDTO(request: UserProfileRequest): UserProfileRequestDTO =
+        UserProfileRequestDTO(
             nickName = request.nickName,
-            description = request.description,
-            favGudan = request.favGudan,
+            favoriteClubId = request.favoriteClubId,
             watchStyle = request.watchStyle,
         )
 
     fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =
         PatchUserProfileResponse(
-            userId = responseDTO.userId,
-            createdAt = responseDTO.createdAt,
+            state = responseDTO.state,
         )
 
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
