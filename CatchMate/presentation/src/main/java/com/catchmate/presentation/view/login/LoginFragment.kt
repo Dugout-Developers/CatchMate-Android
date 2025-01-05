@@ -73,15 +73,15 @@ class LoginFragment : Fragment() {
                         val userInfo =
                             PostUserAdditionalInfoRequest(
                                 postLoginRequest.email,
-                                postLoginRequest.provider,
                                 postLoginRequest.providerId,
-                                "",
+                                postLoginRequest.provider,
                                 postLoginRequest.picture,
                                 postLoginRequest.fcmToken,
                                 "",
                                 "",
                                 "",
-                                "",
+                                -1,
+                                ""
                             )
                         val bundle = Bundle()
                         bundle.putSerializable("userInfo", userInfo)

@@ -1,5 +1,6 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.FavoriteClubDTO
 import com.catchmate.data.dto.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.GetUserProfileResponseDTO
 import com.catchmate.data.dto.PatchUserAlarmResponseDTO
@@ -7,6 +8,7 @@ import com.catchmate.data.dto.PatchUserProfileRequestDTO
 import com.catchmate.data.dto.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
+import com.catchmate.domain.model.FavoriteClub
 import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
 import com.catchmate.domain.model.PatchUserAlarmResponse
@@ -20,14 +22,24 @@ object UserMapper {
         GetUserProfileResponse(
             userId = getUserProfileResponseDTO.userId,
             email = getUserProfileResponseDTO.email,
-            picture = getUserProfileResponseDTO.picture,
+            profileImageUrl = getUserProfileResponseDTO.profileImageUrl,
             gender = getUserProfileResponseDTO.gender,
-            pushAgreement = getUserProfileResponseDTO.pushAgreement,
+            allAlarm = getUserProfileResponseDTO.allAlarm,
+            chatAlarm = getUserProfileResponseDTO.chatAlarm,
+            enrollAlarm = getUserProfileResponseDTO.enrollAlarm,
+            eventAlarm = getUserProfileResponseDTO.eventAlarm,
             nickName = getUserProfileResponseDTO.nickName,
-            favoriteGudan = getUserProfileResponseDTO.favoriteGudan,
-            description = getUserProfileResponseDTO.description,
+            favoriteClub = toFavoriteClub(getUserProfileResponseDTO.favoriteClub),
             birthDate = getUserProfileResponseDTO.birthDate,
             watchStyle = getUserProfileResponseDTO.watchStyle,
+        )
+
+    private fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
+        FavoriteClub(
+            dto.id,
+            dto.name,
+            dto.homeStadium,
+            dto.region,
         )
 
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =

@@ -3,12 +3,14 @@ package com.catchmate.data.dto
 data class GetUserProfileResponseDTO(
     val userId: Long,
     val email: String,
-    val picture: String,
+    val profileImageUrl: String,
     val gender: String,
-    val pushAgreement: String,
+    val allAlarm: String,
+    val chatAlarm: String,
+    val enrollAlarm: String,
+    val eventAlarm: String,
     val nickName: String,
-    val favoriteGudan: String,
-    val description: String?,
+    val favoriteClub: FavoriteClubDTO,
     val birthDate: String,
     val watchStyle: String?,
 )
