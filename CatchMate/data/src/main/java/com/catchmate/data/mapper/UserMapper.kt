@@ -87,7 +87,8 @@ object UserMapper {
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
         PatchUserAlarmResponse(
             userId = responseDTO.userId,
-            pushAgreement = responseDTO.pushAgreement,
+            alarmType = responseDTO.alarmType,
+            isEnabled = responseDTO.isEnabled,
             createdAt = responseDTO.createdAt,
         )
 

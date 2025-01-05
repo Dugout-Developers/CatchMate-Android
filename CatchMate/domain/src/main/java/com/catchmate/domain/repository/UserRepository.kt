@@ -1,5 +1,6 @@
 package com.catchmate.domain.repository
 
+import com.catchmate.domain.model.AlarmType
 import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
 import com.catchmate.domain.model.PatchUserAlarmResponse
@@ -17,5 +18,8 @@ interface UserRepository {
 
     suspend fun patchUserProfile(patchUserProfileRequest: PatchUserProfileRequest): Result<PatchUserProfileResponse>
 
-    suspend fun patchUserAlarm(pushAgreement: String): Result<PatchUserAlarmResponse>
+    suspend fun patchUserAlarm(
+        alarmType: AlarmType,
+        isEnabled: String,
+    ): Result<PatchUserAlarmResponse>
 }

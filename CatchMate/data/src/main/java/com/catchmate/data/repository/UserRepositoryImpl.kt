@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.AlarmType
 import com.catchmate.domain.model.GetUserProfileByIdResponse
 import com.catchmate.domain.model.GetUserProfileResponse
 import com.catchmate.domain.model.PatchUserAlarmResponse
@@ -117,9 +118,12 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun patchUserAlarm(pushAgreement: String): Result<PatchUserAlarmResponse> =
+        override suspend fun patchUserAlarm(
+            alarmType: AlarmType,
+            isEnabled: String,
+        ): Result<PatchUserAlarmResponse> =
             try {
-                val response = userApi.patchUserAlarm(pushAgreement)
+                val response = userApi.patchUserAlarm(alarmType, isEnabled)
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body =
