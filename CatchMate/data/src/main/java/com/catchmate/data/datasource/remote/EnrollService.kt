@@ -52,5 +52,5 @@ interface EnrollService {
     @DELETE("enroll/cancel/{enrollId}")
     suspend fun deleteEnroll(
         @Path("enrollId") enrollId: Long,
-    ): Response<DeleteEnrollResponseDTO>
+    ): Response<DeleteEnrollResponseDTO?>
 }
