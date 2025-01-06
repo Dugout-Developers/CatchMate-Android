@@ -3,7 +3,7 @@ package com.catchmate.data.datasource.local
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.PostLoginRequestDTO
+import com.catchmate.data.dto.auth.PostLoginRequestDTO
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient

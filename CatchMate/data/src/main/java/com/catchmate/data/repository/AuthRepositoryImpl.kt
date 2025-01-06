@@ -5,10 +5,10 @@ import com.catchmate.data.datasource.remote.AuthService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.DeleteLogoutResponse
-import com.catchmate.domain.model.GetCheckNicknameResponse
-import com.catchmate.domain.model.PostLoginRequest
-import com.catchmate.domain.model.PostLoginResponse
+import com.catchmate.domain.model.auth.DeleteLogoutResponse
+import com.catchmate.domain.model.auth.GetCheckNicknameResponse
+import com.catchmate.domain.model.auth.PostLoginRequest
+import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.repository.AuthRepository
 import org.json.JSONObject
 import javax.inject.Inject

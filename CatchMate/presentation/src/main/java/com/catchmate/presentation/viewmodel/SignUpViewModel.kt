@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetCheckNicknameResponse
+import com.catchmate.domain.model.auth.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
 import com.catchmate.domain.usecase.auth.GetAuthCheckNicknameUseCase

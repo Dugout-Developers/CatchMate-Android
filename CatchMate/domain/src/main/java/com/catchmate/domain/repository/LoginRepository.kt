@@ -1,6 +1,6 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.PostLoginRequest
+import com.catchmate.domain.model.auth.PostLoginRequest
 
 interface LoginRepository {
     suspend fun loginWithKakao(): PostLoginRequest
