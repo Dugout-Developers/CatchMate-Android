@@ -1,23 +1,23 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.DeleteBoardRequestDTO
-import com.catchmate.data.dto.GetBoardPagingResponseDTO
-import com.catchmate.data.dto.GetBoardResponseDTO
-import com.catchmate.data.dto.GetLikedBoardResponseDTO
-import com.catchmate.data.dto.PostBoardRequestDTO
-import com.catchmate.data.dto.PostBoardResponseDTO
-import com.catchmate.data.dto.PutBoardRequestDTO
-import com.catchmate.data.dto.PutBoardResponseDTO
-import com.catchmate.data.dto.WriterDTO
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.GetBoardPagingResponse
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.GetLikedBoardResponse
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
-import com.catchmate.domain.model.Writer
+import com.catchmate.data.dto.board.DeleteBoardRequestDTO
+import com.catchmate.data.dto.board.GetBoardPagingResponseDTO
+import com.catchmate.data.dto.board.GetBoardResponseDTO
+import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.PostBoardRequestDTO
+import com.catchmate.data.dto.board.PostBoardResponseDTO
+import com.catchmate.data.dto.board.PutBoardRequestDTO
+import com.catchmate.data.dto.board.PutBoardResponseDTO
+import com.catchmate.data.dto.board.WriterDTO
+import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.board.GetBoardPagingResponse
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
+import com.catchmate.domain.model.board.Writer
 
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =

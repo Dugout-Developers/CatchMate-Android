@@ -11,7 +11,7 @@ import android.widget.ToggleButton
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener

@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto.board
 
-data class GetLikedBoardResponse(
+data class GetLikedBoardResponseDTO(
     val boardId: Long,
     val title: String,
     val gameDate: String,

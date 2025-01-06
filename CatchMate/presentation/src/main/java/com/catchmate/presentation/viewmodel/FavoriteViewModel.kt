@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.usecase.board.GetLikedBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

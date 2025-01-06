@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetBoardPagingResponse
+import com.catchmate.domain.model.board.GetBoardPagingResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.usecase.board.GetBoardPagingUseCase
 import com.catchmate.domain.usecase.user.GetUserProfileUseCase

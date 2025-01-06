@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.board
 
-import com.catchmate.domain.model.DeleteBoardRequest
+import com.catchmate.domain.model.board.DeleteBoardRequest
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 

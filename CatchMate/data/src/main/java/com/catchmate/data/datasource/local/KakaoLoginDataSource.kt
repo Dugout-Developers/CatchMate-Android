@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.PostLoginRequestDTO
-import com.catchmate.domain.model.LoginPlatform
+import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext

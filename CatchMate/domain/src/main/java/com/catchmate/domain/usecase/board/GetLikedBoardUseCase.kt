@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.board
 
-import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 

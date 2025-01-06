@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.catchmate.domain.model.Writer
+import com.catchmate.domain.model.board.Writer
 import com.catchmate.presentation.R
 
 class MyPostFragment : Fragment() {

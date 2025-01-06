@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.usecase.board.PostBoardUseCase
 import com.catchmate.domain.usecase.board.PutBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

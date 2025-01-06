@@ -1,13 +1,13 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.GetBoardPagingResponse
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.GetLikedBoardResponse
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
+import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.board.GetBoardPagingResponse
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>

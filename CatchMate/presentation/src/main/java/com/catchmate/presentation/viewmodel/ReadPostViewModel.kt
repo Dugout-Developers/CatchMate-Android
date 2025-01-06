@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.EnrollState
-import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase

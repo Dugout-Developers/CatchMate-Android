@@ -1,4 +1,4 @@
-package com.catchmate.data.dto
+package com.catchmate.data.dto.board
 
 data class PutBoardRequestDTO(
     val boardId: Long,

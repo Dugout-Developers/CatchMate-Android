@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.EnrollState
-import com.catchmate.domain.model.GetBoardResponse
+import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding

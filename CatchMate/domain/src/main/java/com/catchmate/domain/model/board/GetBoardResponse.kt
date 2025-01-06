@@ -1,8 +1,10 @@
-package com.catchmate.data.dto
+package com.catchmate.domain.model.board
 
-data class GetBoardResponseDTO(
+import java.io.Serializable
+
+data class GetBoardResponse(
     val boardId: Long,
-    val writer: WriterDTO,
+    val writer: Writer,
     val title: String,
     val gameDate: String,
     val location: String,
@@ -14,4 +16,4 @@ data class GetBoardResponseDTO(
     val preferGender: String? = null,
     val preferAge: Int? = null,
     val addInfo: String,
-)
+) : Serializable

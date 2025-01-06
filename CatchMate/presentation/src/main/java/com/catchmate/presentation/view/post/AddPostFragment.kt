@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PutBoardRequest
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener

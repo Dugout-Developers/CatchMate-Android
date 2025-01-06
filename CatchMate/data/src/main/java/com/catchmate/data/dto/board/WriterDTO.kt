@@ -1,10 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto.board
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class Writer(
+data class WriterDTO(
     val userId: Long,
     val nickName: String,
     val picture: String,
@@ -12,4 +8,4 @@ data class Writer(
     val watchStyle: String,
     val gender: String,
     val birthDate: String,
-) : Parcelable
+)
