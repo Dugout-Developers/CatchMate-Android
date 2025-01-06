@@ -1,4 +1,4 @@
-package com.catchmate.domain.model
+package com.catchmate.domain.model.user
 
 data class UserProfileRequest(
     val nickName: String,

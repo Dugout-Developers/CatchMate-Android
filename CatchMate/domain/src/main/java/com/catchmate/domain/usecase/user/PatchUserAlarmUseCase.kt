@@ -1,7 +1,7 @@
 package com.catchmate.domain.usecase.user
 
-import com.catchmate.domain.model.AlarmType
-import com.catchmate.domain.model.PatchUserAlarmResponse
+import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.repository.UserRepository
 import javax.inject.Inject
 

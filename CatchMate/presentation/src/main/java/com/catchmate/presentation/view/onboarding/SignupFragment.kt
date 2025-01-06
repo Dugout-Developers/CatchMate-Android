@@ -14,7 +14,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupBinding
 import com.catchmate.presentation.util.DateUtils

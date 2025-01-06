@@ -1,8 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto.user
 
-import java.io.Serializable
-
-data class PostUserAdditionalInfoRequest(
+data class PostUserAdditionalInfoRequestDTO(
     val email: String,
     val providerId: String,
     val provider: String,
@@ -13,4 +11,4 @@ data class PostUserAdditionalInfoRequest(
     val birthDate: String,
     val favoriteClubId: Int,
     val watchStyle: String?,
-) : Serializable
+)

@@ -1,23 +1,23 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.FavoriteClubDTO
-import com.catchmate.data.dto.GetUserProfileByIdResponseDTO
-import com.catchmate.data.dto.GetUserProfileResponseDTO
-import com.catchmate.data.dto.PatchUserAlarmResponseDTO
-import com.catchmate.data.dto.PatchUserProfileRequestDTO
-import com.catchmate.data.dto.PatchUserProfileResponseDTO
-import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
-import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
-import com.catchmate.data.dto.UserProfileRequestDTO
-import com.catchmate.domain.model.FavoriteClub
-import com.catchmate.domain.model.GetUserProfileByIdResponse
-import com.catchmate.domain.model.GetUserProfileResponse
-import com.catchmate.domain.model.PatchUserAlarmResponse
-import com.catchmate.domain.model.PatchUserProfileRequest
-import com.catchmate.domain.model.PatchUserProfileResponse
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
-import com.catchmate.domain.model.PostUserAdditionalInfoResponse
-import com.catchmate.domain.model.UserProfileRequest
+import com.catchmate.data.dto.user.FavoriteClubDTO
+import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
+import com.catchmate.data.dto.user.GetUserProfileResponseDTO
+import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
+import com.catchmate.data.dto.user.PatchUserProfileRequestDTO
+import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
+import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
+import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
+import com.catchmate.data.dto.user.UserProfileRequestDTO
+import com.catchmate.domain.model.user.FavoriteClub
+import com.catchmate.domain.model.user.GetUserProfileByIdResponse
+import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.PatchUserAlarmResponse
+import com.catchmate.domain.model.user.PatchUserProfileRequest
+import com.catchmate.domain.model.user.PatchUserProfileResponse
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.user.UserProfileRequest
 
 object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =

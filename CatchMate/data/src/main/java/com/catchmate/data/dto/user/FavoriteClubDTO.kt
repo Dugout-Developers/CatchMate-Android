@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto.user
 
-data class FavoriteClub(
+data class FavoriteClubDTO(
     val id: Int,
     val name: String,
     val homeStadium: String,

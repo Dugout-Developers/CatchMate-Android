@@ -1,6 +1,6 @@
-package com.catchmate.domain.model
+package com.catchmate.data.dto.user
 
-data class GetUserProfileResponse(
+data class GetUserProfileByIdResponseDTO(
     val userId: Long,
     val email: String,
     val profileImageUrl: String,
@@ -10,7 +10,7 @@ data class GetUserProfileResponse(
     val enrollAlarm: String,
     val eventAlarm: String,
     val nickName: String,
-    val favoriteClub: FavoriteClub,
+    val favoriteClub: FavoriteClubDTO,
     val birthDate: String,
-    val watchStyle: String?,
+    val watchStyle: String,
 )

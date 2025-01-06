@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.Club
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.enumclass.Club
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
 

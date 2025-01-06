@@ -1,4 +1,4 @@
-package com.catchmate.domain.model
+package com.catchmate.domain.model.enumclass
 
 // name 프로퍼티가 enum 기본 속성이라 생성자 명으로 지정할 수 없음 name -> teamName 대체
 enum class Club(val id: Int, val teamName: String, val homeStadium: String, val region: String) {

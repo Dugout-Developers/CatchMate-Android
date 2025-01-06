@@ -1,6 +1,6 @@
-package com.catchmate.data.dto
+package com.catchmate.data.dto.user
 
-import com.catchmate.domain.model.AlarmType
+import com.catchmate.domain.model.enumclass.AlarmType
 
 data class PatchUserAlarmResponseDTO(
     val userId: Long,
