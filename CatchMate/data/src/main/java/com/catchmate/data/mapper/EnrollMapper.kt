@@ -13,7 +13,7 @@ import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
 import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
-import com.catchmate.data.dto.enroll.ReceivedEnrollContentDTO
+import com.catchmate.data.dto.enroll.ReceivedEnrollInfoDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollBoardInfo
@@ -28,7 +28,7 @@ import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
-import com.catchmate.domain.model.enroll.ReceivedEnrollContent
+import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
 import com.catchmate.domain.model.user.FavoriteClub
 
 object EnrollMapper {
@@ -57,10 +57,10 @@ object EnrollMapper {
 
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =
         GetRequestedEnrollListResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toEnrollContent(it) },
+            enrollInfoList = responseDTO.enrollInfoList.map { toEnrollInfo(it) },
         )
 
-    private fun toEnrollContent(dto: EnrollInfoDTO): EnrollInfo =
+    private fun toEnrollInfo(dto: EnrollInfoDTO): EnrollInfo =
         EnrollInfo(
             enrollId = dto.enrollId,
             acceptStatus = dto.acceptStatus,
@@ -119,15 +119,15 @@ object EnrollMapper {
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
         GetReceivedEnrollResponse(
-            content = responseDTO.content.map { toReceivedEnrollContent(it) },
+            content = responseDTO.enrollInfoList.map { toReceivedEnrollInfo(it) },
         )
 
-    private fun toReceivedEnrollContent(dto: ReceivedEnrollContentDTO): ReceivedEnrollContent =
-        ReceivedEnrollContent(
+    private fun toReceivedEnrollInfo(dto: ReceivedEnrollInfoDTO): ReceivedEnrollInfo =
+        ReceivedEnrollInfo(
             enrollId = dto.enrollId,
             acceptStatus = dto.acceptStatus,
             description = dto.description,
-            requestDate = dto.requestDate,
+            receiveDate = dto.receiveDate,
             userInfo = toEnrollUserInfo(dto.userInfo),
             boardInfo = toEnrollBoardInfo(dto.boardInfo),
             new = dto.new,
@@ -135,7 +135,7 @@ object EnrollMapper {
 
     fun toGetAllReceivedEnrollResponse(responseDTO: GetAllReceivedEnrollResponseDTO): GetAllReceivedEnrollResponse =
         GetAllReceivedEnrollResponse(
-            content = responseDTO.content.map { toReceivedEnrollContent(it) },
+            content = responseDTO.content.map { toReceivedEnrollInfo(it) },
         )
 
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =
