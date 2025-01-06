@@ -1,14 +1,14 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.DeleteEnrollResponse
-import com.catchmate.domain.model.GetAllReceivedEnrollResponse
-import com.catchmate.domain.model.GetEnrollNewCountResponse
-import com.catchmate.domain.model.GetReceivedEnrollResponse
-import com.catchmate.domain.model.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.PatchEnrollAcceptResponse
-import com.catchmate.domain.model.PatchEnrollRejectResponse
-import com.catchmate.domain.model.PostEnrollRequest
-import com.catchmate.domain.model.PostEnrollResponse
+import com.catchmate.domain.model.enroll.DeleteEnrollResponse
+import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
+import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
+import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
+import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
+import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enroll.PostEnrollResponse
 
 interface EnrollRepository {
     suspend fun postEnroll(

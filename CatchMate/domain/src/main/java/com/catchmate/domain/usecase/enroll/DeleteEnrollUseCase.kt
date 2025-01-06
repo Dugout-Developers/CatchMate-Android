@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.enroll
 
-import com.catchmate.domain.model.DeleteEnrollResponse
+import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.repository.EnrollRepository
 import javax.inject.Inject
 

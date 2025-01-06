@@ -1,4 +1,4 @@
-package com.catchmate.domain.model
+package com.catchmate.domain.model.enroll
 
 data class EnrollContent(
     val enrollId: Long,

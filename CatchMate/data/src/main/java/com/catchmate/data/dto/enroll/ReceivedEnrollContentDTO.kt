@@ -1,4 +1,4 @@
-package com.catchmate.data.dto
+package com.catchmate.data.dto.enroll
 
 data class ReceivedEnrollContentDTO(
     val enrollId: Long,

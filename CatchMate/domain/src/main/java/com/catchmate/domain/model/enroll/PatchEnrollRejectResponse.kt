@@ -1,4 +1,4 @@
-package com.catchmate.domain.model
+package com.catchmate.domain.model.enroll
 
 data class PatchEnrollRejectResponse(
     val enrollId: Long,

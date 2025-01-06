@@ -8,8 +8,8 @@ import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.DeleteBoardRequest
 import com.catchmate.domain.model.EnrollState
 import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.PostEnrollRequest
-import com.catchmate.domain.model.PostEnrollResponse
+import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase

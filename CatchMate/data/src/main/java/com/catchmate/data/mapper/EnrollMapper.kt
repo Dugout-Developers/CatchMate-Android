@@ -1,31 +1,31 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.DeleteEnrollResponseDTO
-import com.catchmate.data.dto.EnrollBoardInfoDTO
-import com.catchmate.data.dto.EnrollContentDTO
-import com.catchmate.data.dto.EnrollUserInfoDTO
-import com.catchmate.data.dto.GetAllReceivedEnrollResponseDTO
-import com.catchmate.data.dto.GetEnrollNewCountResponseDTO
-import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
-import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
-import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
-import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
-import com.catchmate.data.dto.PostEnrollRequestDTO
-import com.catchmate.data.dto.PostEnrollResponseDTO
-import com.catchmate.data.dto.ReceivedEnrollContentDTO
-import com.catchmate.domain.model.DeleteEnrollResponse
-import com.catchmate.domain.model.EnrollBoardInfo
-import com.catchmate.domain.model.EnrollContent
-import com.catchmate.domain.model.EnrollUserInfo
-import com.catchmate.domain.model.GetAllReceivedEnrollResponse
-import com.catchmate.domain.model.GetEnrollNewCountResponse
-import com.catchmate.domain.model.GetReceivedEnrollResponse
-import com.catchmate.domain.model.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.PatchEnrollAcceptResponse
-import com.catchmate.domain.model.PatchEnrollRejectResponse
-import com.catchmate.domain.model.PostEnrollRequest
-import com.catchmate.domain.model.PostEnrollResponse
-import com.catchmate.domain.model.ReceivedEnrollContent
+import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
+import com.catchmate.data.dto.enroll.EnrollBoardInfoDTO
+import com.catchmate.data.dto.enroll.EnrollContentDTO
+import com.catchmate.data.dto.enroll.EnrollUserInfoDTO
+import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
+import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
+import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
+import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
+import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
+import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
+import com.catchmate.data.dto.enroll.ReceivedEnrollContentDTO
+import com.catchmate.domain.model.enroll.DeleteEnrollResponse
+import com.catchmate.domain.model.enroll.EnrollBoardInfo
+import com.catchmate.domain.model.enroll.EnrollContent
+import com.catchmate.domain.model.enroll.EnrollUserInfo
+import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
+import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
+import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
+import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
+import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enroll.PostEnrollResponse
+import com.catchmate.domain.model.enroll.ReceivedEnrollContent
 
 object EnrollMapper {
     fun toPostEnrollRequestDTO(request: PostEnrollRequest): PostEnrollRequestDTO =

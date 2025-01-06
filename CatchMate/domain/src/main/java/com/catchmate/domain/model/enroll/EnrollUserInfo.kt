@@ -1,6 +1,6 @@
-package com.catchmate.data.dto
+package com.catchmate.domain.model.enroll
 
-data class EnrollUserInfoDTO(
+data class EnrollUserInfo(
     val userId: Long,
     val nickName: String,
     val picture: String,

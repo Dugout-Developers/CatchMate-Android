@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.enroll
 
-import com.catchmate.domain.model.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
 import com.catchmate.domain.repository.EnrollRepository
 import javax.inject.Inject
 
