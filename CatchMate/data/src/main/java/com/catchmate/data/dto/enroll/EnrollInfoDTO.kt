@@ -1,9 +1,10 @@
 package com.catchmate.data.dto.enroll
 
-data class EnrollContentDTO(
+data class EnrollInfoDTO(
     val enrollId: Long,
     val acceptStatus: String,
     val description: String,
+    val requestDate: String,
     val userInfo: EnrollUserInfoDTO,
     val boardInfo: EnrollBoardInfoDTO,
 )
