@@ -1,4 +1,4 @@
-package com.catchmate.domain.model
+package com.catchmate.domain.model.notification
 
 data class Content(
     val notificationId: Long,

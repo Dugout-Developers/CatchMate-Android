@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.notification
 
-import com.catchmate.domain.model.DeleteReceivedNotificationResponse
+import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
 import javax.inject.Inject
 

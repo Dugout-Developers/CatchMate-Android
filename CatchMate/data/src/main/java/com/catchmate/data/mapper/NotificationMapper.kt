@@ -1,15 +1,15 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.BoardInfoDTO
-import com.catchmate.data.dto.ContentDTO
-import com.catchmate.data.dto.DeleteReceivedNotificationResponseDTO
-import com.catchmate.data.dto.GetReceivedNotificationListResponseDTO
-import com.catchmate.data.dto.GetReceivedNotificationResponseDTO
-import com.catchmate.domain.model.BoardInfo
-import com.catchmate.domain.model.Content
-import com.catchmate.domain.model.DeleteReceivedNotificationResponse
-import com.catchmate.domain.model.GetReceivedNotificationListResponse
-import com.catchmate.domain.model.GetReceivedNotificationResponse
+import com.catchmate.data.dto.notification.BoardInfoDTO
+import com.catchmate.data.dto.notification.ContentDTO
+import com.catchmate.data.dto.notification.DeleteReceivedNotificationResponseDTO
+import com.catchmate.data.dto.notification.GetReceivedNotificationListResponseDTO
+import com.catchmate.data.dto.notification.GetReceivedNotificationResponseDTO
+import com.catchmate.domain.model.notification.BoardInfo
+import com.catchmate.domain.model.notification.Content
+import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 
 object NotificationMapper {
     fun toGetReceivedNotificationListResponse(responseDTO: GetReceivedNotificationListResponseDTO): GetReceivedNotificationListResponse =

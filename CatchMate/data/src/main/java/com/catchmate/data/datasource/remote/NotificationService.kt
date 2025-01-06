@@ -1,8 +1,8 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.DeleteReceivedNotificationResponseDTO
-import com.catchmate.data.dto.GetReceivedNotificationListResponseDTO
-import com.catchmate.data.dto.GetReceivedNotificationResponseDTO
+import com.catchmate.data.dto.notification.DeleteReceivedNotificationResponseDTO
+import com.catchmate.data.dto.notification.GetReceivedNotificationListResponseDTO
+import com.catchmate.data.dto.notification.GetReceivedNotificationResponseDTO
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET

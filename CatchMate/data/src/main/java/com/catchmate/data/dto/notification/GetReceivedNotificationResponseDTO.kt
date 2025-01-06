@@ -1,7 +1,7 @@
-package com.catchmate.data.dto
+package com.catchmate.data.dto.notification
 
-data class ContentDTO(
-    val notificationId: Long,
+data class GetReceivedNotificationResponseDTO(
+    val notificationID: Long,
     val boardInfo: BoardInfoDTO,
     val title: String,
     val body: String,

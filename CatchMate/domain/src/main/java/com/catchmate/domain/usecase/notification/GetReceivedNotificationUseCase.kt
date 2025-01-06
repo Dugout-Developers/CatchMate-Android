@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.notification
 
-import com.catchmate.domain.model.GetReceivedNotificationResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
 import javax.inject.Inject
 

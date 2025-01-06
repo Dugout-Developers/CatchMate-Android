@@ -1,4 +1,4 @@
-package com.catchmate.data.dto
+package com.catchmate.data.dto.notification
 
 data class BoardInfoDTO(
     val boardId: Long,
