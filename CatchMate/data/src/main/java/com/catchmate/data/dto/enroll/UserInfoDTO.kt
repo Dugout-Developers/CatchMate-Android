@@ -2,7 +2,7 @@ package com.catchmate.data.dto.enroll
 
 import com.catchmate.data.dto.user.FavoriteClubDTO
 
-data class EnrollUserInfoDTO(
+data class UserInfoDTO(
     val userId: Long,
     val email: String,
     val profileImageUrl: String,

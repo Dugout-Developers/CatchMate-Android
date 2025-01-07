@@ -3,7 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.enroll.EnrollBoardInfoDTO
 import com.catchmate.data.dto.enroll.EnrollInfoDTO
-import com.catchmate.data.dto.enroll.EnrollUserInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
@@ -18,7 +18,7 @@ import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollBoardInfo
 import com.catchmate.domain.model.enroll.EnrollInfo
-import com.catchmate.domain.model.enroll.EnrollUserInfo
+import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
@@ -70,8 +70,8 @@ object EnrollMapper {
             boardInfo = toEnrollBoardInfo(dto.boardInfo),
         )
 
-    private fun toEnrollUserInfo(dto: EnrollUserInfoDTO): EnrollUserInfo =
-        EnrollUserInfo(
+    private fun toEnrollUserInfo(dto: UserInfoDTO): UserInfo =
+        UserInfo(
             userId = dto.userId,
             email = dto.email,
             profileImageUrl = dto.profileImageUrl,
@@ -146,6 +146,6 @@ object EnrollMapper {
     fun toDeleteEnrollResponse(responseDTO: DeleteEnrollResponseDTO): DeleteEnrollResponse =
         DeleteEnrollResponse(
             enrollId = responseDTO.enrollId,
-            deleteAt = responseDTO.deleteAt,
+            deletedAt = responseDTO.deletedAt,
         )
 }

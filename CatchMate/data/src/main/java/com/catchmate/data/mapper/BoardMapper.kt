@@ -9,6 +9,9 @@ import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PutBoardRequestDTO
 import com.catchmate.data.dto.board.PutBoardResponseDTO
 import com.catchmate.data.dto.board.WriterDTO
+import com.catchmate.data.dto.enroll.GameInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
+import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.domain.model.board.DeleteBoardRequest
 import com.catchmate.domain.model.board.GetBoardPagingResponse
 import com.catchmate.domain.model.board.GetBoardResponse
@@ -18,25 +21,76 @@ import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.Writer
+import com.catchmate.domain.model.enroll.GameInfo
+import com.catchmate.domain.model.enroll.UserInfo
+import com.catchmate.domain.model.user.FavoriteClub
 
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =
         PostBoardRequestDTO(
             title = request.title,
-            gameDate = request.gameDate,
-            location = request.location,
-            homeTeam = request.homeTeam,
-            awayTeam = request.awayTeam,
+            content = request.content,
             maxPerson = request.maxPerson,
-            cheerTeam = request.cheerTeam,
-            preferGender = request.preferGender,
-            preferAge = request.preferAge,
-            addInfo = request.addInfo,
+            cheerClubId = request.cheerClubId,
+            preferredGender = request.preferredGender,
+            preferredAgeRange = request.preferredAgeRange,
+            gameRequest = toGameRequestDTO(request.gameRequest),
+            isCompleted = request.isCompleted,
         )
 
-    fun toPostBoardResponse(responseDTO: PostBoardResponseDTO): PostBoardResponse =
+    private fun toGameRequestDTO(request: GameInfo): GameInfoDTO =
+        GameInfoDTO(
+            homeClubId = request.homeClubId,
+            awayClubId = request.awayClubId,
+            gameStartDate = request.gameStartDate,
+            location = request.location,
+        )
+
+    fun toPostBoardResponse(dto: PostBoardResponseDTO): PostBoardResponse =
         PostBoardResponse(
-            boardId = responseDTO.boardId,
+            boardId = dto.boardId,
+            title = dto.title,
+            content = dto.content,
+            cheerClubId = dto.cheerClubId,
+            currentPerson = dto.currentPerson,
+            maxPerson = dto.maxPerson,
+            preferredGender = dto.preferredGender,
+            preferredAgeRange = dto.preferredAgeRange,
+            gameInfo = toGameInfo(dto.gameInfo),
+            liftUpDate = dto.liftUpDate,
+            userInfo = toUserInfo(dto.userInfo),
+        )
+
+    private fun toGameInfo(dto: GameInfoDTO): GameInfo =
+        GameInfo(
+            homeClubId = dto.homeClubId,
+            awayClubId = dto.awayClubId,
+            gameStartDate = dto.gameStartDate,
+            location = dto.location,
+        )
+
+    private fun toUserInfo(dto: UserInfoDTO): UserInfo =
+        UserInfo(
+            userId = dto.userId,
+            email = dto.email,
+            profileImageUrl = dto.profileImageUrl,
+            gender = dto.gender,
+            allAlarm = dto.allAlarm,
+            chatAlarm = dto.chatAlarm,
+            enrollAlarm = dto.enrollAlarm,
+            eventAlarm = dto.eventAlarm,
+            nickName = dto.nickName,
+            favoriteClub = toFavoriteClub(dto.favoriteClub),
+            birthDate = dto.birthDate,
+            watchStyle = dto.watchStyle,
+        )
+
+    private fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
+        FavoriteClub(
+            id = dto.id,
+            name = dto.name,
+            homeStadium = dto.homeStadium,
+            region = dto.region,
         )
 
     fun toPutBoardRequestDTO(request: PutBoardRequest): PutBoardRequestDTO =

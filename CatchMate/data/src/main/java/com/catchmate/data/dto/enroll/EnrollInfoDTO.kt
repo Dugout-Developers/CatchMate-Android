@@ -5,6 +5,6 @@ data class EnrollInfoDTO(
     val acceptStatus: String,
     val description: String,
     val requestDate: String,
-    val userInfo: EnrollUserInfoDTO,
+    val userInfo: UserInfoDTO,
     val boardInfo: EnrollBoardInfoDTO,
 )

@@ -2,7 +2,7 @@ package com.catchmate.domain.model.enroll
 
 import com.catchmate.domain.model.user.FavoriteClub
 
-data class EnrollUserInfo(
+data class UserInfo(
     val userId: Long,
     val email: String,
     val profileImageUrl: String,

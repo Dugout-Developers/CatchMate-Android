@@ -18,7 +18,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface BoardService {
-    @POST("board/write")
+    @POST("board")
     suspend fun postBoard(
         @Body postBoardRequestDTO: PostBoardRequestDTO,
     ): Response<PostBoardResponseDTO?>

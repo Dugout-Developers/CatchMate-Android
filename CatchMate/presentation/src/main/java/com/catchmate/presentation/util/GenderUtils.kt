@@ -4,11 +4,11 @@ import android.content.Context
 import com.catchmate.presentation.R
 
 object GenderUtils {
-    fun convertPostGender(gender: String): String? =
+    fun convertPostGender(gender: String): String =
         when (gender) {
             "여성" -> "F"
             "남성" -> "M"
-            else -> null
+            else -> "N"
         }
 
     fun convertBoardGender(
@@ -17,6 +17,8 @@ object GenderUtils {
     ): String =
         when (gender) {
             "F" -> context.getString(R.string.female)
-            else -> context.getString(R.string.male)
+            "M" -> context.getString(R.string.male)
+            "N" -> "성별무관"
+            else -> ""
         }
 }

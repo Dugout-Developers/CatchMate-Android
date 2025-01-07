@@ -7,9 +7,9 @@ data class EnrollBoardInfo(
     val cheerClubId: Int,
     val currentPerson: Int,
     val maxPerson: Int,
-    val preferredGender: String? = null,
-    val preferredAgeRange: List<String>?= null,
+    val preferredGender: String,
+    val preferredAgeRange: List<String>,
     val gameInfo: GameInfo,
     val liftUpDate: String,
-    val userInfo: EnrollUserInfo,
+    val userInfo: UserInfo,
 )

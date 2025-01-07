@@ -5,6 +5,6 @@ data class EnrollInfo(
     val acceptStatus: String,
     val description: String,
     val requestDate: String,
-    val userInfo: EnrollUserInfo,
+    val userInfo: UserInfo,
     val boardInfo: EnrollBoardInfo,
 )

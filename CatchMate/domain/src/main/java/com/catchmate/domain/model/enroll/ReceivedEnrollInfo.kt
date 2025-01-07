@@ -5,7 +5,7 @@ data class ReceivedEnrollInfo(
     val acceptStatus: String,
     val description: String,
     val receiveDate: String,
-    val userInfo: EnrollUserInfo,
+    val userInfo: UserInfo,
     val boardInfo: EnrollBoardInfo,
     val new: Boolean,
 )

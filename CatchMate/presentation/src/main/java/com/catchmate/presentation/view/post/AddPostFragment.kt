@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
@@ -23,6 +24,7 @@ import com.catchmate.presentation.interaction.OnPeopleCountSelectedListener
 import com.catchmate.presentation.interaction.OnPlaceSelectedListener
 import com.catchmate.presentation.interaction.OnTeamSelectedListener
 import com.catchmate.presentation.util.AgeUtils
+import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
@@ -175,17 +177,13 @@ class AddPostFragment :
         binding.layoutAddPostFooter.btnFooterOne.setText(R.string.post_complete)
         binding.layoutAddPostFooter.btnFooterOne.setOnClickListener {
             val title = binding.edtAddPostTitle.text.toString()
-            val peopleCount =
+            val content = binding.edtAddPostAdditionalInfo.text.toString()
+            val maxPerson =
                 binding.tvAddPostPeopleCount.text
                     .toString()
                     .toInt()
-            val dateTime = addPostViewModel.gameDateTime.value.toString()
-            val homeTeam = addPostViewModel.homeTeamName.value.toString()
-            val awayTeam = addPostViewModel.awayTeamName.value.toString()
-            val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
-            val place = binding.tvAddPostPlace.text.toString()
-            val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
-            val preferGender =
+            val cheerClubId = ClubUtils.convertClubNameToId(binding.tvAddPostCheerTeam.text.toString())
+            val preferredGender =
                 if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
                     GenderUtils.convertPostGender(
                         binding.root
@@ -195,51 +193,48 @@ class AddPostFragment :
                             .toString(),
                     )
                 } else {
-                    null
+                    ""
                 }
-            val preferAge =
+            val preferredAgeRange =
                 if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                    AgeUtils.convertPostAge(
-                        binding.root
-                            .findViewById<Chip>(
-                                binding.chipgroupAddPostAge.checkedChipIds[0],
-                            ).text
-                            .toString(),
-                    )
+                    getCheckedAgeRange(binding.chipgroupAddPostAge.checkedChipIds).toList()
                 } else {
-                    null
+                    emptyList()
                 }
+            val homeClubId = ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
+            val awayClubId = ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
+            val gameStartDate = addPostViewModel.gameDateTime.value.toString()
+            val location = binding.tvAddPostPlace.text.toString()
+            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
 
             if (isEditMode) {
                 val boardEditRequest =
                     PutBoardRequest(
                         boardInfo?.boardId ?: 0,
                         title,
-                        dateTime,
-                        place,
-                        homeTeam,
-                        awayTeam,
-                        cheerTeam,
+                        gameStartDate,
+                        location,
+                        "",
+                        "",
+                        "",
                         boardInfo?.currentPerson ?: 0,
                         boardInfo?.maxPerson ?: 0,
-                        preferGender,
-                        preferAge,
-                        additionalInfo,
+                        "",
+                        null,
+                        content,
                     )
                 putBoard(boardEditRequest)
             } else {
                 val boardWriteRequest =
                     PostBoardRequest(
                         title,
-                        dateTime,
-                        place,
-                        homeTeam,
-                        awayTeam,
-                        peopleCount,
-                        cheerTeam,
-                        preferGender,
-                        preferAge,
-                        additionalInfo,
+                        content,
+                        maxPerson,
+                        cheerClubId,
+                        preferredGender,
+                        preferredAgeRange,
+                        gameRequest,
+                        true,
                     )
                 postBoardWrite(boardWriteRequest)
             }
@@ -413,6 +408,19 @@ class AddPostFragment :
             cheerTeam.isNotEmpty() &&
             place.isNotEmpty() &&
             additionalInfo.isNotEmpty()
+    }
+
+    private fun getCheckedAgeRange(checkedChipIds: List<Int>): MutableList<String> {
+        val ages: MutableList<String> = mutableListOf()
+        checkedChipIds.forEach { id ->
+            val age = AgeUtils.convertPostAge(
+                binding.root
+                    .findViewById<Chip>(id).text
+                    .toString(),
+            )
+            ages.add(age)
+        }
+        return ages
     }
 
     override fun onPeopleCountSelected(count: Int) {
