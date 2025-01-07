@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -20,11 +21,13 @@ import com.catchmate.domain.model.board.DeleteBoardRequest
 import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enumclass.Club
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.AgeUtils
+import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
@@ -120,7 +123,7 @@ class ReadPostFragment : Fragment() {
                         }
                         R.id.menuitem_post_update -> {
                             val bundle = Bundle()
-                            bundle.putSerializable("boardInfo", readPostViewModel.getBoardResponse.value)
+                            bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             true
                         }
@@ -144,7 +147,7 @@ class ReadPostFragment : Fragment() {
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.writer)
+            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.userInfo)
             findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
@@ -178,7 +181,7 @@ class ReadPostFragment : Fragment() {
     private fun initViewModel() {
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
-            initKebabMenuVisibility(response.writer.userId)
+            initKebabMenuVisibility(response.userInfo.userId) // 가시성 설정 아닌 작성자 본인 여부에 따른 팝업메뉴 분기 필요
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
@@ -222,12 +225,12 @@ class ReadPostFragment : Fragment() {
     private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
-            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameDate)
-            tvReadPostPlace.text = post.location
+            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate)
+            tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
-            val isCheerTeam = post.homeTeam == post.cheerTeam
+            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                post.homeTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -235,43 +238,97 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                post.awayTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
                 "read",
                 requireContext(),
             )
-            tvReadPostWriterNickname.text = post.writer.nickName
+            tvReadPostWriterNickname.text = post.userInfo.nickName
             DrawableCompat
                 .setTint(
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.writer.favGudan,
+                        post.userInfo.favoriteClub.name,
                         true,
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = post.writer.favGudan
-            tvReadPostWriterCheerStyle.text = post.writer.watchStyle
-            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.writer.gender)
-            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.writer.birthDate)
-            tvReadPostAdditionalInfo.text = post.addInfo
+            tvReadPostWriterTeam.text = post.userInfo.favoriteClub.name
+            tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
+            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.userInfo.gender)
+            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.userInfo.birthDate)
+            tvReadPostAdditionalInfo.text = post.content
             Glide
                 .with(this@ReadPostFragment)
-                .load(post.writer.picture)
+                .load(post.userInfo.profileImageUrl)
                 .into(ivReadPostWriterProfile)
 
-            // 선호 나이대, 성별 정보 추후 서버 로직 정리되면 반영
+            setGenderTextViewVisibility(
+                tvReadPostGender,
+                post.preferredGender,
+            )
+            setAgeTextViewVisibility(
+                tvReadPostRegardlessOfAge,
+                tvReadPostTeenager,
+                tvReadPostTwenties,
+                tvReadPostThirties,
+                tvReadPostFourties,
+                tvReadPostFifties,
+                post.preferredAgeRange,
+            )
 
-            if (userId == post.writer.userId) {
+            if (userId == post.userInfo.userId) {
                 // 신청 수락된 경우 (참여중일때)
                 readPostViewModel.setBoardEnrollState(EnrollState.ACCEPTED)
             } else {
                 // 아직 신청 안한 경우
                 readPostViewModel.setBoardEnrollState(EnrollState.APPLICABLE)
                 // 수락됐거나 거절됐거나 신청후대기중일때 분기 필요
+            }
+        }
+    }
+
+    private fun setGenderTextViewVisibility(
+        textView: TextView,
+        genderInfo: String,
+    ) {
+        if (genderInfo == "") {
+            textView.visibility = View.GONE
+        } else {
+            textView.visibility = View.VISIBLE
+            textView.text = genderInfo
+        }
+    }
+
+    private fun setAgeTextViewVisibility(
+        tvRegardlessOfAge: TextView,
+        tvTeenager: TextView,
+        tvTwenties: TextView,
+        tvThirties: TextView,
+        tvFourties: TextView,
+        tvFifties: TextView,
+        ages: List<String>,
+    ) {
+        if (ages.isEmpty()) {
+            tvRegardlessOfAge.visibility = View.GONE
+            tvTeenager.visibility = View.GONE
+            tvTwenties.visibility = View.GONE
+            tvThirties.visibility = View.GONE
+            tvFourties.visibility = View.GONE
+            tvFifties.visibility = View.GONE
+        } else {
+            ages.forEach { age ->
+                when (age) {
+                    "0" -> tvRegardlessOfAge.visibility = View.VISIBLE
+                    "10" -> tvTeenager.visibility = View.VISIBLE
+                    "20" -> tvTwenties.visibility = View.VISIBLE
+                    "30" -> tvThirties.visibility = View.VISIBLE
+                    "40" -> tvFourties.visibility = View.VISIBLE
+                    "50" -> tvFifties.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -287,14 +344,14 @@ class ReadPostFragment : Fragment() {
         dialogBinding.apply {
             val post = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameDate)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = post.location
+            tvApplicationDetailDialogPlace.text = post.gameInfo.location
 
-            val isCheerTeam = post.homeTeam == post.cheerTeam
+            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                post.homeTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -302,7 +359,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                post.awayTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

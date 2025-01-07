@@ -94,13 +94,13 @@ class AddPostFragment :
         binding.apply {
             edtAddPostTitle.setText(response.title)
             tvAddPostPeopleCount.text = response.maxPerson.toString()
-            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameDate))
-            addPostViewModel.setHomeTeamName(response.homeTeam)
-            addPostViewModel.setAwayTeamName(response.awayTeam)
-            tvAddPostCheerTeam.text = response.cheerTeam
-            tvAddPostPlace.text = response.location
-            edtAddPostAdditionalInfo.setText(response.addInfo)
-            tvAddPostAdditionalInfoLetterCount.text = response.addInfo.length.toString()
+            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameInfo.gameStartDate))
+            addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
+            addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
+            tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            tvAddPostPlace.text = response.gameInfo.location
+            edtAddPostAdditionalInfo.setText(response.content)
+            tvAddPostAdditionalInfoLetterCount.text = response.content.length.toString()
             layoutAddPostFooter.btnFooterOne.isEnabled = true
             // 성별, 나이대 반영 필
         }
@@ -108,9 +108,9 @@ class AddPostFragment :
 
     private fun getBoardInfo(): GetBoardResponse? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("boardInfo", GetBoardResponse::class.java)
+            arguments?.getParcelable("boardInfo", GetBoardResponse::class.java)
         } else {
-            arguments?.getSerializable("boardInfo") as GetBoardResponse
+            arguments?.getParcelable("boardInfo") as GetBoardResponse?
         }
 
     private fun getTokens() {

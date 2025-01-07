@@ -1,7 +1,10 @@
 package com.catchmate.domain.model.enroll
 
+import android.os.Parcelable
 import com.catchmate.domain.model.user.FavoriteClub
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UserInfo(
     val userId: Long,
     val email: String,
@@ -15,4 +18,4 @@ data class UserInfo(
     val favoriteClub: FavoriteClub,
     val birthDate: String,
     val watchStyle: String? = null,
-)
+) : Parcelable

@@ -1,19 +1,22 @@
 package com.catchmate.domain.model.board
 
+import android.os.Parcelable
+import com.catchmate.domain.model.enroll.GameInfo
+import com.catchmate.domain.model.enroll.UserInfo
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+@Parcelize
 data class GetBoardResponse(
     val boardId: Long,
-    val writer: Writer,
     val title: String,
-    val gameDate: String,
-    val location: String,
-    val homeTeam: String,
-    val awayTeam: String,
-    val cheerTeam: String,
-    val maxPerson: Int,
+    val content: String,
+    val cheerClubId: Int,
     val currentPerson: Int,
-    val preferGender: String? = null,
-    val preferAge: Int? = null,
-    val addInfo: String,
-) : Serializable
+    val maxPerson: Int,
+    val preferredGender: String,
+    val preferredAgeRange: List<String>,
+    val gameInfo: GameInfo,
+    val liftUpDate: String,
+    val userInfo: UserInfo,
+) : Parcelable

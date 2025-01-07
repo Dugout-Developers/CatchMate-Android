@@ -8,7 +8,6 @@ import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PutBoardRequestDTO
 import com.catchmate.data.dto.board.PutBoardResponseDTO
-import com.catchmate.data.dto.board.WriterDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
@@ -20,7 +19,6 @@ import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.board.PutBoardResponse
-import com.catchmate.domain.model.board.Writer
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.FavoriteClub
@@ -132,29 +130,16 @@ object BoardMapper {
     fun toGetBoardResponse(responseDTO: GetBoardResponseDTO): GetBoardResponse =
         GetBoardResponse(
             boardId = responseDTO.boardId,
-            writer = toWriter(responseDTO.writer),
             title = responseDTO.title,
-            gameDate = responseDTO.gameDate,
-            location = responseDTO.location,
-            homeTeam = responseDTO.homeTeam,
-            awayTeam = responseDTO.awayTeam,
-            cheerTeam = responseDTO.cheerTeam,
-            maxPerson = responseDTO.maxPerson,
+            content = responseDTO.content,
+            cheerClubId = responseDTO.cheerClubId,
             currentPerson = responseDTO.currentPerson,
-            preferGender = responseDTO.preferGender,
-            preferAge = responseDTO.preferAge,
-            addInfo = responseDTO.addInfo,
-        )
-
-    private fun toWriter(writerDTO: WriterDTO): Writer =
-        Writer(
-            userId = writerDTO.userId,
-            nickName = writerDTO.nickName,
-            picture = writerDTO.picture,
-            favGudan = writerDTO.favGudan,
-            watchStyle = writerDTO.watchStyle,
-            gender = writerDTO.gender,
-            birthDate = writerDTO.birthDate,
+            maxPerson = responseDTO.maxPerson,
+            preferredGender = responseDTO.preferredGender,
+            preferredAgeRange = responseDTO.preferredAgeRange,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
+            liftUpDate = responseDTO.liftUpDate,
+            userInfo = toUserInfo(responseDTO.userInfo),
         )
 
     fun toDeleteBoardRequestDTO(request: DeleteBoardRequest): DeleteBoardRequestDTO =

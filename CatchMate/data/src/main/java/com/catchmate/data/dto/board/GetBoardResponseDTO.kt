@@ -1,17 +1,18 @@
 package com.catchmate.data.dto.board
 
+import com.catchmate.data.dto.enroll.GameInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
+
 data class GetBoardResponseDTO(
     val boardId: Long,
-    val writer: WriterDTO,
     val title: String,
-    val gameDate: String,
-    val location: String,
-    val homeTeam: String,
-    val awayTeam: String,
-    val cheerTeam: String,
-    val maxPerson: Int,
+    val content: String,
+    val cheerClubId: Int,
     val currentPerson: Int,
-    val preferGender: String? = null,
-    val preferAge: Int? = null,
-    val addInfo: String,
+    val maxPerson: Int,
+    val preferredGender: String,
+    val preferredAgeRange: List<String>,
+    val gameInfo: GameInfoDTO,
+    val liftUpDate: String,
+    val userInfo: UserInfoDTO,
 )

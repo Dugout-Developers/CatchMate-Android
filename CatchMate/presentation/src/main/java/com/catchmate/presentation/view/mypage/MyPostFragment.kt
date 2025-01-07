@@ -8,14 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.catchmate.domain.model.board.Writer
+import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.presentation.R
 
 class MyPostFragment : Fragment() {
-    private var writer: Writer? = null
+    private var userInfo: UserInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        writer = getUserInfo()
+        userInfo = getUserInfo()
     }
 
     override fun onCreateView(
@@ -32,13 +33,13 @@ class MyPostFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e("Writer", "${writer?.userId} / ${writer?.nickName}")
+        Log.e("Writer", "${userInfo?.userId} / ${userInfo?.nickName}")
     }
 
-    private fun getUserInfo(): Writer? =
+    private fun getUserInfo(): UserInfo? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("userInfo", Writer::class.java)
+            arguments?.getParcelable("userInfo", UserInfo::class.java)
         } else {
-            arguments?.getParcelable("userInfo") as Writer?
+            arguments?.getParcelable("userInfo") as UserInfo?
         }
 }
