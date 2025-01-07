@@ -5,11 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.usecase.board.DeleteBoardLikeUseCase
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
@@ -25,15 +28,20 @@ class ReadPostViewModel
         private val getBoardUseCase: GetBoardUseCase,
         private val deleteBoardUseCase: DeleteBoardUseCase,
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
+        private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
         val getBoardResponse: LiveData<GetBoardResponse>
             get() = _getBoardResponse
 
-        private val _postBoardLikeResponse = MutableLiveData<Int>()
-        val postBoardLikeResponse: LiveData<Int>
+        private val _postBoardLikeResponse = MutableLiveData<PostBoardLikeResponse>()
+        val postBoardLikeResponse: LiveData<PostBoardLikeResponse>
             get() = _postBoardLikeResponse
+
+        private val _deleteBoardLikeResponse = MutableLiveData<DeleteBoardLikeResponse>()
+        val deleteBoardLikeResponse: LiveData<DeleteBoardLikeResponse>
+            get() = _deleteBoardLikeResponse
 
         private val _boardEnrollState = MutableLiveData<EnrollState>()
         val boardEnrollState: LiveData<EnrollState>
@@ -71,15 +79,28 @@ class ReadPostViewModel
             }
         }
 
-        fun postBoardLike(
-            boardId: Long,
-            flag: Int,
-        ) {
+        fun postBoardLike(boardId: Long) {
             viewModelScope.launch {
-                val result = postBoardLikeUseCase.postBoardLike(boardId, flag)
+                val result = postBoardLikeUseCase.postBoardLike(boardId)
                 result
                     .onSuccess { response ->
                         _postBoardLikeResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun deleteBoardLike(boardId: Long) {
+            viewModelScope.launch {
+                val result = deleteBoardLikeUseCase.deleteBoardLike(boardId)
+                result
+                    .onSuccess { response ->
+                        _deleteBoardLikeResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

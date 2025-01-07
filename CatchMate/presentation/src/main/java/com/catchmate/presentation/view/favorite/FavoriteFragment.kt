@@ -137,7 +137,7 @@ class FavoriteFragment :
         boardId: Long,
         position: Int,
     ) {
-        favoriteViewModel.postBoardLike(boardId, FAVORITE_CANCEL_FLAG)
+        favoriteViewModel.deleteBoardLike(boardId)
         val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
         adapter.removeUnlikedPost(position)
     }
@@ -145,9 +145,5 @@ class FavoriteFragment :
     override fun onPostItemAllRemoved() {
         binding.rvFavoritePost.visibility = View.GONE
         binding.layoutFavoriteNoList.visibility = View.VISIBLE
-    }
-
-    companion object {
-        const val FAVORITE_CANCEL_FLAG = 0
     }
 }

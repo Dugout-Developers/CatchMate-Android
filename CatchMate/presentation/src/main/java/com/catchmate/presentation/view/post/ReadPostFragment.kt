@@ -143,9 +143,9 @@ class ReadPostFragment : Fragment() {
             }
             toggleLikedFooterLiked.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    readPostViewModel.run { postBoardLike(boardId, 1) }
+                    readPostViewModel.postBoardLike(boardId)
                 } else {
-                    readPostViewModel.postBoardLike(boardId, 0)
+                    readPostViewModel.deleteBoardLike(boardId)
                 }
             }
             btnLikedFooterRegister.setOnClickListener {

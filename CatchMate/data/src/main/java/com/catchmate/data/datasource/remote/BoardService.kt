@@ -1,11 +1,13 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
 import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
+import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import retrofit2.Response
@@ -23,11 +25,10 @@ interface BoardService {
         @Body postBoardRequestDTO: PostBoardRequestDTO,
     ): Response<PostBoardResponseDTO?>
 
-    @POST("board/like/{boardId}")
+    @POST("board/bookmark/{boardId}")
     suspend fun postBoardLike(
         @Path("boardId") boardId: Long,
-        @Query("flag") flag: Int,
-    ): Response<Int>
+    ): Response<PostBoardLikeResponseDTO?>
 
     @PATCH("board/{boardId}")
     suspend fun patchBoard(
@@ -55,4 +56,9 @@ interface BoardService {
     suspend fun deleteBoard(
         @Path("boardId") boardId: Long,
     ): Response<DeleteBoardResponseDTO?>
+
+    @DELETE("board/bookmark/{boardId}")
+    suspend fun deleteBoardLike(
+        @Path("boardId") boardId: Long,
+    ): Response<DeleteBoardLikeResponseDTO?>
 }
