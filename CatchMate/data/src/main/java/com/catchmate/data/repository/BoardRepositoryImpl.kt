@@ -6,7 +6,7 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardRequest
-import com.catchmate.domain.model.board.GetBoardPagingResponse
+import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
@@ -77,18 +77,17 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getBoardPaging(
-            pageNum: Long,
-            gudans: String,
-            people: Int,
-            gameDate: String,
-        ): Result<List<GetBoardPagingResponse>> =
+        override suspend fun getBoardList(
+            gameStartDate: String?,
+            maxPerson: Int?,
+            preferredTeamId: Int?,
+        ): Result<GetBoardListResponse> =
             try {
-                val response = boardApi.getBoardPaging(pageNum, gudans, people, gameDate)
+                val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetBoardPagingResponse(it) }
-                    Result.success(body ?: emptyList())
+                    val body = response.body()?.let { BoardMapper.toGetBoardListResponse(it) } ?: throw java.lang.NullPointerException("Null Response")
+                    Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))

@@ -1,7 +1,7 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.board.DeleteBoardRequestDTO
-import com.catchmate.data.dto.board.GetBoardPagingResponseDTO
+import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
@@ -34,13 +34,13 @@ interface BoardService {
         @Body putBoardRequestDTO: PutBoardRequestDTO,
     ): Response<PutBoardResponseDTO?>
 
-    @GET("board/page/{pageNum}")
-    suspend fun getBoardPaging(
-        @Path("pageNum") pageNum: Long,
-        @Query("gudans") gudans: String,
-        @Query("people") people: Int,
-        @Query("gameDate") gameDate: String,
-    ): Response<List<GetBoardPagingResponseDTO>?>
+    // 필터 미지정 시 모든 쿼리 값 안넣고 호출
+    @GET("board/list")
+    suspend fun getBoardList(
+        @Query("gameStartDate") gameStartDate: String? = null,
+        @Query("maxPerson") maxPerson: Int? = null,
+        @Query("preferredTeamId") preferredTeamId: Int?= null,
+    ): Response<GetBoardListResponseDTO?>
 
     @GET("board/{boardId}")
     suspend fun getBoard(

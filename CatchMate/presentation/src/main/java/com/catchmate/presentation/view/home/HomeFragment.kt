@@ -34,6 +34,10 @@ class HomeFragment :
     private var page: Long = 1
     private var isNextPageExist = true
 
+    private var gameStartDate: String? = null
+    private var maxPerson: Int? = null
+    private var preferredTeamId: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -93,20 +97,22 @@ class HomeFragment :
     }
 
     private fun initViewModel() {
-        homeViewModel.getBoardPaging(
-            pageNum = page++,
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamId,
         )
-        homeViewModel.getBoardPagingResponse.observe(viewLifecycleOwner) { boardList ->
-            boardList?.let {
-                if (boardList.isNotEmpty()) {
-                    Log.e("게시글 목록 존재", boardList.size.toString())
-                    isNextPageExist = true
+        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                if (response.boardInfoList.isNotEmpty()) {
+                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
+//                    isNextPageExist = true
                     val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                    adapter.updatePostList(boardList)
+                    adapter.updatePostList(response.boardInfoList)
                 } else {
                     // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
-                    Log.e("게시글 목록 더이상 없음", boardList.size.toString())
-                    isNextPageExist = false
+                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
+//                    isNextPageExist = false
                 }
             }
         }
@@ -154,29 +160,29 @@ class HomeFragment :
         binding.rvHomePosts.apply {
             adapter = HomePostAdapter(requireContext(), layoutInflater, this@HomeFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addOnScrollListener(
-                object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(
-                        recyclerView: RecyclerView,
-                        dx: Int,
-                        dy: Int,
-                    ) {
-                        super.onScrolled(recyclerView, dx, dy)
-                        val lastVisibleItemPosition =
-                            (recyclerView.layoutManager as LinearLayoutManager)
-                                .findLastCompletelyVisibleItemPosition()
-                        val itemTotalCount = recyclerView.adapter!!.itemCount
-
-                        if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
-                            if (isNextPageExist) {
-                                homeViewModel.getBoardPaging(
-                                    pageNum = page++,
-                                )
-                            }
-                        }
-                    }
-                },
-            )
+//            addOnScrollListener(
+//                object : RecyclerView.OnScrollListener() {
+//                    override fun onScrolled(
+//                        recyclerView: RecyclerView,
+//                        dx: Int,
+//                        dy: Int,
+//                    ) {
+//                        super.onScrolled(recyclerView, dx, dy)
+//                        val lastVisibleItemPosition =
+//                            (recyclerView.layoutManager as LinearLayoutManager)
+//                                .findLastCompletelyVisibleItemPosition()
+//                        val itemTotalCount = recyclerView.adapter!!.itemCount
+//
+//                        if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
+//                            if (isNextPageExist) {
+//                                homeViewModel.getBoardPaging(
+//                                    pageNum = page++,
+//                                )
+//                            }
+//                        }
+//                    }
+//                },
+//            )
         }
     }
 
