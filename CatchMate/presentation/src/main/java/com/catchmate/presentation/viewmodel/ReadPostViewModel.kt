@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
@@ -43,8 +43,8 @@ class ReadPostViewModel
         val postEnrollResponse: LiveData<PostEnrollResponse>
             get() = _postEnrollResponse
 
-        private val _deleteBoardResponse = MutableLiveData<Int>()
-        val deleteBoardResponse: LiveData<Int>
+        private val _deleteBoardResponse = MutableLiveData<DeleteBoardResponse>()
+        val deleteBoardResponse: LiveData<DeleteBoardResponse>
             get() = _deleteBoardResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -113,9 +113,9 @@ class ReadPostViewModel
             _boardEnrollState.value = state
         }
 
-        fun deleteBoard(deleteBoardRequest: DeleteBoardRequest) {
+        fun deleteBoard(boardId: Long) {
             viewModelScope.launch {
-                val result = deleteBoardUseCase.deleteBoard(deleteBoardRequest)
+                val result = deleteBoardUseCase.deleteBoard(boardId)
                 result
                     .onSuccess { response ->
                         _deleteBoardResponse.value = response

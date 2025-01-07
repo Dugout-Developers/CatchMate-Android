@@ -1,26 +1,26 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.board.BoardDTO
-import com.catchmate.data.dto.board.DeleteBoardRequestDTO
+import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
-import com.catchmate.data.dto.board.PostBoardRequestDTO
-import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
+import com.catchmate.data.dto.board.PostBoardRequestDTO
+import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.domain.model.board.Board
-import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
-import com.catchmate.domain.model.board.PostBoardRequest
-import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.FavoriteClub
@@ -154,9 +154,10 @@ object BoardMapper {
             userInfo = toUserInfo(responseDTO.userInfo),
         )
 
-    fun toDeleteBoardRequestDTO(request: DeleteBoardRequest): DeleteBoardRequestDTO =
-        DeleteBoardRequestDTO(
-            boardId = request.boardId,
+    fun toDeleteBoardResponse(dto: DeleteBoardResponseDTO): DeleteBoardResponse =
+        DeleteBoardResponse(
+            boardId = dto.boardId,
+            deletedAt = dto.deletedAt,
         )
 
     fun toGetLikedBoardResponse(responseDTO: List<GetLikedBoardResponseDTO>): List<GetLikedBoardResponse> =

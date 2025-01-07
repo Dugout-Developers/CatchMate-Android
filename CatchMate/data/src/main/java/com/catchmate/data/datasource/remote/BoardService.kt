@@ -1,13 +1,13 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.board.DeleteBoardRequestDTO
+import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
-import com.catchmate.data.dto.board.PostBoardRequestDTO
-import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
+import com.catchmate.data.dto.board.PostBoardRequestDTO
+import com.catchmate.data.dto.board.PostBoardResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -51,8 +51,8 @@ interface BoardService {
     @GET("board/likes")
     suspend fun getLikedBoard(): Response<List<GetLikedBoardResponseDTO>?>
 
-    @DELETE("board/remove")
+    @DELETE("board/{boardId}")
     suspend fun deleteBoard(
-        @Body deleteBoardRequest: DeleteBoardRequestDTO,
-    ): Response<Int>
+        @Path("boardId") boardId: Long,
+    ): Response<DeleteBoardResponseDTO?>
 }

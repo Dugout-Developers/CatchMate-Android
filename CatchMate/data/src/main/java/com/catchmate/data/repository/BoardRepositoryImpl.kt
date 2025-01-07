@@ -5,14 +5,14 @@ import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.board.DeleteBoardRequest
+import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
-import com.catchmate.domain.model.board.PostBoardRequest
-import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -135,12 +135,13 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun deleteBoard(deleteBoardRequest: DeleteBoardRequest): Result<Int> =
+        override suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse> =
             try {
-                val response = boardApi.deleteBoard(BoardMapper.toDeleteBoardRequestDTO(deleteBoardRequest))
+                val response = boardApi.deleteBoard(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    Result.success(response.code())
+                    val body = response.body()?.let { BoardMapper.toDeleteBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
