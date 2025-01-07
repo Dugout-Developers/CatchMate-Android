@@ -38,4 +38,6 @@ object AgeUtils {
             else -> "아동"
         }
     }
+
+    fun convertAgeStringToList(age: String): List<String> = age.split(",").map { it }
 }

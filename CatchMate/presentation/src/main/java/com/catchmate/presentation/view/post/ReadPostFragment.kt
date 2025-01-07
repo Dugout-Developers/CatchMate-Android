@@ -15,13 +15,13 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.board.DeleteBoardRequest
-import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
-import com.catchmate.domain.model.enumclass.Club
+import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
@@ -32,7 +32,6 @@ import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -46,14 +45,11 @@ class ReadPostFragment : Fragment() {
     private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
-
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         boardId = getBoardId()
+        Log.d("readpostboardId", boardId.toString())
     }
 
     override fun onCreateView(
@@ -70,7 +66,6 @@ class ReadPostFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        getTokens()
         initViewModel()
         initHeader()
         initFooter()
@@ -83,28 +78,6 @@ class ReadPostFragment : Fragment() {
     }
 
     private fun getBoardId(): Long = arguments?.getLong("boardId")!!
-
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.getUserId()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-                readPostViewModel.getBoard(boardId)
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
-        localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
-            if (userId != null) {
-                this.userId = userId
-            }
-        }
-    }
 
     private fun initHeader() {
         binding.layoutReadPostHeader.apply {
@@ -179,6 +152,7 @@ class ReadPostFragment : Fragment() {
     }
 
     private fun initViewModel() {
+        readPostViewModel.getBoard(boardId)
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
             initKebabMenuVisibility(response.userInfo.userId) // 가시성 설정 아닌 작성자 본인 여부에 따른 팝업메뉴 분기 필요
@@ -214,6 +188,21 @@ class ReadPostFragment : Fragment() {
             if (code == 200) {
                 Log.d("삭제 성공", "")
                 findNavController().popBackStack()
+            }
+        }
+        readPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.readPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, null, navOptions)
+            }
+        }
+        readPostViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
@@ -256,7 +245,7 @@ class ReadPostFragment : Fragment() {
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = post.userInfo.favoriteClub.name
+            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.id)
             tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
             tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.userInfo.gender)
             tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.userInfo.birthDate)
@@ -270,6 +259,7 @@ class ReadPostFragment : Fragment() {
                 tvReadPostGender,
                 post.preferredGender,
             )
+            val ages = AgeUtils.convertAgeStringToList(post.preferredAgeRange)
             setAgeTextViewVisibility(
                 tvReadPostRegardlessOfAge,
                 tvReadPostTeenager,
@@ -277,7 +267,7 @@ class ReadPostFragment : Fragment() {
                 tvReadPostThirties,
                 tvReadPostFourties,
                 tvReadPostFifties,
-                post.preferredAgeRange,
+                ages,
             )
 
             if (userId == post.userInfo.userId) {
@@ -295,11 +285,12 @@ class ReadPostFragment : Fragment() {
         textView: TextView,
         genderInfo: String,
     ) {
-        if (genderInfo == "") {
+        val gender = GenderUtils.convertBoardGender(requireContext(), genderInfo)
+        if (gender == "") {
             textView.visibility = View.GONE
         } else {
             textView.visibility = View.VISIBLE
-            textView.text = genderInfo
+            textView.text = gender
         }
     }
 

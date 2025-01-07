@@ -18,7 +18,7 @@ object GenderUtils {
         when (gender) {
             "F" -> context.getString(R.string.female)
             "M" -> context.getString(R.string.male)
-            "N" -> "성별무관"
+            "N" -> context.getString(R.string.regardless_of_gender)
             else -> ""
         }
 }
