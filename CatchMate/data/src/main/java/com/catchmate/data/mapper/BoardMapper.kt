@@ -138,6 +138,7 @@ object BoardMapper {
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
             preferredGender = dto.preferredGender,
+            preferredAgeRange = dto.preferredAgeRange,
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
@@ -164,20 +165,10 @@ object BoardMapper {
             deletedAt = dto.deletedAt,
         )
 
-    fun toGetLikedBoardResponse(responseDTO: List<GetLikedBoardResponseDTO>): List<GetLikedBoardResponse> =
-        responseDTO.map { board ->
-            GetLikedBoardResponse(
-                boardId = board.boardId,
-                title = board.title,
-                gameDate = board.gameDate,
-                location = board.location,
-                homeTeam = board.homeTeam,
-                awayTeam = board.awayTeam,
-                cheerTeam = board.cheerTeam,
-                currentPerson = board.currentPerson,
-                maxPerson = board.maxPerson,
-            )
-        }
+    fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
+        GetLikedBoardResponse(
+            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) }
+        )
 
     fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse =
         PostBoardLikeResponse(dto.state)

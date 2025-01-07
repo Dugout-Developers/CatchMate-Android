@@ -118,13 +118,13 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getLikedBoard(): Result<List<GetLikedBoardResponse>> =
+        override suspend fun getLikedBoard(): Result<GetLikedBoardResponse> =
             try {
                 val response = boardApi.getLikedBoard()
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetLikedBoardResponse(it) }
-                    Result.success(body ?: emptyList())
+                    val body = response.body()?.let { BoardMapper.toGetLikedBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))

@@ -11,6 +11,7 @@ data class BoardDTO(
     val currentPerson: Int,
     val maxPerson: Int,
     val preferredGender: String,
+    val preferredAgeRange: String,
     val gameInfo: GameInfoDTO,
     val liftUpDate: String,
     val userInfo: UserInfoDTO,

@@ -83,12 +83,12 @@ class FavoriteFragment :
 
     private fun initViewModel() {
         favoriteViewModel.getLikedBoard()
-        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { likedList ->
-            if (likedList.isNotEmpty()) {
+        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { response ->
+            if (response.boardInfoList.isNotEmpty()) {
                 binding.layoutFavoriteNoList.visibility = View.GONE
                 binding.rvFavoritePost.visibility = View.VISIBLE
                 val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-                adapter.updateLikedList(likedList)
+                adapter.updateLikedList(response.boardInfoList)
             } else {
                 binding.layoutFavoriteNoList.visibility = View.VISIBLE
                 binding.rvFavoritePost.visibility = View.GONE

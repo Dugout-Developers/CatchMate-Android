@@ -29,7 +29,7 @@ interface BoardRepository {
 
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
 
-    suspend fun getLikedBoard(): Result<List<GetLikedBoardResponse>>
+    suspend fun getLikedBoard(): Result<GetLikedBoardResponse>
 
     suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse>
 

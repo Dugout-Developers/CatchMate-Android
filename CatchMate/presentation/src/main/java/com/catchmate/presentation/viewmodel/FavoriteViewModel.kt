@@ -20,8 +20,8 @@ class FavoriteViewModel
         private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val getLikedBoardUseCase: GetLikedBoardUseCase,
     ) : ViewModel() {
-        private val _getLikedBoardResponse = MutableLiveData<List<GetLikedBoardResponse>>()
-        val getLikedBoardResponse: LiveData<List<GetLikedBoardResponse>>
+        private val _getLikedBoardResponse = MutableLiveData<GetLikedBoardResponse>()
+        val getLikedBoardResponse: LiveData<GetLikedBoardResponse>
             get() = _getLikedBoardResponse
 
         private val _errorMessage = MutableLiveData<String>()

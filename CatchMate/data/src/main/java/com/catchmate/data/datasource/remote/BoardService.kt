@@ -49,8 +49,8 @@ interface BoardService {
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
 
-    @GET("board/likes")
-    suspend fun getLikedBoard(): Response<List<GetLikedBoardResponseDTO>?>
+    @GET("board/bookmark")
+    suspend fun getLikedBoard(): Response<GetLikedBoardResponseDTO?>
 
     @DELETE("board/{boardId}")
     suspend fun deleteBoard(
