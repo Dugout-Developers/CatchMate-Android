@@ -102,7 +102,24 @@ class AddPostFragment :
             edtAddPostAdditionalInfo.setText(response.content)
             tvAddPostAdditionalInfoLetterCount.text = response.content.length.toString()
             layoutAddPostFooter.btnFooterOne.isEnabled = true
-            // 성별, 나이대 반영 필
+
+            when (response.preferredGender) {
+                "F" -> chipAddPostGenderFemale.isChecked = true
+                "M" -> chipAddPostGenderMale.isChecked = true
+                "N" -> chipAddPostGenderRegardless.isChecked = true
+            }
+
+            val ages = AgeUtils.convertAgeStringToList(response.preferredAgeRange)
+            ages.forEach { age ->
+                when (age) {
+                    "0" -> chipAddPostAgeRegardless.isChecked = true
+                    "10" -> chipAddPostAgeTeenager.isChecked = true
+                    "20" -> chipAddPostAgeTwenties.isChecked = true
+                    "30" -> chipAddPostAgeThirties.isChecked = true
+                    "40" -> chipAddPostAgeFourties.isChecked = true
+                    "50" -> chipAddPostAgeFifties.isChecked = true
+                }
+            }
         }
     }
 
