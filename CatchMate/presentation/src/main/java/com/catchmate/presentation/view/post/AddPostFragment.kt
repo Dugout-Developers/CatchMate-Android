@@ -14,7 +14,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
-import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -209,21 +209,17 @@ class AddPostFragment :
 
             if (isEditMode) {
                 val boardEditRequest =
-                    PutBoardRequest(
-                        boardInfo?.boardId ?: 0,
+                    PatchBoardRequest(
                         title,
-                        gameStartDate,
-                        location,
-                        "",
-                        "",
-                        "",
-                        boardInfo?.currentPerson ?: 0,
-                        boardInfo?.maxPerson ?: 0,
-                        "",
-                        null,
                         content,
+                        maxPerson,
+                        cheerClubId,
+                        preferredGender,
+                        preferredAgeRange,
+                        gameRequest,
+                        true,
                     )
-                putBoard(boardEditRequest)
+                patchBoard(boardInfo?.boardId ?: 0, boardEditRequest)
             } else {
                 val boardWriteRequest =
                     PostBoardRequest(
@@ -255,9 +251,12 @@ class AddPostFragment :
         }
     }
 
-    private fun putBoard(putBoardRequest: PutBoardRequest) {
-        addPostViewModel.putBoard(putBoardRequest)
-        addPostViewModel.putBoardResponse.observe(viewLifecycleOwner) { response ->
+    private fun patchBoard(
+        boardId: Long,
+        patchBoardRequest: PatchBoardRequest,
+    ) {
+        addPostViewModel.patchBoard(boardId, patchBoardRequest)
+        addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("boardEditResponse", response.boardId.toString())
                 val bundle = Bundle()

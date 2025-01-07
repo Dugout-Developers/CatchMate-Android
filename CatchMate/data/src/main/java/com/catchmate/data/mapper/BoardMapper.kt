@@ -7,8 +7,8 @@ import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
-import com.catchmate.data.dto.board.PutBoardRequestDTO
-import com.catchmate.data.dto.board.PutBoardResponseDTO
+import com.catchmate.data.dto.board.PatchBoardRequestDTO
+import com.catchmate.data.dto.board.PatchBoardResponseDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
@@ -19,8 +19,8 @@ import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.FavoriteClub
@@ -93,25 +93,31 @@ object BoardMapper {
             region = dto.region,
         )
 
-    fun toPutBoardRequestDTO(request: PutBoardRequest): PutBoardRequestDTO =
-        PutBoardRequestDTO(
-            boardId = request.boardId,
+    fun toPatchBoardRequestDTO(request: PatchBoardRequest): PatchBoardRequestDTO =
+        PatchBoardRequestDTO(
             title = request.title,
-            gameDate = request.gameDate,
-            location = request.location,
-            homeTeam = request.homeTeam,
-            awayTeam = request.awayTeam,
-            cheerTeam = request.cheerTeam,
-            currentPerson = request.currentPerson,
+            content = request.content,
             maxPerson = request.maxPerson,
-            preferGender = request.preferGender,
-            preferAge = request.preferAge,
-            addInfo = request.addInfo,
+            cheerClubId = request.cheerClubId,
+            preferredGender = request.preferredGender,
+            preferredAgeRange = request.preferredAgeRange,
+            gameRequest = toGameRequestDTO(request.gameRequest),
+            isCompleted = request.isCompleted,
         )
 
-    fun toPutBoardResponse(responseDTO: PutBoardResponseDTO): PutBoardResponse =
-        PutBoardResponse(
+    fun toPatchBoardResponse(responseDTO: PatchBoardResponseDTO): PatchBoardResponse =
+        PatchBoardResponse(
             boardId = responseDTO.boardId,
+            title = responseDTO.title,
+            content = responseDTO.content,
+            cheerClubId = responseDTO.cheerClubId,
+            currentPerson = responseDTO.currentPerson,
+            maxPerson = responseDTO.maxPerson,
+            preferredGender = responseDTO.preferredGender,
+            preferredAgeRange = responseDTO.preferredAgeRange,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
+            liftUpDate = responseDTO.liftUpDate,
+            userInfo = toUserInfo(responseDTO.userInfo),
         )
 
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =

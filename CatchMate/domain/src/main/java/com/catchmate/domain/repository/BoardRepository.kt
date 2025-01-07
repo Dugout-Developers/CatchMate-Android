@@ -6,8 +6,8 @@ import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
 
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>
@@ -17,7 +17,10 @@ interface BoardRepository {
         flag: Int,
     ): Result<Int>
 
-    suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse>
+    suspend fun patchBoard(
+        boardId: Long,
+        patchBoardRequest: PatchBoardRequest,
+    ): Result<PatchBoardResponse>
 
     suspend fun getBoardList(
         gameStartDate: String?,

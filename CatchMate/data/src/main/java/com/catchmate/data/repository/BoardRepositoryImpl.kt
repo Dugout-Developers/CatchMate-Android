@@ -11,8 +11,8 @@ import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -60,12 +60,15 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse> =
+        override suspend fun patchBoard(
+            boardId: Long,
+            patchBoardRequest: PatchBoardRequest,
+        ): Result<PatchBoardResponse> =
             try {
-                val response = boardApi.putBoard(BoardMapper.toPutBoardRequestDTO(putBoardRequest))
+                val response = boardApi.patchBoard(boardId, BoardMapper.toPatchBoardRequestDTO(patchBoardRequest))
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toPutBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body = response.body()?.let { BoardMapper.toPatchBoardResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

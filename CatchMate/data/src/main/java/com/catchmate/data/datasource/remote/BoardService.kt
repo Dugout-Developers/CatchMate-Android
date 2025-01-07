@@ -6,14 +6,14 @@ import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
-import com.catchmate.data.dto.board.PutBoardRequestDTO
-import com.catchmate.data.dto.board.PutBoardResponseDTO
+import com.catchmate.data.dto.board.PatchBoardRequestDTO
+import com.catchmate.data.dto.board.PatchBoardResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -29,10 +29,11 @@ interface BoardService {
         @Query("flag") flag: Int,
     ): Response<Int>
 
-    @PUT("board/edit")
-    suspend fun putBoard(
-        @Body putBoardRequestDTO: PutBoardRequestDTO,
-    ): Response<PutBoardResponseDTO?>
+    @PATCH("board/{boardId}")
+    suspend fun patchBoard(
+        @Path("boardId") boardId: Long,
+        @Body patchBoardRequestDTO: PatchBoardRequestDTO,
+    ): Response<PatchBoardResponseDTO?>
 
     // 필터 미지정 시 모든 쿼리 값 안넣고 호출
     @GET("board/list")
