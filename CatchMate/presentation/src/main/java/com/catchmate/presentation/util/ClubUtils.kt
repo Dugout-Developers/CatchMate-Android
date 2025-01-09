@@ -19,8 +19,8 @@ object ClubUtils {
             else -> Club.BEGINNER.id
         }
 
-    fun convertClubIdToName(clubId: Int): String {
-        return when (clubId) {
+    fun convertClubIdToName(clubId: Int): String =
+        when (clubId) {
             Club.KIA.id -> Club.KIA.teamName
             Club.SAMSUNG.id -> Club.SAMSUNG.teamName
             Club.LG.id -> Club.LG.teamName
@@ -34,5 +34,4 @@ object ClubUtils {
             Club.PACIFIST.id -> Club.PACIFIST.teamName
             else -> Club.BEGINNER.teamName
         }
-    }
 }
