@@ -48,7 +48,7 @@ interface BoardService {
     suspend fun getBoardList(
         @Query("gameStartDate") gameStartDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
-        @Query("preferredTeamId") preferredTeamId: Int?= null,
+        @Query("preferredTeamId") preferredTeamId: Int? = null,
     ): Response<GetBoardListResponseDTO?>
 
     @GET("board/list/{userId}")

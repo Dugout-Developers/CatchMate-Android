@@ -128,12 +128,11 @@ object BoardMapper {
             userInfo = toUserInfo(responseDTO.userInfo),
         )
 
-    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =
-        PatchBoardLiftUpResponse(dto.liftUpDate)
+    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse = PatchBoardLiftUpResponse(dto.liftUpDate)
 
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
         GetBoardListResponse(
-            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) }
+            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
         )
 
     private fun toBoard(dto: BoardDTO): Board =
@@ -153,7 +152,7 @@ object BoardMapper {
 
     fun toGetUserBoardListResponse(dto: GetUserBoardListResponseDTO): GetUserBoardListResponse =
         GetUserBoardListResponse(
-            boardInfoList = dto.boardInfoList.map { toBoard(it) }
+            boardInfoList = dto.boardInfoList.map { toBoard(it) },
         )
 
     fun toGetBoardResponse(responseDTO: GetBoardResponseDTO): GetBoardResponse =
@@ -179,12 +178,10 @@ object BoardMapper {
 
     fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
         GetLikedBoardResponse(
-            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) }
+            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
         )
 
-    fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse =
-        PostBoardLikeResponse(dto.state)
+    fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse = PostBoardLikeResponse(dto.state)
 
-    fun toDeleteBoardLikeResponse(dto: DeleteBoardLikeResponseDTO): DeleteBoardLikeResponse =
-        DeleteBoardLikeResponse(dto.state)
+    fun toDeleteBoardLikeResponse(dto: DeleteBoardLikeResponseDTO): DeleteBoardLikeResponse = DeleteBoardLikeResponse(dto.state)
 }

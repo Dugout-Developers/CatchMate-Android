@@ -3,7 +3,6 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.enroll.EnrollBoardInfoDTO
 import com.catchmate.data.dto.enroll.EnrollInfoDTO
-import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
@@ -14,11 +13,11 @@ import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
 import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollBoardInfo
 import com.catchmate.domain.model.enroll.EnrollInfo
-import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
@@ -29,6 +28,7 @@ import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
+import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.FavoriteClub
 
 object EnrollMapper {
@@ -106,7 +106,7 @@ object EnrollMapper {
             preferredAgeRange = dto.preferredAgeRange,
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
-            userInfo = toEnrollUserInfo(dto.userInfo)
+            userInfo = toEnrollUserInfo(dto.userInfo),
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =

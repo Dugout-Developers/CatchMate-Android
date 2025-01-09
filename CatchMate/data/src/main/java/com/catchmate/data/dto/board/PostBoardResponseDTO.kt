@@ -1,7 +1,7 @@
 package com.catchmate.data.dto.board
 
-import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
 
 data class PostBoardResponseDTO(
     val boardId: Long,

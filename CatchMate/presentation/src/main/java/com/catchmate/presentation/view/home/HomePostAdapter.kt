@@ -9,7 +9,6 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
-import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener

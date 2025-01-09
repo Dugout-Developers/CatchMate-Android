@@ -36,7 +36,6 @@ import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class ReadPostFragment : Fragment() {

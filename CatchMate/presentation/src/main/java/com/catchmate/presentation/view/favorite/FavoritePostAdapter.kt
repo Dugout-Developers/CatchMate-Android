@@ -118,8 +118,28 @@ class FavoritePostAdapter(
 
             val isCheerTeam = board.gameInfo.homeClubId == board.cheerClubId
 
-            ResourceUtil.setTeamViewResources(ClubUtils.convertClubIdToName(board.gameInfo.homeClubId), isCheerTeam, ivItemHomeTeamBg, ivItemHomeTeamLogo, "home", context)
-            ResourceUtil.setTeamViewResources(ClubUtils.convertClubIdToName(board.gameInfo.awayClubId), !isCheerTeam, ivItemAwayTeamBg, ivItemAwayTeamLogo, "home", context)
+            ResourceUtil
+                .setTeamViewResources(
+                    ClubUtils.convertClubIdToName(
+                        board.gameInfo.homeClubId,
+                    ),
+                    isCheerTeam,
+                    ivItemHomeTeamBg,
+                    ivItemHomeTeamLogo,
+                    "home",
+                    context,
+                )
+            ResourceUtil
+                .setTeamViewResources(
+                    ClubUtils.convertClubIdToName(
+                        board.gameInfo.awayClubId,
+                    ),
+                    !isCheerTeam,
+                    ivItemAwayTeamBg,
+                    ivItemAwayTeamLogo,
+                    "home",
+                    context,
+                )
         }
     }
 }

@@ -1,11 +1,10 @@
 package com.catchmate.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catchmate.domain.LiftUpFailureException
+import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse

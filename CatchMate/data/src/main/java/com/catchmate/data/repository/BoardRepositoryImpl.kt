@@ -4,7 +4,7 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
-import com.catchmate.domain.LiftUpFailureException
+import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
@@ -34,7 +34,13 @@ class BoardRepositoryImpl
                 val response = boardApi.postBoard(BoardMapper.toPostBoardRequestDTO(postBoardRequest))
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toPostBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toPostBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -51,7 +57,13 @@ class BoardRepositoryImpl
                 val response = boardApi.postBoardLike(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toPostBoardLikeResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toPostBoardLikeResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -71,7 +83,13 @@ class BoardRepositoryImpl
                 val response = boardApi.patchBoard(boardId, BoardMapper.toPatchBoardRequestDTO(patchBoardRequest))
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toPatchBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toPatchBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -88,7 +106,13 @@ class BoardRepositoryImpl
                 val response = boardApi.patchBoardLiftUp(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toPatchBoardLiftUpResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toPatchBoardLiftUpResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -113,7 +137,13 @@ class BoardRepositoryImpl
                 val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetBoardListResponse(it) } ?: throw java.lang.NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toGetBoardListResponse(it)
+                            }
+                            ?: throw java.lang.NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -130,7 +160,13 @@ class BoardRepositoryImpl
                 val response = boardApi.getUserBoardList(userId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetUserBoardListResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toGetUserBoardListResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -147,7 +183,13 @@ class BoardRepositoryImpl
                 val response = boardApi.getBoard(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toGetBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -164,7 +206,13 @@ class BoardRepositoryImpl
                 val response = boardApi.getLikedBoard()
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toGetLikedBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toGetLikedBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -181,7 +229,13 @@ class BoardRepositoryImpl
                 val response = boardApi.deleteBoard(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
-                    val body = response.body()?.let { BoardMapper.toDeleteBoardResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toDeleteBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
@@ -198,7 +252,13 @@ class BoardRepositoryImpl
                 val response = boardApi.deleteBoardLike(boardId)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공 : ${response.code()}")
-                    val body = response.body()?.let { BoardMapper.toDeleteBoardLikeResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toDeleteBoardLikeResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

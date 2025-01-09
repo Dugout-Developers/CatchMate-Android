@@ -1,7 +1,12 @@
 package com.catchmate.domain.model.enumclass
 
 // name 프로퍼티가 enum 기본 속성이라 생성자 명으로 지정할 수 없음 name -> teamName 대체
-enum class Club(val id: Int, val teamName: String, val homeStadium: String, val region: String) {
+enum class Club(
+    val id: Int,
+    val teamName: String,
+    val homeStadium: String,
+    val region: String,
+) {
     KIA(1, "타이거즈", "기아 챔피언스 필드", "광주"),
     SAMSUNG(2, "라이온즈", "대구 삼성 라이온즈 파크", "대구"),
     LG(3, "트윈스", "잠실 야구장", "잠실"),

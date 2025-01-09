@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 @Parcelize
 data class GetBoardResponse(

@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.board.GetBoardResponse
-import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -429,11 +429,13 @@ class AddPostFragment :
     private fun getCheckedAgeRange(checkedChipIds: List<Int>): MutableList<String> {
         val ages: MutableList<String> = mutableListOf()
         checkedChipIds.forEach { id ->
-            val age = AgeUtils.convertPostAge(
-                binding.root
-                    .findViewById<Chip>(id).text
-                    .toString(),
-            )
+            val age =
+                AgeUtils.convertPostAge(
+                    binding.root
+                        .findViewById<Chip>(id)
+                        .text
+                        .toString(),
+                )
             ages.add(age)
         }
         return ages

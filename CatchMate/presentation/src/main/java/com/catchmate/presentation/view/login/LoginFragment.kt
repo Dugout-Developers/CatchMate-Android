@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
                                 "",
                                 "",
                                 -1,
-                                ""
+                                "",
                             )
                         val bundle = Bundle()
                         bundle.putSerializable("userInfo", userInfo)

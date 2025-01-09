@@ -1,4 +1,4 @@
-package com.catchmate.domain
+package com.catchmate.domain.exception
 
 import java.io.IOException
 

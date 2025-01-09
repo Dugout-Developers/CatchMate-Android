@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener

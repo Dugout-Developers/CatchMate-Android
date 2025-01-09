@@ -1,7 +1,6 @@
 package com.catchmate.presentation.util
 
 import com.catchmate.domain.model.enumclass.Club
-import com.catchmate.presentation.R
 
 object ClubUtils {
     fun convertClubNameToId(clubName: String): Int =
