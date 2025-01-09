@@ -5,6 +5,7 @@ import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
@@ -49,6 +50,11 @@ interface BoardService {
         @Query("maxPerson") maxPerson: Int? = null,
         @Query("preferredTeamId") preferredTeamId: Int?= null,
     ): Response<GetBoardListResponseDTO?>
+
+    @GET("board/list/{userId}")
+    suspend fun getUserBoardList(
+        @Path("userId") userId: Long,
+    ): Response<GetUserBoardListResponseDTO?>
 
     @GET("board/{boardId}")
     suspend fun getBoard(

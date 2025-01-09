@@ -11,6 +11,7 @@ import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
@@ -113,6 +114,23 @@ class BoardRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body = response.body()?.let { BoardMapper.toGetBoardListResponse(it) } ?: throw java.lang.NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse> =
+            try {
+                val response = boardApi.getUserBoardList(userId)
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공")
+                    val body = response.body()?.let { BoardMapper.toGetUserBoardListResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
