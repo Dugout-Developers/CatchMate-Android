@@ -1,8 +1,11 @@
 package com.catchmate.data.dto.notification
 
-data class ContentDTO(
+import com.catchmate.data.dto.board.BoardDTO
+
+data class NotificationInfoDTO(
     val notificationId: Long,
-    val boardInfo: BoardInfoDTO,
+    val boardInfo: BoardDTO,
+    val senderProfileImageUrl: String,
     val title: String,
     val body: String,
     val createdAt: String,

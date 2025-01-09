@@ -1,8 +1,11 @@
 package com.catchmate.domain.model.notification
 
-data class Content(
+import com.catchmate.domain.model.board.Board
+
+data class NotificationInfo(
     val notificationId: Long,
-    val boardInfo: BoardInfo,
+    val boardInfo: Board,
+    val senderProfileImageUrl: String,
     val title: String,
     val body: String,
     val createdAt: String,
