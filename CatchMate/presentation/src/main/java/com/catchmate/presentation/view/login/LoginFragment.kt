@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -73,14 +73,14 @@ class LoginFragment : Fragment() {
                         val userInfo =
                             PostUserAdditionalInfoRequest(
                                 postLoginRequest.email,
-                                postLoginRequest.provider,
                                 postLoginRequest.providerId,
-                                "",
+                                postLoginRequest.provider,
                                 postLoginRequest.picture,
                                 postLoginRequest.fcmToken,
                                 "",
                                 "",
                                 "",
+                                -1,
                                 "",
                             )
                         val bundle = Bundle()

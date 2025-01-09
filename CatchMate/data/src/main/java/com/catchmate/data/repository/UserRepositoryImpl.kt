@@ -5,13 +5,14 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetUserProfileByIdResponse
-import com.catchmate.domain.model.GetUserProfileResponse
-import com.catchmate.domain.model.PatchUserAlarmResponse
-import com.catchmate.domain.model.PatchUserProfileRequest
-import com.catchmate.domain.model.PatchUserProfileResponse
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
-import com.catchmate.domain.model.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.domain.model.user.GetUserProfileByIdResponse
+import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.PatchUserAlarmResponse
+import com.catchmate.domain.model.user.PatchUserProfileRequest
+import com.catchmate.domain.model.user.PatchUserProfileResponse
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
 import com.catchmate.domain.repository.UserRepository
 import org.json.JSONObject
 import javax.inject.Inject
@@ -117,9 +118,12 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun patchUserAlarm(pushAgreement: String): Result<PatchUserAlarmResponse> =
+        override suspend fun patchUserAlarm(
+            alarmType: AlarmType,
+            isEnabled: String,
+        ): Result<PatchUserAlarmResponse> =
             try {
-                val response = userApi.patchUserAlarm(pushAgreement)
+                val response = userApi.patchUserAlarm(alarmType, isEnabled)
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body =

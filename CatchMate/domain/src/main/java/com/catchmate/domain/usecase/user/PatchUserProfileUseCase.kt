@@ -1,7 +1,7 @@
 package com.catchmate.domain.usecase.user
 
-import com.catchmate.domain.model.PatchUserProfileRequest
-import com.catchmate.domain.model.PatchUserProfileResponse
+import com.catchmate.domain.model.user.PatchUserProfileRequest
+import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.repository.UserRepository
 import javax.inject.Inject
 

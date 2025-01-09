@@ -8,23 +8,25 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.EnrollState
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.PostEnrollRequest
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.AgeUtils
+import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
@@ -45,12 +47,10 @@ class ReadPostFragment : Fragment() {
     private val readPostViewModel: ReadPostViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         boardId = getBoardId()
+        Log.d("readpostboardId", boardId.toString())
     }
 
     override fun onCreateView(
@@ -67,7 +67,7 @@ class ReadPostFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        getTokens()
+        getUserId()
         initViewModel()
         initHeader()
         initFooter()
@@ -81,21 +81,8 @@ class ReadPostFragment : Fragment() {
 
     private fun getBoardId(): Long = arguments?.getLong("boardId")!!
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
+    private fun getUserId() {
         localDataViewModel.getUserId()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-                readPostViewModel.getBoard(boardId)
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
         localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (userId != null) {
                 this.userId = userId
@@ -115,12 +102,12 @@ class ReadPostFragment : Fragment() {
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
-                            Log.e("끌올", "끌올")
+                            liftUpBoard()
                             true
                         }
                         R.id.menuitem_post_update -> {
                             val bundle = Bundle()
-                            bundle.putSerializable("boardInfo", readPostViewModel.getBoardResponse.value)
+                            bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             true
                         }
@@ -144,7 +131,7 @@ class ReadPostFragment : Fragment() {
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.writer)
+            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.userInfo)
             findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
@@ -156,9 +143,9 @@ class ReadPostFragment : Fragment() {
             }
             toggleLikedFooterLiked.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    readPostViewModel.run { postBoardLike(boardId, 1) }
+                    readPostViewModel.postBoardLike(boardId)
                 } else {
-                    readPostViewModel.postBoardLike(boardId, 0)
+                    readPostViewModel.deleteBoardLike(boardId)
                 }
             }
             btnLikedFooterRegister.setOnClickListener {
@@ -176,9 +163,10 @@ class ReadPostFragment : Fragment() {
     }
 
     private fun initViewModel() {
+        readPostViewModel.getBoard(boardId)
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
-            initKebabMenuVisibility(response.writer.userId)
+            initKebabMenuVisibility(response.userInfo.userId) // 가시성 설정 아닌 작성자 본인 여부에 따른 팝업메뉴 분기 필요
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
@@ -207,10 +195,25 @@ class ReadPostFragment : Fragment() {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
             }
         }
-        readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { code ->
-            if (code == 200) {
-                Log.d("삭제 성공", "")
+        readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("삭제 성공", "${response.boardId}")
                 findNavController().popBackStack()
+            }
+        }
+        readPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.readPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, null, navOptions)
+            }
+        }
+        readPostViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
@@ -222,12 +225,12 @@ class ReadPostFragment : Fragment() {
     private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
-            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameDate)
-            tvReadPostPlace.text = post.location
+            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate)
+            tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
-            val isCheerTeam = post.homeTeam == post.cheerTeam
+            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                post.homeTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -235,43 +238,113 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                post.awayTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
                 "read",
                 requireContext(),
             )
-            tvReadPostWriterNickname.text = post.writer.nickName
+            tvReadPostWriterNickname.text = post.userInfo.nickName
             DrawableCompat
                 .setTint(
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.writer.favGudan,
+                        post.userInfo.favoriteClub.name,
                         true,
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = post.writer.favGudan
-            tvReadPostWriterCheerStyle.text = post.writer.watchStyle
-            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.writer.gender)
-            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.writer.birthDate)
-            tvReadPostAdditionalInfo.text = post.addInfo
+            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.id)
+            tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
+            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.userInfo.gender)
+            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.userInfo.birthDate)
+            tvReadPostAdditionalInfo.text = post.content
             Glide
                 .with(this@ReadPostFragment)
-                .load(post.writer.picture)
+                .load(post.userInfo.profileImageUrl)
                 .into(ivReadPostWriterProfile)
 
-            // 선호 나이대, 성별 정보 추후 서버 로직 정리되면 반영
+            setGenderTextViewVisibility(
+                tvReadPostGender,
+                post.preferredGender,
+            )
+            val ages = AgeUtils.convertAgeStringToList(post.preferredAgeRange)
+            setAgeTextViewVisibility(
+                tvReadPostRegardlessOfAge,
+                tvReadPostTeenager,
+                tvReadPostTwenties,
+                tvReadPostThirties,
+                tvReadPostFourties,
+                tvReadPostFifties,
+                ages,
+            )
 
-            if (userId == post.writer.userId) {
+            if (userId == post.userInfo.userId) {
                 // 신청 수락된 경우 (참여중일때)
                 readPostViewModel.setBoardEnrollState(EnrollState.ACCEPTED)
             } else {
                 // 아직 신청 안한 경우
                 readPostViewModel.setBoardEnrollState(EnrollState.APPLICABLE)
                 // 수락됐거나 거절됐거나 신청후대기중일때 분기 필요
+            }
+        }
+    }
+
+    private fun setGenderTextViewVisibility(
+        textView: TextView,
+        genderInfo: String,
+    ) {
+        val gender = GenderUtils.convertBoardGender(requireContext(), genderInfo)
+        if (gender == "") {
+            textView.visibility = View.GONE
+        } else {
+            textView.visibility = View.VISIBLE
+            textView.text = gender
+        }
+    }
+
+    private fun setAgeTextViewVisibility(
+        tvRegardlessOfAge: TextView,
+        tvTeenager: TextView,
+        tvTwenties: TextView,
+        tvThirties: TextView,
+        tvFourties: TextView,
+        tvFifties: TextView,
+        ages: List<String>,
+    ) {
+        if (ages.isEmpty()) {
+            tvRegardlessOfAge.visibility = View.GONE
+            tvTeenager.visibility = View.GONE
+            tvTwenties.visibility = View.GONE
+            tvThirties.visibility = View.GONE
+            tvFourties.visibility = View.GONE
+            tvFifties.visibility = View.GONE
+        } else {
+            ages.forEach { age ->
+                when (age) {
+                    "0" -> tvRegardlessOfAge.visibility = View.VISIBLE
+                    "10" -> tvTeenager.visibility = View.VISIBLE
+                    "20" -> tvTwenties.visibility = View.VISIBLE
+                    "30" -> tvThirties.visibility = View.VISIBLE
+                    "40" -> tvFourties.visibility = View.VISIBLE
+                    "50" -> tvFifties.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun liftUpBoard() {
+        readPostViewModel.patchBoardLiftUp(boardId)
+        readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Snackbar.make(requireView(), R.string.post_read_writer_menu_up_complete, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        readPostViewModel.liftUpFailureMessage.observe(viewLifecycleOwner) { message ->
+            if (message.isNotEmpty()) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -287,14 +360,14 @@ class ReadPostFragment : Fragment() {
         dialogBinding.apply {
             val post = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameDate)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = post.location
+            tvApplicationDetailDialogPlace.text = post.gameInfo.location
 
-            val isCheerTeam = post.homeTeam == post.cheerTeam
+            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                post.homeTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -302,7 +375,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                post.awayTeam,
+                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
@@ -369,9 +442,8 @@ class ReadPostFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.brand500),
                 )
                 setOnClickListener {
-                    readPostViewModel.deleteBoard(
-                        DeleteBoardRequest(boardId),
-                    )
+                    readPostViewModel.deleteBoard(boardId)
+                    dialog.dismiss()
                 }
             }
         }

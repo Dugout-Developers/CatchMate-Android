@@ -1,7 +1,7 @@
 package com.catchmate.domain.usecase.auth
 
-import com.catchmate.domain.model.PostLoginRequest
-import com.catchmate.domain.model.PostLoginResponse
+import com.catchmate.domain.model.auth.PostLoginRequest
+import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.repository.AuthRepository
 import javax.inject.Inject
 

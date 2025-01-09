@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.user
 
-import com.catchmate.domain.model.GetUserProfileByIdResponse
+import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.repository.UserRepository
 import javax.inject.Inject
 

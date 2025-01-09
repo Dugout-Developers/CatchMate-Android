@@ -1,12 +1,13 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.GetUserProfileByIdResponse
-import com.catchmate.domain.model.GetUserProfileResponse
-import com.catchmate.domain.model.PatchUserAlarmResponse
-import com.catchmate.domain.model.PatchUserProfileRequest
-import com.catchmate.domain.model.PatchUserProfileResponse
-import com.catchmate.domain.model.PostUserAdditionalInfoRequest
-import com.catchmate.domain.model.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.domain.model.user.GetUserProfileByIdResponse
+import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.PatchUserAlarmResponse
+import com.catchmate.domain.model.user.PatchUserProfileRequest
+import com.catchmate.domain.model.user.PatchUserProfileResponse
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
+import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
 
 interface UserRepository {
     suspend fun getUserProfile(): Result<GetUserProfileResponse>
@@ -17,5 +18,8 @@ interface UserRepository {
 
     suspend fun patchUserProfile(patchUserProfileRequest: PatchUserProfileRequest): Result<PatchUserProfileResponse>
 
-    suspend fun patchUserAlarm(pushAgreement: String): Result<PatchUserAlarmResponse>
+    suspend fun patchUserAlarm(
+        alarmType: AlarmType,
+        isEnabled: String,
+    ): Result<PatchUserAlarmResponse>
 }

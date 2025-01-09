@@ -1,10 +1,10 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.DeleteLogoutResponseDTO
-import com.catchmate.data.dto.GetCheckNicknameResponseDTO
-import com.catchmate.data.dto.PostLoginRequestDTO
-import com.catchmate.data.dto.PostLoginResponseDTO
-import com.catchmate.data.dto.PostReissueResponseDTO
+import com.catchmate.data.dto.auth.DeleteLogoutResponseDTO
+import com.catchmate.data.dto.auth.GetCheckNicknameResponseDTO
+import com.catchmate.data.dto.auth.PostLoginRequestDTO
+import com.catchmate.data.dto.auth.PostLoginResponseDTO
+import com.catchmate.data.dto.auth.PostReissueResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

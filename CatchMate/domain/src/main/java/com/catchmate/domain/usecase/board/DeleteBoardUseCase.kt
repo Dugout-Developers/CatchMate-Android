@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.board
 
-import com.catchmate.domain.model.DeleteBoardRequest
+import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 
@@ -9,5 +9,5 @@ class DeleteBoardUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun deleteBoard(deleteBoardRequest: DeleteBoardRequest): Result<Int> = boardRepository.deleteBoard(deleteBoardRequest)
+        suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse> = boardRepository.deleteBoard(boardId)
     }

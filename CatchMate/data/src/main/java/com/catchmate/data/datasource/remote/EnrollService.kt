@@ -1,14 +1,14 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.DeleteEnrollResponseDTO
-import com.catchmate.data.dto.GetAllReceivedEnrollResponseDTO
-import com.catchmate.data.dto.GetEnrollNewCountResponseDTO
-import com.catchmate.data.dto.GetReceivedEnrollResponseDTO
-import com.catchmate.data.dto.GetRequestedEnrollListResponseDTO
-import com.catchmate.data.dto.PatchEnrollAcceptResponseDTO
-import com.catchmate.data.dto.PatchEnrollRejectResponseDTO
-import com.catchmate.data.dto.PostEnrollRequestDTO
-import com.catchmate.data.dto.PostEnrollResponseDTO
+import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
+import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
+import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
+import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
+import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
+import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -52,5 +52,5 @@ interface EnrollService {
     @DELETE("enroll/cancel/{enrollId}")
     suspend fun deleteEnroll(
         @Path("enrollId") enrollId: Long,
-    ): Response<DeleteEnrollResponseDTO>
+    ): Response<DeleteEnrollResponseDTO?>
 }

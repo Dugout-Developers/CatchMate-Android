@@ -83,12 +83,12 @@ class FavoriteFragment :
 
     private fun initViewModel() {
         favoriteViewModel.getLikedBoard()
-        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { likedList ->
-            if (likedList.isNotEmpty()) {
+        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { response ->
+            if (response.boardInfoList.isNotEmpty()) {
                 binding.layoutFavoriteNoList.visibility = View.GONE
                 binding.rvFavoritePost.visibility = View.VISIBLE
                 val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-                adapter.updateLikedList(likedList)
+                adapter.updateLikedList(response.boardInfoList)
             } else {
                 binding.layoutFavoriteNoList.visibility = View.VISIBLE
                 binding.rvFavoritePost.visibility = View.GONE
@@ -137,7 +137,7 @@ class FavoriteFragment :
         boardId: Long,
         position: Int,
     ) {
-        favoriteViewModel.postBoardLike(boardId, FAVORITE_CANCEL_FLAG)
+        favoriteViewModel.deleteBoardLike(boardId)
         val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
         adapter.removeUnlikedPost(position)
     }
@@ -145,9 +145,5 @@ class FavoriteFragment :
     override fun onPostItemAllRemoved() {
         binding.rvFavoritePost.visibility = View.GONE
         binding.layoutFavoriteNoList.visibility = View.VISIBLE
-    }
-
-    companion object {
-        const val FAVORITE_CANCEL_FLAG = 0
     }
 }

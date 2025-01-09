@@ -11,12 +11,13 @@ import android.widget.ToggleButton
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
+import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
 import kotlinx.coroutines.runBlocking
@@ -28,13 +29,10 @@ class FavoritePostAdapter(
     private val onPostItemToggleClickListener: OnPostItemToggleClickListener,
     private val onPostItemAllRemovedListener: OnPostItemAllRemovedListener,
 ) : RecyclerView.Adapter<FavoritePostAdapter.FavoritePostViewHolder>() {
-    private var likedList: MutableList<GetLikedBoardResponse> = mutableListOf()
+    private var likedList: MutableList<Board> = mutableListOf()
 
-    fun updateLikedList(newList: List<GetLikedBoardResponse>) {
-        likedList.clear()
-        newList.forEach { boardListResponse ->
-            likedList.add(boardListResponse)
-        }
+    fun updateLikedList(newList: List<Board>) {
+        likedList = newList.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -112,16 +110,36 @@ class FavoritePostAdapter(
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(board.gameDate)
+            val dateTimePair = DateUtils.formatISODateTime(board.gameInfo.gameStartDate)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
-            tvItemPlace.text = board.location
+            tvItemPlace.text = board.gameInfo.location
             tvItemTitle.text = board.title
 
-            val isCheerTeam = board.homeTeam == board.cheerTeam
+            val isCheerTeam = board.gameInfo.homeClubId == board.cheerClubId
 
-            ResourceUtil.setTeamViewResources(board.homeTeam, isCheerTeam, ivItemHomeTeamBg, ivItemHomeTeamLogo, "home", context)
-            ResourceUtil.setTeamViewResources(board.awayTeam, !isCheerTeam, ivItemAwayTeamBg, ivItemAwayTeamLogo, "home", context)
+            ResourceUtil
+                .setTeamViewResources(
+                    ClubUtils.convertClubIdToName(
+                        board.gameInfo.homeClubId,
+                    ),
+                    isCheerTeam,
+                    ivItemHomeTeamBg,
+                    ivItemHomeTeamLogo,
+                    "home",
+                    context,
+                )
+            ResourceUtil
+                .setTeamViewResources(
+                    ClubUtils.convertClubIdToName(
+                        board.gameInfo.awayClubId,
+                    ),
+                    !isCheerTeam,
+                    ivItemAwayTeamBg,
+                    ivItemAwayTeamLogo,
+                    "home",
+                    context,
+                )
         }
     }
 }

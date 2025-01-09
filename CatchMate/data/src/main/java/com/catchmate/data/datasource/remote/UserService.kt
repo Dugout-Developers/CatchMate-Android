@@ -1,12 +1,13 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.GetUserProfileByIdResponseDTO
-import com.catchmate.data.dto.GetUserProfileResponseDTO
-import com.catchmate.data.dto.PatchUserAlarmResponseDTO
-import com.catchmate.data.dto.PatchUserProfileRequestDTO
-import com.catchmate.data.dto.PatchUserProfileResponseDTO
-import com.catchmate.data.dto.PostUserAdditionalInfoRequestDTO
-import com.catchmate.data.dto.PostUserAdditionalInfoResponseDTO
+import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
+import com.catchmate.data.dto.user.GetUserProfileResponseDTO
+import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
+import com.catchmate.data.dto.user.PatchUserProfileRequestDTO
+import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
+import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
+import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
+import com.catchmate.domain.model.enumclass.AlarmType
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,10 +33,12 @@ interface UserService {
     @PATCH("user/profile")
     suspend fun patchUserProfile(
         @Body patchUserProfileRequestDTO: PatchUserProfileRequestDTO,
-    ): Response<PatchUserProfileResponseDTO>
+    ): Response<PatchUserProfileResponseDTO?>
 
+    // isEnabled : Y/N
     @PATCH("user/alarm")
     suspend fun patchUserAlarm(
-        @Query("pushAgreement") pushAgreement: String,
-    ): Response<PatchUserAlarmResponseDTO>
+        @Query("alarmType") alarmType: AlarmType,
+        @Query("isEnabled") isEnabled: String,
+    ): Response<PatchUserAlarmResponseDTO?>
 }

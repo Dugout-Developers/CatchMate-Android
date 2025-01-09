@@ -4,14 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.EnrollState
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.PostEnrollRequest
-import com.catchmate.domain.model.PostEnrollResponse
+import com.catchmate.domain.model.board.DeleteBoardLikeResponse
+import com.catchmate.domain.model.board.DeleteBoardResponse
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
+import com.catchmate.domain.model.enroll.PostEnrollRequest
+import com.catchmate.domain.model.enroll.PostEnrollResponse
+import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.usecase.board.DeleteBoardLikeUseCase
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
+import com.catchmate.domain.usecase.board.PatchBoardLiftUpUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import com.catchmate.domain.usecase.enroll.PostEnrollUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,15 +31,21 @@ class ReadPostViewModel
         private val getBoardUseCase: GetBoardUseCase,
         private val deleteBoardUseCase: DeleteBoardUseCase,
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
+        private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
+        private val patchBoardLiftUpUseCase: PatchBoardLiftUpUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
         val getBoardResponse: LiveData<GetBoardResponse>
             get() = _getBoardResponse
 
-        private val _postBoardLikeResponse = MutableLiveData<Int>()
-        val postBoardLikeResponse: LiveData<Int>
+        private val _postBoardLikeResponse = MutableLiveData<PostBoardLikeResponse>()
+        val postBoardLikeResponse: LiveData<PostBoardLikeResponse>
             get() = _postBoardLikeResponse
+
+        private val _deleteBoardLikeResponse = MutableLiveData<DeleteBoardLikeResponse>()
+        val deleteBoardLikeResponse: LiveData<DeleteBoardLikeResponse>
+            get() = _deleteBoardLikeResponse
 
         private val _boardEnrollState = MutableLiveData<EnrollState>()
         val boardEnrollState: LiveData<EnrollState>
@@ -43,9 +55,13 @@ class ReadPostViewModel
         val postEnrollResponse: LiveData<PostEnrollResponse>
             get() = _postEnrollResponse
 
-        private val _deleteBoardResponse = MutableLiveData<Int>()
-        val deleteBoardResponse: LiveData<Int>
+        private val _deleteBoardResponse = MutableLiveData<DeleteBoardResponse>()
+        val deleteBoardResponse: LiveData<DeleteBoardResponse>
             get() = _deleteBoardResponse
+
+        private val _patchBoardLiftUpResponse = MutableLiveData<PatchBoardLiftUpResponse>()
+        val patchBoardLiftUpResponse: LiveData<PatchBoardLiftUpResponse>
+            get() = _patchBoardLiftUpResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -54,6 +70,10 @@ class ReadPostViewModel
         private val _navigateToLogin = MutableLiveData<Boolean>()
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
+
+        private val _liftUpFailureMessage = MutableLiveData<String>()
+        val liftUpFailureMessage: LiveData<String>
+            get() = _liftUpFailureMessage
 
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
@@ -71,15 +91,28 @@ class ReadPostViewModel
             }
         }
 
-        fun postBoardLike(
-            boardId: Long,
-            flag: Int,
-        ) {
+        fun postBoardLike(boardId: Long) {
             viewModelScope.launch {
-                val result = postBoardLikeUseCase.postBoardLike(boardId, flag)
+                val result = postBoardLikeUseCase.postBoardLike(boardId)
                 result
                     .onSuccess { response ->
                         _postBoardLikeResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun deleteBoardLike(boardId: Long) {
+            viewModelScope.launch {
+                val result = deleteBoardLikeUseCase.deleteBoardLike(boardId)
+                result
+                    .onSuccess { response ->
+                        _deleteBoardLikeResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
@@ -113,9 +146,9 @@ class ReadPostViewModel
             _boardEnrollState.value = state
         }
 
-        fun deleteBoard(deleteBoardRequest: DeleteBoardRequest) {
+        fun deleteBoard(boardId: Long) {
             viewModelScope.launch {
-                val result = deleteBoardUseCase.deleteBoard(deleteBoardRequest)
+                val result = deleteBoardUseCase.deleteBoard(boardId)
                 result
                     .onSuccess { response ->
                         _deleteBoardResponse.value = response
@@ -124,6 +157,28 @@ class ReadPostViewModel
                             _navigateToLogin.value = true
                         } else {
                             _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun patchBoardLiftUp(boardId: Long) {
+            viewModelScope.launch {
+                val result = patchBoardLiftUpUseCase.patchBoardLiftUp(boardId)
+                result
+                    .onSuccess { response ->
+                        _patchBoardLiftUpResponse.value = response
+                    }.onFailure { exception ->
+                        when (exception) {
+                            is ReissueFailureException -> {
+                                _navigateToLogin.value = true
+                            }
+                            is LiftUpFailureException -> {
+                                _liftUpFailureMessage.value = "지금은 게시글을 끌어올릴 수 없어요"
+                            }
+                            else -> {
+                                _errorMessage.value = exception.message
+                            }
                         }
                     }
             }
