@@ -4,12 +4,14 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
+import com.catchmate.domain.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.model.board.PostBoardLikeResponse
@@ -73,6 +75,27 @@ class BoardRepositoryImpl
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse> =
+            try {
+                val response = boardApi.patchBoardLiftUp(boardId)
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { BoardMapper.toPatchBoardLiftUpResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    if (response.code() == 400) {
+                        Result.failure(LiftUpFailureException("$stringToJson"))
+                    } else {
+                        Result.failure(Exception("$stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)

@@ -61,6 +61,7 @@
     <string name="post_read_toast_msg">게시글을 저장했어요</string>
 
     <string name="post_read_writer_menu_up">끌어올리기</string>
+    <string name="post_read_writer_menu_up_complete">게시글을 끌어올렸어요</string>
     <string name="post_read_writer_menu_update">게시글 수정</string>
     <string name="post_read_writer_menu_delete">게시글 삭제</string>
     <string name="post_read_writer_menu_delete_dialog_title">게시글 삭제 시 채팅방도 삭제돼요\n정말로 삭제할까요?</string>

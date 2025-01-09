@@ -5,6 +5,7 @@ import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
@@ -35,6 +36,11 @@ interface BoardService {
         @Path("boardId") boardId: Long,
         @Body patchBoardRequestDTO: PatchBoardRequestDTO,
     ): Response<PatchBoardResponseDTO?>
+
+    @PATCH("board/{boardId}/lift-up")
+    suspend fun patchBoardLiftUp(
+        @Path("boardId") boardId: Long,
+    ): Response<PatchBoardLiftUpResponseDTO?>
 
     // 필터 미지정 시 모든 쿼리 값 안넣고 호출
     @GET("board/list")

@@ -1,13 +1,16 @@
 package com.catchmate.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
@@ -15,6 +18,7 @@ import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.domain.usecase.board.DeleteBoardLikeUseCase
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
+import com.catchmate.domain.usecase.board.PatchBoardLiftUpUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import com.catchmate.domain.usecase.enroll.PostEnrollUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +34,7 @@ class ReadPostViewModel
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
         private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
+        private val patchBoardLiftUpUseCase: PatchBoardLiftUpUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
         val getBoardResponse: LiveData<GetBoardResponse>
@@ -55,6 +60,10 @@ class ReadPostViewModel
         val deleteBoardResponse: LiveData<DeleteBoardResponse>
             get() = _deleteBoardResponse
 
+        private val _patchBoardLiftUpResponse = MutableLiveData<PatchBoardLiftUpResponse>()
+        val patchBoardLiftUpResponse: LiveData<PatchBoardLiftUpResponse>
+            get() = _patchBoardLiftUpResponse
+
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
             get() = _errorMessage
@@ -62,6 +71,10 @@ class ReadPostViewModel
         private val _navigateToLogin = MutableLiveData<Boolean>()
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
+
+        private val _liftUpFailureMessage = MutableLiveData<String>()
+        val liftUpFailureMessage: LiveData<String>
+            get() = _liftUpFailureMessage
 
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
@@ -145,6 +158,28 @@ class ReadPostViewModel
                             _navigateToLogin.value = true
                         } else {
                             _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun patchBoardLiftUp(boardId: Long) {
+            viewModelScope.launch {
+                val result = patchBoardLiftUpUseCase.patchBoardLiftUp(boardId)
+                result
+                    .onSuccess { response ->
+                        _patchBoardLiftUpResponse.value = response
+                    }.onFailure { exception ->
+                        when (exception) {
+                            is ReissueFailureException -> {
+                                _navigateToLogin.value = true
+                            }
+                            is LiftUpFailureException -> {
+                                _liftUpFailureMessage.value = "지금은 게시글을 끌어올릴 수 없어요"
+                            }
+                            else -> {
+                                _errorMessage.value = exception.message
+                            }
                         }
                     }
             }

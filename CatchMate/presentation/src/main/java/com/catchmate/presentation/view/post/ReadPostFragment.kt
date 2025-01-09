@@ -36,6 +36,7 @@ import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class ReadPostFragment : Fragment() {
@@ -102,7 +103,7 @@ class ReadPostFragment : Fragment() {
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
-                            Log.e("끌올", "끌올")
+                            liftUpBoard()
                             true
                         }
                         R.id.menuitem_post_update -> {
@@ -331,6 +332,20 @@ class ReadPostFragment : Fragment() {
                     "40" -> tvFourties.visibility = View.VISIBLE
                     "50" -> tvFifties.visibility = View.VISIBLE
                 }
+            }
+        }
+    }
+
+    private fun liftUpBoard() {
+        readPostViewModel.patchBoardLiftUp(boardId)
+        readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Snackbar.make(requireView(), R.string.post_read_writer_menu_up_complete, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        readPostViewModel.liftUpFailureMessage.observe(viewLifecycleOwner) { message ->
+            if (message.isNotEmpty()) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

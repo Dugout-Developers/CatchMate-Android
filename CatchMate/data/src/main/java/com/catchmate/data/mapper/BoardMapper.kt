@@ -6,6 +6,7 @@ import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
@@ -20,6 +21,7 @@ import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.model.board.PostBoardLikeResponse
@@ -123,6 +125,9 @@ object BoardMapper {
             liftUpDate = responseDTO.liftUpDate,
             userInfo = toUserInfo(responseDTO.userInfo),
         )
+
+    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =
+        PatchBoardLiftUpResponse(dto.liftUpDate)
 
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
         GetBoardListResponse(
