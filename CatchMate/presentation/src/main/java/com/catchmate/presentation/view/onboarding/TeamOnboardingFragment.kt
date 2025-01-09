@@ -117,7 +117,7 @@ class TeamOnboardingFragment : Fragment() {
                                 ?.binding
                                 ?.tvTeamButton
                                 ?.text
-                                .toString()
+                                .toString(),
                         ),
                         "",
                     )
