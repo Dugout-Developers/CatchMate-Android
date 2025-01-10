@@ -82,6 +82,35 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_home_left"
         app:layout_constraintTop_toBottomOf="@+id/nestedsv_home"
         tools:itemCount="8"
-        tools:listitem="@layout/item_home_post" />
+        tools:listitem="@layout/item_home_post" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/layout_home_no_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nestedsv_home">
+
+        <ImageView
+            android:id="@+id/iv_home_no_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_no_list_icon" />
+
+        <TextView
+            android:id="@+id/tv_home_no_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/home_no_list_message"
+            android:textAppearance="@style/Typography.HeadLine03.SemiBold" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -110,6 +110,8 @@ class HomeFragment :
         homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
                 if (response.boardInfoList.isNotEmpty()) {
+                    binding.rvHomePosts.visibility = View.VISIBLE
+                    binding.layoutHomeNoList.visibility = View.GONE
                     Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
 //                    isNextPageExist = true
                     val adapter = binding.rvHomePosts.adapter as HomePostAdapter
@@ -118,6 +120,8 @@ class HomeFragment :
                     // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
                     Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
 //                    isNextPageExist = false
+                    binding.rvHomePosts.visibility = View.GONE
+                    binding.layoutHomeNoList.visibility = View.VISIBLE
                 }
             }
         }
