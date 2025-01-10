@@ -15,6 +15,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
+import com.catchmate.presentation.interaction.OnPersonFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -25,7 +26,8 @@ class HomeFragment :
     Fragment(),
     OnPostItemClickListener,
     OnDateFilterSelectedListener,
-    OnClubFilterSelectedListener {
+    OnClubFilterSelectedListener,
+    OnPersonFilterSelectedListener {
     private var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
 
@@ -145,7 +147,8 @@ class HomeFragment :
 
     private fun initHeadCountFilter() {
         binding.hfvHomeMemberCountFilter.setOnClickListener {
-            val headCountFilterBottomSheet = HomeHeadCountFilterBottomSheetFragment()
+            val headCountFilterBottomSheet = HomeHeadCountFilterBottomSheetFragment(maxPerson)
+            headCountFilterBottomSheet.setOnPersonFilterSelected(this@HomeFragment)
             headCountFilterBottomSheet.show(requireActivity().supportFragmentManager, headCountFilterBottomSheet.tag)
         }
     }
@@ -216,5 +219,16 @@ class HomeFragment :
         )
         binding.hfvHomeTeamFilter.setClubFilterText(clubId)
         binding.hfvHomeTeamFilter.setFilterTextColor(clubId != null)
+    }
+
+    override fun onPersonFilterSelected(count: Int?) {
+        maxPerson = count
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamId,
+        )
+        binding.hfvHomeMemberCountFilter.setFilterTextColor(count != null)
+        binding.hfvHomeMemberCountFilter.setPersonFilterText(count)
     }
 }

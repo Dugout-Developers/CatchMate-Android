@@ -57,6 +57,14 @@ class HomeFilterView(
         }
     }
 
+    fun setPersonFilterText(count: Int?) {
+        if (count != null) {
+            binding.tvFilterName.text = "${count}명"
+        } else {
+            binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_member_count)
+        }
+    }
+
     fun setFilterTextColor(isSelected: Boolean) {
         val color = if (isSelected) {
             binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_selected_r8)
