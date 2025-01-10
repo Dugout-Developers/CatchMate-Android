@@ -5,9 +5,9 @@ import com.catchmate.data.datasource.remote.NotificationService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.NotificationMapper
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.DeleteReceivedNotificationResponse
-import com.catchmate.domain.model.GetReceivedNotificationListResponse
-import com.catchmate.domain.model.GetReceivedNotificationResponse
+import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
 import org.json.JSONObject
 import javax.inject.Inject

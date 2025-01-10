@@ -69,7 +69,8 @@
                         android:paddingBottom="2dp"
                         android:text="@string/regardless_of_age"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_read_post_teenager"
@@ -84,7 +85,8 @@
                         android:paddingBottom="2dp"
                         android:text="@string/teenager"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_read_post_twenties"
@@ -99,7 +101,8 @@
                         android:paddingBottom="2dp"
                         android:text="@string/twenties"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_read_post_thirties"
@@ -114,7 +117,8 @@
                         android:paddingBottom="2dp"
                         android:text="@string/thirties"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_read_post_fourties"
@@ -129,7 +133,8 @@
                         android:paddingBottom="2dp"
                         android:text="@string/fourties"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_read_post_fifties"
@@ -144,10 +149,11 @@
                         android:paddingBottom="2dp"
                         android:text="@string/fifties"
                         android:textAppearance="@style/Typography.Caption01.Regular"
-                        android:textColor="@color/grey500" />
+                        android:textColor="@color/grey500"
+                        android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/tv_read_post_age"
+                        android:id="@+id/tv_read_post_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/xstiny"

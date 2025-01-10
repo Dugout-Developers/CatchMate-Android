@@ -1,34 +1,43 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.GetBoardPagingResponse
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.GetLikedBoardResponse
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
+import com.catchmate.domain.model.board.DeleteBoardLikeResponse
+import com.catchmate.domain.model.board.DeleteBoardResponse
+import com.catchmate.domain.model.board.GetBoardListResponse
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetUserBoardListResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
 
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>
 
-    suspend fun postBoardLike(
+    suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse>
+
+    suspend fun patchBoard(
         boardId: Long,
-        flag: Int,
-    ): Result<Int>
+        patchBoardRequest: PatchBoardRequest,
+    ): Result<PatchBoardResponse>
 
-    suspend fun putBoard(putBoardRequest: PutBoardRequest): Result<PutBoardResponse>
+    suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse>
 
-    suspend fun getBoardPaging(
-        pageNum: Long,
-        gudans: String,
-        people: Int,
-        gameDate: String,
-    ): Result<List<GetBoardPagingResponse>>
+    suspend fun getBoardList(
+        gameStartDate: String?,
+        maxPerson: Int?,
+        preferredTeamId: Int?,
+    ): Result<GetBoardListResponse>
+
+    suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse>
 
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
 
-    suspend fun getLikedBoard(): Result<List<GetLikedBoardResponse>>
+    suspend fun getLikedBoard(): Result<GetLikedBoardResponse>
 
-    suspend fun deleteBoard(boardDeleteRequest: DeleteBoardRequest): Result<Int>
+    suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse>
+
+    suspend fun deleteBoardLike(boardId: Long): Result<DeleteBoardLikeResponse>
 }

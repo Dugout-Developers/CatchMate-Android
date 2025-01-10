@@ -1,7 +1,7 @@
 package com.catchmate.domain.usecase.board
 
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 

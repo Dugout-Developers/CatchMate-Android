@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetLikedBoardResponse
+import com.catchmate.domain.model.board.DeleteBoardLikeResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.usecase.board.DeleteBoardLikeUseCase
 import com.catchmate.domain.usecase.board.GetLikedBoardUseCase
-import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,11 +17,11 @@ import javax.inject.Inject
 class FavoriteViewModel
     @Inject
     constructor(
-        private val postBoardLikeUseCase: PostBoardLikeUseCase,
+        private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val getLikedBoardUseCase: GetLikedBoardUseCase,
     ) : ViewModel() {
-        private val _getLikedBoardResponse = MutableLiveData<List<GetLikedBoardResponse>>()
-        val getLikedBoardResponse: LiveData<List<GetLikedBoardResponse>>
+        private val _getLikedBoardResponse = MutableLiveData<GetLikedBoardResponse>()
+        val getLikedBoardResponse: LiveData<GetLikedBoardResponse>
             get() = _getLikedBoardResponse
 
         private val _errorMessage = MutableLiveData<String>()
@@ -31,19 +32,16 @@ class FavoriteViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        private val _postBoardLikeResponse = MutableLiveData<Int>()
-        val postBoardLikeResponse: LiveData<Int>
-            get() = _postBoardLikeResponse
+        private val _deleteBoardLikeResponse = MutableLiveData<DeleteBoardLikeResponse>()
+        val deleteBoardLikeResponse: LiveData<DeleteBoardLikeResponse>
+            get() = _deleteBoardLikeResponse
 
-        fun postBoardLike(
-            boardId: Long,
-            flag: Int,
-        ) {
+        fun deleteBoardLike(boardId: Long) {
             viewModelScope.launch {
-                val result = postBoardLikeUseCase.postBoardLike(boardId, flag)
+                val result = deleteBoardLikeUseCase.deleteBoardLike(boardId)
                 result
                     .onSuccess { response ->
-                        _postBoardLikeResponse.value = response
+                        _deleteBoardLikeResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

@@ -52,6 +52,14 @@ object DateUtils {
         return Pair(outputDateFormat.format(formattedDate), time.substring(0, 5))
     }
 
+    // home date filter 포맷하는 함수
+    fun formatDateToFilterDate(date: String): String {
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val formattedDate = inputDateFormat.parse(date)
+        val outputDateFormat = SimpleDateFormat("MM.dd E", Locale.KOREAN)
+        return outputDateFormat.format(formattedDate)
+    }
+
     fun formatISODateTimeToDateTime(dateTime: String): Pair<String, String> {
         val (date, time) = dateTime.split("T")
 

@@ -3,8 +3,8 @@ package com.catchmate.data.datasource.local
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.PostLoginRequestDTO
-import com.catchmate.domain.model.LoginPlatform
+import com.catchmate.data.dto.auth.PostLoginRequestDTO
+import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback

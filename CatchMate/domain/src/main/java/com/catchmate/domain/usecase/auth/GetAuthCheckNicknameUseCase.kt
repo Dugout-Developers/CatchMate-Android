@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.auth
 
-import com.catchmate.domain.model.GetCheckNicknameResponse
+import com.catchmate.domain.model.auth.GetCheckNicknameResponse
 import com.catchmate.domain.repository.AuthRepository
 import javax.inject.Inject
 

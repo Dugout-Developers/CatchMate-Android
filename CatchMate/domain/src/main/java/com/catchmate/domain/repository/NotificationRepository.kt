@@ -1,8 +1,8 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.DeleteReceivedNotificationResponse
-import com.catchmate.domain.model.GetReceivedNotificationListResponse
-import com.catchmate.domain.model.GetReceivedNotificationResponse
+import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 
 interface NotificationRepository {
     // 받은 알림 목록 get

@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.usecase.board.PatchBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardUseCase
-import com.catchmate.domain.usecase.board.PutBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class AddPostViewModel
     @Inject
     constructor(
         private val postBoardUseCase: PostBoardUseCase,
-        private val putBoardUseCase: PutBoardUseCase,
+        private val patchBoardUseCase: PatchBoardUseCase,
     ) : ViewModel() {
         private var _homeTeamName = MutableLiveData<String>()
         val homeTeamName: LiveData<String>
@@ -46,9 +46,9 @@ class AddPostViewModel
         val postBoardResponse: LiveData<PostBoardResponse>
             get() = _postBoardResponse
 
-        private var _putBoardResponse = MutableLiveData<PutBoardResponse>()
-        val putBoardResponse: LiveData<PutBoardResponse>
-            get() = _putBoardResponse
+        private var _patchBoardResponse = MutableLiveData<PatchBoardResponse>()
+        val patchBoardResponse: LiveData<PatchBoardResponse>
+            get() = _patchBoardResponse
 
         fun setHomeTeamName(teamName: String) {
             _homeTeamName.value = teamName
@@ -78,12 +78,15 @@ class AddPostViewModel
             }
         }
 
-        fun putBoard(putBoardRequest: PutBoardRequest) {
+        fun patchBoard(
+            boardId: Long,
+            patchBoardRequest: PatchBoardRequest,
+        ) {
             viewModelScope.launch {
-                val result = putBoardUseCase.putBoard(putBoardRequest)
+                val result = patchBoardUseCase.patchBoard(boardId, patchBoardRequest)
                 result
                     .onSuccess { response ->
-                        _putBoardResponse.value = response
+                        _patchBoardResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

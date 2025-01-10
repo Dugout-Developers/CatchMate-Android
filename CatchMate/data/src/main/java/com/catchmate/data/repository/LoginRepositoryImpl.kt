@@ -4,7 +4,7 @@ import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
 import com.catchmate.data.mapper.AuthMapper
-import com.catchmate.domain.model.PostLoginRequest
+import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.repository.LoginRepository
 import javax.inject.Inject
 

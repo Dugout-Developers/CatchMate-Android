@@ -1,125 +1,187 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.DeleteBoardRequestDTO
-import com.catchmate.data.dto.GetBoardPagingResponseDTO
-import com.catchmate.data.dto.GetBoardResponseDTO
-import com.catchmate.data.dto.GetLikedBoardResponseDTO
-import com.catchmate.data.dto.PostBoardRequestDTO
-import com.catchmate.data.dto.PostBoardResponseDTO
-import com.catchmate.data.dto.PutBoardRequestDTO
-import com.catchmate.data.dto.PutBoardResponseDTO
-import com.catchmate.data.dto.WriterDTO
-import com.catchmate.domain.model.DeleteBoardRequest
-import com.catchmate.domain.model.GetBoardPagingResponse
-import com.catchmate.domain.model.GetBoardResponse
-import com.catchmate.domain.model.GetLikedBoardResponse
-import com.catchmate.domain.model.PostBoardRequest
-import com.catchmate.domain.model.PostBoardResponse
-import com.catchmate.domain.model.PutBoardRequest
-import com.catchmate.domain.model.PutBoardResponse
-import com.catchmate.domain.model.Writer
+import com.catchmate.data.dto.board.BoardDTO
+import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
+import com.catchmate.data.dto.board.DeleteBoardResponseDTO
+import com.catchmate.data.dto.board.GetBoardListResponseDTO
+import com.catchmate.data.dto.board.GetBoardResponseDTO
+import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
+import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
+import com.catchmate.data.dto.board.PatchBoardRequestDTO
+import com.catchmate.data.dto.board.PatchBoardResponseDTO
+import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
+import com.catchmate.data.dto.board.PostBoardRequestDTO
+import com.catchmate.data.dto.board.PostBoardResponseDTO
+import com.catchmate.data.dto.enroll.GameInfoDTO
+import com.catchmate.data.dto.enroll.UserInfoDTO
+import com.catchmate.data.dto.user.FavoriteClubDTO
+import com.catchmate.domain.model.board.Board
+import com.catchmate.domain.model.board.DeleteBoardLikeResponse
+import com.catchmate.domain.model.board.DeleteBoardResponse
+import com.catchmate.domain.model.board.GetBoardListResponse
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetUserBoardListResponse
+import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
+import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.enroll.GameInfo
+import com.catchmate.domain.model.enroll.UserInfo
+import com.catchmate.domain.model.user.FavoriteClub
 
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =
         PostBoardRequestDTO(
             title = request.title,
-            gameDate = request.gameDate,
-            location = request.location,
-            homeTeam = request.homeTeam,
-            awayTeam = request.awayTeam,
+            content = request.content,
             maxPerson = request.maxPerson,
-            cheerTeam = request.cheerTeam,
-            preferGender = request.preferGender,
-            preferAge = request.preferAge,
-            addInfo = request.addInfo,
+            cheerClubId = request.cheerClubId,
+            preferredGender = request.preferredGender,
+            preferredAgeRange = request.preferredAgeRange,
+            gameRequest = toGameRequestDTO(request.gameRequest),
+            isCompleted = request.isCompleted,
         )
 
-    fun toPostBoardResponse(responseDTO: PostBoardResponseDTO): PostBoardResponse =
+    private fun toGameRequestDTO(request: GameInfo): GameInfoDTO =
+        GameInfoDTO(
+            homeClubId = request.homeClubId,
+            awayClubId = request.awayClubId,
+            gameStartDate = request.gameStartDate,
+            location = request.location,
+        )
+
+    fun toPostBoardResponse(dto: PostBoardResponseDTO): PostBoardResponse =
         PostBoardResponse(
-            boardId = responseDTO.boardId,
+            boardId = dto.boardId,
+            title = dto.title,
+            content = dto.content,
+            cheerClubId = dto.cheerClubId,
+            currentPerson = dto.currentPerson,
+            maxPerson = dto.maxPerson,
+            preferredGender = dto.preferredGender,
+            preferredAgeRange = dto.preferredAgeRange,
+            gameInfo = toGameInfo(dto.gameInfo),
+            liftUpDate = dto.liftUpDate,
+            userInfo = toUserInfo(dto.userInfo),
         )
 
-    fun toPutBoardRequestDTO(request: PutBoardRequest): PutBoardRequestDTO =
-        PutBoardRequestDTO(
-            boardId = request.boardId,
+    private fun toGameInfo(dto: GameInfoDTO): GameInfo =
+        GameInfo(
+            homeClubId = dto.homeClubId,
+            awayClubId = dto.awayClubId,
+            gameStartDate = dto.gameStartDate,
+            location = dto.location,
+        )
+
+    private fun toUserInfo(dto: UserInfoDTO): UserInfo =
+        UserInfo(
+            userId = dto.userId,
+            email = dto.email,
+            profileImageUrl = dto.profileImageUrl,
+            gender = dto.gender,
+            allAlarm = dto.allAlarm,
+            chatAlarm = dto.chatAlarm,
+            enrollAlarm = dto.enrollAlarm,
+            eventAlarm = dto.eventAlarm,
+            nickName = dto.nickName,
+            favoriteClub = toFavoriteClub(dto.favoriteClub),
+            birthDate = dto.birthDate,
+            watchStyle = dto.watchStyle,
+        )
+
+    private fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
+        FavoriteClub(
+            id = dto.id,
+            name = dto.name,
+            homeStadium = dto.homeStadium,
+            region = dto.region,
+        )
+
+    fun toPatchBoardRequestDTO(request: PatchBoardRequest): PatchBoardRequestDTO =
+        PatchBoardRequestDTO(
             title = request.title,
-            gameDate = request.gameDate,
-            location = request.location,
-            homeTeam = request.homeTeam,
-            awayTeam = request.awayTeam,
-            cheerTeam = request.cheerTeam,
-            currentPerson = request.currentPerson,
+            content = request.content,
             maxPerson = request.maxPerson,
-            preferGender = request.preferGender,
-            preferAge = request.preferAge,
-            addInfo = request.addInfo,
+            cheerClubId = request.cheerClubId,
+            preferredGender = request.preferredGender,
+            preferredAgeRange = request.preferredAgeRange,
+            gameRequest = toGameRequestDTO(request.gameRequest),
+            isCompleted = request.isCompleted,
         )
 
-    fun toPutBoardResponse(responseDTO: PutBoardResponseDTO): PutBoardResponse =
-        PutBoardResponse(
+    fun toPatchBoardResponse(responseDTO: PatchBoardResponseDTO): PatchBoardResponse =
+        PatchBoardResponse(
             boardId = responseDTO.boardId,
+            title = responseDTO.title,
+            content = responseDTO.content,
+            cheerClubId = responseDTO.cheerClubId,
+            currentPerson = responseDTO.currentPerson,
+            maxPerson = responseDTO.maxPerson,
+            preferredGender = responseDTO.preferredGender,
+            preferredAgeRange = responseDTO.preferredAgeRange,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
+            liftUpDate = responseDTO.liftUpDate,
+            userInfo = toUserInfo(responseDTO.userInfo),
         )
 
-    fun toGetBoardPagingResponse(responseDTOList: List<GetBoardPagingResponseDTO>): List<GetBoardPagingResponse> =
-        responseDTOList.map { response ->
-            GetBoardPagingResponse(
-                boardId = response.boardId,
-                title = response.title,
-                gameDate = response.gameDate,
-                location = response.location,
-                homeTeam = response.homeTeam,
-                awayTeam = response.awayTeam,
-                cheerTeam = response.cheerTeam,
-                currentPerson = response.currentPerson,
-                maxPerson = response.maxPerson,
-            )
-        }
+    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse = PatchBoardLiftUpResponse(dto.liftUpDate)
+
+    fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
+        GetBoardListResponse(
+            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+        )
+
+    private fun toBoard(dto: BoardDTO): Board =
+        Board(
+            boardId = dto.boardId,
+            title = dto.title,
+            content = dto.content,
+            cheerClubId = dto.cheerClubId,
+            currentPerson = dto.currentPerson,
+            maxPerson = dto.maxPerson,
+            preferredGender = dto.preferredGender,
+            preferredAgeRange = dto.preferredAgeRange,
+            gameInfo = toGameInfo(dto.gameInfo),
+            liftUpDate = dto.liftUpDate,
+            userInfo = toUserInfo(dto.userInfo),
+        )
+
+    fun toGetUserBoardListResponse(dto: GetUserBoardListResponseDTO): GetUserBoardListResponse =
+        GetUserBoardListResponse(
+            boardInfoList = dto.boardInfoList.map { toBoard(it) },
+        )
 
     fun toGetBoardResponse(responseDTO: GetBoardResponseDTO): GetBoardResponse =
         GetBoardResponse(
             boardId = responseDTO.boardId,
-            writer = toWriter(responseDTO.writer),
             title = responseDTO.title,
-            gameDate = responseDTO.gameDate,
-            location = responseDTO.location,
-            homeTeam = responseDTO.homeTeam,
-            awayTeam = responseDTO.awayTeam,
-            cheerTeam = responseDTO.cheerTeam,
-            maxPerson = responseDTO.maxPerson,
+            content = responseDTO.content,
+            cheerClubId = responseDTO.cheerClubId,
             currentPerson = responseDTO.currentPerson,
-            preferGender = responseDTO.preferGender,
-            preferAge = responseDTO.preferAge,
-            addInfo = responseDTO.addInfo,
+            maxPerson = responseDTO.maxPerson,
+            preferredGender = responseDTO.preferredGender,
+            preferredAgeRange = responseDTO.preferredAgeRange,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
+            liftUpDate = responseDTO.liftUpDate,
+            userInfo = toUserInfo(responseDTO.userInfo),
         )
 
-    private fun toWriter(writerDTO: WriterDTO): Writer =
-        Writer(
-            userId = writerDTO.userId,
-            nickName = writerDTO.nickName,
-            picture = writerDTO.picture,
-            favGudan = writerDTO.favGudan,
-            watchStyle = writerDTO.watchStyle,
-            gender = writerDTO.gender,
-            birthDate = writerDTO.birthDate,
+    fun toDeleteBoardResponse(dto: DeleteBoardResponseDTO): DeleteBoardResponse =
+        DeleteBoardResponse(
+            boardId = dto.boardId,
+            deletedAt = dto.deletedAt,
         )
 
-    fun toDeleteBoardRequestDTO(request: DeleteBoardRequest): DeleteBoardRequestDTO =
-        DeleteBoardRequestDTO(
-            boardId = request.boardId,
+    fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
+        GetLikedBoardResponse(
+            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
         )
 
-    fun toGetLikedBoardResponse(responseDTO: List<GetLikedBoardResponseDTO>): List<GetLikedBoardResponse> =
-        responseDTO.map { board ->
-            GetLikedBoardResponse(
-                boardId = board.boardId,
-                title = board.title,
-                gameDate = board.gameDate,
-                location = board.location,
-                homeTeam = board.homeTeam,
-                awayTeam = board.awayTeam,
-                cheerTeam = board.cheerTeam,
-                currentPerson = board.currentPerson,
-                maxPerson = board.maxPerson,
-            )
-        }
+    fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse = PostBoardLikeResponse(dto.state)
+
+    fun toDeleteBoardLikeResponse(dto: DeleteBoardLikeResponseDTO): DeleteBoardLikeResponse = DeleteBoardLikeResponse(dto.state)
 }

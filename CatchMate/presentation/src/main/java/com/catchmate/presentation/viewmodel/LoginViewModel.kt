@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catchmate.domain.model.PostLoginRequest
-import com.catchmate.domain.model.PostLoginResponse
+import com.catchmate.domain.model.auth.PostLoginRequest
+import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.usecase.auth.PostAuthLoginUseCase
 import com.catchmate.domain.usecase.auth.SocialLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

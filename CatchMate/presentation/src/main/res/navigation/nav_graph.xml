@@ -90,6 +90,12 @@
         <action
             android:id="@+id/action_readPostFragment_to_addPostFragment"
             app:destination="@id/addPostFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_myPostFragment"
+            app:destination="@id/myPostFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
