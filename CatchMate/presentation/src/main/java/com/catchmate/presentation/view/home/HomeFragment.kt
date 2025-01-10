@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
+import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -20,15 +22,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment :
     Fragment(),
-    OnPostItemClickListener {
+    OnPostItemClickListener,
+    OnDateFilterSelectedListener {
     private var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
 
     private var page: Long = 1
     private var isNextPageExist = true
@@ -53,10 +53,12 @@ class HomeFragment :
         super.onViewCreated(view, savedInstanceState)
 
         getTokens()
+        initViewModel()
         initHeader()
         initDateFilter()
         initTeamFilter()
         initHeadCountFilter()
+        initBoardList()
         initRecyclerView()
     }
 
@@ -66,20 +68,7 @@ class HomeFragment :
     }
 
     private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
         localDataViewModel.getUserId()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-                initViewModel()
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
         localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (userId == -1L) {
                 getUserProfile()
@@ -96,26 +85,6 @@ class HomeFragment :
     }
 
     private fun initViewModel() {
-        homeViewModel.getBoardList(
-            gameStartDate,
-            maxPerson,
-            preferredTeamId,
-        )
-        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                if (response.boardInfoList.isNotEmpty()) {
-                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
-//                    isNextPageExist = true
-                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                    adapter.updatePostList(response.boardInfoList)
-                } else {
-                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
-                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
-//                    isNextPageExist = false
-                }
-            }
-        }
-
         homeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
                 val navOptions =
@@ -134,9 +103,28 @@ class HomeFragment :
         }
     }
 
+    private fun initBoardList() {
+        homeViewModel.getBoardList()
+        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                if (response.boardInfoList.isNotEmpty()) {
+                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
+//                    isNextPageExist = true
+                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
+                    adapter.updatePostList(response.boardInfoList)
+                } else {
+                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
+                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
+//                    isNextPageExist = false
+                }
+            }
+        }
+    }
+
     private fun initDateFilter() {
         binding.hfvHomeDateFilter.setOnClickListener {
-            val dateFilterBottomSheet = HomeDateFilterBottomSheetFragment()
+            val dateFilterBottomSheet = HomeDateFilterBottomSheetFragment(gameStartDate)
+            dateFilterBottomSheet.setOnDateFilterSelectedListener(this@HomeFragment)
             dateFilterBottomSheet.show(requireActivity().supportFragmentManager, dateFilterBottomSheet.tag)
         }
     }
@@ -198,5 +186,16 @@ class HomeFragment :
         val bundle = Bundle()
         bundle.putLong("boardId", boardId)
         findNavController().navigate(R.id.action_homeFragment_to_readPostFragment, bundle)
+    }
+
+    override fun onDateSelected(date: String?) {
+        gameStartDate = date
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamId,
+        )
+        binding.hfvHomeDateFilter.setFilterText(gameStartDate)
+        binding.hfvHomeDateFilter.setFilterTextColor(gameStartDate != null)
     }
 }

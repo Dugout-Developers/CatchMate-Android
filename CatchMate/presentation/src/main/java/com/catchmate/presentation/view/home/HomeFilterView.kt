@@ -6,8 +6,10 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewHomeFilterBinding
+import com.catchmate.presentation.util.DateUtils
 
 class HomeFilterView(
     context: Context,
@@ -36,5 +38,25 @@ class HomeFilterView(
 
         binding.tvFilterName.text = homeFilterNameText
         binding.ivFilterDropdown.setImageResource(homeFilterImage)
+    }
+
+    fun setFilterText(str: String?) {
+        if (str != null) {
+            binding.tvFilterName.text = DateUtils.formatDateToFilterDate(str)
+        } else {
+            binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_date)
+        }
+    }
+
+    fun setFilterTextColor(isSelected: Boolean) {
+        val color = if (isSelected) {
+            binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_selected_r8)
+            ContextCompat.getColor(context, R.color.brand500)
+        } else {
+            binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_unselected_r8)
+            ContextCompat.getColor(context, R.color.grey700)
+        }
+        binding.tvFilterName.setTextColor(color)
+        binding.ivFilterDropdown.imageTintList = ColorStateList.valueOf(color)
     }
 }
