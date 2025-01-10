@@ -54,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/xsmall"
                 app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
-                app:homeFilterLayoutColor="@color/grey0"
                 app:homeFilterNameText="@string/home_filter_date" />
 
             <com.catchmate.presentation.view.home.HomeFilterView
@@ -63,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/xsmall"
                 app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
-                app:homeFilterLayoutColor="@color/grey0"
                 app:homeFilterNameText="@string/home_filter_team" />
 
             <com.catchmate.presentation.view.home.HomeFilterView
@@ -71,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:homeFilterImage="@drawable/vec_home_filter_dropdown_20dp"
-                app:homeFilterLayoutColor="@color/grey0"
                 app:homeFilterNameText="@string/home_filter_member_count" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
