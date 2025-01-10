@@ -12,7 +12,6 @@ import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
-import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
 
@@ -96,7 +95,7 @@ class HomePostAdapter(
             val isCheerTeam = homeBoard.gameInfo.homeClubId == homeBoard.cheerClubId
 
             ResourceUtil.setTeamViewResources(
-                ClubUtils.convertClubIdToName(homeBoard.gameInfo.homeClubId),
+                homeBoard.gameInfo.homeClubId,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -104,7 +103,7 @@ class HomePostAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                ClubUtils.convertClubIdToName(homeBoard.gameInfo.awayClubId),
+                homeBoard.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,

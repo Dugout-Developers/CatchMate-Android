@@ -230,7 +230,7 @@ class ReadPostFragment : Fragment() {
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -238,7 +238,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
@@ -251,7 +251,7 @@ class ReadPostFragment : Fragment() {
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.favoriteClub.name,
+                        post.userInfo.favoriteClub.id,
                         true,
                         "read",
                     ),
@@ -367,7 +367,7 @@ class ReadPostFragment : Fragment() {
 
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -375,7 +375,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

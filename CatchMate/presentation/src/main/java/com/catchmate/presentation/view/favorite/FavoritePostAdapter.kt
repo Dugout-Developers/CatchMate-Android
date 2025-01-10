@@ -17,7 +17,6 @@ import com.catchmate.presentation.databinding.ItemHomePostBinding
 import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
-import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
 import kotlinx.coroutines.runBlocking
@@ -120,9 +119,7 @@ class FavoritePostAdapter(
 
             ResourceUtil
                 .setTeamViewResources(
-                    ClubUtils.convertClubIdToName(
-                        board.gameInfo.homeClubId,
-                    ),
+                    board.gameInfo.homeClubId,
                     isCheerTeam,
                     ivItemHomeTeamBg,
                     ivItemHomeTeamLogo,
@@ -131,9 +128,7 @@ class FavoritePostAdapter(
                 )
             ResourceUtil
                 .setTeamViewResources(
-                    ClubUtils.convertClubIdToName(
-                        board.gameInfo.awayClubId,
-                    ),
+                    board.gameInfo.awayClubId,
                     !isCheerTeam,
                     ivItemAwayTeamBg,
                     ivItemAwayTeamLogo,
