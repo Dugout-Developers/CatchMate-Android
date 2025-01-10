@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewHomeFilterBinding
+import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 
 class HomeFilterView(
@@ -40,11 +41,19 @@ class HomeFilterView(
         binding.ivFilterDropdown.setImageResource(homeFilterImage)
     }
 
-    fun setFilterText(str: String?) {
+    fun setDateFilterText(str: String?) {
         if (str != null) {
             binding.tvFilterName.text = DateUtils.formatDateToFilterDate(str)
         } else {
             binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_date)
+        }
+    }
+
+    fun setClubFilterText(clubId: Int?) {
+        if (clubId != null) {
+            binding.tvFilterName.text = ClubUtils.convertClubIdToName(clubId)
+        } else {
+            binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_team)
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
+import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.viewmodel.HomeViewModel
@@ -23,7 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment :
     Fragment(),
     OnPostItemClickListener,
-    OnDateFilterSelectedListener {
+    OnDateFilterSelectedListener,
+    OnClubFilterSelectedListener {
     private var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
 
@@ -131,7 +133,8 @@ class HomeFragment :
 
     private fun initTeamFilter() {
         binding.hfvHomeTeamFilter.setOnClickListener {
-            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment()
+            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment(preferredTeamId)
+            teamFilterBottomSheet.setOnClubSelectedListener(this@HomeFragment)
             teamFilterBottomSheet.show(requireActivity().supportFragmentManager, teamFilterBottomSheet.tag)
         }
     }
@@ -195,7 +198,19 @@ class HomeFragment :
             maxPerson,
             preferredTeamId,
         )
-        binding.hfvHomeDateFilter.setFilterText(gameStartDate)
+        binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
         binding.hfvHomeDateFilter.setFilterTextColor(gameStartDate != null)
+    }
+
+    override fun onClubFilterSelected(clubId: Int?) {
+        preferredTeamId = clubId
+        Log.e("CLUB", clubId.toString())
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamId,
+        )
+        binding.hfvHomeTeamFilter.setClubFilterText(clubId)
+        binding.hfvHomeTeamFilter.setFilterTextColor(clubId != null)
     }
 }
