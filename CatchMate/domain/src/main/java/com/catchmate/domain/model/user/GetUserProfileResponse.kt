@@ -1,5 +1,9 @@
 package com.catchmate.domain.model.user
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class GetUserProfileResponse(
     val userId: Long,
     val email: String,
@@ -13,4 +17,4 @@ data class GetUserProfileResponse(
     val favoriteClub: FavoriteClub,
     val birthDate: String,
     val watchStyle: String?,
-)
+) : Parcelable

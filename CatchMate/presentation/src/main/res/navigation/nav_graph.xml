@@ -106,9 +106,6 @@
             android:id="@+id/action_myPageFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_editProfileFragment2"
-            app:destination="@id/editProfileFragment" />
-        <action
             android:id="@+id/action_myPageFragment_to_sentJoinFragment"
             app:destination="@id/sentJoinFragment" />
         <action
@@ -117,6 +114,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_receivedJoinFragment"
             app:destination="@id/receivedJoinFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_myPostFragment"
+            app:destination="@id/myPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"

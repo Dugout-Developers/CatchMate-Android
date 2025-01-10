@@ -42,6 +42,7 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initHeader()
         initViewModel()
+        initViews()
     }
 
     override fun onDestroyView() {
@@ -89,8 +90,40 @@ class MyPageFragment : Fragment() {
 
     private fun initViewModel() {
         myPageViewModel.getUserProfile()
+        myPageViewModel.getEnrollNewCount()
         myPageViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             initProfile(response)
+        }
+        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
+            if (response.newEnrollCount == 0) {
+                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.GONE
+            } else {
+                binding.tvMyPageReceivedJoinUnreadCount.apply {
+                    visibility = View.VISIBLE
+                    text = response.newEnrollCount.toString()
+                }
+            }
+        }
+    }
+
+    private fun initViews() {
+        binding.apply {
+            viewMyPageProfile.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putParcelable("userInfo", myPageViewModel.userProfile.value)
+                findNavController().navigate(R.id.action_myPageFragment_to_editProfileFragment, bundle)
+            }
+            tvMyPageMyPost.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putLong("userId", myPageViewModel.userProfile.value?.userId!!)
+                findNavController().navigate(R.id.action_myPageFragment_to_myPostFragment, bundle)
+            }
+            tvMyPageSentJoin.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_sentJoinFragment)
+            }
+            tvMyPageReceivedJoin.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment)
+            }
         }
     }
 }
