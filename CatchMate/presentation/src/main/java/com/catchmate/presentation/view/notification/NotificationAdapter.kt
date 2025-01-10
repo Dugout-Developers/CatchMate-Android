@@ -3,25 +3,33 @@ package com.catchmate.presentation.view.notification
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.Content
-import com.catchmate.domain.model.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.NotificationInfo
+import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemNotificationBinding
+import com.catchmate.presentation.interaction.OnNotificationItemClickListener
+import com.catchmate.presentation.util.DateUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
 class NotificationAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
+    private val itemClickListener: OnNotificationItemClickListener,
 ) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
-    private var notificationList: MutableList<Content> = mutableListOf()
+    private var notificationList: MutableList<NotificationInfo> = mutableListOf()
 
-    fun updateNotificationList(newList: List<Content>) {
+    fun updateNotificationList(newList: List<NotificationInfo>) {
         notificationList = newList.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun updateSelectedNotification(pos: Int) {
+        notificationList[pos].read = true
+        notifyItemChanged(pos)
     }
 
     inner class ViewHolder(
@@ -41,6 +49,11 @@ class NotificationAdapter(
             tvNotificationItemDate = itemBinding.tvNotificationItemDate
             tvNotificationItemTime = itemBinding.tvNotificationItemTime
             tvNotificationItemPlace = itemBinding.tvNotificationItemPlace
+
+            itemBinding.root.setOnClickListener {
+                val pos = absoluteAdapterPosition
+                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos)
+            }
         }
     }
 
@@ -63,7 +76,22 @@ class NotificationAdapter(
         holder: ViewHolder,
         position: Int,
     ) {
-//        Glide.with(context)
-//            .load(notificationList[position].)
+        val info = notificationList[position]
+        Glide.with(context)
+            .load(info.senderProfileImageUrl)
+            .into(holder.ivNotificationItemProfile)
+        holder.tvNotificationItemTitle.text = info.body
+        val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo.gameInfo.gameStartDate)
+        holder.tvNotificationItemDate.text = dateTime.first + " | "
+        holder.tvNotificationItemTime.text = dateTime.second + " | "
+        holder.tvNotificationItemPlace.text = info.boardInfo.gameInfo.location
+
+        if (info.read) {
+            holder.layoutNotification.setBackgroundColor(ContextCompat.getColor(context, R.color.grey50))
+            holder.tvNotificationItemTitle.setTextColor(ContextCompat.getColor(context, R.color.grey500))
+        } else {
+            holder.layoutNotification.setBackgroundColor(ContextCompat.getColor(context, R.color.grey0))
+            holder.tvNotificationItemTitle.setTextColor(ContextCompat.getColor(context, R.color.grey800))
+        }
     }
 }

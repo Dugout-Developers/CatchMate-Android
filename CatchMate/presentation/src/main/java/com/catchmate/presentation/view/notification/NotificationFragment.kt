@@ -6,13 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationBinding
+import com.catchmate.presentation.interaction.OnNotificationItemClickListener
 import com.catchmate.presentation.viewmodel.NotificationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class NotificationFragment : Fragment() {
+@AndroidEntryPoint
+class NotificationFragment :
+    Fragment(),
+    OnNotificationItemClickListener {
     private var _binding: FragmentNotificationBinding? = null
     val binding get() = _binding!!
 
@@ -35,6 +40,7 @@ class NotificationFragment : Fragment() {
 
         initHeader()
         initViewModel()
+        initRecyclerView()
     }
 
     override fun onDestroyView() {
@@ -54,17 +60,35 @@ class NotificationFragment : Fragment() {
     private fun initViewModel() {
         notificationViewModel.getReceivedNotificationList()
         notificationViewModel.receivedNotificationList.observe(viewLifecycleOwner) { response ->
-            if (response.content.isEmpty()) {
+            if (response.notificationInfoList.isEmpty()) {
                 binding.rvNotificationList.visibility = View.GONE
                 binding.layoutNotificationNoList.visibility = View.VISIBLE
             } else {
                 binding.rvNotificationList.visibility = View.VISIBLE
                 binding.layoutNotificationNoList.visibility = View.GONE
+                val adapter = binding.rvNotificationList.adapter as NotificationAdapter
+                adapter.updateNotificationList(response.notificationInfoList)
             }
         }
     }
 
     private fun initRecyclerView() {
+        binding.rvNotificationList.apply {
+            adapter = NotificationAdapter(requireContext(), layoutInflater, this@NotificationFragment)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+    }
 
+    override fun onNotificationItemClick(
+        notificationId: Long,
+        currentPos: Int,
+    ) {
+        notificationViewModel.getReceivedNotification(notificationId)
+        notificationViewModel.receivedNotification.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val adapter = binding.rvNotificationList.adapter as NotificationAdapter
+                adapter.updateSelectedNotification(currentPos)
+            }
+        }
     }
 }

@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.usecase.notification.GetReceivedNotificationListUseCase
+import com.catchmate.domain.usecase.notification.GetReceivedNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,10 +18,15 @@ class NotificationViewModel
     @Inject
     constructor(
         private val getReceivedNotificationListUseCase: GetReceivedNotificationListUseCase,
+        private val getReceivedNotificationUseCase: GetReceivedNotificationUseCase,
     ) : ViewModel() {
         private val _receivedNotificationList = MutableLiveData<GetReceivedNotificationListResponse>()
         val receivedNotificationList: LiveData<GetReceivedNotificationListResponse>
             get() = _receivedNotificationList
+
+        private val _receivedNotification = MutableLiveData<GetReceivedNotificationResponse>()
+        val receivedNotification: LiveData<GetReceivedNotificationResponse>
+            get() = _receivedNotification
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -35,6 +42,22 @@ class NotificationViewModel
                 result
                     .onSuccess { response ->
                         _receivedNotificationList.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun getReceivedNotification(notificationId: Long) {
+            viewModelScope.launch {
+                val result = getReceivedNotificationUseCase.getReceivedNotification(notificationId)
+                result
+                    .onSuccess { response ->
+                        _receivedNotification.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
