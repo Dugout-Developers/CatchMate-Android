@@ -66,13 +66,14 @@ class HomeFilterView(
     }
 
     fun setFilterTextColor(isSelected: Boolean) {
-        val color = if (isSelected) {
-            binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_selected_r8)
-            ContextCompat.getColor(context, R.color.brand500)
-        } else {
-            binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_unselected_r8)
-            ContextCompat.getColor(context, R.color.grey700)
-        }
+        val color =
+            if (isSelected) {
+                binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_selected_r8)
+                ContextCompat.getColor(context, R.color.brand500)
+            } else {
+                binding.layoutFilter.setBackgroundResource(R.drawable.shape_home_filter_unselected_r8)
+                ContextCompat.getColor(context, R.color.grey700)
+            }
         binding.tvFilterName.setTextColor(color)
         binding.ivFilterDropdown.imageTintList = ColorStateList.valueOf(color)
     }
