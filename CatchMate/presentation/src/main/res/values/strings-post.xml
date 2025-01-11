@@ -24,6 +24,7 @@
     <string name="temporary_storage_save_question">작성 중인 글을 임시저장할까요?</string>
     <string name="temporary_storage_save_positive">임시저장</string>
     <string name="temporary_storage_save_negative">나가기</string>
+    <string name="temporary_storage_sucess_toast_msg">임시저장이 완료되었어요</string>
 
     <string name="post_edt_hint_title">제목을 입력해주세요</string>
     <string name="post_edt_hint_count">본인 포함 인원</string>

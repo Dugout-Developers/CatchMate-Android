@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
@@ -62,6 +63,10 @@ class AddPostViewModel
         val noTempBoardMessage: LiveData<String?>
             get() = _noTempBoardMessage
 
+        private val _boardInfo = MutableLiveData<GetBoardResponse?>()
+        val boardInfo: LiveData<GetBoardResponse?>
+            get() = _boardInfo
+
         fun setHomeTeamName(teamName: String) {
             _homeTeamName.value = teamName
         }
@@ -72,6 +77,10 @@ class AddPostViewModel
 
         fun setGameDate(gameDateTime: String) {
             _gameDateTime.value = gameDateTime
+        }
+
+        fun setBoardInfo(boardInfo: GetBoardResponse?) {
+            _boardInfo.value = boardInfo
         }
 
         fun postBoard(postBoardRequest: PostBoardRequest) {

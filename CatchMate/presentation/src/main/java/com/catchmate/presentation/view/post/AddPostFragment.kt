@@ -32,6 +32,7 @@ import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,14 +47,7 @@ class AddPostFragment :
     val binding get() = _binding!!
 
     private val addPostViewModel: AddPostViewModel by viewModels()
-
-    private var boardInfo: GetBoardResponse? = null
     private var isEditMode = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        boardInfo = getBoardInfo()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,23 +63,26 @@ class AddPostFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        boardInfo?.let {
-            isEditMode = true
-            setBoardData(it)
-        }
-        initViewModel()
-        if (!isEditMode) {
-            addPostViewModel.getTempBoard()
-            addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
-                showImportTempBoardDialog()
+        addPostViewModel.setBoardInfo(getBoardInfo())
+        addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
+            info?.let {
+                isEditMode = true
+                setBoardData(it)
             }
-            addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
-                if (!message.isNullOrEmpty()) {
-                    Log.d("NO TEMP BOARD", message)
+            initHeader()
+            if (!isEditMode) {
+                addPostViewModel.getTempBoard()
+                addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
+                    showImportTempBoardDialog()
+                }
+                addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
+                    if (!message.isNullOrEmpty()) {
+                        Log.d("NO TEMP BOARD", message)
+                    }
                 }
             }
         }
-        initHeader()
+        initViewModel()
         initFooter()
         initAdditionalInfoEdt()
         initBottomSheets()
@@ -101,11 +98,19 @@ class AddPostFragment :
     private fun setBoardData(response: GetBoardResponse) {
         binding.apply {
             edtAddPostTitle.setText(response.title)
-            tvAddPostPeopleCount.text = response.maxPerson.toString()
-            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameInfo.gameStartDate!!))
-            addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
-            addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
-            tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            tvAddPostPeopleCount.text = if (response.maxPerson != 0) response.maxPerson.toString() else ""
+            response.gameInfo.gameStartDate?.let {
+                addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(it))
+            }
+            if (response.gameInfo.homeClubId != 0) {
+                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
+            }
+            if (response.gameInfo.awayClubId != 0) {
+                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
+            }
+            if (response.cheerClubId != 0) {
+                tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            }
             tvAddPostPlace.text = response.gameInfo.location
             edtAddPostAdditionalInfo.setText(response.content)
             tvAddPostAdditionalInfoLetterCount.text = response.content.length.toString()
@@ -140,15 +145,22 @@ class AddPostFragment :
 
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
-            imgbtnHeaderTextBack.setOnClickListener {
-                showHandleWritingBoardDialog()
-            }
             tvHeaderTextTitle.visibility = View.GONE
-            tvHeaderTextSub.visibility = View.VISIBLE
-            tvHeaderTextSub.setText(R.string.temporary_storage)
-            // 임시저장 버튼 클릭
-            tvHeaderTextSub.setOnClickListener {
-                saveTempBoard()
+            if (isEditMode) {
+                tvHeaderTextSub.visibility = View.GONE
+                imgbtnHeaderTextBack.setOnClickListener {
+                    findNavController().popBackStack()
+                }
+            } else {
+                tvHeaderTextSub.visibility = View.VISIBLE
+                tvHeaderTextSub.setText(R.string.temporary_storage)
+                // 임시저장 버튼 클릭
+                tvHeaderTextSub.setOnClickListener {
+                    saveTempBoard()
+                }
+                imgbtnHeaderTextBack.setOnClickListener {
+                    showHandleWritingBoardDialog()
+                }
             }
         }
     }
@@ -241,7 +253,7 @@ class AddPostFragment :
                         gameRequest,
                         true,
                     )
-                patchBoard(boardInfo?.boardId ?: 0, boardEditRequest)
+                patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
                 val boardWriteRequest =
                     PostBoardRequest(
@@ -310,14 +322,19 @@ class AddPostFragment :
         addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.e("boardWriteResponse", response.boardId.toString())
-                val bundle = Bundle()
-                bundle.putLong("boardId", response.boardId)
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.addPostFragment, true)
-                        .build()
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
+                if (boardWriteRequest.isCompleted) { // 게시글 등록일 때
+                    val bundle = Bundle()
+                    bundle.putLong("boardId", response.boardId)
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
+                } else { // 임시 저장일 때
+                    Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
             }
         }
     }
@@ -554,7 +571,7 @@ class AddPostFragment :
                             tempBoard.liftUpDate,
                             tempBoard.userInfo,
                         )
-//                    setBoardData(board)
+                    addPostViewModel.setBoardInfo(board)
                     dialog.dismiss()
                 }
             }
