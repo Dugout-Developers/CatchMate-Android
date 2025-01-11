@@ -276,7 +276,12 @@ class AddPostFragment :
             val title = edtAddPostTitle.text.toString()
             val content = edtAddPostAdditionalInfo.text.toString()
             val maxPerson = if (tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else tvAddPostPeopleCount.text.toString().toInt()
-            val cheerClubId = if (tvAddPostCheerTeam.text.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(tvAddPostCheerTeam.text.toString())
+            val cheerClubId =
+                if (tvAddPostCheerTeam.text.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(tvAddPostCheerTeam.text.toString())
+                }
             val preferredGender =
                 if (chipgroupAddPostGender.checkedChipId != View.NO_ID) {
                     GenderUtils.convertPostGender(
@@ -295,9 +300,24 @@ class AddPostFragment :
                 } else {
                     emptyList()
                 }
-            val homeClubId = if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
-            val awayClubId = if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
-            val gameStartDate = if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) null else addPostViewModel.gameDateTime.value.toString()
+            val homeClubId =
+                if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
+                }
+            val awayClubId =
+                if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
+                }
+            val gameStartDate =
+                if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) {
+                    null
+                } else {
+                    addPostViewModel.gameDateTime.value.toString()
+                }
             val location = tvAddPostPlace.text.toString()
             val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
             val tempBoard =

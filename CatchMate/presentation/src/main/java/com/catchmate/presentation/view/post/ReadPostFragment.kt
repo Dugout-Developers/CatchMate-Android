@@ -197,7 +197,7 @@ class ReadPostFragment : Fragment() {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
             }
         }
-        readPostViewModel.bookmarkFailureException.observe(viewLifecycleOwner) { message ->
+        readPostViewModel.bookmarkFailureMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {
                 Snackbar.make(requireView(), R.string.post_already_liked_toast_msg, Snackbar.LENGTH_SHORT).show()
             }

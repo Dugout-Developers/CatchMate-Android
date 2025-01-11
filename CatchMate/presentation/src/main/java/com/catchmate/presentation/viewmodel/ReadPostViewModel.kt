@@ -77,7 +77,7 @@ class ReadPostViewModel
             get() = _liftUpFailureMessage
 
         private val _bookmarkFailureMessage = MutableLiveData<String>()
-        val bookmarkFailureException: LiveData<String>
+        val bookmarkFailureMessage: LiveData<String>
             get() = _bookmarkFailureMessage
 
         fun getBoard(boardId: Long) {
