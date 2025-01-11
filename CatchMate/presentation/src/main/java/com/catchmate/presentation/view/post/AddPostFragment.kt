@@ -44,10 +44,7 @@ class AddPostFragment :
     val binding get() = _binding!!
 
     private val addPostViewModel: AddPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
 
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
     private var boardInfo: GetBoardResponse? = null
     private var isEditMode = false
 
@@ -74,8 +71,6 @@ class AddPostFragment :
             isEditMode = true
             setBoardData(it)
         }
-
-        getTokens()
         initViewModel()
         initHeader()
         initFooter()
@@ -94,7 +89,7 @@ class AddPostFragment :
         binding.apply {
             edtAddPostTitle.setText(response.title)
             tvAddPostPeopleCount.text = response.maxPerson.toString()
-            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameInfo.gameStartDate))
+            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameInfo.gameStartDate!!))
             addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
             addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
             tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
@@ -130,38 +125,56 @@ class AddPostFragment :
             arguments?.getParcelable("boardInfo") as GetBoardResponse?
         }
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
-    }
-
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
             imgbtnHeaderTextBack.setOnClickListener {
-                if (isEditMode) {
-                    findNavController().popBackStack()
-                } else {
-                    val navOptions =
-                        NavOptions
-                            .Builder()
-                            .setPopUpTo(R.id.addPostFragment, true)
-                            .build()
-                    findNavController().navigate(R.id.action_addPostFragment_to_homeFragment, null, navOptions)
-                }
+                findNavController().popBackStack()
             }
             tvHeaderTextTitle.visibility = View.GONE
             tvHeaderTextSub.visibility = View.VISIBLE
             tvHeaderTextSub.setText(R.string.temporary_storage)
+            // 임시저장
+            tvHeaderTextSub.setOnClickListener {
+                val title = binding.edtAddPostTitle.text.toString()
+                val content = binding.edtAddPostAdditionalInfo.text.toString()
+                val maxPerson = if (binding.tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else binding.tvAddPostPeopleCount.text.toString().toInt()
+                val cheerClubId = if (binding.tvAddPostCheerTeam.text.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(binding.tvAddPostCheerTeam.text.toString())
+                val preferredGender =
+                    if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
+                        GenderUtils.convertPostGender(
+                            binding.root
+                                .findViewById<Chip>(
+                                    binding.chipgroupAddPostGender.checkedChipId,
+                                ).text
+                                .toString(),
+                        )
+                    } else {
+                        ""
+                    }
+                val preferredAgeRange =
+                    if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
+                        getCheckedAgeRange(binding.chipgroupAddPostAge.checkedChipIds).toList()
+                    } else {
+                        emptyList()
+                    }
+                val homeClubId = if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
+                val awayClubId = if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
+                val gameStartDate = if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) null else addPostViewModel.gameDateTime.value.toString()
+                val location = binding.tvAddPostPlace.text.toString()
+                val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+                val tempBoard =
+                    PostBoardRequest(
+                        title,
+                        content,
+                        maxPerson,
+                        cheerClubId,
+                        preferredGender,
+                        preferredAgeRange,
+                        gameRequest,
+                        false,
+                    )
+                postBoardWrite(tempBoard)
+            }
         }
     }
 
@@ -187,6 +200,23 @@ class AddPostFragment :
             if (gameDateTime != null) {
                 binding.tvAddPostGameDateTime.text = DateUtils.formatPlayDate(gameDateTime)
             }
+        }
+
+        addPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                if (isTrue) {
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_loginFragment, null, navOptions)
+                }
+            }
+        }
+
+        addPostViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Log.e("ADD POST ERR", message.toString())
         }
     }
 
@@ -263,7 +293,12 @@ class AddPostFragment :
                 Log.e("boardWriteResponse", response.boardId.toString())
                 val bundle = Bundle()
                 bundle.putLong("boardId", response.boardId)
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.addPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
             }
         }
     }
@@ -278,7 +313,12 @@ class AddPostFragment :
                 Log.d("boardEditResponse", response.boardId.toString())
                 val bundle = Bundle()
                 bundle.putLong("boardId", response.boardId)
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.addPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
             }
         }
     }
@@ -290,13 +330,31 @@ class AddPostFragment :
     }
 
     private fun initAgeChip() {
-        binding.chipgroupAddPostAge.setOnCheckedStateChangeListener { group, checkedIds ->
-            if (!checkedIds.contains(R.id.chip_add_post_age_regardless) && checkedIds.size == 5) {
-                group.clearCheck()
-                binding.chipAddPostAgeRegardless.isChecked = true
-            }
-            if (checkedIds.contains(R.id.chip_add_post_age_regardless) && checkedIds.size > 1) {
-                binding.chipAddPostAgeRegardless.isChecked = false
+        binding.apply {
+            chipgroupAddPostAge.setOnCheckedStateChangeListener { group, checkedIds ->
+                val ageChipIds =
+                    listOf(
+                        chipAddPostAgeTeenager.id,
+                        chipAddPostAgeTwenties.id,
+                        chipAddPostAgeThirties.id,
+                        chipAddPostAgeFourties.id,
+                        chipAddPostAgeFifties.id,
+                    )
+                val ageChips =
+                    listOf(
+                        chipAddPostAgeTeenager,
+                        chipAddPostAgeTwenties,
+                        chipAddPostAgeThirties,
+                        chipAddPostAgeFourties,
+                        chipAddPostAgeFifties,
+                    )
+
+                if (checkedIds.containsAll(ageChipIds)) {
+                    ageChips.forEach { chip ->
+                        chip.isChecked = false
+                    }
+                    chipAddPostAgeRegardless.isChecked = true
+                }
             }
         }
     }
@@ -413,7 +471,6 @@ class AddPostFragment :
         val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
         val place = binding.tvAddPostPlace.text.toString()
         val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
-        // 연령대 추후 로직 변경 시 적용
 
         binding.layoutAddPostFooter.btnFooterOne.isEnabled =
             title.isNotEmpty() &&
