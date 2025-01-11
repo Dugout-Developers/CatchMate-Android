@@ -5,6 +5,7 @@ import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
@@ -36,6 +37,8 @@ interface BoardRepository {
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
 
     suspend fun getLikedBoard(): Result<GetLikedBoardResponse>
+
+    suspend fun getTempBoard(): Result<GetTempBoardResponse>
 
     suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse>
 

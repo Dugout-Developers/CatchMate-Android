@@ -6,6 +6,7 @@ import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
@@ -22,6 +23,7 @@ import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
@@ -168,6 +170,21 @@ object BoardMapper {
             gameInfo = toGameInfo(responseDTO.gameInfo),
             liftUpDate = responseDTO.liftUpDate,
             userInfo = toUserInfo(responseDTO.userInfo),
+        )
+
+    fun toGetTempBoardResponse(dto: GetTempBoardResponseDTO): GetTempBoardResponse =
+        GetTempBoardResponse(
+            boardId = dto.boardId,
+            title = dto.title,
+            content = dto.content,
+            cheerClubId = dto.cheerClubId,
+            currentPerson = dto.currentPerson,
+            maxPerson = dto.maxPerson,
+            preferredGender = dto.preferredGender,
+            preferredAgeRange = dto.preferredAgeRange,
+            gameInfo = toGameInfo(dto.gameInfo),
+            liftUpDate = dto.liftUpDate,
+            userInfo = toUserInfo(dto.userInfo),
         )
 
     fun toDeleteBoardResponse(dto: DeleteBoardResponseDTO): DeleteBoardResponse =

@@ -18,6 +18,14 @@
     <string name="post_register">직관 신청</string>
     <string name="post_writer">채팅 보기</string>
 
+    <string name="temporary_storage_import_question">임시저장된 글을 불러올까요?</string>
+    <string name="temporary_storage_import_positive">불러오기</string>
+    <string name="temporary_storage_import_negative">새로 작성</string>
+    <string name="temporary_storage_save_question">작성 중인 글을 임시저장할까요?</string>
+    <string name="temporary_storage_save_positive">임시저장</string>
+    <string name="temporary_storage_save_negative">나가기</string>
+    <string name="temporary_storage_sucess_toast_msg">임시저장이 완료되었어요</string>
+
     <string name="post_edt_hint_title">제목을 입력해주세요</string>
     <string name="post_edt_hint_count">본인 포함 인원</string>
     <string name="post_edt_hint_count_unit">명</string>
@@ -59,6 +67,7 @@
     <string name="post_read_people_count">인원</string>
     <string name="post_read_additional_info">추가 정보</string>
     <string name="post_read_toast_msg">게시글을 저장했어요</string>
+    <string name="post_already_liked_toast_msg">이미 찜한 게시글입니다</string>
 
     <string name="post_read_writer_menu_up">끌어올리기</string>
     <string name="post_read_writer_menu_up_complete">게시글을 끌어올렸어요</string>

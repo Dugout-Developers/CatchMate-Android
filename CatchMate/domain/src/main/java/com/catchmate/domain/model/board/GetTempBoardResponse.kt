@@ -1,9 +1,9 @@
-package com.catchmate.data.dto.board
+package com.catchmate.domain.model.board
 
-import com.catchmate.data.dto.enroll.GameInfoDTO
-import com.catchmate.data.dto.enroll.UserInfoDTO
+import com.catchmate.domain.model.enroll.GameInfo
+import com.catchmate.domain.model.enroll.UserInfo
 
-data class PostBoardResponseDTO(
+data class GetTempBoardResponse(
     val boardId: Long,
     val title: String,
     val content: String,
@@ -12,7 +12,7 @@ data class PostBoardResponseDTO(
     val maxPerson: Int,
     val preferredGender: String,
     val preferredAgeRange: String,
-    val gameInfo: GameInfoDTO,
+    val gameInfo: GameInfo,
     val liftUpDate: String,
-    val userInfo: UserInfoDTO,
+    val userInfo: UserInfo,
 )

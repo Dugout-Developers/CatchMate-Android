@@ -3,7 +3,7 @@ package com.catchmate.data.dto.board
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 
-data class PostBoardResponseDTO(
+data class GetTempBoardResponseDTO(
     val boardId: Long,
     val title: String,
     val content: String,

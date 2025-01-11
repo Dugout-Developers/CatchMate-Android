@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
 import com.catchmate.presentation.interaction.OnDateTimeSelectedListener
 import com.catchmate.presentation.interaction.OnPeopleCountSelectedListener
@@ -28,8 +30,9 @@ import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,17 +47,7 @@ class AddPostFragment :
     val binding get() = _binding!!
 
     private val addPostViewModel: AddPostViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
-
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
-    private var boardInfo: GetBoardResponse? = null
     private var isEditMode = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        boardInfo = getBoardInfo()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,14 +63,26 @@ class AddPostFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        boardInfo?.let {
-            isEditMode = true
-            setBoardData(it)
+        addPostViewModel.setBoardInfo(getBoardInfo())
+        addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
+            info?.let {
+                isEditMode = true
+                setBoardData(it)
+            }
+            initHeader()
+            if (!isEditMode) {
+                addPostViewModel.getTempBoard()
+                addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
+                    showImportTempBoardDialog()
+                }
+                addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
+                    if (!message.isNullOrEmpty()) {
+                        Log.d("NO TEMP BOARD", message)
+                    }
+                }
+            }
         }
-
-        getTokens()
         initViewModel()
-        initHeader()
         initFooter()
         initAdditionalInfoEdt()
         initBottomSheets()
@@ -93,11 +98,19 @@ class AddPostFragment :
     private fun setBoardData(response: GetBoardResponse) {
         binding.apply {
             edtAddPostTitle.setText(response.title)
-            tvAddPostPeopleCount.text = response.maxPerson.toString()
-            addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(response.gameInfo.gameStartDate))
-            addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
-            addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
-            tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            tvAddPostPeopleCount.text = if (response.maxPerson != 0) response.maxPerson.toString() else ""
+            response.gameInfo.gameStartDate?.let {
+                addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(it))
+            }
+            if (response.gameInfo.homeClubId != 0) {
+                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
+            }
+            if (response.gameInfo.awayClubId != 0) {
+                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
+            }
+            if (response.cheerClubId != 0) {
+                tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            }
             tvAddPostPlace.text = response.gameInfo.location
             edtAddPostAdditionalInfo.setText(response.content)
             tvAddPostAdditionalInfoLetterCount.text = response.content.length.toString()
@@ -130,38 +143,25 @@ class AddPostFragment :
             arguments?.getParcelable("boardInfo") as GetBoardResponse?
         }
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
-    }
-
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
-            imgbtnHeaderTextBack.setOnClickListener {
-                if (isEditMode) {
+            tvHeaderTextTitle.visibility = View.GONE
+            if (isEditMode) {
+                tvHeaderTextSub.visibility = View.GONE
+                imgbtnHeaderTextBack.setOnClickListener {
                     findNavController().popBackStack()
-                } else {
-                    val navOptions =
-                        NavOptions
-                            .Builder()
-                            .setPopUpTo(R.id.addPostFragment, true)
-                            .build()
-                    findNavController().navigate(R.id.action_addPostFragment_to_homeFragment, null, navOptions)
+                }
+            } else {
+                tvHeaderTextSub.visibility = View.VISIBLE
+                tvHeaderTextSub.setText(R.string.temporary_storage)
+                // 임시저장 버튼 클릭
+                tvHeaderTextSub.setOnClickListener {
+                    saveTempBoard()
+                }
+                imgbtnHeaderTextBack.setOnClickListener {
+                    showHandleWritingBoardDialog()
                 }
             }
-            tvHeaderTextTitle.visibility = View.GONE
-            tvHeaderTextSub.visibility = View.VISIBLE
-            tvHeaderTextSub.setText(R.string.temporary_storage)
         }
     }
 
@@ -187,6 +187,23 @@ class AddPostFragment :
             if (gameDateTime != null) {
                 binding.tvAddPostGameDateTime.text = DateUtils.formatPlayDate(gameDateTime)
             }
+        }
+
+        addPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                if (isTrue) {
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_loginFragment, null, navOptions)
+                }
+            }
+        }
+
+        addPostViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Log.e("ADD POST ERR", message.toString())
         }
     }
 
@@ -236,7 +253,7 @@ class AddPostFragment :
                         gameRequest,
                         true,
                     )
-                patchBoard(boardInfo?.boardId ?: 0, boardEditRequest)
+                patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
                 val boardWriteRequest =
                     PostBoardRequest(
@@ -254,6 +271,70 @@ class AddPostFragment :
         }
     }
 
+    private fun saveTempBoard() {
+        binding.apply {
+            val title = edtAddPostTitle.text.toString()
+            val content = edtAddPostAdditionalInfo.text.toString()
+            val maxPerson = if (tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else tvAddPostPeopleCount.text.toString().toInt()
+            val cheerClubId =
+                if (tvAddPostCheerTeam.text.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(tvAddPostCheerTeam.text.toString())
+                }
+            val preferredGender =
+                if (chipgroupAddPostGender.checkedChipId != View.NO_ID) {
+                    GenderUtils.convertPostGender(
+                        root
+                            .findViewById<Chip>(
+                                chipgroupAddPostGender.checkedChipId,
+                            ).text
+                            .toString(),
+                    )
+                } else {
+                    ""
+                }
+            val preferredAgeRange =
+                if (chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
+                    getCheckedAgeRange(chipgroupAddPostAge.checkedChipIds).toList()
+                } else {
+                    emptyList()
+                }
+            val homeClubId =
+                if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
+                }
+            val awayClubId =
+                if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) {
+                    0
+                } else {
+                    ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
+                }
+            val gameStartDate =
+                if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) {
+                    null
+                } else {
+                    addPostViewModel.gameDateTime.value.toString()
+                }
+            val location = tvAddPostPlace.text.toString()
+            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+            val tempBoard =
+                PostBoardRequest(
+                    title,
+                    content,
+                    maxPerson,
+                    cheerClubId,
+                    preferredGender,
+                    preferredAgeRange,
+                    gameRequest,
+                    false,
+                )
+            postBoardWrite(tempBoard)
+        }
+    }
+
     private fun postBoardWrite(boardWriteRequest: PostBoardRequest) {
         addPostViewModel.postBoard(
             boardWriteRequest,
@@ -261,9 +342,19 @@ class AddPostFragment :
         addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.e("boardWriteResponse", response.boardId.toString())
-                val bundle = Bundle()
-                bundle.putLong("boardId", response.boardId)
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
+                if (boardWriteRequest.isCompleted) { // 게시글 등록일 때
+                    val bundle = Bundle()
+                    bundle.putLong("boardId", response.boardId)
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
+                } else { // 임시 저장일 때
+                    Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
             }
         }
     }
@@ -278,7 +369,12 @@ class AddPostFragment :
                 Log.d("boardEditResponse", response.boardId.toString())
                 val bundle = Bundle()
                 bundle.putLong("boardId", response.boardId)
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle)
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.addPostFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
             }
         }
     }
@@ -290,13 +386,31 @@ class AddPostFragment :
     }
 
     private fun initAgeChip() {
-        binding.chipgroupAddPostAge.setOnCheckedStateChangeListener { group, checkedIds ->
-            if (!checkedIds.contains(R.id.chip_add_post_age_regardless) && checkedIds.size == 5) {
-                group.clearCheck()
-                binding.chipAddPostAgeRegardless.isChecked = true
-            }
-            if (checkedIds.contains(R.id.chip_add_post_age_regardless) && checkedIds.size > 1) {
-                binding.chipAddPostAgeRegardless.isChecked = false
+        binding.apply {
+            chipgroupAddPostAge.setOnCheckedStateChangeListener { group, checkedIds ->
+                val ageChipIds =
+                    listOf(
+                        chipAddPostAgeTeenager.id,
+                        chipAddPostAgeTwenties.id,
+                        chipAddPostAgeThirties.id,
+                        chipAddPostAgeFourties.id,
+                        chipAddPostAgeFifties.id,
+                    )
+                val ageChips =
+                    listOf(
+                        chipAddPostAgeTeenager,
+                        chipAddPostAgeTwenties,
+                        chipAddPostAgeThirties,
+                        chipAddPostAgeFourties,
+                        chipAddPostAgeFifties,
+                    )
+
+                if (checkedIds.containsAll(ageChipIds)) {
+                    ageChips.forEach { chip ->
+                        chip.isChecked = false
+                    }
+                    chipAddPostAgeRegardless.isChecked = true
+                }
             }
         }
     }
@@ -413,7 +527,6 @@ class AddPostFragment :
         val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
         val place = binding.tvAddPostPlace.text.toString()
         val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
-        // 연령대 추후 로직 변경 시 적용
 
         binding.layoutAddPostFooter.btnFooterOne.isEnabled =
             title.isNotEmpty() &&
@@ -439,6 +552,82 @@ class AddPostFragment :
             ages.add(age)
         }
         return ages
+    }
+
+    private fun showImportTempBoardDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.temporary_storage_import_question)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.temporary_storage_import_negative)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.temporary_storage_import_positive)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    val tempBoard = addPostViewModel.getTempBoardResponse.value!!
+                    val board =
+                        GetBoardResponse(
+                            tempBoard.boardId,
+                            tempBoard.title,
+                            tempBoard.content,
+                            tempBoard.cheerClubId,
+                            tempBoard.currentPerson,
+                            tempBoard.maxPerson,
+                            tempBoard.preferredGender,
+                            tempBoard.preferredAgeRange,
+                            tempBoard.gameInfo,
+                            tempBoard.liftUpDate,
+                            tempBoard.userInfo,
+                        )
+                    addPostViewModel.setBoardInfo(board)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
+    }
+
+    private fun showHandleWritingBoardDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.temporary_storage_save_question)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.temporary_storage_save_negative)
+                setOnClickListener {
+                    findNavController().popBackStack()
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.temporary_storage_save_positive)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    saveTempBoard()
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 
     override fun onPeopleCountSelected(count: Int) {
