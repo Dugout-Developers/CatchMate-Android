@@ -241,7 +241,7 @@ class BoardRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    if (response.code() == 400) {
+                    if (response.code() == 404) {
                         Result.failure(NonExistentTempBoardException("$stringToJson"))
                     } else {
                         Result.failure(Exception("$stringToJson"))

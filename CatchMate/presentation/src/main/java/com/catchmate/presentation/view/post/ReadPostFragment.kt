@@ -225,7 +225,7 @@ class ReadPostFragment : Fragment() {
     private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
-            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate)
+            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate!!)
             tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
@@ -360,7 +360,7 @@ class ReadPostFragment : Fragment() {
         dialogBinding.apply {
             val post = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = post.gameInfo.location

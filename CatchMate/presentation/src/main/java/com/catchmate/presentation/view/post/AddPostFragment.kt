@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.interaction.OnCheerTeamSelectedListener
 import com.catchmate.presentation.interaction.OnDateTimeSelectedListener
 import com.catchmate.presentation.interaction.OnPeopleCountSelectedListener
@@ -28,8 +30,8 @@ import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.viewmodel.AddPostViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,6 +74,17 @@ class AddPostFragment :
             setBoardData(it)
         }
         initViewModel()
+        if (!isEditMode) {
+            addPostViewModel.getTempBoard()
+            addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
+                showImportTempBoardDialog()
+            }
+            addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
+                if (!message.isNullOrEmpty()) {
+                    Log.d("NO TEMP BOARD", message)
+                }
+            }
+        }
         initHeader()
         initFooter()
         initAdditionalInfoEdt()
@@ -128,52 +141,14 @@ class AddPostFragment :
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
             imgbtnHeaderTextBack.setOnClickListener {
-                findNavController().popBackStack()
+                showHandleWritingBoardDialog()
             }
             tvHeaderTextTitle.visibility = View.GONE
             tvHeaderTextSub.visibility = View.VISIBLE
             tvHeaderTextSub.setText(R.string.temporary_storage)
-            // 임시저장
+            // 임시저장 버튼 클릭
             tvHeaderTextSub.setOnClickListener {
-                val title = binding.edtAddPostTitle.text.toString()
-                val content = binding.edtAddPostAdditionalInfo.text.toString()
-                val maxPerson = if (binding.tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else binding.tvAddPostPeopleCount.text.toString().toInt()
-                val cheerClubId = if (binding.tvAddPostCheerTeam.text.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(binding.tvAddPostCheerTeam.text.toString())
-                val preferredGender =
-                    if (binding.chipgroupAddPostGender.checkedChipId != View.NO_ID) {
-                        GenderUtils.convertPostGender(
-                            binding.root
-                                .findViewById<Chip>(
-                                    binding.chipgroupAddPostGender.checkedChipId,
-                                ).text
-                                .toString(),
-                        )
-                    } else {
-                        ""
-                    }
-                val preferredAgeRange =
-                    if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
-                        getCheckedAgeRange(binding.chipgroupAddPostAge.checkedChipIds).toList()
-                    } else {
-                        emptyList()
-                    }
-                val homeClubId = if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
-                val awayClubId = if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
-                val gameStartDate = if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) null else addPostViewModel.gameDateTime.value.toString()
-                val location = binding.tvAddPostPlace.text.toString()
-                val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
-                val tempBoard =
-                    PostBoardRequest(
-                        title,
-                        content,
-                        maxPerson,
-                        cheerClubId,
-                        preferredGender,
-                        preferredAgeRange,
-                        gameRequest,
-                        false,
-                    )
-                postBoardWrite(tempBoard)
+                saveTempBoard()
             }
         }
     }
@@ -281,6 +256,50 @@ class AddPostFragment :
                     )
                 postBoardWrite(boardWriteRequest)
             }
+        }
+    }
+
+    private fun saveTempBoard() {
+        binding.apply {
+            val title = edtAddPostTitle.text.toString()
+            val content = edtAddPostAdditionalInfo.text.toString()
+            val maxPerson = if (tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else tvAddPostPeopleCount.text.toString().toInt()
+            val cheerClubId = if (tvAddPostCheerTeam.text.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(tvAddPostCheerTeam.text.toString())
+            val preferredGender =
+                if (chipgroupAddPostGender.checkedChipId != View.NO_ID) {
+                    GenderUtils.convertPostGender(
+                        root
+                            .findViewById<Chip>(
+                                chipgroupAddPostGender.checkedChipId,
+                            ).text
+                            .toString(),
+                    )
+                } else {
+                    ""
+                }
+            val preferredAgeRange =
+                if (chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
+                    getCheckedAgeRange(chipgroupAddPostAge.checkedChipIds).toList()
+                } else {
+                    emptyList()
+                }
+            val homeClubId = if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
+            val awayClubId = if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) 0 else ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
+            val gameStartDate = if (addPostViewModel.gameDateTime.value.isNullOrEmpty()) null else addPostViewModel.gameDateTime.value.toString()
+            val location = tvAddPostPlace.text.toString()
+            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+            val tempBoard =
+                PostBoardRequest(
+                    title,
+                    content,
+                    maxPerson,
+                    cheerClubId,
+                    preferredGender,
+                    preferredAgeRange,
+                    gameRequest,
+                    false,
+                )
+            postBoardWrite(tempBoard)
         }
     }
 
@@ -496,6 +515,82 @@ class AddPostFragment :
             ages.add(age)
         }
         return ages
+    }
+
+    private fun showImportTempBoardDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.temporary_storage_import_question)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.temporary_storage_import_negative)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.temporary_storage_import_positive)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    val tempBoard = addPostViewModel.getTempBoardResponse.value!!
+                    val board =
+                        GetBoardResponse(
+                            tempBoard.boardId,
+                            tempBoard.title,
+                            tempBoard.content,
+                            tempBoard.cheerClubId,
+                            tempBoard.currentPerson,
+                            tempBoard.maxPerson,
+                            tempBoard.preferredGender,
+                            tempBoard.preferredAgeRange,
+                            tempBoard.gameInfo,
+                            tempBoard.liftUpDate,
+                            tempBoard.userInfo,
+                        )
+//                    setBoardData(board)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
+    }
+
+    private fun showHandleWritingBoardDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.temporary_storage_save_question)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.temporary_storage_save_negative)
+                setOnClickListener {
+                    findNavController().popBackStack()
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.temporary_storage_save_positive)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    saveTempBoard()
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 
     override fun onPeopleCountSelected(count: Int) {
