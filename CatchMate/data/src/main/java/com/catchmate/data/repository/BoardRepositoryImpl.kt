@@ -4,6 +4,7 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
+import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
@@ -69,7 +70,11 @@ class BoardRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                    if (response.code() == 400) {
+                        Result.failure(BookmarkFailureException("$stringToJson"))
+                    } else {
+                        Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)

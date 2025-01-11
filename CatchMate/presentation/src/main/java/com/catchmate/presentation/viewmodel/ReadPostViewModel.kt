@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
@@ -75,6 +76,10 @@ class ReadPostViewModel
         val liftUpFailureMessage: LiveData<String>
             get() = _liftUpFailureMessage
 
+        private val _bookmarkFailureMessage = MutableLiveData<String>()
+        val bookmarkFailureException: LiveData<String>
+            get() = _bookmarkFailureMessage
+
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
                 val result = getBoardUseCase.getBoard(boardId)
@@ -98,10 +103,10 @@ class ReadPostViewModel
                     .onSuccess { response ->
                         _postBoardLikeResponse.value = response
                     }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            _errorMessage.value = exception.message
+                        when (exception) {
+                            is ReissueFailureException -> _navigateToLogin.value = true
+                            is BookmarkFailureException -> _bookmarkFailureMessage.value = exception.message
+                            else -> _errorMessage.value = exception.message
                         }
                     }
             }

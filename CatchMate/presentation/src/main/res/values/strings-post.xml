@@ -66,6 +66,7 @@
     <string name="post_read_people_count">인원</string>
     <string name="post_read_additional_info">추가 정보</string>
     <string name="post_read_toast_msg">게시글을 저장했어요</string>
+    <string name="post_already_liked_toast_msg">이미 찜한 게시글입니다</string>
 
     <string name="post_read_writer_menu_up">끌어올리기</string>
     <string name="post_read_writer_menu_up_complete">게시글을 끌어올렸어요</string>

@@ -46,6 +46,7 @@ class ReadPostFragment : Fragment() {
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
+    private var isWriter = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,32 +98,54 @@ class ReadPostFragment : Fragment() {
             }
             imgbtnHeaderKebabMenu.setOnClickListener {
                 val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)
-                popup.menuInflater.inflate(R.menu.menu_read_post_writer, popup.menu)
+                // 유저에 따라 팝업 메뉴 분기, 세번째 메뉴 아이템 텍스트 색상 변경
+                val targetItem =
+                    if (isWriter) {
+                        popup.menuInflater.inflate(R.menu.menu_read_post_writer, popup.menu)
+                        popup.menu.findItem(R.id.menuitem_post_delete)
+                    } else {
+                        popup.menuInflater.inflate(R.menu.menu_read_post_user, popup.menu)
+                        popup.menu.findItem(R.id.menuitem_post_report)
+                    }
+                val s = SpannableString(targetItem.title)
+                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.system_red)), 0, s.length, 0)
+                targetItem.title = s
 
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
                             liftUpBoard()
+                            Log.e("LIFT UP", "")
                             true
                         }
                         R.id.menuitem_post_update -> {
                             val bundle = Bundle()
                             bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
+                            Log.e("UPDATE", "")
                             true
                         }
                         R.id.menuitem_post_delete -> {
                             showBoardDeleteDialog()
+                            Log.e("DELETE", "")
+                            true
+                        }
+                        R.id.menuitem_post_liked -> {
+                            Log.e("LIKED", "")
+                            binding.layoutReadPostFooter.toggleLikedFooterLiked.isChecked = true
+                            true
+                        }
+                        R.id.menuitem_post_share -> {
+                            Log.e("SHARE", "")
+                            true
+                        }
+                        R.id.menuitem_post_report -> {
+                            Log.e("REPORT", "")
                             true
                         }
                         else -> false
                     }
                 }
-                val deletePostItem = popup.menu.findItem(R.id.menuitem_post_delete)
-                val s = SpannableString(deletePostItem.title)
-                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.system_red)), 0, s.length, 0)
-                deletePostItem.title = s
-
                 popup.show()
             }
         }
@@ -166,12 +189,17 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.getBoard(boardId)
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
-            initKebabMenuVisibility(response.userInfo.userId) // 가시성 설정 아닌 작성자 본인 여부에 따른 팝업메뉴 분기 필요
+            isWriter = response.userInfo.userId == userId
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
-            if (code != null) {
+            if (code.state) {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        readPostViewModel.bookmarkFailureException.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                Snackbar.make(requireView(), R.string.post_already_liked_toast_msg, Snackbar.LENGTH_SHORT).show()
             }
         }
         readPostViewModel.boardEnrollState.observe(viewLifecycleOwner) { state ->
@@ -216,10 +244,6 @@ class ReadPostFragment : Fragment() {
                 Log.e("Reissue Error", it)
             }
         }
-    }
-
-    private fun initKebabMenuVisibility(writerUserId: Long) {
-        binding.layoutReadPostHeader.imgbtnHeaderKebabMenu.visibility = if (writerUserId == userId) View.VISIBLE else View.INVISIBLE
     }
 
     private fun setPostData(post: GetBoardResponse) {
