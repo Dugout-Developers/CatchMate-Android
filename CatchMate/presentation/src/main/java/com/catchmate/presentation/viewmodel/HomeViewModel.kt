@@ -53,9 +53,9 @@ class HomeViewModel
         }
 
         fun getBoardList(
-            gameStartDate: String?,
-            maxPerson: Int?,
-            preferredTeamId: Int?,
+            gameStartDate: String? = null,
+            maxPerson: Int? = null,
+            preferredTeamId: Int? = null,
         ) {
             viewModelScope.launch {
                 val result = getBoardListUseCase.getBoardList(gameStartDate, maxPerson, preferredTeamId)

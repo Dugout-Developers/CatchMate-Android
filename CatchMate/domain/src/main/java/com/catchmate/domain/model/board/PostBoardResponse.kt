@@ -11,7 +11,7 @@ data class PostBoardResponse(
     val currentPerson: Int,
     val maxPerson: Int,
     val preferredGender: String,
-    val preferredAgeRange: List<String>,
+    val preferredAgeRange: String,
     val gameInfo: GameInfo,
     val liftUpDate: String,
     val userInfo: UserInfo,

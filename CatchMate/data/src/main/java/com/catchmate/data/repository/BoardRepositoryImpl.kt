@@ -4,13 +4,16 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
+import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.LiftUpFailureException
+import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
+import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
@@ -67,7 +70,11 @@ class BoardRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                    if (response.code() == 400) {
+                        Result.failure(BookmarkFailureException("$stringToJson"))
+                    } else {
+                        Result.failure(Exception("BoardRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)
@@ -217,6 +224,33 @@ class BoardRepositoryImpl
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
                     Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun getTempBoard(): Result<GetTempBoardResponse> =
+            try {
+                val response = boardApi.getTempBoard()
+                if (response.isSuccessful) {
+                    Log.d("BoardRepo", "통신 성공 : ${response.code()}")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                BoardMapper.toGetTempBoardResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    if (response.code() == 404) {
+                        Result.failure(NonExistentTempBoardException("$stringToJson"))
+                    } else {
+                        Result.failure(Exception("$stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)
