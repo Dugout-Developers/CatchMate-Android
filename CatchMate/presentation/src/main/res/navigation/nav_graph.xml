@@ -125,7 +125,14 @@
         android:id="@+id/myPostFragment"
         android:name="com.catchmate.presentation.view.mypage.MyPostFragment"
         android:label="fragment_my_post"
-        tools:layout="@layout/fragment_my_post" />
+        tools:layout="@layout/fragment_my_post" >
+        <action
+            android:id="@+id/action_myPostFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+        <action
+            android:id="@+id/action_myPostFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.catchmate.presentation.view.mypage.EditProfileFragment"
