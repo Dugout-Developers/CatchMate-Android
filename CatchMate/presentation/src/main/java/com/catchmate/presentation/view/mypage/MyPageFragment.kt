@@ -115,7 +115,7 @@ class MyPageFragment : Fragment() {
             }
             tvMyPageMyPost.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putLong("userId", myPageViewModel.userProfile.value?.userId!!)
+                bundle.putParcelable("userInfo", myPageViewModel.userProfile.value)
                 findNavController().navigate(R.id.action_myPageFragment_to_myPostFragment, bundle)
             }
             tvMyPageSentJoin.setOnClickListener {
