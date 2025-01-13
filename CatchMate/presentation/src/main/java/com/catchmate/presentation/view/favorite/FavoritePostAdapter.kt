@@ -109,7 +109,7 @@ class FavoritePostAdapter(
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(board.gameInfo.gameStartDate)
+            val dateTimePair = DateUtils.formatISODateTime(board.gameInfo.gameStartDate!!)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
             tvItemPlace.text = board.gameInfo.location

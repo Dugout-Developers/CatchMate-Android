@@ -86,7 +86,7 @@ class HomePostAdapter(
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameInfo.gameStartDate)
+            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameInfo.gameStartDate!!)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
             tvItemPlace.text = homeBoard.gameInfo.location
