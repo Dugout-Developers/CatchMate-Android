@@ -10,6 +10,9 @@
     <string name="mypage_terms_and_conditions">약관 및 정책</string>
     <string name="mypage_information">정보</string>
 
+    <string name="mypage_mypost_menu_block">차단하기</string>
+    <string name="mypage_mypost_menu_report">신고하기</string>
+    
     <string name="mypage_setting">설정</string>
 
     <string name="mypage_setting_user_settings">사용자 설정</string>
@@ -27,4 +30,6 @@
     <string name="edit_profile_title">프로필 편집</string>
 
     <string name="new_badge">N</string>
+
+    <string name="mypost_no_list_msg">작성한 게시글이 없어요</string>
 </resources>
