@@ -9,15 +9,15 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface NotificationService {
-    @GET("notification/receive")
+    @GET("notifications/receive")
     suspend fun getReceivedNotificationList(): Response<GetReceivedNotificationListResponseDTO>
 
-    @GET("notification/receive/{notificationId}")
+    @GET("notifications/receive/{notificationId}")
     suspend fun getReceivedNotification(
         @Path("notificationId") notificationId: Long,
     ): Response<GetReceivedNotificationResponseDTO>
 
-    @DELETE("notification/receive/{notificationId}")
+    @DELETE("notifications/receive/{notificationId}")
     suspend fun deleteReceivedNotification(
         @Path("notificationId") notificationId: Long,
     ): Response<DeleteReceivedNotificationResponseDTO>
