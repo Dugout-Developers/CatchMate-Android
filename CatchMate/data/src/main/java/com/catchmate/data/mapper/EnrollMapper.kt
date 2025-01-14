@@ -96,7 +96,7 @@ object EnrollMapper {
 
     private fun toEnrollBoardInfo(dto: EnrollBoardInfoDTO): EnrollBoardInfo =
         EnrollBoardInfo(
-            boardInfo = dto.boardInfo,
+            boardId = dto.boardId,
             title = dto.title,
             content = dto.content,
             cheerClubId = dto.cheerClubId,
@@ -135,7 +135,7 @@ object EnrollMapper {
 
     fun toGetAllReceivedEnrollResponse(responseDTO: GetAllReceivedEnrollResponseDTO): GetAllReceivedEnrollResponse =
         GetAllReceivedEnrollResponse(
-            content = responseDTO.content.map { toReceivedEnrollInfo(it) },
+            enrollInfoList = responseDTO.enrollInfoList.map { toReceivedEnrollInfo(it) },
         )
 
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =

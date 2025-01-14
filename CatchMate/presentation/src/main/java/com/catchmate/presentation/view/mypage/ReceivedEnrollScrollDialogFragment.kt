@@ -3,6 +3,7 @@ package com.catchmate.presentation.view.mypage
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,28 @@ import com.catchmate.presentation.databinding.FragmentReceivedEnrollScrollDialog
 class ReceivedEnrollScrollDialogFragment : DialogFragment() {
     private var _binding: FragmentReceivedEnrollScrollDialogBinding? = null
     val binding get() = _binding!!
+
+    private var boardId: Long = 0L
+
+    companion object {
+        private const val ARG_ITEM = "boardId"
+
+        fun newInstance(item: Long): ReceivedEnrollScrollDialogFragment {
+            val fragment = ReceivedEnrollScrollDialogFragment()
+            val bundle = Bundle()
+            bundle.putLong(ARG_ITEM, item)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            boardId = it.getLong(ARG_ITEM)
+            Log.e(ARG_ITEM, boardId.toString())
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

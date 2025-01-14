@@ -1,5 +1,6 @@
 plugins {
     id("catchmate.android.library")
+    alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
 android {
