@@ -19,37 +19,37 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EnrollService {
-    @POST("enroll/{boardId}")
+    @POST("enrolls/{boardId}")
     suspend fun postEnroll(
         @Path("boardId") boardId: Long,
         @Body postEnrollRequestDTO: PostEnrollRequestDTO,
     ): Response<PostEnrollResponseDTO?>
 
-    @PATCH("enroll/{enrollId}/reject")
+    @PATCH("enrolls/{enrollId}/reject")
     suspend fun patchEnrollReject(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollRejectResponseDTO?>
 
-    @PATCH("enroll/{enrollId}/accept")
+    @PATCH("enrolls/{enrollId}/accept")
     suspend fun patchEnrollAccept(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollAcceptResponseDTO?>
 
-    @GET("enroll/request")
+    @GET("enrolls/request")
     suspend fun getRequestedEnrollList(): Response<GetRequestedEnrollListResponseDTO?>
 
-    @GET("enroll/receive")
+    @GET("enrolls/receive")
     suspend fun getReceivedEnroll(
         @Query("boardId") boardId: Long,
     ): Response<GetReceivedEnrollResponseDTO?>
 
-    @GET("enroll/receive/all")
+    @GET("enrolls/receive/all")
     suspend fun getAllReceivedEnroll(): Response<GetAllReceivedEnrollResponseDTO?>
 
-    @GET("enroll/new-count")
+    @GET("enrolls/new-count")
     suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
 
-    @DELETE("enroll/cancel/{enrollId}")
+    @DELETE("enrolls/cancel/{enrollId}")
     suspend fun deleteEnroll(
         @Path("enrollId") enrollId: Long,
     ): Response<DeleteEnrollResponseDTO?>
