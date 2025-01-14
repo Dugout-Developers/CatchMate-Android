@@ -32,4 +32,7 @@
     <string name="new_badge">N</string>
 
     <string name="mypost_no_list_msg">작성한 게시글이 없어요</string>
+
+    <string name="mypage_received_join_enroll_reject">거절</string>
+    <string name="mypage_received_join_enroll_accept">수락</string>
 </resources>

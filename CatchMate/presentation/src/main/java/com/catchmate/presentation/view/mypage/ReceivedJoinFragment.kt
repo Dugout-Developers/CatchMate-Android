@@ -27,6 +27,7 @@ class ReceivedJoinFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initHeader()
+
     }
 
     override fun onDestroyView() {
@@ -40,4 +41,11 @@ class ReceivedJoinFragment : Fragment() {
             tvHeaderTextUnreadMessageCountBadge.visibility = View.VISIBLE // message 확인 여부에 따라 유동적으로 설정하기
         }
     }
+
+//    private fun initEvent() {
+//        binding.layoutHeaderReceivedJoin.tvHeaderTextTitle.setOnClickListener {
+//            val dialog = ReceivedEnrollScrollDialogFragment()
+//            dialog.show(parentFragmentManager, "ReceivedEnrollDialog")
+//        }
+//    }
 }
