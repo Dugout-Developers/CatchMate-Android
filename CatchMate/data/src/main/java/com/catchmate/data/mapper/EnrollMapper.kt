@@ -119,7 +119,7 @@ object EnrollMapper {
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
         GetReceivedEnrollResponse(
-            content = responseDTO.enrollInfoList.map { toReceivedEnrollInfo(it) },
+            enrollInfoList = responseDTO.enrollInfoList.map { toReceivedEnrollInfo(it) },
         )
 
     private fun toReceivedEnrollInfo(dto: ReceivedEnrollInfoDTO): ReceivedEnrollInfo =
