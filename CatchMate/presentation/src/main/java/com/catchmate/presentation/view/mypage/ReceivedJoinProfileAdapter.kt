@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
@@ -15,6 +16,7 @@ import com.catchmate.presentation.databinding.ItemReceivedJoinBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ReceivedJoinProfileAdapter(
@@ -76,7 +78,7 @@ class ReceivedJoinProfileAdapter(
             if (info.new) {
                 tvProfileNewBadge.visibility = View.VISIBLE
             } else {
-                tvProfileNewBadge.visibility = View.VISIBLE
+                tvProfileNewBadge.visibility = View.INVISIBLE
             }
             Glide
                 .with(context)
@@ -85,6 +87,18 @@ class ReceivedJoinProfileAdapter(
                 .into(ivProfileImage)
             tvProfileNickname.text = info.userInfo.nickName
             tvProfileTeam.text = ClubUtils.convertClubIdToName(info.userInfo.favoriteClub.id)
+
+            DrawableCompat
+                .setTint(
+                    tvProfileTeam.background,
+                    convertTeamColor(
+                        context,
+                        info.userInfo.favoriteClub.id,
+                        true,
+                        "receivedJoinProfileAdapter",
+                    ),
+                )
+
             if (info.userInfo.watchStyle != null) {
                 tvProfileCheerStyle.visibility = View.VISIBLE
                 tvProfileCheerStyle.text = info.userInfo.watchStyle

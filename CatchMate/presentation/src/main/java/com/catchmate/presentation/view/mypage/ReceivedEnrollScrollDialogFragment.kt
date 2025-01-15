@@ -8,16 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.catchmate.domain.model.TestEnrollInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReceivedEnrollScrollDialogBinding
+import com.catchmate.presentation.interaction.OnReceivedEnrollResultSelectedListener
+import com.catchmate.presentation.viewmodel.ReceivedEnrollScrollDialogViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class ReceivedEnrollScrollDialogFragment : DialogFragment() {
+@AndroidEntryPoint
+class ReceivedEnrollScrollDialogFragment : DialogFragment(), OnReceivedEnrollResultSelectedListener {
     private var _binding: FragmentReceivedEnrollScrollDialogBinding? = null
     val binding get() = _binding!!
 
+    private val receivedEnrollScrollDialogViewModel: ReceivedEnrollScrollDialogViewModel by viewModels()
     private var boardId: Long = 0L
 
     companion object {
@@ -66,7 +71,7 @@ class ReceivedEnrollScrollDialogFragment : DialogFragment() {
 
     private fun initRecyclerView() {
         binding.rvReceivedEnrollScrollDialog.apply {
-            adapter = ReceivedEnrollAdapter(requireContext(), layoutInflater)
+            adapter = ReceivedEnrollAdapter(requireContext(), layoutInflater, this@ReceivedEnrollScrollDialogFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
         val snapHelper = PagerSnapHelper()
@@ -74,34 +79,32 @@ class ReceivedEnrollScrollDialogFragment : DialogFragment() {
     }
 
     private fun setData() {
-        val enrollInfo =
-            listOf(
-                TestEnrollInfo(
-                    "지은",
-                    "이글스",
-                    "여성",
-                    "20대",
-                    "1월 14일 01:00",
-                    "직관신청합니다."
-                ),
-                TestEnrollInfo(
-                    "창근",
-                    "다이노스",
-                    "남성",
-                    "30대",
-                    "10월 5일 15:28",
-                    "같이가요"
-                ),
-                TestEnrollInfo(
-                    "유빈",
-                    "이글스",
-                    "여성",
-                    "20대",
-                    "1월 19일 03:00",
-                    "직관신청합니다."
-                ),
-            )
-        val adapter = binding.rvReceivedEnrollScrollDialog.adapter as ReceivedEnrollAdapter
-        adapter.updateEnrollList(enrollInfo)
+        receivedEnrollScrollDialogViewModel.getReceivedEnroll(boardId)
+        receivedEnrollScrollDialogViewModel.getReceivedEnrollResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                val adapter = binding.rvReceivedEnrollScrollDialog.adapter as ReceivedEnrollAdapter
+                adapter.updateEnrollList(response.enrollInfoList)
+            }
+        }
+    }
+
+    override fun onReceivedEnrollRejected(enrollId: Long) {
+        receivedEnrollScrollDialogViewModel.patchEnrollReject(enrollId)
+        receivedEnrollScrollDialogViewModel.patchEnrollReject.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.e("STATUS", response.acceptStatus)
+                dismiss()
+            }
+        }
+    }
+
+    override fun onReceivedEnrollAccepted(enrollId: Long) {
+        receivedEnrollScrollDialogViewModel.patchEnrollAccept(enrollId)
+        receivedEnrollScrollDialogViewModel.patchEnrollAccept.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.e("STATUS", response.acceptStatus)
+                dismiss()
+            }
+        }
     }
 }

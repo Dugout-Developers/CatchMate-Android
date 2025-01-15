@@ -49,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/shape_all_rect_r2"
                 android:paddingLeft="@dimen/xstiny"
                 android:paddingTop="1dp"
@@ -56,10 +57,30 @@
                 android:paddingBottom="1dp"
                 android:textAppearance="@style/Typography.Caption01.Medium"
                 android:textColor="@color/grey50"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_item_received_enroll_watch_style"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_item_received_enroll_nickname"
                 tools:text="@string/team_ssg_landers" />
+
+            <TextView
+                android:id="@+id/tv_item_received_enroll_watch_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_all_rect_r2"
+                android:backgroundTint="@color/brand500"
+                android:paddingLeft="@dimen/xstiny"
+                android:paddingTop="1dp"
+                android:paddingRight="@dimen/xstiny"
+                android:paddingBottom="1dp"
+                android:textAppearance="@style/Typography.Caption01.Medium"
+                android:textColor="@color/grey50"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_item_received_enroll_team_badge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/tv_item_received_enroll_team_badge"
+                app:layout_constraintTop_toTopOf="@+id/tv_item_received_enroll_team_badge"
+                tools:text="@string/badge_glutton" />
 
             <TextView
                 android:id="@+id/tv_item_received_enroll_gender_badge"

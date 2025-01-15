@@ -3,21 +3,32 @@ package com.catchmate.presentation.view.mypage
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.TestEnrollInfo
+import com.bumptech.glide.Glide
+import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
+import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemReceivedEnrollBinding
+import com.catchmate.presentation.interaction.OnReceivedEnrollResultSelectedListener
+import com.catchmate.presentation.util.AgeUtils.convertBirthDateToAge
+import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
+import com.catchmate.presentation.util.DateUtils.formatDateTimeToEnrollDateTime
+import com.catchmate.presentation.util.GenderUtils.convertBoardGender
+import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ReceivedEnrollAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
+    private val onReceivedEnrollResultSelectedListener: OnReceivedEnrollResultSelectedListener,
 ) : RecyclerView.Adapter<ReceivedEnrollAdapter.ReceivedEnrollViewHolder>() {
-    private var enrollList: MutableList<TestEnrollInfo> = mutableListOf()
+    private var enrollList: MutableList<ReceivedEnrollInfo> = mutableListOf()
 
-    fun updateEnrollList(newList: List<TestEnrollInfo>) {
+    fun updateEnrollList(newList: List<ReceivedEnrollInfo>) {
         enrollList = newList.toMutableList()
         notifyDataSetChanged()
     }
@@ -28,6 +39,7 @@ class ReceivedEnrollAdapter(
         val ivEnrollUserProfile: CircleImageView = itemBinding.ivItemReceivedEnrollProfile
         val tvEnrollUserNickname: TextView = itemBinding.tvItemReceivedEnrollNickname
         val tvEnrollUserCheerTeam: TextView = itemBinding.tvItemReceivedEnrollTeamBadge
+        val tvEnrollUserWatchStyle: TextView = itemBinding.tvItemReceivedEnrollWatchStyle
         val tvEnrollUserGender: TextView = itemBinding.tvItemReceivedEnrollGenderBadge
         val tvEnrollUserAge: TextView = itemBinding.tvItemReceivedEnrollAgeBadge
         val tvEnrollSavedDateTime: TextView = itemBinding.tvItemReceivedEnrollSavedDateTime
@@ -57,18 +69,43 @@ class ReceivedEnrollAdapter(
     ) {
         val info = enrollList[position]
         holder.apply {
-            tvEnrollUserNickname.text = info.nickName
-            tvEnrollUserCheerTeam.text = info.teamName
-            tvEnrollUserGender.text = info.gender
-            tvEnrollUserAge.text = info.age
-            tvEnrollSavedDateTime.text = info.date
+            Glide
+                .with(context)
+                .load(info.userInfo.profileImageUrl)
+                .error(R.drawable.temporary_profile)
+                .into(ivEnrollUserProfile)
+
+            tvEnrollUserNickname.text = info.userInfo.nickName
+            tvEnrollUserCheerTeam.text = convertClubIdToName(info.userInfo.favoriteClub.id)
+
+            DrawableCompat
+                .setTint(
+                    tvEnrollUserCheerTeam.background,
+                    convertTeamColor(
+                        context,
+                        info.userInfo.favoriteClub.id,
+                        true,
+                        "receivedEnrollAdapter",
+                    ),
+                )
+
+            if (info.userInfo.watchStyle != null) {
+                tvEnrollUserWatchStyle.visibility = View.VISIBLE
+                tvEnrollUserWatchStyle.text = info.userInfo.watchStyle
+            } else {
+                tvEnrollUserWatchStyle.visibility = View.GONE
+            }
+
+            tvEnrollUserGender.text = convertBoardGender(context, info.userInfo.gender)
+            tvEnrollUserAge.text = convertBirthDateToAge(info.userInfo.birthDate)
+            tvEnrollSavedDateTime.text = formatDateTimeToEnrollDateTime(info.receiveDate)
             edtEnrollDescription.setText(info.description)
 
             tvEnrollReject.setOnClickListener {
-                Log.e("REJECT", "$position")
+                onReceivedEnrollResultSelectedListener.onReceivedEnrollRejected(info.enrollId)
             }
             tvEnrollAccept.setOnClickListener {
-                Log.e("ACCEPT", "$position")
+                onReceivedEnrollResultSelectedListener.onReceivedEnrollAccepted(info.enrollId)
             }
         }
     }
