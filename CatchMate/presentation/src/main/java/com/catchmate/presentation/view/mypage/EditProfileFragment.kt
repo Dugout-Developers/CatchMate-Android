@@ -13,12 +13,13 @@ import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentEditProfileBinding
 import com.catchmate.presentation.interaction.OnEditProfileTeamSelectedListener
+import com.catchmate.presentation.interaction.OnEditProfileWatchStyleSelectedListener
 import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
 import com.catchmate.presentation.viewmodel.EditProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener {
+class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener, OnEditProfileWatchStyleSelectedListener {
     private var _binding: FragmentEditProfileBinding? = null
     val binding get() = _binding!!
 
@@ -87,7 +88,7 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener {
         editProfileViewModel.cheerClub.observe(viewLifecycleOwner) { id ->
             binding.tvEditProfileCheerClub.text = convertClubIdToName(id)
         }
-        editProfileViewModel.setWatchStyle(userInfo?.watchStyle)
+        editProfileViewModel.setWatchStyle(userInfo?.watchStyle ?: "")
         editProfileViewModel.watchStyle.observe(viewLifecycleOwner) { str ->
             str?.let {
                 binding.tvEditProfileWatchStyle.text = it
@@ -101,12 +102,16 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener {
             cheerClubBottomSheet.show(requireActivity().supportFragmentManager, cheerClubBottomSheet.tag)
         }
         binding.tvEditProfileWatchStyle.setOnClickListener {
-            val watchStyleBottomSheet = EditProfileWatchStyleBottomSheetFragment()
+            val watchStyleBottomSheet = EditProfileWatchStyleBottomSheetFragment(editProfileViewModel.watchStyle.value!!, this@EditProfileFragment)
             watchStyleBottomSheet.show(requireActivity().supportFragmentManager, watchStyleBottomSheet.tag)
         }
     }
 
     override fun onTeamSelected(clubId: Int) {
         editProfileViewModel.setCheerClub(clubId)
+    }
+
+    override fun onWatchStyleSelected(watchStyle: String) {
+        editProfileViewModel.setWatchStyle(watchStyle)
     }
 }

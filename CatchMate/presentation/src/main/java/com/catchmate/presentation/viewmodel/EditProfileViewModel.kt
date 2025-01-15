@@ -25,8 +25,8 @@ class EditProfileViewModel
         val cheerClub: LiveData<Int>
             get() = _cheerClub
 
-        private val _watchStyle = MutableLiveData<String?>()
-        val watchStyle: LiveData<String?>
+        private val _watchStyle = MutableLiveData<String>()
+        val watchStyle: LiveData<String>
             get() = _watchStyle
 
         fun setProfileImage(url: String) {
@@ -41,7 +41,7 @@ class EditProfileViewModel
             _cheerClub.value = id
         }
 
-        fun setWatchStyle(str: String?) {
+        fun setWatchStyle(str: String) {
             _watchStyle.value = str
         }
     }
