@@ -96,7 +96,7 @@ class MyPageFragment : Fragment() {
         }
         myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
             if (response.newEnrollCount == 0) {
-                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.GONE
+                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
             } else {
                 binding.tvMyPageReceivedJoinUnreadCount.apply {
                     visibility = View.VISIBLE
@@ -121,8 +121,10 @@ class MyPageFragment : Fragment() {
             tvMyPageSentJoin.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageFragment_to_sentJoinFragment)
             }
-            tvMyPageReceivedJoin.setOnClickListener {
-                findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment)
+            layoutMyPageReceivedJoin.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putInt("newCount", myPageViewModel.newCount.value?.newEnrollCount ?: 0)
+                findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment, bundle)
             }
         }
     }
