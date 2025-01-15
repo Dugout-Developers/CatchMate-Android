@@ -106,7 +106,7 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener {
         }
     }
 
-    override fun onTeamSelected(cludId: Int) {
-        editProfileViewModel.setCheerClub(cludId)
+    override fun onTeamSelected(clubId: Int) {
+        editProfileViewModel.setCheerClub(clubId)
     }
 }
