@@ -74,17 +74,19 @@ class ReceivedJoinAdapter(
         position: Int,
     ) {
         val boardId = groupedData.keys.elementAt(position)
-        val info = groupedData[boardId]?.get(position)!!
-        Log.e("DATA", "${info.description} / ${info.boardInfo.boardId} / ${info.boardInfo.title}")
+        val info = groupedData[boardId] ?: emptyList()
+
+        val firstInfo = info.first()
+        Log.e("DATA", "${firstInfo.description} / ${firstInfo.boardInfo.boardId} / ${firstInfo.boardInfo.title}")
         holder.apply {
-            val dateTime = DateUtils.formatISODateTime(info.boardInfo.gameInfo.gameStartDate!!)
+            val dateTime = DateUtils.formatISODateTime(firstInfo.boardInfo.gameInfo.gameStartDate!!)
             tvGameDate.text = dateTime.first
             tvGameTime.text = dateTime.second
-            tvGamePlace.text = info.boardInfo.gameInfo.location
-            tvBoardTitle.text = info.boardInfo.title
+            tvGamePlace.text = firstInfo.boardInfo.gameInfo.location
+            tvBoardTitle.text = firstInfo.boardInfo.title
 
             val adapter = rvProfile.adapter as ReceivedJoinProfileAdapter
-            adapter.updateEnrollInfoList(groupedData[boardId]!!)
+            adapter.updateEnrollInfoList(info)
 
             layoutBoardInfo.setOnClickListener {
                 onReceivedEnrollClickListener.onReceivedEnrollClick(boardId)
