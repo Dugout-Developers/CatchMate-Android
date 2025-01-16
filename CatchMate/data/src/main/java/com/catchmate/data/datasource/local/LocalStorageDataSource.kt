@@ -51,11 +51,20 @@ class LocalStorageDataSource
             }
         }
 
+        fun saveProvider(provider: String) {
+            with(sharedPreferences.edit()) {
+                putString("provider", provider)
+                commit()
+            }
+        }
+
         fun getAccessToken(): String = sharedPreferences.getString("accessToken", "") ?: ""
 
         fun getRefreshToken(): String = sharedPreferences.getString("refreshToken", "") ?: ""
 
         fun getUserId(): Long = sharedPreferences.getLong("userId", -1L)
+
+        fun getProvider(): String = sharedPreferences.getString("provider", "") ?: ""
 
         fun removeTokens() {
             with(sharedPreferences.edit()) {
@@ -68,6 +77,13 @@ class LocalStorageDataSource
         fun removeUserId() {
             with(sharedPreferences.edit()) {
                 remove("userId")
+                apply()
+            }
+        }
+
+        fun removeProvider() {
+            with(sharedPreferences.edit()) {
+                remove("provider")
                 apply()
             }
         }

@@ -138,6 +138,7 @@ class CheerStyleOnboardingFragment : Fragment() {
                 localDataViewModel.saveAccessToken(response.accessToken)
                 localDataViewModel.saveRefreshToken(response.refreshToken)
                 localDataViewModel.saveUserId(response.userId)
+                localDataViewModel.saveProvider(userInfo.provider)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
         }
