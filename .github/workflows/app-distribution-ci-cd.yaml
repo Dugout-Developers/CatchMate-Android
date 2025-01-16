@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 이후의 jobs들은 ubuntu의 최신버전에서 실행한다.
+    runs-on: macos-latest # 이후의 jobs들은 ubuntu의 최신버전에서 실행한다.
 
     env:
       LOCAL_PROPERTIES_CONTENTS: ${{ secrets.LOCAL_PROPERTIES_CONTENTS }} # scerets에서 로컬 프로퍼티 값 변수(LOCAL_PROPERTIES_CONTENTS)로 설정
