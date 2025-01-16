@@ -54,7 +54,9 @@ class MyPageFragment : Fragment() {
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
             imgbtnSettingHeaderSetting.setOnClickListener {
-                findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment)
+                val bundle = Bundle()
+                bundle.putString("email", myPageViewModel.userProfile.value?.email)
+                findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }
         }
     }

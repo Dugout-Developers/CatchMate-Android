@@ -60,4 +60,10 @@ class LocalDataViewModel
         fun getProvider() {
             _provider.value = localDataUseCase.getProvider()
         }
+
+        fun logout() {
+            localDataUseCase.removeTokens()
+            localDataUseCase.removeProvider()
+            localDataUseCase.removeUserId()
+        }
     }

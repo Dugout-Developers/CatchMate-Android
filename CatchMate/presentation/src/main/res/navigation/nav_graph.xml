@@ -194,7 +194,11 @@
         android:id="@+id/accountInfoFragment"
         android:name="com.catchmate.presentation.view.mypage.AccountInfoFragment"
         android:label="fragment_account_info"
-        tools:layout="@layout/fragment_account_info" />
+        tools:layout="@layout/fragment_account_info" >
+        <action
+            android:id="@+id/action_accountInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/notificationSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.NotificationSettingFragment"
