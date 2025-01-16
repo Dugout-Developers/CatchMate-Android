@@ -44,5 +44,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: appdistributiontestaos
+          groups: aos-test-team
           file: CatchMate/app/build/outputs/apk/debug/app-debug.apk
