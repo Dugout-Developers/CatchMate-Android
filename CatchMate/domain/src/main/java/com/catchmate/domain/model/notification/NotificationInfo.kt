@@ -9,5 +9,5 @@ data class NotificationInfo(
     val title: String,
     val body: String,
     val createdAt: String,
-    val read: Boolean,
+    var read: Boolean,
 )
