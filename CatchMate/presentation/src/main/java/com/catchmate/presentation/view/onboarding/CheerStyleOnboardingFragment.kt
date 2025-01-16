@@ -89,10 +89,11 @@ class CheerStyleOnboardingFragment : Fragment() {
                         userInfo.favoriteClubId,
                         watchStyle =
                             if (selectedButton
-                                ?.binding
-                                ?.tvCheerStyleName
-                                ?.text
-                                ?.toString() == null) {
+                                    ?.binding
+                                    ?.tvCheerStyleName
+                                    ?.text
+                                    ?.toString() == null
+                                ) {
                                 ""
                             } else {
                                 selectedButton

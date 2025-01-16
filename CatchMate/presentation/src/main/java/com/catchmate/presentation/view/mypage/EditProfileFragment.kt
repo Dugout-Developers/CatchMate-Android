@@ -274,7 +274,7 @@ class EditProfileFragment :
         binding.apply {
             layoutFooterEditProfile.btnFooterOne.isEnabled =
                 isValid &&
-                    !editProfileViewModel.nickName.value.isNullOrEmpty()
+                !editProfileViewModel.nickName.value.isNullOrEmpty()
         }
     }
 

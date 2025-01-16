@@ -83,7 +83,7 @@ class MyPostFragment :
 
     private fun getLocalUserId() {
         localDataViewModel.getUserId()
-        localDataViewModel.userId.observe(viewLifecycleOwner) { userId->
+        localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (userId == userInfo?.userId) {
                 binding.layoutHeaderMyPost.imgbtnHeaderKebabMenu.visibility = View.INVISIBLE
             } else {
