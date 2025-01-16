@@ -3,16 +3,19 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
-import com.catchmate.data.dto.user.PatchUserProfileRequestDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.domain.model.enumclass.AlarmType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -30,9 +33,11 @@ interface UserService {
         @Body postUserAdditionalInfoRequestDTO: PostUserAdditionalInfoRequestDTO,
     ): Response<PostUserAdditionalInfoResponseDTO?>
 
+    @Multipart
     @PATCH("users/profile")
     suspend fun patchUserProfile(
-        @Body patchUserProfileRequestDTO: PatchUserProfileRequestDTO,
+        @Part("request") request: RequestBody,
+        @Part profileImage: MultipartBody.Part,
     ): Response<PatchUserProfileResponseDTO?>
 
     // isEnabled : Y/N

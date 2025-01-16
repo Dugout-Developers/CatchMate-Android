@@ -9,11 +9,12 @@ import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
-import com.catchmate.domain.model.user.PatchUserProfileRequest
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
 import com.catchmate.domain.repository.UserRepository
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -95,9 +96,12 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun patchUserProfile(patchUserProfileRequest: PatchUserProfileRequest): Result<PatchUserProfileResponse> =
+        override suspend fun patchUserProfile(
+            request: RequestBody,
+            profileImage: MultipartBody.Part
+        ): Result<PatchUserProfileResponse> =
             try {
-                val response = userApi.patchUserProfile(UserMapper.toPatchUserProfileRequestDTO(patchUserProfileRequest))
+                val response = userApi.patchUserProfile(request, profileImage)
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body =
