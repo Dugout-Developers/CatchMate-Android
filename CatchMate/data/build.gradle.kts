@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)

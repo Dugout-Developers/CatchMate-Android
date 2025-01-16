@@ -4,20 +4,16 @@ import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
-import com.catchmate.data.dto.user.PatchUserProfileRequestDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
-import com.catchmate.data.dto.user.UserProfileRequestDTO
 import com.catchmate.domain.model.user.FavoriteClub
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
-import com.catchmate.domain.model.user.PatchUserProfileRequest
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
-import com.catchmate.domain.model.user.UserProfileRequest
 
 object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
@@ -64,19 +60,6 @@ object UserMapper {
             accessToken = responseDTO.accessToken,
             refreshToken = responseDTO.refreshToken,
             createdAt = responseDTO.createdAt,
-        )
-
-    fun toPatchUserProfileRequestDTO(request: PatchUserProfileRequest): PatchUserProfileRequestDTO =
-        PatchUserProfileRequestDTO(
-            request = toUserProfileRequestDTO(request.request),
-            profileImage = request.profileImage,
-        )
-
-    private fun toUserProfileRequestDTO(request: UserProfileRequest): UserProfileRequestDTO =
-        UserProfileRequestDTO(
-            nickName = request.nickName,
-            favoriteClubId = request.favoriteClubId,
-            watchStyle = request.watchStyle,
         )
 
     fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =

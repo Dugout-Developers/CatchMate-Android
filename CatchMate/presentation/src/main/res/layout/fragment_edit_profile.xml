@@ -105,6 +105,111 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_edit_profile_nickname_title" />
+
+        <TextView
+            android:id="@+id/tv_signup_nickname_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xstiny"
+            android:text="@string/signup_nickname_unusable"
+            android:textAppearance="@style/Typography.Caption01.SemiBold"
+            android:textColor="@color/system_red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_edit_profile_nickname" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey0"
+        android:paddingLeft="18dp"
+        android:paddingTop="20dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <TextView
+            android:id="@+id/tv_edit_profile_cheer_club_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_profile_my_club"
+            android:textAppearance="@style/Typography.Body02.Medium"
+            android:textColor="@color/grey500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_edit_profile_cheer_club_essential_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/vec_all_essential_mark_6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_edit_profile_cheer_club_title"
+            app:layout_constraintStart_toEndOf="@+id/tv_edit_profile_cheer_club_title"
+            app:layout_constraintTop_toTopOf="@+id/tv_edit_profile_cheer_club_title" />
+
+        <TextView
+            android:id="@+id/tv_edit_profile_cheer_club"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shape_all_rect_r8_grey50"
+            android:paddingLeft="16dp"
+            android:paddingTop="17dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="17dp"
+            android:textAppearance="@style/Typography.Body02.Medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_edit_profile_cheer_club_title"
+            tools:text="베어스" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey0"
+        android:paddingLeft="18dp"
+        android:paddingTop="20dp"
+        android:paddingRight="18dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+        <TextView
+            android:id="@+id/tv_edit_profile_watch_style_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_profile_my_watch_style"
+            android:textAppearance="@style/Typography.Body02.Medium"
+            android:textColor="@color/grey500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_edit_profile_watch_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shape_all_rect_r8_grey50"
+            android:hint="@string/edit_profile_watch_style_hint"
+            android:paddingLeft="16dp"
+            android:paddingTop="17dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="17dp"
+            android:textAppearance="@style/Typography.Body02.Medium"
+            android:textColorHint="@color/grey800"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_edit_profile_watch_style_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include

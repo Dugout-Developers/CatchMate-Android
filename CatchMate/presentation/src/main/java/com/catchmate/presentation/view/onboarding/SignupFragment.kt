@@ -101,7 +101,7 @@ class SignupFragment : Fragment() {
                         nickName,
                         DateUtils.formatBirthDate(birthDate),
                         -1,
-                        null,
+                        "",
                     )
                 val bundle = Bundle()
                 bundle.putSerializable("userInfo", newUserInfo)

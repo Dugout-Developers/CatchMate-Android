@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_addPostFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_addPostFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/readPostFragment"
@@ -106,9 +109,6 @@
             android:id="@+id/action_myPageFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
         <action
-            android:id="@+id/action_myPageFragment_to_editProfileFragment2"
-            app:destination="@id/editProfileFragment" />
-        <action
             android:id="@+id/action_myPageFragment_to_sentJoinFragment"
             app:destination="@id/sentJoinFragment" />
         <action
@@ -117,12 +117,22 @@
         <action
             android:id="@+id/action_myPageFragment_to_receivedJoinFragment"
             app:destination="@id/receivedJoinFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_myPostFragment"
+            app:destination="@id/myPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
         android:name="com.catchmate.presentation.view.mypage.MyPostFragment"
         android:label="fragment_my_post"
-        tools:layout="@layout/fragment_my_post" />
+        tools:layout="@layout/fragment_my_post" >
+        <action
+            android:id="@+id/action_myPostFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+        <action
+            android:id="@+id/action_myPostFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.catchmate.presentation.view.mypage.EditProfileFragment"
@@ -184,7 +194,11 @@
         android:id="@+id/accountInfoFragment"
         android:name="com.catchmate.presentation.view.mypage.AccountInfoFragment"
         android:label="fragment_account_info"
-        tools:layout="@layout/fragment_account_info" />
+        tools:layout="@layout/fragment_account_info" >
+        <action
+            android:id="@+id/action_accountInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/notificationSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.NotificationSettingFragment"

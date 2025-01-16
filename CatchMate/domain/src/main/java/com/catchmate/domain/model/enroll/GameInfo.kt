@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class GameInfo(
     val homeClubId: Int,
     val awayClubId: Int,
-    val gameStartDate: String,
+    val gameStartDate: String?,
     val location: String,
 ) : Parcelable

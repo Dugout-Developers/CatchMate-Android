@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.usecase.board.GetTempBoardUseCase
 import com.catchmate.domain.usecase.board.PatchBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +25,7 @@ class AddPostViewModel
     constructor(
         private val postBoardUseCase: PostBoardUseCase,
         private val patchBoardUseCase: PatchBoardUseCase,
+        private val getTempBoardUseCase: GetTempBoardUseCase,
     ) : ViewModel() {
         private var _homeTeamName = MutableLiveData<String>()
         val homeTeamName: LiveData<String>
@@ -50,6 +55,18 @@ class AddPostViewModel
         val patchBoardResponse: LiveData<PatchBoardResponse>
             get() = _patchBoardResponse
 
+        private var _getTempBoardResponse = MutableLiveData<GetTempBoardResponse>()
+        val getTempBoardResponse: LiveData<GetTempBoardResponse>
+            get() = _getTempBoardResponse
+
+        private val _noTempBoardMessage = MutableLiveData<String?>()
+        val noTempBoardMessage: LiveData<String?>
+            get() = _noTempBoardMessage
+
+        private val _boardInfo = MutableLiveData<GetBoardResponse?>()
+        val boardInfo: LiveData<GetBoardResponse?>
+            get() = _boardInfo
+
         fun setHomeTeamName(teamName: String) {
             _homeTeamName.value = teamName
         }
@@ -60,6 +77,10 @@ class AddPostViewModel
 
         fun setGameDate(gameDateTime: String) {
             _gameDateTime.value = gameDateTime
+        }
+
+        fun setBoardInfo(boardInfo: GetBoardResponse?) {
+            _boardInfo.value = boardInfo
         }
 
         fun postBoard(postBoardRequest: PostBoardRequest) {
@@ -92,6 +113,22 @@ class AddPostViewModel
                             _navigateToLogin.value = true
                         } else {
                             _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun getTempBoard() {
+            viewModelScope.launch {
+                val result = getTempBoardUseCase.getTempBoard()
+                result
+                    .onSuccess { response ->
+                        _getTempBoardResponse.value = response
+                    }.onFailure { exception ->
+                        when (exception) {
+                            is ReissueFailureException -> _navigateToLogin.value = true
+                            is NonExistentTempBoardException -> _noTempBoardMessage.value = "임시 저장된 글이 없습니다."
+                            else -> _errorMessage.value = exception.message
                         }
                     }
             }

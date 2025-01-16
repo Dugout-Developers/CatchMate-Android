@@ -5,6 +5,7 @@ import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
+import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
@@ -22,54 +23,57 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface BoardService {
-    @POST("board")
+    @POST("boards")
     suspend fun postBoard(
         @Body postBoardRequestDTO: PostBoardRequestDTO,
     ): Response<PostBoardResponseDTO?>
 
-    @POST("board/bookmark/{boardId}")
+    @POST("boards/bookmark/{boardId}")
     suspend fun postBoardLike(
         @Path("boardId") boardId: Long,
     ): Response<PostBoardLikeResponseDTO?>
 
-    @PATCH("board/{boardId}")
+    @PATCH("boards/{boardId}")
     suspend fun patchBoard(
         @Path("boardId") boardId: Long,
         @Body patchBoardRequestDTO: PatchBoardRequestDTO,
     ): Response<PatchBoardResponseDTO?>
 
-    @PATCH("board/{boardId}/lift-up")
+    @PATCH("boards/{boardId}/lift-up")
     suspend fun patchBoardLiftUp(
         @Path("boardId") boardId: Long,
     ): Response<PatchBoardLiftUpResponseDTO?>
 
     // 필터 미지정 시 모든 쿼리 값 안넣고 호출
-    @GET("board/list")
+    @GET("boards/list")
     suspend fun getBoardList(
         @Query("gameStartDate") gameStartDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
         @Query("preferredTeamId") preferredTeamId: Int? = null,
     ): Response<GetBoardListResponseDTO?>
 
-    @GET("board/list/{userId}")
+    @GET("boards/list/{userId}")
     suspend fun getUserBoardList(
         @Path("userId") userId: Long,
     ): Response<GetUserBoardListResponseDTO?>
 
-    @GET("board/{boardId}")
+    @GET("boards/{boardId}")
     suspend fun getBoard(
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
 
-    @GET("board/bookmark")
+    @GET("boards/bookmark")
     suspend fun getLikedBoard(): Response<GetLikedBoardResponseDTO?>
 
-    @DELETE("board/{boardId}")
+    @GET("boards/temp")
+    suspend fun getTempBoard(): Response<GetTempBoardResponseDTO?>
+
+    @DELETE("boards/{boardId}")
     suspend fun deleteBoard(
         @Path("boardId") boardId: Long,
     ): Response<DeleteBoardResponseDTO?>
 
-    @DELETE("board/bookmark/{boardId}")
+    @DELETE("boards/bookmark/{boardId}")
     suspend fun deleteBoardLike(
         @Path("boardId") boardId: Long,
     ): Response<DeleteBoardLikeResponseDTO?>

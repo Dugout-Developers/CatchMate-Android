@@ -13,6 +13,13 @@ class MyPageSettingFragment : Fragment() {
     private var _binding: FragmentMyPageSettingBinding? = null
     val binding get() = _binding!!
 
+    private var email: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        email = arguments?.getString("email") ?: ""
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,7 +54,9 @@ class MyPageSettingFragment : Fragment() {
 
     private fun initMenu() {
         binding.tvMyPageSettingUserInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_myPageSettingFragment_to_accountInfoFragment)
+            val bundle = Bundle()
+            bundle.putString("email", email)
+            findNavController().navigate(R.id.action_myPageSettingFragment_to_accountInfoFragment, bundle)
         }
     }
 }

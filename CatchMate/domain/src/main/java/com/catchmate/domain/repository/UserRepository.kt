@@ -4,10 +4,11 @@ import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
-import com.catchmate.domain.model.user.PatchUserProfileRequest
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface UserRepository {
     suspend fun getUserProfile(): Result<GetUserProfileResponse>
@@ -16,7 +17,10 @@ interface UserRepository {
 
     suspend fun postUserAdditionalInfo(postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest): Result<PostUserAdditionalInfoResponse>
 
-    suspend fun patchUserProfile(patchUserProfileRequest: PatchUserProfileRequest): Result<PatchUserProfileResponse>
+    suspend fun patchUserProfile(
+        request: RequestBody,
+        profileImage: MultipartBody.Part,
+    ): Result<PatchUserProfileResponse>
 
     suspend fun patchUserAlarm(
         alarmType: AlarmType,

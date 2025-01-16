@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
@@ -46,6 +47,7 @@ class ReadPostFragment : Fragment() {
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
+    private var isWriter = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,32 +99,54 @@ class ReadPostFragment : Fragment() {
             }
             imgbtnHeaderKebabMenu.setOnClickListener {
                 val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)
-                popup.menuInflater.inflate(R.menu.menu_read_post_writer, popup.menu)
+                // 유저에 따라 팝업 메뉴 분기, 세번째 메뉴 아이템 텍스트 색상 변경
+                val targetItem =
+                    if (isWriter) {
+                        popup.menuInflater.inflate(R.menu.menu_read_post_writer, popup.menu)
+                        popup.menu.findItem(R.id.menuitem_post_delete)
+                    } else {
+                        popup.menuInflater.inflate(R.menu.menu_read_post_user, popup.menu)
+                        popup.menu.findItem(R.id.menuitem_post_report)
+                    }
+                val s = SpannableString(targetItem.title)
+                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.brand500)), 0, s.length, 0)
+                targetItem.title = s
 
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
                             liftUpBoard()
+                            Log.e("LIFT UP", "")
                             true
                         }
                         R.id.menuitem_post_update -> {
                             val bundle = Bundle()
                             bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
+                            Log.e("UPDATE", "")
                             true
                         }
                         R.id.menuitem_post_delete -> {
                             showBoardDeleteDialog()
+                            Log.e("DELETE", "")
+                            true
+                        }
+                        R.id.menuitem_post_liked -> {
+                            Log.e("LIKED", "")
+                            binding.layoutReadPostFooter.toggleLikedFooterLiked.isChecked = true
+                            true
+                        }
+                        R.id.menuitem_post_share -> {
+                            Log.e("SHARE", "")
+                            true
+                        }
+                        R.id.menuitem_post_report -> {
+                            Log.e("REPORT", "")
                             true
                         }
                         else -> false
                     }
                 }
-                val deletePostItem = popup.menu.findItem(R.id.menuitem_post_delete)
-                val s = SpannableString(deletePostItem.title)
-                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.system_red)), 0, s.length, 0)
-                deletePostItem.title = s
-
                 popup.show()
             }
         }
@@ -130,8 +154,24 @@ class ReadPostFragment : Fragment() {
 
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
+            val userInfo = readPostViewModel.getBoardResponse.value?.userInfo
+            val userProfile =
+                GetUserProfileResponse(
+                    userInfo?.userId!!,
+                    userInfo.email,
+                    userInfo.profileImageUrl,
+                    userInfo.gender,
+                    userInfo.allAlarm,
+                    userInfo.chatAlarm,
+                    userInfo.enrollAlarm,
+                    userInfo.eventAlarm,
+                    userInfo.nickName,
+                    userInfo.favoriteClub,
+                    userInfo.birthDate,
+                    userInfo.watchStyle,
+                )
             val bundle = Bundle()
-            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.userInfo)
+            bundle.putParcelable("userInfo", userProfile)
             findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
@@ -166,12 +206,17 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.getBoard(boardId)
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
-            initKebabMenuVisibility(response.userInfo.userId) // 가시성 설정 아닌 작성자 본인 여부에 따른 팝업메뉴 분기 필요
+            isWriter = response.userInfo.userId == userId
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
-            if (code != null) {
+            if (code.state) {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        readPostViewModel.bookmarkFailureMessage.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                Snackbar.make(requireView(), R.string.post_already_liked_toast_msg, Snackbar.LENGTH_SHORT).show()
             }
         }
         readPostViewModel.boardEnrollState.observe(viewLifecycleOwner) { state ->
@@ -218,19 +263,15 @@ class ReadPostFragment : Fragment() {
         }
     }
 
-    private fun initKebabMenuVisibility(writerUserId: Long) {
-        binding.layoutReadPostHeader.imgbtnHeaderKebabMenu.visibility = if (writerUserId == userId) View.VISIBLE else View.INVISIBLE
-    }
-
     private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
-            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate)
+            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate!!)
             tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -238,7 +279,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
@@ -251,7 +292,7 @@ class ReadPostFragment : Fragment() {
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.favoriteClub.name,
+                        post.userInfo.favoriteClub.id,
                         true,
                         "read",
                     ),
@@ -360,14 +401,14 @@ class ReadPostFragment : Fragment() {
         dialogBinding.apply {
             val post = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = post.gameInfo.location
 
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -375,7 +416,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
