@@ -11,14 +11,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReceivedEnrollScrollDialogBinding
 import com.catchmate.presentation.interaction.OnReceivedEnrollResultSelectedListener
 import com.catchmate.presentation.viewmodel.ReceivedEnrollScrollDialogViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReceivedEnrollScrollDialogFragment : DialogFragment(), OnReceivedEnrollResultSelectedListener {
+class ReceivedEnrollScrollDialogFragment :
+    DialogFragment(),
+    OnReceivedEnrollResultSelectedListener {
     private var _binding: FragmentReceivedEnrollScrollDialogBinding? = null
     val binding get() = _binding!!
 

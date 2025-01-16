@@ -87,12 +87,21 @@ class CheerStyleOnboardingFragment : Fragment() {
                         userInfo.nickName,
                         userInfo.birthDate,
                         userInfo.favoriteClubId,
-                        watchStyle = if (selectedButton?.binding?.tvCheerStyleName?.text?.toString() == null) {
-                            ""
-                        } else {
-                            selectedButton?.binding?.tvCheerStyleName?.text?.toString()!!
-                                .replace(" 스타일", "")
-                        }
+                        watchStyle =
+                            if (selectedButton
+                                ?.binding
+                                ?.tvCheerStyleName
+                                ?.text
+                                ?.toString() == null) {
+                                ""
+                            } else {
+                                selectedButton
+                                    ?.binding
+                                    ?.tvCheerStyleName
+                                    ?.text
+                                    ?.toString()!!
+                                    .replace(" 스타일", "")
+                            },
                     )
                 postUserAdditionalInfo(newUserInfo)
             }

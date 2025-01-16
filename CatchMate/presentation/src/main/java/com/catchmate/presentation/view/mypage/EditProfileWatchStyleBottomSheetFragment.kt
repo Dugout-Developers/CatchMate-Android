@@ -39,7 +39,10 @@ class EditProfileWatchStyleBottomSheetFragment(
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initCheerStyleButtons()
         initFooter()
@@ -54,7 +57,14 @@ class EditProfileWatchStyleBottomSheetFragment(
         binding.layoutFooterEditProfileWatchStyle.btnFooterOne.apply {
             text = getString(R.string.complete)
             setOnClickListener {
-                listener.onWatchStyleSelected(selectedButton?.binding?.tvCheerStyleName?.text.toString().replace(" 스타일", ""))
+                listener.onWatchStyleSelected(
+                    selectedButton
+                        ?.binding
+                        ?.tvCheerStyleName
+                        ?.text
+                        .toString()
+                        .replace(" 스타일", ""),
+                )
                 dismiss()
             }
         }

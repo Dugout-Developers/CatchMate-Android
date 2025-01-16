@@ -98,7 +98,7 @@ class UserRepositoryImpl
 
         override suspend fun patchUserProfile(
             request: RequestBody,
-            profileImage: MultipartBody.Part
+            profileImage: MultipartBody.Part,
         ): Result<PatchUserProfileResponse> =
             try {
                 val response = userApi.patchUserProfile(request, profileImage)

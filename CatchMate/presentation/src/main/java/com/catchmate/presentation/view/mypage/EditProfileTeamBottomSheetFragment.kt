@@ -41,7 +41,10 @@ class EditProfileTeamBottomSheetFragment(
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initTeamButtonViews()
         initFooter()
@@ -106,7 +109,15 @@ class EditProfileTeamBottomSheetFragment(
         binding.layoutFooterEditProfileTeam.btnFooterOne.apply {
             text = getString(R.string.complete)
             setOnClickListener {
-                listener.onTeamSelected(convertClubNameToId(selectedButton?.binding?.tvTeamToggleCheckButton?.text.toString()))
+                listener.onTeamSelected(
+                    convertClubNameToId(
+                        selectedButton
+                            ?.binding
+                            ?.tvTeamToggleCheckButton
+                            ?.text
+                            .toString(),
+                    ),
+                )
                 dismiss()
             }
         }

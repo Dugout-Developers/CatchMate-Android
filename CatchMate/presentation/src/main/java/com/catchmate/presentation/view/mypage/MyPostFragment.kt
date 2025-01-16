@@ -18,7 +18,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentMyPostBinding
@@ -32,7 +31,9 @@ import com.catchmate.presentation.viewmodel.MyPostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPostFragment : Fragment(), OnPostItemClickListener {
+class MyPostFragment :
+    Fragment(),
+    OnPostItemClickListener {
     private var _binding: FragmentMyPostBinding? = null
     val binding get() = _binding!!
 

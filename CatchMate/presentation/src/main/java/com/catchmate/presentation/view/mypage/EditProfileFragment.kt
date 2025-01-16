@@ -42,7 +42,10 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 @AndroidEntryPoint
-class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener, OnEditProfileWatchStyleSelectedListener {
+class EditProfileFragment :
+    Fragment(),
+    OnEditProfileTeamSelectedListener,
+    OnEditProfileWatchStyleSelectedListener {
     private var _binding: FragmentEditProfileBinding? = null
     val binding get() = _binding!!
 
@@ -173,9 +176,10 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener, OnEdi
                         val originalBitmap = BitmapFactory.decodeStream(inputStream, null, option)
                         inputStream?.close()
 
-                        val resizedBitmap = originalBitmap?.let { bitmap ->
-                            Bitmap.createScaledBitmap(bitmap, 200, 200, true)
-                        }
+                        val resizedBitmap =
+                            originalBitmap?.let { bitmap ->
+                                Bitmap.createScaledBitmap(bitmap, 200, 200, true)
+                            }
 
                         resizedBitmap?.let { bitmap ->
                             editProfileViewModel.setProfileImage(bitmap)
@@ -193,7 +197,11 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener, OnEdi
             cheerClubBottomSheet.show(requireActivity().supportFragmentManager, cheerClubBottomSheet.tag)
         }
         binding.tvEditProfileWatchStyle.setOnClickListener {
-            val watchStyleBottomSheet = EditProfileWatchStyleBottomSheetFragment(editProfileViewModel.watchStyle.value!!, this@EditProfileFragment)
+            val watchStyleBottomSheet =
+                EditProfileWatchStyleBottomSheetFragment(
+                    editProfileViewModel.watchStyle.value!!,
+                    this@EditProfileFragment,
+                )
             watchStyleBottomSheet.show(requireActivity().supportFragmentManager, watchStyleBottomSheet.tag)
         }
     }
@@ -265,7 +273,8 @@ class EditProfileFragment : Fragment(), OnEditProfileTeamSelectedListener, OnEdi
     private fun checkAllFieldsAreFilled() {
         binding.apply {
             layoutFooterEditProfile.btnFooterOne.isEnabled =
-                isValid && !editProfileViewModel.nickName.value.isNullOrEmpty()
+                isValid &&
+                    !editProfileViewModel.nickName.value.isNullOrEmpty()
         }
     }
 

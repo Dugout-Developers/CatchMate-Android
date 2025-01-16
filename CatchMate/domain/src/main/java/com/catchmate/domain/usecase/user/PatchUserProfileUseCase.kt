@@ -14,6 +14,5 @@ class PatchUserProfileUseCase
         suspend fun patchUserProfile(
             request: RequestBody,
             profileImage: MultipartBody.Part,
-        ): Result<PatchUserProfileResponse> =
-            userRepository.patchUserProfile(request, profileImage)
+        ): Result<PatchUserProfileResponse> = userRepository.patchUserProfile(request, profileImage)
     }

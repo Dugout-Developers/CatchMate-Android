@@ -63,7 +63,8 @@ class MyPageFragment : Fragment() {
 
     private fun initProfile(userInfo: GetUserProfileResponse) {
         binding.viewMyPageProfile.binding.apply {
-            Glide.with(this@MyPageFragment)
+            Glide
+                .with(this@MyPageFragment)
                 .load(userInfo.profileImageUrl)
                 .into(ivMyPageUserProfile)
             tvMyPageUserProfileNickname.text = userInfo.nickName

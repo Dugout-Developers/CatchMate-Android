@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemProfileBinding
-import com.catchmate.presentation.databinding.ItemReceivedJoinBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils

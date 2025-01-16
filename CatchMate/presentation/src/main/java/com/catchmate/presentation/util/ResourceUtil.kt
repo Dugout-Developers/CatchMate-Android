@@ -31,7 +31,7 @@ object ResourceUtil {
         if (isCheerTeam) {
             when (clubId) {
                 Club.NC.id -> ContextCompat.getColor(context, R.color.nc_dinos)
-                Club.SAMSUNG.id-> ContextCompat.getColor(context, R.color.samsung_lions)
+                Club.SAMSUNG.id -> ContextCompat.getColor(context, R.color.samsung_lions)
                 Club.SSG.id -> ContextCompat.getColor(context, R.color.ssg_landers)
                 Club.DOOSAN.id -> ContextCompat.getColor(context, R.color.doosan_bears)
                 Club.KT.id -> ContextCompat.getColor(context, R.color.kt_wiz)
