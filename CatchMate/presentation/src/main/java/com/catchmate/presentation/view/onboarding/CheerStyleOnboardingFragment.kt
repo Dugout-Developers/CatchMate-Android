@@ -93,7 +93,7 @@ class CheerStyleOnboardingFragment : Fragment() {
                                     ?.tvCheerStyleName
                                     ?.text
                                     ?.toString() == null
-                                ) {
+                            ) {
                                 ""
                             } else {
                                 selectedButton
