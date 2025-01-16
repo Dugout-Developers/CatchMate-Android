@@ -73,6 +73,7 @@ class CheerStyleOnboardingFragment : Fragment() {
 
     private fun initFooterButton() {
         binding.layoutCheerStyleOnboardingNext.btnFooterOne.apply {
+            isEnabled = true
             setText(R.string.next)
             setOnClickListener {
                 val newUserInfo =
@@ -86,12 +87,12 @@ class CheerStyleOnboardingFragment : Fragment() {
                         userInfo.nickName,
                         userInfo.birthDate,
                         userInfo.favoriteClubId,
-                        selectedButton
-                            ?.binding
-                            ?.tvCheerStyleName
-                            ?.text
-                            .toString()
-                            .replace(" 스타일", ""),
+                        watchStyle = if (selectedButton?.binding?.tvCheerStyleName?.text?.toString() == null) {
+                            ""
+                        } else {
+                            selectedButton?.binding?.tvCheerStyleName?.text?.toString()!!
+                                .replace(" 스타일", "")
+                        }
                     )
                 postUserAdditionalInfo(newUserInfo)
             }
@@ -124,9 +125,6 @@ class CheerStyleOnboardingFragment : Fragment() {
                     selectedButton?.binding?.toggleCheerStyle?.isChecked = false
                     buttonView.isChecked = true
                     selectedButton = btn
-                    binding.layoutCheerStyleOnboardingNext.btnFooterOne.isEnabled = true
-                } else {
-                    binding.layoutCheerStyleOnboardingNext.btnFooterOne.isEnabled = false
                 }
             }
         }
