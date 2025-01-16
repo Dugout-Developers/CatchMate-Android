@@ -32,6 +32,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.legacy.support.v4)
 
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
     implementation(libs.circleimageview)
     implementation(libs.glide)
 }
