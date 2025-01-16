@@ -77,11 +77,12 @@ class NotificationAdapter(
         position: Int,
     ) {
         val info = notificationList[position]
-        Glide.with(context)
+        Glide
+            .with(context)
             .load(info.senderProfileImageUrl)
             .into(holder.ivNotificationItemProfile)
         holder.tvNotificationItemTitle.text = info.body
-        val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo.gameInfo.gameStartDate)
+        val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo.gameInfo.gameStartDate!!)
         holder.tvNotificationItemDate.text = dateTime.first + " | "
         holder.tvNotificationItemTime.text = dateTime.second + " | "
         holder.tvNotificationItemPlace.text = info.boardInfo.gameInfo.location
