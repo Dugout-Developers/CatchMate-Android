@@ -25,6 +25,10 @@ class LocalDataViewModel
         val userId: LiveData<Long>
             get() = _userId
 
+        private var _provider = MutableLiveData<String>()
+        val provider: LiveData<String>
+            get() = _provider
+
         fun saveAccessToken(accessToken: String) {
             localDataUseCase.saveAccessToken(accessToken)
         }
@@ -37,6 +41,10 @@ class LocalDataViewModel
             localDataUseCase.saveUserId(userId)
         }
 
+        fun saveProvider(provider: String) {
+            localDataUseCase.saveProvider(provider)
+        }
+
         fun getAccessToken() {
             _accessToken.value = localDataUseCase.getAccessToken()
         }
@@ -47,5 +55,15 @@ class LocalDataViewModel
 
         fun getUserId() {
             _userId.value = localDataUseCase.getUserId()
+        }
+
+        fun getProvider() {
+            _provider.value = localDataUseCase.getProvider()
+        }
+
+        fun logout() {
+            localDataUseCase.removeTokens()
+            localDataUseCase.removeProvider()
+            localDataUseCase.removeUserId()
         }
     }

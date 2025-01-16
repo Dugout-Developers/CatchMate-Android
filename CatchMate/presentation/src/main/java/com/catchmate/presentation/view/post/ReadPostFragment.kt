@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enumclass.EnrollState
+import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReadPostBinding
 import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
@@ -108,7 +109,7 @@ class ReadPostFragment : Fragment() {
                         popup.menu.findItem(R.id.menuitem_post_report)
                     }
                 val s = SpannableString(targetItem.title)
-                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.system_red)), 0, s.length, 0)
+                s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.brand500)), 0, s.length, 0)
                 targetItem.title = s
 
                 popup.setOnMenuItemClickListener { item ->
@@ -153,8 +154,24 @@ class ReadPostFragment : Fragment() {
 
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
+            val userInfo = readPostViewModel.getBoardResponse.value?.userInfo
+            val userProfile =
+                GetUserProfileResponse(
+                    userInfo?.userId!!,
+                    userInfo.email,
+                    userInfo.profileImageUrl,
+                    userInfo.gender,
+                    userInfo.allAlarm,
+                    userInfo.chatAlarm,
+                    userInfo.enrollAlarm,
+                    userInfo.eventAlarm,
+                    userInfo.nickName,
+                    userInfo.favoriteClub,
+                    userInfo.birthDate,
+                    userInfo.watchStyle,
+                )
             val bundle = Bundle()
-            bundle.putParcelable("userInfo", readPostViewModel.getBoardResponse.value?.userInfo)
+            bundle.putParcelable("userInfo", userProfile)
             findNavController().navigate(R.id.action_readPostFragment_to_myPostFragment, bundle)
         }
     }
@@ -254,7 +271,7 @@ class ReadPostFragment : Fragment() {
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -262,7 +279,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
@@ -275,7 +292,7 @@ class ReadPostFragment : Fragment() {
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.favoriteClub.name,
+                        post.userInfo.favoriteClub.id,
                         true,
                         "read",
                     ),
@@ -391,7 +408,7 @@ class ReadPostFragment : Fragment() {
 
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.homeClubId),
+                post.gameInfo.homeClubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -399,7 +416,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                ClubUtils.convertClubIdToName(post.gameInfo.awayClubId),
+                post.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

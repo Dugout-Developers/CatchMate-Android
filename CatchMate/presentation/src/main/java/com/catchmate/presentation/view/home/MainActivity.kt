@@ -1,5 +1,6 @@
 package com.catchmate.presentation.view.home
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,12 +20,19 @@ class MainActivity : AppCompatActivity() {
 
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
+    val permissionList =
+        arrayOf(
+            Manifest.permission.INTERNET,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        requestPermissions(permissionList, 0)
         initNavController()
         initBottomNavigationView()
 

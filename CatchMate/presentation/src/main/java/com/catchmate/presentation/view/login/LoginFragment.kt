@@ -90,6 +90,7 @@ class LoginFragment : Fragment() {
                     false -> {
                         localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
                         localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)
+                        localDataViewModel.saveProvider(loginViewModel.postLoginRequest.value?.provider!!)
                         findNavController().navigate(R.id.homeFragment)
                     }
                 }

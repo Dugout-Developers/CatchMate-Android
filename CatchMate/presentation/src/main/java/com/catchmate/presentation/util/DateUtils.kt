@@ -71,4 +71,12 @@ object DateUtils {
 
         return Pair(outputDateFormat.format(formattedDate), time.substring(0, 5))
     }
+
+    fun formatDateTimeToEnrollDateTime(dateTime: String): String {
+        val (date, time) = dateTime.split("T")
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val formattedDate = inputDateFormat.parse(date)
+        val outputDataFormat = SimpleDateFormat("M월 d일", Locale.KOREAN)
+        return outputDataFormat.format(formattedDate) + " " + time.substring(0, 5)
+    }
 }

@@ -1,5 +1,5 @@
 package com.catchmate.domain.model.enroll
 
 data class GetAllReceivedEnrollResponse(
-    val content: List<ReceivedEnrollInfo>,
+    val enrollInfoList: List<ReceivedEnrollInfo>,
 )
