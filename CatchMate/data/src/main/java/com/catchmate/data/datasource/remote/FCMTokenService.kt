@@ -2,7 +2,6 @@ package com.catchmate.data.datasource.remote
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.util.Log
@@ -33,13 +32,15 @@ class FCMTokenService : FirebaseMessagingService() {
         body = intent?.extras?.getString("gcm.notification.body") ?: ""
         title = intent?.extras?.getString("gcm.notification.title") ?: ""
         Log.e("body title", "$body - $title")
-        val new = intent?.apply {
-            val temp = extras?.apply {
-                remove(MessageNotificationKeys.ENABLE_NOTIFICATION)
-                remove("gcm.notification.e")
+        val new =
+            intent?.apply {
+                val temp =
+                    extras?.apply {
+                        remove(MessageNotificationKeys.ENABLE_NOTIFICATION)
+                        remove("gcm.notification.e")
+                    }
+                replaceExtras(temp)
             }
-            replaceExtras(temp)
-        }
         super.handleIntent(new)
     }
 
@@ -55,13 +56,12 @@ class FCMTokenService : FirebaseMessagingService() {
         }
     }
 
-    private fun getNotificationBuilder(channelId: String) : NotificationCompat.Builder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    private fun getNotificationBuilder(channelId: String): NotificationCompat.Builder =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationCompat.Builder(this@FCMTokenService, channelId)
         } else {
             NotificationCompat.Builder(this@FCMTokenService)
         }
-    }
 
     private fun createNotificationChannel(
         channerId: String,

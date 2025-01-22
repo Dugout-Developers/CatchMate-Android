@@ -1,6 +1,5 @@
 package com.catchmate.domain
 
-import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 
 interface NotificationHandler {
