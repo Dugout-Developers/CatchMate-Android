@@ -38,7 +38,7 @@ class HomeFragment :
 
     private var gameStartDate: String? = null
     private var maxPerson: Int? = null
-    private var preferredTeamId: Int? = null
+    private var preferredTeamIdList: Array<Int>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -138,7 +138,7 @@ class HomeFragment :
 
     private fun initTeamFilter() {
         binding.hfvHomeTeamFilter.setOnClickListener {
-            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment(preferredTeamId)
+            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment(preferredTeamIdList)
             teamFilterBottomSheet.setOnClubSelectedListener(this@HomeFragment)
             teamFilterBottomSheet.show(requireActivity().supportFragmentManager, teamFilterBottomSheet.tag)
         }
@@ -202,22 +202,21 @@ class HomeFragment :
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
-            preferredTeamId,
+            preferredTeamIdList,
         )
         binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
         binding.hfvHomeDateFilter.setFilterTextColor(gameStartDate != null)
     }
 
-    override fun onClubFilterSelected(clubId: Int?) {
-        preferredTeamId = clubId
-        Log.e("CLUB", clubId.toString())
+    override fun onClubFilterSelected(clubIdList: Array<Int>?) {
+        preferredTeamIdList = clubIdList
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
-            preferredTeamId,
+            preferredTeamIdList,
         )
-        binding.hfvHomeTeamFilter.setClubFilterText(clubId)
-        binding.hfvHomeTeamFilter.setFilterTextColor(clubId != null)
+        binding.hfvHomeTeamFilter.setClubFilterText(preferredTeamIdList)
+        binding.hfvHomeTeamFilter.setFilterTextColor(preferredTeamIdList != null)
     }
 
     override fun onPersonFilterSelected(count: Int?) {
@@ -225,7 +224,7 @@ class HomeFragment :
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
-            preferredTeamId,
+            preferredTeamIdList,
         )
         binding.hfvHomeMemberCountFilter.setFilterTextColor(count != null)
         binding.hfvHomeMemberCountFilter.setPersonFilterText(count)

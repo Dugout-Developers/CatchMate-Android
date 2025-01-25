@@ -7,20 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.catchmate.presentation.databinding.FragmentHomeTeamFilterBottomSheetBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
-import com.catchmate.presentation.util.ClubUtils
+import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
+import com.catchmate.presentation.util.ClubUtils.convertClubNameToId
 import com.catchmate.presentation.view.post.TeamToggleCheckButtonView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HomeTeamFilterBottomSheetFragment(
-    private val defaultClub: Int?,
+    private val defaultClubList: Array<Int>?,
 ) : BottomSheetDialogFragment() {
     private var _binding: FragmentHomeTeamFilterBottomSheetBinding? = null
     val binding get() = _binding!!
 
     private var clubSelectedListener: OnClubFilterSelectedListener? = null
-    private var selectedButton: TeamToggleCheckButtonView? = null
+    private var selectedButton: MutableList<TeamToggleCheckButtonView> = mutableListOf()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -69,28 +70,45 @@ class HomeTeamFilterBottomSheetFragment(
             )
 
         teamToggleCheckButtons.forEach { btn ->
+            var isSyncing = false
+
+            // 토글 버튼 체크 변경 이벤트
             btn.binding.toggleTeamToggleCheckButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isSyncing) return@setOnCheckedChangeListener // 상호 호출 방지
+                isSyncing = true
+
                 btn.binding.cbTeamToggleCheckButton.isChecked = isChecked
                 if (isChecked) {
-                    selectedButton?.binding?.toggleTeamToggleCheckButton?.isChecked = false
-                    buttonView.isChecked = true
-                    selectedButton = btn
+                    selectedButton.add(btn)
+                } else {
+                    selectedButton.remove(btn)
                 }
+
+                isSyncing = false
             }
 
+            // 체크 버튼 체크 변경 이벤트
             btn.binding.cbTeamToggleCheckButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isSyncing) return@setOnCheckedChangeListener // 상호 호출 방지
+                isSyncing = true
+
                 btn.binding.toggleTeamToggleCheckButton.isChecked = isChecked
                 if (isChecked) {
-                    selectedButton?.binding?.cbTeamToggleCheckButton?.isChecked = false
-                    buttonView.isChecked = true
-                    selectedButton = btn
+                    selectedButton.add(btn)
+                } else {
+                    selectedButton.remove(btn)
+                }
+                isSyncing = false
+            }
+
+            // 이미 선택된 구단 있을 때 체크 상태 셋팅
+            defaultClubList?.forEach { id ->
+                if (convertClubIdToName(id) == btn.binding.tvTeamToggleCheckButton.text) {
+                    btn.binding.toggleTeamToggleCheckButton.isChecked = true
                 }
             }
 
-            if (defaultClub != null && btn.binding.tvTeamToggleCheckButton.text == ClubUtils.convertClubIdToName(defaultClub)) {
-                btn.binding.toggleTeamToggleCheckButton.isChecked = true
-            }
-
+            // 버튼 뷰 전체 클릭 범위 설정
             btn.setOnClickListener {
                 btn.binding.toggleTeamToggleCheckButton.isChecked = !btn.binding.toggleTeamToggleCheckButton.isChecked
             }
@@ -100,24 +118,22 @@ class HomeTeamFilterBottomSheetFragment(
     private fun initFooter() {
         binding.layoutTeamFilterFooter.apply {
             btnFilterFooterReset.setOnClickListener {
-                if (selectedButton != null) {
-                    selectedButton?.binding?.toggleTeamToggleCheckButton?.isChecked = false
-                    selectedButton = null
+                if (selectedButton.isNotEmpty()) {
+                    selectedButton.toList().forEach { btn ->
+                        btn.binding.toggleTeamToggleCheckButton.isChecked = false
+                    }
+                    selectedButton.clear()
                 }
             }
             btnFilterFooterApply.setOnClickListener {
-                if (selectedButton == null) {
+                if (selectedButton.isEmpty()) {
                     clubSelectedListener?.onClubFilterSelected(null)
                 } else {
-                    clubSelectedListener?.onClubFilterSelected(
-                        ClubUtils.convertClubNameToId(
-                            selectedButton
-                                ?.binding
-                                ?.tvTeamToggleCheckButton
-                                ?.text
-                                .toString(),
-                        ),
-                    )
+                    val clubList = mutableListOf<Int>()
+                    selectedButton.forEach { btn ->
+                        clubList.add(convertClubNameToId(btn.binding.tvTeamToggleCheckButton.text.toString()))
+                    }
+                    clubSelectedListener?.onClubFilterSelected(clubList.toTypedArray())
                 }
                 dismiss()
             }

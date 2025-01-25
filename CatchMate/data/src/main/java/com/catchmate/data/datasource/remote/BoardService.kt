@@ -49,7 +49,7 @@ interface BoardService {
     suspend fun getBoardList(
         @Query("gameStartDate") gameStartDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
-        @Query("preferredTeamId") preferredTeamId: Int? = null,
+        @Query("preferredTeamIdList") preferredTeamIdList: Array<Int>? = null,
     ): Response<GetBoardListResponseDTO?>
 
     @GET("boards/list/{userId}")

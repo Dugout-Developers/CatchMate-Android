@@ -12,6 +12,6 @@ class GetBoardListUseCase
         suspend fun getBoardList(
             gameStartDate: String?,
             maxPerson: Int?,
-            preferredTeamId: Int?,
-        ): Result<GetBoardListResponse> = boardRepository.getBoardList(gameStartDate, maxPerson, preferredTeamId)
+            preferredTeamIdList: Array<Int>?,
+        ): Result<GetBoardListResponse> = boardRepository.getBoardList(gameStartDate, maxPerson, preferredTeamIdList)
     }

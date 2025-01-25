@@ -138,10 +138,10 @@ class BoardRepositoryImpl
         override suspend fun getBoardList(
             gameStartDate: String?,
             maxPerson: Int?,
-            preferredTeamId: Int?,
+            preferredTeamIdList: Array<Int>?
         ): Result<GetBoardListResponse> =
             try {
-                val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamId)
+                val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamIdList)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =

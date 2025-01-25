@@ -29,7 +29,7 @@ interface BoardRepository {
     suspend fun getBoardList(
         gameStartDate: String?,
         maxPerson: Int?,
-        preferredTeamId: Int?,
+        preferredTeamIdList: Array<Int>?,
     ): Result<GetBoardListResponse>
 
     suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse>
