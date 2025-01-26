@@ -128,6 +128,8 @@ object BoardMapper {
             gameInfo = toGameInfo(responseDTO.gameInfo),
             liftUpDate = responseDTO.liftUpDate,
             userInfo = toUserInfo(responseDTO.userInfo),
+            buttonStatus = responseDTO.buttonStatus,
+            bookMarked = responseDTO.bookMarked,
         )
 
     fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =
@@ -154,6 +156,8 @@ object BoardMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     fun toGetUserBoardListResponse(dto: GetUserBoardListResponseDTO): GetUserBoardListResponse =
@@ -171,9 +175,11 @@ object BoardMapper {
             maxPerson = responseDTO.maxPerson,
             preferredGender = responseDTO.preferredGender,
             preferredAgeRange = responseDTO.preferredAgeRange,
-            gameInfo = toGameInfo(responseDTO.gameInfo),
             liftUpDate = responseDTO.liftUpDate,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
             userInfo = toUserInfo(responseDTO.userInfo),
+            buttonStatus = responseDTO.buttonStatus,
+            bookMarked = responseDTO.bookMarked,
         )
 
     fun toGetTempBoardResponse(dto: GetTempBoardResponseDTO): GetTempBoardResponse =

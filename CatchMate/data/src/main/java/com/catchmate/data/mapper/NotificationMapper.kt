@@ -47,6 +47,8 @@ object NotificationMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =

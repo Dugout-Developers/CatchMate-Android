@@ -15,4 +15,6 @@ data class BoardDTO(
     val gameInfo: GameInfoDTO,
     val liftUpDate: String,
     val userInfo: UserInfoDTO,
+    val buttonStatus: String?,
+    val bookMarked: Boolean,
 )

@@ -107,6 +107,8 @@ object EnrollMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toEnrollUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =
