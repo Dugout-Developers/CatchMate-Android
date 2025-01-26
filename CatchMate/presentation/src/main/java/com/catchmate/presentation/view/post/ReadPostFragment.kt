@@ -72,7 +72,6 @@ class ReadPostFragment : Fragment() {
         getUserId()
         initViewModel()
         initHeader()
-        initFooter()
         initWriterInfoLayout()
     }
 
@@ -190,12 +189,12 @@ class ReadPostFragment : Fragment() {
             }
             btnLikedFooterRegister.setOnClickListener {
                 when (readPostViewModel.boardEnrollState.value) {
-                    EnrollState.APPLICABLE -> {
-                        showEnrollDialog()
+                    EnrollState.APPLY -> showEnrollDialog()
+                    EnrollState.APPLIED -> {
+                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 목록 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
+                        readPostViewModel.getRequestedEnrollList(boardId)
                     }
-                    EnrollState.ACCEPTED -> {}
-                    EnrollState.REJECTED -> {}
-                    EnrollState.PENDING -> {}
+                    EnrollState.VIEW_CHAT -> {} // 채팅 화면으로 이동
                     null -> {}
                 }
             }
@@ -220,30 +219,47 @@ class ReadPostFragment : Fragment() {
             }
         }
         readPostViewModel.boardEnrollState.observe(viewLifecycleOwner) { state ->
-            when (state!!) {
-                EnrollState.APPLICABLE -> {
-                    binding.layoutReadPostFooter.btnLikedFooterRegister.setText(R.string.post_register)
-                }
-                EnrollState.ACCEPTED -> {
-                    binding.layoutReadPostFooter.btnLikedFooterRegister.setText(R.string.post_writer)
-                }
-                EnrollState.REJECTED -> {
-                    // 구현
-                }
-                EnrollState.PENDING -> {
-                    // 구현
+            binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
+                when (state) {
+                    EnrollState.APPLY -> {
+                        setText(R.string.post_register)
+                        setBackgroundResource(R.drawable.shape_all_submit_button)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.grey0))
+                    }
+                    EnrollState.APPLIED -> {
+                        setText(R.string.post_check_register)
+                        setBackgroundResource(R.drawable.shape_all_team_toggle_selected_bg)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.brand500))
+                    }
+                    EnrollState.VIEW_CHAT -> {
+                        setText(R.string.post_writer)
+                        setBackgroundResource(R.drawable.shape_all_submit_button)
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.grey0))
+                    }
                 }
             }
+
         }
         readPostViewModel.postEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
+                readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
             }
         }
         readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("삭제 성공", "${response.boardId}")
                 findNavController().popBackStack()
+            }
+        }
+        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { enrollInfo ->
+            if (enrollInfo != null) {
+                showEnrollRequestDialog()
+            }
+        }
+        readPostViewModel.deleteEnrollResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
             }
         }
         readPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -298,7 +314,12 @@ class ReadPostFragment : Fragment() {
                     ),
                 )
             tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.id)
-            tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
+            if (post.userInfo.watchStyle.isNullOrEmpty()) {
+                tvReadPostWriterCheerStyle.visibility = View.GONE
+            } else {
+                tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
+            }
+
             tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.userInfo.gender)
             tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.userInfo.birthDate)
             tvReadPostAdditionalInfo.text = post.content
@@ -322,15 +343,16 @@ class ReadPostFragment : Fragment() {
                 ages,
             )
 
-            if (userId == post.userInfo.userId) {
-                // 신청 수락된 경우 (참여중일때)
-                readPostViewModel.setBoardEnrollState(EnrollState.ACCEPTED)
-            } else {
-                // 아직 신청 안한 경우
-                readPostViewModel.setBoardEnrollState(EnrollState.APPLICABLE)
-                // 수락됐거나 거절됐거나 신청후대기중일때 분기 필요
+            layoutReadPostFooter.toggleLikedFooterLiked.isChecked = post.bookMarked
+
+            when (post.buttonStatus) {
+                "APPLY" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
+                "APPLIED" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
+                "VIEW CHAT" -> readPostViewModel.setBoardEnrollState(EnrollState.VIEW_CHAT)
+                else -> Log.e("BUTTON STATUS NULL", "BUTTON STATUS NULL")
             }
         }
+        initFooter()
     }
 
     private fun setGenderTextViewVisibility(
@@ -443,21 +465,81 @@ class ReadPostFragment : Fragment() {
                 }
             }
 
-            edtApplicationDetailDialogExplain.doAfterTextChanged {
-                if (edtApplicationDetailDialogExplain.text.toString().isNotEmpty()) {
-                    tvApplicationDetailDialogSubmit.isClickable = true
-                    tvApplicationDetailDialogSubmit.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.brand500),
-                    )
-                } else {
-                    tvApplicationDetailDialogSubmit.isClickable = false
-                    tvApplicationDetailDialogSubmit.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.grey500),
-                    )
+            tvApplicationDetailDialogExplain.visibility = View.GONE
+            edtApplicationDetailDialogExplain.apply {
+                visibility = View.VISIBLE
+                doAfterTextChanged {
+                    if (edtApplicationDetailDialogExplain.text.toString().isNotEmpty()) {
+                        tvApplicationDetailDialogSubmit.isClickable = true
+                        tvApplicationDetailDialogSubmit.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.brand500),
+                        )
+                    } else {
+                        tvApplicationDetailDialogSubmit.isClickable = false
+                        tvApplicationDetailDialogSubmit.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.grey500),
+                        )
+                    }
                 }
             }
         }
 
+        dialog.show()
+    }
+
+    private fun showEnrollRequestDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutApplicationDetailDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            val enrollInfo = readPostViewModel.getRequestedEnroll.value!!
+
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(enrollInfo.boardInfo.gameInfo.gameStartDate!!)
+            tvApplicationDetailDialogDate.text = dateTimePair.first
+            tvApplicationDetailDialogTime.text = dateTimePair.second
+            tvApplicationDetailDialogPlace.text = enrollInfo.boardInfo.gameInfo.location
+
+            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClubId == enrollInfo.boardInfo.cheerClubId
+            setTeamViewResources(
+                enrollInfo.boardInfo.gameInfo.homeClubId,
+                isCheerTeam,
+                ivApplicationDetailDialogHomeTeamBg,
+                ivApplicationDetailDialogHomeTeamLogo,
+                "readPost",
+                requireContext(),
+            )
+            setTeamViewResources(
+                enrollInfo.boardInfo.gameInfo.awayClubId,
+                !isCheerTeam,
+                ivApplicationDetailDialogAwayTeamBg,
+                ivApplicationDetailDialogAwayTeamLogo,
+                "readPost",
+                requireContext(),
+            )
+            tvApplicationDetailDialogTitle.setText(R.string.application_detail_dialog_read_title)
+
+            tvApplicationDetailDialogCancel.apply {
+                setText(R.string.dialog_button_enroll_cancel)
+                setOnClickListener {
+                    readPostViewModel.deleteEnroll(enrollInfo.enrollId)
+                }
+            }
+            tvApplicationDetailDialogSubmit.apply {
+                setText(R.string.complete)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+
+            edtApplicationDetailDialogExplain.visibility = View.INVISIBLE
+            tvApplicationDetailDialogExplain.apply {
+                visibility = View.VISIBLE
+                text = enrollInfo.description
+            }
+        }
         dialog.show()
     }
 

@@ -587,9 +587,11 @@ class AddPostFragment :
                             tempBoard.maxPerson,
                             tempBoard.preferredGender,
                             tempBoard.preferredAgeRange,
-                            tempBoard.gameInfo,
                             tempBoard.liftUpDate,
+                            tempBoard.gameInfo,
                             tempBoard.userInfo,
+                            "",
+                            false,
                         )
                     addPostViewModel.setBoardInfo(board)
                     dialog.dismiss()

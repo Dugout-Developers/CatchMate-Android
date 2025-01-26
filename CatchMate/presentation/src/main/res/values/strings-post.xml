@@ -16,6 +16,7 @@
     <string name="temporary_storage">임시저장</string>
     <string name="post_complete">작성 완료</string>
     <string name="post_register">직관 신청</string>
+    <string name="post_check_register">보낸 신청 보기</string>
     <string name="post_writer">채팅 보기</string>
 
     <string name="temporary_storage_import_question">임시저장된 글을 불러올까요?</string>
@@ -58,6 +59,7 @@
     <string name="application_detail_dialog_hint">간단한 자기소개를 적어주세요</string>
     <string name="application_detail_dialog_write_title">직관 신청을 보낼까요?</string>
     <string name="application_detail_dialog_read_title">직관 신청을 보냈어요</string>
+    <string name="dialog_button_enroll_cancel">신청 취소</string>
     <string name="dialog_button_cancel">취소</string>
     <string name="dialog_button_enroll">신청</string>
     <string name="dialog_button_delete">삭제</string>
