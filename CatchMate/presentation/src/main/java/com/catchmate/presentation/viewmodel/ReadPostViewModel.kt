@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.BookmarkFailureException
-import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
@@ -71,10 +70,6 @@ class ReadPostViewModel
         private val _navigateToLogin = MutableLiveData<Boolean>()
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
-
-        private val _liftUpFailureMessage = MutableLiveData<String>()
-        val liftUpFailureMessage: LiveData<String>
-            get() = _liftUpFailureMessage
 
         private val _bookmarkFailureMessage = MutableLiveData<String>()
         val bookmarkFailureMessage: LiveData<String>
@@ -177,11 +172,7 @@ class ReadPostViewModel
                         when (exception) {
                             is ReissueFailureException -> {
                                 _navigateToLogin.value = true
-                            }
-                            is LiftUpFailureException -> {
-                                _liftUpFailureMessage.value = "지금은 게시글을 끌어올릴 수 없어요"
-                            }
-                            else -> {
+                            } else -> {
                                 _errorMessage.value = exception.message
                             }
                         }
