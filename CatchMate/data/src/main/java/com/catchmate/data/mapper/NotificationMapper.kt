@@ -31,6 +31,7 @@ object NotificationMapper {
             title = dto.title,
             body = dto.body,
             createdAt = dto.createdAt,
+            acceptStatus = dto.acceptStatus,
             read = dto.read,
         )
 
@@ -91,6 +92,7 @@ object NotificationMapper {
             title = dto.title,
             body = dto.body,
             createdAt = dto.createdAt,
+            acceptStatus = dto.acceptStatus,
             read = dto.read,
         )
 
