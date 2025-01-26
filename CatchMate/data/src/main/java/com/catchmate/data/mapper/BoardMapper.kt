@@ -130,7 +130,11 @@ object BoardMapper {
             userInfo = toUserInfo(responseDTO.userInfo),
         )
 
-    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse = PatchBoardLiftUpResponse(dto.liftUpDate)
+    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =
+        PatchBoardLiftUpResponse(
+            state = dto.state,
+            remainTime = dto.remainTime,
+        )
 
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
         GetBoardListResponse(

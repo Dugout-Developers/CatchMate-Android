@@ -380,11 +380,12 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.patchBoardLiftUp(boardId)
         readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Snackbar.make(requireView(), R.string.post_read_writer_menu_up_complete, Snackbar.LENGTH_SHORT).show()
-            }
-        }
-        readPostViewModel.liftUpFailureMessage.observe(viewLifecycleOwner) { message ->
-            if (message.isNotEmpty()) {
+                val message = if (response.state) {
+                    getString(R.string.post_read_writer_menu_up_complete)
+                } else {
+                    val failureMessage = getString(R.string.post_read_writer_menu_up_failure)
+                    failureMessage.format(response.remainTime)
+                }
                 Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }
