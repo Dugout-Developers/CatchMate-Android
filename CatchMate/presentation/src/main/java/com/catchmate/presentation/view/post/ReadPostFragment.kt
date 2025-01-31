@@ -525,6 +525,7 @@ class ReadPostFragment : Fragment() {
                 setText(R.string.dialog_button_enroll_cancel)
                 setOnClickListener {
                     readPostViewModel.deleteEnroll(enrollInfo.enrollId)
+                    dialog.dismiss()
                 }
             }
             tvApplicationDetailDialogSubmit.apply {
