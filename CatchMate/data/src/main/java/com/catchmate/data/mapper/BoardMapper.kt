@@ -137,7 +137,7 @@ object BoardMapper {
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
         )
 
-    private fun toBoard(dto: BoardDTO): Board =
+    fun toBoard(dto: BoardDTO): Board =
         Board(
             boardId = dto.boardId,
             title = dto.title,
