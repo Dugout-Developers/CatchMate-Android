@@ -141,6 +141,8 @@ object BoardMapper {
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
         GetBoardListResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+            totalPages = responseDTO.totalPages,
+            isLast = responseDTO.isLast,
         )
 
     private fun toBoard(dto: BoardDTO): Board =
