@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
@@ -33,8 +35,11 @@ class HomeFragment :
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
-    private var page: Long = 1
-    private var isNextPageExist = true
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isFirstLoad = true
+    private var postList: MutableList<Board> = mutableListOf()
 
     private var gameStartDate: String? = null
     private var maxPerson: Int? = null
@@ -61,13 +66,48 @@ class HomeFragment :
         initDateFilter()
         initTeamFilter()
         initHeadCountFilter()
-        initBoardList()
         initRecyclerView()
+        Log.e("POST SIZE", postList.size.toString())
+        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                if (response.boardInfoList.isEmpty() && response.isLast && currentPage == 0) {
+                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
+                    binding.rvHomePosts.visibility = View.GONE
+                    binding.layoutHomeNoList.visibility = View.VISIBLE
+                } else {
+                    binding.rvHomePosts.visibility = View.VISIBLE
+                    binding.layoutHomeNoList.visibility = View.GONE
+                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
+
+                    if (currentPage == 0 && isFirstLoad) {
+                        postList.clear()
+                        isFirstLoad = false
+                        Log.i("LIST CLEARED", "CLEARED")
+                    }
+
+                    if (response.totalElements > postList.size) {
+                        postList.addAll(response.boardInfoList)
+                        postList.forEach {
+                            Log.e("LIST", "${it.boardId}")
+                        }
+                    }
+                    Log.e("POST SIZE2", postList.size.toString())
+                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
+                    adapter.updatePostList(postList)
+                    isLastPage = response.isLast
+                    isLoading = false
+                    currentPage++
+                }
+            }
+        }
+
+        loadBoardList()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        currentPage = 0
     }
 
     private fun getTokens() {
@@ -106,26 +146,15 @@ class HomeFragment :
         }
     }
 
-    private fun initBoardList() {
-        homeViewModel.getBoardList()
-        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                if (response.boardInfoList.isNotEmpty()) {
-                    binding.rvHomePosts.visibility = View.VISIBLE
-                    binding.layoutHomeNoList.visibility = View.GONE
-                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
-//                    isNextPageExist = true
-                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                    adapter.updatePostList(response.boardInfoList)
-                } else {
-                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
-                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
-//                    isNextPageExist = false
-                    binding.rvHomePosts.visibility = View.GONE
-                    binding.layoutHomeNoList.visibility = View.VISIBLE
-                }
-            }
-        }
+    private fun loadBoardList() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamIdList,
+            currentPage,
+        )
     }
 
     private fun initDateFilter() {
@@ -133,6 +162,10 @@ class HomeFragment :
             val dateFilterBottomSheet = HomeDateFilterBottomSheetFragment(gameStartDate)
             dateFilterBottomSheet.setOnDateFilterSelectedListener(this@HomeFragment)
             dateFilterBottomSheet.show(requireActivity().supportFragmentManager, dateFilterBottomSheet.tag)
+        }
+        if (gameStartDate != null) {
+            binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
+            binding.hfvHomeDateFilter.setFilterTextColor(true)
         }
     }
 
@@ -142,6 +175,10 @@ class HomeFragment :
             teamFilterBottomSheet.setOnClubSelectedListener(this@HomeFragment)
             teamFilterBottomSheet.show(requireActivity().supportFragmentManager, teamFilterBottomSheet.tag)
         }
+        if (preferredTeamIdList != null) {
+            binding.hfvHomeTeamFilter.setClubFilterText(preferredTeamIdList)
+            binding.hfvHomeTeamFilter.setFilterTextColor(true)
+        }
     }
 
     private fun initHeadCountFilter() {
@@ -150,35 +187,35 @@ class HomeFragment :
             headCountFilterBottomSheet.setOnPersonFilterSelected(this@HomeFragment)
             headCountFilterBottomSheet.show(requireActivity().supportFragmentManager, headCountFilterBottomSheet.tag)
         }
+        if (maxPerson != null) {
+            binding.hfvHomeMemberCountFilter.setFilterTextColor(true)
+            binding.hfvHomeMemberCountFilter.setPersonFilterText(maxPerson)
+        }
     }
 
     private fun initRecyclerView() {
         binding.rvHomePosts.apply {
             adapter = HomePostAdapter(requireContext(), layoutInflater, this@HomeFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//            addOnScrollListener(
-//                object : RecyclerView.OnScrollListener() {
-//                    override fun onScrolled(
-//                        recyclerView: RecyclerView,
-//                        dx: Int,
-//                        dy: Int,
-//                    ) {
-//                        super.onScrolled(recyclerView, dx, dy)
-//                        val lastVisibleItemPosition =
-//                            (recyclerView.layoutManager as LinearLayoutManager)
-//                                .findLastCompletelyVisibleItemPosition()
-//                        val itemTotalCount = recyclerView.adapter!!.itemCount
-//
-//                        if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
-//                            if (isNextPageExist) {
-//                                homeViewModel.getBoardPaging(
-//                                    pageNum = page++,
-//                                )
-//                            }
-//                        }
-//                    }
-//                },
-//            )
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) { // 새로운 목록 불러와야함
+                            loadBoardList()
+                        }
+                    }
+                },
+            )
         }
     }
 
@@ -199,10 +236,13 @@ class HomeFragment :
 
     override fun onDateSelected(date: String?) {
         gameStartDate = date
+        currentPage = 0
+        postList.clear()
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
             preferredTeamIdList,
+            currentPage,
         )
         binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
         binding.hfvHomeDateFilter.setFilterTextColor(gameStartDate != null)
@@ -210,10 +250,13 @@ class HomeFragment :
 
     override fun onClubFilterSelected(clubIdList: Array<Int>?) {
         preferredTeamIdList = clubIdList
+        currentPage = 0
+        postList.clear()
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
             preferredTeamIdList,
+            currentPage,
         )
         binding.hfvHomeTeamFilter.setClubFilterText(preferredTeamIdList)
         binding.hfvHomeTeamFilter.setFilterTextColor(preferredTeamIdList != null)
@@ -221,10 +264,13 @@ class HomeFragment :
 
     override fun onPersonFilterSelected(count: Int?) {
         maxPerson = count
+        currentPage = 0
+        postList.clear()
         homeViewModel.getBoardList(
             gameStartDate,
             maxPerson,
             preferredTeamIdList,
+            currentPage,
         )
         binding.hfvHomeMemberCountFilter.setFilterTextColor(count != null)
         binding.hfvHomeMemberCountFilter.setPersonFilterText(count)

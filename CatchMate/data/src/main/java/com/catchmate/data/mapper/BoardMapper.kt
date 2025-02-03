@@ -142,6 +142,7 @@ object BoardMapper {
         GetBoardListResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
             totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
             isLast = responseDTO.isLast,
         )
 

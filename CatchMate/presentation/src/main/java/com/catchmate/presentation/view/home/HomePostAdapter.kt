@@ -27,6 +27,11 @@ class HomePostAdapter(
         notifyDataSetChanged()
     }
 
+    fun resetPostList() {
+        postList.clear()
+        notifyDataSetChanged()
+    }
+
     inner class HomePostViewHolder(
         itemBinding: ItemHomePostBinding,
     ) : RecyclerView.ViewHolder(itemBinding.root) {
