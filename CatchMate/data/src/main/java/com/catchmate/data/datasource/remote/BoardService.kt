@@ -64,7 +64,9 @@ interface BoardService {
     ): Response<GetBoardResponseDTO?>
 
     @GET("boards/bookmark")
-    suspend fun getLikedBoard(): Response<GetLikedBoardResponseDTO?>
+    suspend fun getLikedBoard(
+        @Query("page") page: Int,
+    ): Response<GetLikedBoardResponseDTO?>
 
     @GET("boards/temp")
     suspend fun getTempBoard(): Response<GetTempBoardResponseDTO?>

@@ -10,13 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentFavoriteBinding
 import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.viewmodel.FavoriteViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,11 +29,14 @@ class FavoriteFragment :
     private var _binding: FragmentFavoriteBinding? = null
     val binding get() = _binding!!
 
-    private val localDataViewModel: LocalDataViewModel by viewModels()
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var isFirstLoad = true
+    private var likedList: MutableList<Board> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,30 +52,19 @@ class FavoriteFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        getTokens()
         initHeader()
+        initViewModel()
         initRecyclerView()
+
+        if (isFirstLoad) {
+            getLikedBoard()
+            isFirstLoad = false
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
-        localDataViewModel.getRefreshToken()
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { accessToken ->
-            if (accessToken != null) {
-                this.accessToken = accessToken
-                initViewModel()
-            }
-        }
-        localDataViewModel.refreshToken.observe(viewLifecycleOwner) { refreshToken ->
-            if (refreshToken != null) {
-                this.refreshToken = refreshToken
-            }
-        }
     }
 
     private fun initHeader() {
@@ -82,17 +75,22 @@ class FavoriteFragment :
     }
 
     private fun initViewModel() {
-        favoriteViewModel.getLikedBoard()
         favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (response.boardInfoList.isNotEmpty()) {
-                binding.layoutFavoriteNoList.visibility = View.GONE
-                binding.rvFavoritePost.visibility = View.VISIBLE
-                val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-                adapter.updateLikedList(response.boardInfoList)
-            } else {
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
                 binding.layoutFavoriteNoList.visibility = View.VISIBLE
                 binding.rvFavoritePost.visibility = View.GONE
+            } else {
+                binding.layoutFavoriteNoList.visibility = View.GONE
+                binding.rvFavoritePost.visibility = View.VISIBLE
+                if (isApiCalled) {
+                    likedList.addAll(response.boardInfoList)
+                }
+                val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
+                adapter.updateLikedList(likedList)
+                isLastPage = response.isLast
+                isLoading = false
             }
+            isApiCalled = false
         }
 
         favoriteViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -113,6 +111,13 @@ class FavoriteFragment :
         }
     }
 
+    private fun getLikedBoard() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+        favoriteViewModel.getLikedBoard(currentPage)
+        isApiCalled = true
+    }
+
     private fun initRecyclerView() {
         binding.rvFavoritePost.apply {
             adapter =
@@ -124,6 +129,25 @@ class FavoriteFragment :
                     this@FavoriteFragment,
                 )
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            currentPage += 1
+                            getLikedBoard()
+                        }
+                    }
+                }
+            )
         }
     }
 
@@ -138,6 +162,7 @@ class FavoriteFragment :
         position: Int,
     ) {
         favoriteViewModel.deleteBoardLike(boardId)
+        likedList.removeAt(position)
         val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
         adapter.removeUnlikedPost(position)
     }

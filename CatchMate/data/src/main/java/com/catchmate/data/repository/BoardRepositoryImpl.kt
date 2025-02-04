@@ -204,9 +204,9 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getLikedBoard(): Result<GetLikedBoardResponse> =
+        override suspend fun getLikedBoard(page: Int): Result<GetLikedBoardResponse> =
             try {
-                val response = boardApi.getLikedBoard()
+                val response = boardApi.getLikedBoard(page)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =

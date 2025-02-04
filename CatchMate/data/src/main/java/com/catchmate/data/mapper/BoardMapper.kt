@@ -210,6 +210,10 @@ object BoardMapper {
     fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
         GetLikedBoardResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse = PostBoardLikeResponse(dto.state)
