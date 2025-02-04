@@ -72,16 +72,12 @@ class HomeFragment :
         if (isFirstLoad) {
             getBoardList()
             isFirstLoad = false
-        } else {
-            val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-            adapter.updatePostList(postList)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        currentPage = 0
     }
 
     private fun getTokens() {
