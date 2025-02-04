@@ -132,10 +132,14 @@ class HomeTeamFilterBottomSheetFragment(
                     val clubList = mutableListOf<Int>()
                     selectedButton.forEach { btn ->
                         clubList.add(
-                                convertClubNameToId(
-                                    btn.binding.tvTeamToggleCheckButton.text.toString()
-                                )
-                            )
+                            convertClubNameToId(
+                                btn
+                                    .binding
+                                    .tvTeamToggleCheckButton
+                                    .text
+                                    .toString(),
+                            ),
+                        )
                     }
                     clubSelectedListener?.onClubFilterSelected(clubList.toTypedArray())
                 }
