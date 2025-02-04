@@ -197,7 +197,7 @@ class ReadPostViewModel
 
         fun getRequestedEnrollList(boardId: Long) {
             viewModelScope.launch {
-                val result = getRequestedEnrollListUseCase.getRequestedEnrollList()
+                val result = getRequestedEnrollListUseCase.getRequestedEnrollList(0)
                 result
                     .onSuccess { response ->
                         for (enrollInfo in response.enrollInfoList) {
