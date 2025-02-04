@@ -20,7 +20,7 @@ interface EnrollRepository {
 
     suspend fun patchEnrollAccept(enrollId: Long): Result<PatchEnrollAcceptResponse>
 
-    suspend fun getRequestedEnrollList(): Result<GetRequestedEnrollListResponse>
+    suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse>
 
     suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse>
 

@@ -21,6 +21,10 @@ object NotificationMapper {
     fun toGetReceivedNotificationListResponse(responseDTO: GetReceivedNotificationListResponseDTO): GetReceivedNotificationListResponse =
         GetReceivedNotificationListResponse(
             notificationInfoList = responseDTO.notificationInfoList.map { toNotificationInfo(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     private fun toNotificationInfo(dto: NotificationInfoDTO): NotificationInfo =
@@ -31,6 +35,7 @@ object NotificationMapper {
             title = dto.title,
             body = dto.body,
             createdAt = dto.createdAt,
+            acceptStatus = dto.acceptStatus,
             read = dto.read,
         )
 
@@ -47,6 +52,8 @@ object NotificationMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =
@@ -89,6 +96,7 @@ object NotificationMapper {
             title = dto.title,
             body = dto.body,
             createdAt = dto.createdAt,
+            acceptStatus = dto.acceptStatus,
             read = dto.read,
         )
 

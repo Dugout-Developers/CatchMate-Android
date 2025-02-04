@@ -58,6 +58,10 @@ object EnrollMapper {
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =
         GetRequestedEnrollListResponse(
             enrollInfoList = responseDTO.enrollInfoList.map { toEnrollInfo(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     private fun toEnrollInfo(dto: EnrollInfoDTO): EnrollInfo =
@@ -107,6 +111,8 @@ object EnrollMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toEnrollUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =

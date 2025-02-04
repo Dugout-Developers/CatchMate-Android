@@ -5,7 +5,6 @@ import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.domain.exception.BookmarkFailureException
-import com.catchmate.domain.exception.LiftUpFailureException
 import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
@@ -123,11 +122,7 @@ class BoardRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    if (response.code() == 400) {
-                        Result.failure(LiftUpFailureException("$stringToJson"))
-                    } else {
-                        Result.failure(Exception("$stringToJson"))
-                    }
+                    Result.failure(Exception("$stringToJson"))
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)
@@ -138,10 +133,11 @@ class BoardRepositoryImpl
         override suspend fun getBoardList(
             gameStartDate: String?,
             maxPerson: Int?,
-            preferredTeamId: Int?,
+            preferredTeamIdList: Array<Int>?,
+            page: Int?,
         ): Result<GetBoardListResponse> =
             try {
-                val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamId)
+                val response = boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamIdList, page)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =
@@ -162,9 +158,12 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse> =
+        override suspend fun getUserBoardList(
+            userId: Long,
+            page: Int,
+        ): Result<GetUserBoardListResponse> =
             try {
-                val response = boardApi.getUserBoardList(userId)
+                val response = boardApi.getUserBoardList(userId, page)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =
@@ -208,9 +207,9 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getLikedBoard(): Result<GetLikedBoardResponse> =
+        override suspend fun getLikedBoard(page: Int): Result<GetLikedBoardResponse> =
             try {
-                val response = boardApi.getLikedBoard()
+                val response = boardApi.getLikedBoard(page)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =

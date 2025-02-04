@@ -36,7 +36,9 @@ interface EnrollService {
     ): Response<PatchEnrollAcceptResponseDTO?>
 
     @GET("enrolls/request")
-    suspend fun getRequestedEnrollList(): Response<GetRequestedEnrollListResponseDTO?>
+    suspend fun getRequestedEnrollList(
+        @Query("page") page: Int,
+    ): Response<GetRequestedEnrollListResponseDTO?>
 
     @GET("enrolls/receive")
     suspend fun getReceivedEnroll(

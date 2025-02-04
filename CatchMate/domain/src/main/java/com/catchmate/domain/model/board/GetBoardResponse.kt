@@ -15,7 +15,9 @@ data class GetBoardResponse(
     val maxPerson: Int,
     val preferredGender: String,
     val preferredAgeRange: String,
-    val gameInfo: GameInfo,
     val liftUpDate: String,
+    val gameInfo: GameInfo,
     val userInfo: UserInfo,
+    val buttonStatus: String,
+    val bookMarked: Boolean,
 ) : Parcelable

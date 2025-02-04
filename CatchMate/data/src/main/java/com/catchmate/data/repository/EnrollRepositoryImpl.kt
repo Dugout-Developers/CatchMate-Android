@@ -91,9 +91,9 @@ class EnrollRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getRequestedEnrollList(): Result<GetRequestedEnrollListResponse> =
+        override suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> =
             try {
-                val response = enrollApi.getRequestedEnrollList()
+                val response = enrollApi.getRequestedEnrollList(page)
                 if (response.isSuccessful) {
                     Log.d("EnrollRepo", "통신 성공 : ${response.code()}")
                     val body =

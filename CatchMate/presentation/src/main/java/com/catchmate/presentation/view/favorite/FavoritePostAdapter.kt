@@ -19,7 +19,9 @@ import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FavoritePostAdapter(
     private val context: Context,
@@ -36,7 +38,7 @@ class FavoritePostAdapter(
     }
 
     fun removeUnlikedPost(position: Int) {
-        runBlocking {
+        CoroutineScope(Dispatchers.Main).launch {
             likedList.removeAt(position)
             notifyItemRemoved(position)
             if (likedList.size == 0) {

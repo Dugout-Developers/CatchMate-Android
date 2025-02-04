@@ -15,4 +15,6 @@ data class Board(
     val gameInfo: GameInfo,
     val liftUpDate: String,
     val userInfo: UserInfo,
+    val buttonStatus: String?,
+    val bookMarked: Boolean,
 )
