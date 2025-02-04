@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationBinding
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
@@ -22,6 +24,13 @@ class NotificationFragment :
     val binding get() = _binding!!
 
     private val notificationViewModel: NotificationViewModel by viewModels()
+
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var isFirstLoad = true
+    private var notificationList: MutableList<NotificationInfo> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +50,11 @@ class NotificationFragment :
         initHeader()
         initViewModel()
         initRecyclerView()
+
+        if (isFirstLoad) {
+            getNotificationList()
+            isFirstLoad = false
+        }
     }
 
     override fun onDestroyView() {
@@ -57,18 +71,30 @@ class NotificationFragment :
         }
     }
 
+    private fun getNotificationList() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+        notificationViewModel.getReceivedNotificationList(currentPage)
+        isApiCalled = true
+    }
+
     private fun initViewModel() {
-        notificationViewModel.getReceivedNotificationList()
         notificationViewModel.receivedNotificationList.observe(viewLifecycleOwner) { response ->
-            if (response.notificationInfoList.isEmpty()) {
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
                 binding.rvNotificationList.visibility = View.GONE
                 binding.layoutNotificationNoList.visibility = View.VISIBLE
             } else {
                 binding.rvNotificationList.visibility = View.VISIBLE
                 binding.layoutNotificationNoList.visibility = View.GONE
+                if (isApiCalled) {
+                    notificationList.addAll(response.notificationInfoList)
+                }
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
-                adapter.updateNotificationList(response.notificationInfoList)
+                adapter.updateNotificationList(notificationList)
+                isLastPage = response.isLast
+                isLoading = false
             }
+            isApiCalled = false
         }
     }
 
@@ -76,6 +102,25 @@ class NotificationFragment :
         binding.rvNotificationList.apply {
             adapter = NotificationAdapter(requireContext(), layoutInflater, this@NotificationFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            currentPage += 1
+                            getNotificationList()
+                        }
+                    }
+                }
+            )
         }
     }
 

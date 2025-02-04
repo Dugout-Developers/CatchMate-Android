@@ -7,18 +7,21 @@ import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface NotificationService {
     @GET("notifications/receive")
-    suspend fun getReceivedNotificationList(): Response<GetReceivedNotificationListResponseDTO>
+    suspend fun getReceivedNotificationList(
+        @Query("page") page: Int,
+    ): Response<GetReceivedNotificationListResponseDTO?>
 
     @GET("notifications/receive/{notificationId}")
     suspend fun getReceivedNotification(
         @Path("notificationId") notificationId: Long,
-    ): Response<GetReceivedNotificationResponseDTO>
+    ): Response<GetReceivedNotificationResponseDTO?>
 
     @DELETE("notifications/receive/{notificationId}")
     suspend fun deleteReceivedNotification(
         @Path("notificationId") notificationId: Long,
-    ): Response<DeleteReceivedNotificationResponseDTO>
+    ): Response<DeleteReceivedNotificationResponseDTO?>
 }

@@ -21,6 +21,10 @@ object NotificationMapper {
     fun toGetReceivedNotificationListResponse(responseDTO: GetReceivedNotificationListResponseDTO): GetReceivedNotificationListResponse =
         GetReceivedNotificationListResponse(
             notificationInfoList = responseDTO.notificationInfoList.map { toNotificationInfo(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     private fun toNotificationInfo(dto: NotificationInfoDTO): NotificationInfo =
