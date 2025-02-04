@@ -9,5 +9,8 @@ class GetUserBoardListUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse> = boardRepository.getUserBoardList(userId)
+        suspend fun getUserBoardList(
+            userId: Long,
+            page: Int,
+        ): Result<GetUserBoardListResponse> = boardRepository.getUserBoardList(userId, page)
     }

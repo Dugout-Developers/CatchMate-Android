@@ -33,7 +33,10 @@ interface BoardRepository {
         page: Int?,
     ): Result<GetBoardListResponse>
 
-    suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse>
+    suspend fun getUserBoardList(
+        userId: Long,
+        page: Int,
+    ): Result<GetUserBoardListResponse>
 
     suspend fun getBoard(boardId: Long): Result<GetBoardResponse>
 

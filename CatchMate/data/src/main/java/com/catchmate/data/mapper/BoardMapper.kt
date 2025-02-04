@@ -167,6 +167,10 @@ object BoardMapper {
     fun toGetUserBoardListResponse(dto: GetUserBoardListResponseDTO): GetUserBoardListResponse =
         GetUserBoardListResponse(
             boardInfoList = dto.boardInfoList.map { toBoard(it) },
+            totalPages = dto.totalPages,
+            totalElements = dto.totalElements,
+            isFirst = dto.isFirst,
+            isLast = dto.isLast,
         )
 
     fun toGetBoardResponse(responseDTO: GetBoardResponseDTO): GetBoardResponse =

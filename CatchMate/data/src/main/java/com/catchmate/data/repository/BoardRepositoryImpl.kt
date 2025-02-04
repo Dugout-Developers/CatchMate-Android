@@ -158,9 +158,12 @@ class BoardRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getUserBoardList(userId: Long): Result<GetUserBoardListResponse> =
+        override suspend fun getUserBoardList(
+            userId: Long,
+            page: Int,
+        ): Result<GetUserBoardListResponse> =
             try {
-                val response = boardApi.getUserBoardList(userId)
+                val response = boardApi.getUserBoardList(userId, page)
                 if (response.isSuccessful) {
                     Log.d("BoardRepo", "통신 성공")
                     val body =

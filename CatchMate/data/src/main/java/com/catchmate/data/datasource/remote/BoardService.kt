@@ -56,6 +56,7 @@ interface BoardService {
     @GET("boards/list/{userId}")
     suspend fun getUserBoardList(
         @Path("userId") userId: Long,
+        @Query("page") page: Int,
     ): Response<GetUserBoardListResponseDTO?>
 
     @GET("boards/{boardId}")

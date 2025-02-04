@@ -29,9 +29,12 @@ class MyPostViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getUserBoardList(userId: Long) {
+        fun getUserBoardList(
+            userId: Long,
+            page: Int,
+        ) {
             viewModelScope.launch {
-                val result = getUserBoardListUseCase.getUserBoardList(userId)
+                val result = getUserBoardListUseCase.getUserBoardList(userId, page)
                 result
                     .onSuccess { response ->
                         _getUserBoardListResponse.value = response
