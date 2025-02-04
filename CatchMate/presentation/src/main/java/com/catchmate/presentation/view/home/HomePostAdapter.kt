@@ -22,8 +22,8 @@ class HomePostAdapter(
 ) : RecyclerView.Adapter<HomePostAdapter.HomePostViewHolder>() {
     private var postList: MutableList<Board> = mutableListOf()
 
-    fun updatePostList(newList: List<Board>) {
-        postList = newList.toMutableList()
+    fun updatePostList(newList: MutableList<Board>) {
+        postList = newList
         notifyDataSetChanged()
     }
 

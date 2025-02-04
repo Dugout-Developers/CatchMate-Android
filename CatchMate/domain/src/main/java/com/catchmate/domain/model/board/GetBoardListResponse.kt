@@ -4,9 +4,6 @@ data class GetBoardListResponse(
     val boardInfoList: List<Board>,
     val totalPages: Int,
     val totalElements: Int,
+    val isFirst: Boolean,
     val isLast: Boolean,
-) {
-    companion object {
-        val EMPTY = GetBoardListResponse(emptyList(), 0, 0, true)
-    }
-}
+)
