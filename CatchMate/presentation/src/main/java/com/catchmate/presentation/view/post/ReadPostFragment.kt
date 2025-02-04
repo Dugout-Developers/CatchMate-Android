@@ -238,7 +238,6 @@ class ReadPostFragment : Fragment() {
                     }
                 }
             }
-
         }
         readPostViewModel.postEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
@@ -402,12 +401,13 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.patchBoardLiftUp(boardId)
         readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                val message = if (response.state) {
-                    getString(R.string.post_read_writer_menu_up_complete)
-                } else {
-                    val failureMessage = getString(R.string.post_read_writer_menu_up_failure)
-                    failureMessage.format(response.remainTime)
-                }
+                val message =
+                    if (response.state) {
+                        getString(R.string.post_read_writer_menu_up_complete)
+                    } else {
+                        val failureMessage = getString(R.string.post_read_writer_menu_up_failure)
+                        failureMessage.format(response.remainTime)
+                    }
                 Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }

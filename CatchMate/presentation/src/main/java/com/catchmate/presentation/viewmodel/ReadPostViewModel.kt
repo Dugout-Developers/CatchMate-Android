@@ -13,7 +13,6 @@ import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollInfo
-import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enumclass.EnrollState
@@ -226,7 +225,7 @@ class ReadPostViewModel
                             is ReissueFailureException -> {
                                 _navigateToLogin.value = true
                             } else -> {
-                            _errorMessage.value = exception.message
+                                _errorMessage.value = exception.message
                             }
                         }
                     }

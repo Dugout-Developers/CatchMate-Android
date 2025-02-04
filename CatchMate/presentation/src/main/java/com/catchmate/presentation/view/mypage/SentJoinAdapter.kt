@@ -2,7 +2,6 @@ package com.catchmate.presentation.view.mypage
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,7 +27,9 @@ class SentJoinAdapter(
         notifyDataSetChanged()
     }
 
-    inner class SentJoinViewHolder(itemBinding: ItemHomePostBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    inner class SentJoinViewHolder(
+        itemBinding: ItemHomePostBinding,
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
         val cvItemLayout: CardView
         val tvItemCount: TextView
         val tvItemDate: TextView

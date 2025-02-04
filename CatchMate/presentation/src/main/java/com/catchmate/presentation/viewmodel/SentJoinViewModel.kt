@@ -41,7 +41,6 @@ class SentJoinViewModel
                         } else {
                             _errorMessage.value = exception.message
                         }
-
                     }
             }
         }

@@ -119,7 +119,7 @@ class NotificationFragment :
                             getNotificationList()
                         }
                     }
-                }
+                },
             )
         }
     }

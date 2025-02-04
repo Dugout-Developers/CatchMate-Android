@@ -9,5 +9,6 @@ class GetRequestedEnrollListUseCase
     constructor(
         private val enrollRepository: EnrollRepository,
     ) {
-        suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> = enrollRepository.getRequestedEnrollList(page)
+        suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> =
+            enrollRepository.getRequestedEnrollList(page)
     }

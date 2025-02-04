@@ -216,7 +216,7 @@ class MyPostFragment :
                             getMyPostList()
                         }
                     }
-                }
+                },
             )
         }
     }

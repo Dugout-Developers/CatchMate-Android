@@ -91,7 +91,7 @@ class SentJoinFragment :
                             getRequestedEnrollList()
                         }
                     }
-                }
+                },
             )
         }
     }
