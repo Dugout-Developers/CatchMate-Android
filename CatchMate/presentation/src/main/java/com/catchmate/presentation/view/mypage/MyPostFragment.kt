@@ -17,7 +17,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentMyPostBinding
@@ -41,6 +43,11 @@ class MyPostFragment :
     private val myPostViewModel: MyPostViewModel by viewModels()
 
     private var userInfo: GetUserProfileResponse? = null
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var myPostList: MutableList<Board> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +71,9 @@ class MyPostFragment :
         getLocalUserId()
         setUserData()
         initHeader()
-        initRecyclerView()
         initViewModel()
-        setBoardList()
+        initRecyclerView()
+        getMyPostList()
     }
 
     override fun onDestroyView() {
@@ -169,28 +176,56 @@ class MyPostFragment :
                 findNavController().navigate(R.id.action_myPostFragment_to_loginFragment, null, navOptions)
             }
         }
+        myPostViewModel.getUserBoardListResponse.observe(viewLifecycleOwner) { response ->
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
+                binding.rvMyPost.visibility = View.GONE
+                binding.layoutMyPostNoList.visibility = View.VISIBLE
+            } else {
+                binding.rvMyPost.visibility = View.VISIBLE
+                binding.layoutMyPostNoList.visibility = View.GONE
+                if (isApiCalled) {
+                    myPostList.addAll(response.boardInfoList)
+                }
+                val adapter = binding.rvMyPost.adapter as MyPostAdapter
+                adapter.updatePostList(myPostList)
+                isLastPage = response.isLast
+                isLoading = false
+            }
+            isApiCalled = false
+        }
     }
 
     private fun initRecyclerView() {
         binding.rvMyPost.apply {
             adapter = MyPostAdapter(requireContext(), layoutInflater, this@MyPostFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            currentPage += 1
+                            getMyPostList()
+                        }
+                    }
+                },
+            )
         }
     }
 
-    private fun setBoardList() {
-        myPostViewModel.getUserBoardList(userInfo?.userId!!)
-        myPostViewModel.getUserBoardListResponse.observe(viewLifecycleOwner) { response ->
-            if (!response.boardInfoList.isNullOrEmpty()) {
-                binding.rvMyPost.visibility = View.VISIBLE
-                binding.layoutMyPostNoList.visibility = View.GONE
-                val adapter = binding.rvMyPost.adapter as MyPostAdapter
-                adapter.updatePostList(response.boardInfoList)
-            } else {
-                binding.rvMyPost.visibility = View.GONE
-                binding.layoutMyPostNoList.visibility = View.VISIBLE
-            }
-        }
+    private fun getMyPostList() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+        myPostViewModel.getUserBoardList(userInfo?.userId!!, currentPage)
+        isApiCalled = true
     }
 
     override fun onPostItemClicked(boardId: Long) {

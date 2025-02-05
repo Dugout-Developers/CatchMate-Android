@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewHomeFilterBinding
-import com.catchmate.presentation.util.ClubUtils
+import com.catchmate.presentation.util.ClubUtils.convertClubIdListToNameList
 import com.catchmate.presentation.util.DateUtils
 
 class HomeFilterView(
@@ -49,9 +49,15 @@ class HomeFilterView(
         }
     }
 
-    fun setClubFilterText(clubId: Int?) {
-        if (clubId != null) {
-            binding.tvFilterName.text = ClubUtils.convertClubIdToName(clubId)
+    fun setClubFilterText(clubIdList: Array<Int>?) {
+        if (clubIdList != null) {
+            val clubNameList = convertClubIdListToNameList(clubIdList)
+            var clubs: String = ""
+            clubNameList.forEach { name ->
+                clubs += ("$name, ")
+            }
+            clubs = clubs.substring(0, clubs.length - 2)
+            binding.tvFilterName.text = clubs
         } else {
             binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_team)
         }

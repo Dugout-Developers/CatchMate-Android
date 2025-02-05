@@ -5,21 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.board.GetUserBoardListResponse
-import com.catchmate.domain.usecase.board.GetUserBoardListUseCase
+import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.usecase.enroll.GetRequestedEnrollListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPostViewModel
+class SentJoinViewModel
     @Inject
     constructor(
-        private val getUserBoardListUseCase: GetUserBoardListUseCase,
+        private val getRequestedEnrollListUseCase: GetRequestedEnrollListUseCase,
     ) : ViewModel() {
-        private val _getUserBoardListResponse = MutableLiveData<GetUserBoardListResponse>()
-        val getUserBoardListResponse: LiveData<GetUserBoardListResponse>
-            get() = _getUserBoardListResponse
+        private val _requestedEnrollList = MutableLiveData<GetRequestedEnrollListResponse>()
+        val requestedEnrollList: LiveData<GetRequestedEnrollListResponse>
+            get() = _requestedEnrollList
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -29,15 +29,12 @@ class MyPostViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getUserBoardList(
-            userId: Long,
-            page: Int,
-        ) {
+        fun getRequestedEnrollList(page: Int) {
             viewModelScope.launch {
-                val result = getUserBoardListUseCase.getUserBoardList(userId, page)
+                val result = getRequestedEnrollListUseCase.getRequestedEnrollList(page)
                 result
                     .onSuccess { response ->
-                        _getUserBoardListResponse.value = response
+                        _requestedEnrollList.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

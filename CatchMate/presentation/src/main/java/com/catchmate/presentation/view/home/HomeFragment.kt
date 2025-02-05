@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
@@ -33,12 +35,16 @@ class HomeFragment :
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
-    private var page: Long = 1
-    private var isNextPageExist = true
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var isFirstLoad = true
+    private var postList: MutableList<Board> = mutableListOf()
 
     private var gameStartDate: String? = null
     private var maxPerson: Int? = null
-    private var preferredTeamId: Int? = null
+    private var preferredTeamIdList: Array<Int>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,8 +67,12 @@ class HomeFragment :
         initDateFilter()
         initTeamFilter()
         initHeadCountFilter()
-        initBoardList()
         initRecyclerView()
+        Log.e("POST SIZE", postList.size.toString())
+        if (isFirstLoad) {
+            getBoardList()
+            isFirstLoad = false
+        }
     }
 
     override fun onDestroyView() {
@@ -104,28 +114,40 @@ class HomeFragment :
                 Log.e("Reissue Error", it)
             }
         }
+
+        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
+                binding.rvHomePosts.visibility = View.GONE
+                binding.layoutHomeNoList.visibility = View.VISIBLE
+            } else {
+                binding.rvHomePosts.visibility = View.VISIBLE
+                binding.layoutHomeNoList.visibility = View.GONE
+                if (isApiCalled) {
+                    postList.addAll(response.boardInfoList)
+                    postList.forEach {
+                        Log.e("LIST", "${it.boardId}")
+                    }
+                }
+                val adapter = binding.rvHomePosts.adapter as HomePostAdapter
+                adapter.updatePostList(postList)
+                isLastPage = response.isLast
+                isLoading = false
+            }
+            isApiCalled = false
+        }
     }
 
-    private fun initBoardList() {
-        homeViewModel.getBoardList()
-        homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                if (response.boardInfoList.isNotEmpty()) {
-                    binding.rvHomePosts.visibility = View.VISIBLE
-                    binding.layoutHomeNoList.visibility = View.GONE
-                    Log.e("게시글 목록 존재", response.boardInfoList.size.toString())
-//                    isNextPageExist = true
-                    val adapter = binding.rvHomePosts.adapter as HomePostAdapter
-                    adapter.updatePostList(response.boardInfoList)
-                } else {
-                    // page 1일때 아닐때로 분기해서 게시글 목록이 아예 없는지 구분 필요
-                    Log.e("게시글 목록 더이상 없음", response.boardInfoList.size.toString())
-//                    isNextPageExist = false
-                    binding.rvHomePosts.visibility = View.GONE
-                    binding.layoutHomeNoList.visibility = View.VISIBLE
-                }
-            }
-        }
+    private fun getBoardList() {
+        Log.e("api 호출", "호출 $isLoading $isLastPage")
+        if (isLoading || isLastPage) return
+        isLoading = true
+        homeViewModel.getBoardList(
+            gameStartDate,
+            maxPerson,
+            preferredTeamIdList,
+            currentPage,
+        )
+        isApiCalled = true
     }
 
     private fun initDateFilter() {
@@ -134,13 +156,21 @@ class HomeFragment :
             dateFilterBottomSheet.setOnDateFilterSelectedListener(this@HomeFragment)
             dateFilterBottomSheet.show(requireActivity().supportFragmentManager, dateFilterBottomSheet.tag)
         }
+        if (gameStartDate != null) {
+            binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
+            binding.hfvHomeDateFilter.setFilterTextColor(true)
+        }
     }
 
     private fun initTeamFilter() {
         binding.hfvHomeTeamFilter.setOnClickListener {
-            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment(preferredTeamId)
+            val teamFilterBottomSheet = HomeTeamFilterBottomSheetFragment(preferredTeamIdList)
             teamFilterBottomSheet.setOnClubSelectedListener(this@HomeFragment)
             teamFilterBottomSheet.show(requireActivity().supportFragmentManager, teamFilterBottomSheet.tag)
+        }
+        if (preferredTeamIdList != null) {
+            binding.hfvHomeTeamFilter.setClubFilterText(preferredTeamIdList)
+            binding.hfvHomeTeamFilter.setFilterTextColor(true)
         }
     }
 
@@ -150,35 +180,36 @@ class HomeFragment :
             headCountFilterBottomSheet.setOnPersonFilterSelected(this@HomeFragment)
             headCountFilterBottomSheet.show(requireActivity().supportFragmentManager, headCountFilterBottomSheet.tag)
         }
+        if (maxPerson != null) {
+            binding.hfvHomeMemberCountFilter.setFilterTextColor(true)
+            binding.hfvHomeMemberCountFilter.setPersonFilterText(maxPerson)
+        }
     }
 
     private fun initRecyclerView() {
         binding.rvHomePosts.apply {
             adapter = HomePostAdapter(requireContext(), layoutInflater, this@HomeFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//            addOnScrollListener(
-//                object : RecyclerView.OnScrollListener() {
-//                    override fun onScrolled(
-//                        recyclerView: RecyclerView,
-//                        dx: Int,
-//                        dy: Int,
-//                    ) {
-//                        super.onScrolled(recyclerView, dx, dy)
-//                        val lastVisibleItemPosition =
-//                            (recyclerView.layoutManager as LinearLayoutManager)
-//                                .findLastCompletelyVisibleItemPosition()
-//                        val itemTotalCount = recyclerView.adapter!!.itemCount
-//
-//                        if (lastVisibleItemPosition >= itemTotalCount - 1) { // 새로운 목록 불러와야함
-//                            if (isNextPageExist) {
-//                                homeViewModel.getBoardPaging(
-//                                    pageNum = page++,
-//                                )
-//                            }
-//                        }
-//                    }
-//                },
-//            )
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) { // 새로운 목록 불러와야함
+                            currentPage += 1
+                            getBoardList()
+                        }
+                    }
+                },
+            )
         }
     }
 
@@ -199,34 +230,33 @@ class HomeFragment :
 
     override fun onDateSelected(date: String?) {
         gameStartDate = date
-        homeViewModel.getBoardList(
-            gameStartDate,
-            maxPerson,
-            preferredTeamId,
-        )
+        currentPage = 0
+        isLastPage = false
+        isLoading = false
+        postList.clear()
+        getBoardList()
         binding.hfvHomeDateFilter.setDateFilterText(gameStartDate)
         binding.hfvHomeDateFilter.setFilterTextColor(gameStartDate != null)
     }
 
-    override fun onClubFilterSelected(clubId: Int?) {
-        preferredTeamId = clubId
-        Log.e("CLUB", clubId.toString())
-        homeViewModel.getBoardList(
-            gameStartDate,
-            maxPerson,
-            preferredTeamId,
-        )
-        binding.hfvHomeTeamFilter.setClubFilterText(clubId)
-        binding.hfvHomeTeamFilter.setFilterTextColor(clubId != null)
+    override fun onClubFilterSelected(clubIdList: Array<Int>?) {
+        preferredTeamIdList = clubIdList
+        currentPage = 0
+        isLastPage = false
+        isLoading = false
+        postList.clear()
+        getBoardList()
+        binding.hfvHomeTeamFilter.setClubFilterText(preferredTeamIdList)
+        binding.hfvHomeTeamFilter.setFilterTextColor(preferredTeamIdList != null)
     }
 
     override fun onPersonFilterSelected(count: Int?) {
         maxPerson = count
-        homeViewModel.getBoardList(
-            gameStartDate,
-            maxPerson,
-            preferredTeamId,
-        )
+        currentPage = 0
+        isLastPage = false
+        isLoading = false
+        postList.clear()
+        getBoardList()
         binding.hfvHomeMemberCountFilter.setFilterTextColor(count != null)
         binding.hfvHomeMemberCountFilter.setPersonFilterText(count)
     }

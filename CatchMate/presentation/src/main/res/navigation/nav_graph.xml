@@ -142,7 +142,11 @@
         android:id="@+id/sentJoinFragment"
         android:name="com.catchmate.presentation.view.mypage.SentJoinFragment"
         android:label="fragment_sent_join"
-        tools:layout="@layout/fragment_sent_join" />
+        tools:layout="@layout/fragment_sent_join" >
+        <action
+            android:id="@+id/action_sentJoinFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chattingHomeFragment"
         android:name="com.catchmate.presentation.view.chatting.ChattingHomeFragment"

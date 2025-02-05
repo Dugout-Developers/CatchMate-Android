@@ -36,9 +36,9 @@ class NotificationViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getReceivedNotificationList() {
+        fun getReceivedNotificationList(page: Int) {
             viewModelScope.launch {
-                val result = getReceivedNotificationListUseCase.getReceivedNotificationList()
+                val result = getReceivedNotificationListUseCase.getReceivedNotificationList(page)
                 result
                     .onSuccess { response ->
                         _receivedNotificationList.value = response

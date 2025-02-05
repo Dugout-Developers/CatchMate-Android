@@ -12,7 +12,9 @@ data class GetBoardResponseDTO(
     val maxPerson: Int,
     val preferredGender: String,
     val preferredAgeRange: String,
-    val gameInfo: GameInfoDTO,
     val liftUpDate: String,
+    val gameInfo: GameInfoDTO,
     val userInfo: UserInfoDTO,
+    val buttonStatus: String,
+    val bookMarked: Boolean,
 )

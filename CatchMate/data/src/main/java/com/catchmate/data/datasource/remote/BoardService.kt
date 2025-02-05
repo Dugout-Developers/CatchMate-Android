@@ -49,12 +49,14 @@ interface BoardService {
     suspend fun getBoardList(
         @Query("gameStartDate") gameStartDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
-        @Query("preferredTeamId") preferredTeamId: Int? = null,
+        @Query("preferredTeamIdList") preferredTeamIdList: Array<Int>? = null,
+        @Query("page") page: Int? = null,
     ): Response<GetBoardListResponseDTO?>
 
     @GET("boards/list/{userId}")
     suspend fun getUserBoardList(
         @Path("userId") userId: Long,
+        @Query("page") page: Int,
     ): Response<GetUserBoardListResponseDTO?>
 
     @GET("boards/{boardId}")
@@ -63,7 +65,9 @@ interface BoardService {
     ): Response<GetBoardResponseDTO?>
 
     @GET("boards/bookmark")
-    suspend fun getLikedBoard(): Response<GetLikedBoardResponseDTO?>
+    suspend fun getLikedBoard(
+        @Query("page") page: Int,
+    ): Response<GetLikedBoardResponseDTO?>
 
     @GET("boards/temp")
     suspend fun getTempBoard(): Response<GetTempBoardResponseDTO?>

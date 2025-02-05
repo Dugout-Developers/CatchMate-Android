@@ -128,13 +128,23 @@ object BoardMapper {
             gameInfo = toGameInfo(responseDTO.gameInfo),
             liftUpDate = responseDTO.liftUpDate,
             userInfo = toUserInfo(responseDTO.userInfo),
+            buttonStatus = responseDTO.buttonStatus,
+            bookMarked = responseDTO.bookMarked,
         )
 
-    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse = PatchBoardLiftUpResponse(dto.liftUpDate)
+    fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =
+        PatchBoardLiftUpResponse(
+            state = dto.state,
+            remainTime = dto.remainTime,
+        )
 
     fun toGetBoardListResponse(responseDTO: GetBoardListResponseDTO): GetBoardListResponse =
         GetBoardListResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     fun toBoard(dto: BoardDTO): Board =
@@ -150,11 +160,17 @@ object BoardMapper {
             gameInfo = toGameInfo(dto.gameInfo),
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
+            buttonStatus = dto.buttonStatus,
+            bookMarked = dto.bookMarked,
         )
 
     fun toGetUserBoardListResponse(dto: GetUserBoardListResponseDTO): GetUserBoardListResponse =
         GetUserBoardListResponse(
             boardInfoList = dto.boardInfoList.map { toBoard(it) },
+            totalPages = dto.totalPages,
+            totalElements = dto.totalElements,
+            isFirst = dto.isFirst,
+            isLast = dto.isLast,
         )
 
     fun toGetBoardResponse(responseDTO: GetBoardResponseDTO): GetBoardResponse =
@@ -167,9 +183,11 @@ object BoardMapper {
             maxPerson = responseDTO.maxPerson,
             preferredGender = responseDTO.preferredGender,
             preferredAgeRange = responseDTO.preferredAgeRange,
-            gameInfo = toGameInfo(responseDTO.gameInfo),
             liftUpDate = responseDTO.liftUpDate,
+            gameInfo = toGameInfo(responseDTO.gameInfo),
             userInfo = toUserInfo(responseDTO.userInfo),
+            buttonStatus = responseDTO.buttonStatus,
+            bookMarked = responseDTO.bookMarked,
         )
 
     fun toGetTempBoardResponse(dto: GetTempBoardResponseDTO): GetTempBoardResponse =
@@ -196,6 +214,10 @@ object BoardMapper {
     fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
         GetLikedBoardResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+            totalPages = responseDTO.totalPages,
+            totalElements = responseDTO.totalElements,
+            isFirst = responseDTO.isFirst,
+            isLast = responseDTO.isLast,
         )
 
     fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse = PostBoardLikeResponse(dto.state)

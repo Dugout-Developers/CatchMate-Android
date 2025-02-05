@@ -19,9 +19,9 @@ class NotificationRepositoryImpl
     ) : NotificationRepository {
         private val notificationApi = retrofitClient.createApi<NotificationService>()
 
-        override suspend fun getReceivedNotificationList(): Result<GetReceivedNotificationListResponse> =
+        override suspend fun getReceivedNotificationList(page: Int): Result<GetReceivedNotificationListResponse> =
             try {
-                val response = notificationApi.getReceivedNotificationList()
+                val response = notificationApi.getReceivedNotificationList(page)
                 if (response.isSuccessful) {
                     Log.d("NotiRepo", "통신 성공 : ${response.code()}")
                     val body =
