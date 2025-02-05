@@ -17,9 +17,9 @@ class ChattingRepositoryImpl
     ) : ChattingRepository {
         private val chattingApi = retrofitClient.createApi<ChattingService>()
 
-        override suspend fun getChattingRoomList(): Result<GetChattingRoomListResponse> =
+        override suspend fun getChattingRoomList(page: Int): Result<GetChattingRoomListResponse> =
             try {
-                val response = chattingApi.getChattingRoomList()
+                val response = chattingApi.getChattingRoomList(page)
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
                     val body = response.body()?.let { toGetChattingRoomListResponse(it) } ?: throw NullPointerException("Null Response")

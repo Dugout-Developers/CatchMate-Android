@@ -9,7 +9,11 @@ import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 object ChattingMapper {
     fun toGetChattingRoomListResponse(dto: GetChattingRoomListResponseDTO): GetChattingRoomListResponse =
         GetChattingRoomListResponse(
-            chatRoomInfoList = dto.chatRoomInfoList.map { toChatRoomInfo(it) }
+            chatRoomInfoList = dto.chatRoomInfoList.map { toChatRoomInfo(it) },
+            totalPages = dto.totalPages,
+            totalElements = dto.totalElements,
+            isFirst = dto.isFirst,
+            isLast = dto.isLast,
         )
 
     private fun toChatRoomInfo(dto: ChatRoomInfoDTO): ChatRoomInfo =
