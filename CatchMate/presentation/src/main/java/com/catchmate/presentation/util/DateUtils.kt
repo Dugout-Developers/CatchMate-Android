@@ -1,6 +1,11 @@
 package com.catchmate.presentation.util
 
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -78,5 +83,30 @@ object DateUtils {
         val formattedDate = inputDateFormat.parse(date)
         val outputDataFormat = SimpleDateFormat("M월 d일", Locale.KOREAN)
         return outputDataFormat.format(formattedDate) + " " + time.substring(0, 5)
+    }
+
+    fun formatLastChatTime(dateTime: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val parsedTime = LocalDateTime.parse(dateTime, formatter)
+            .atZone(ZoneId.of("UTC"))
+            .toInstant()
+        val now = Instant.now()
+        val duration = Duration.between(parsedTime, now)
+
+        val minutes = duration.toMinutes()
+        val hours = duration.toHours()
+        val days = duration.toDays()
+
+        return when {
+            minutes < 1 -> "방금"
+            minutes < 60 -> "${minutes}분 전"
+            hours < 24 -> "${hours}시간 전"
+            days < 7 -> "${days}일 전"
+            else -> {
+                val dateTime = LocalDateTime.ofInstant(parsedTime, ZoneId.systemDefault())
+                val formatter = DateTimeFormatter.ofPattern("M월 d일")
+                dateTime.format(formatter)
+            }
+        }
     }
 }
