@@ -115,6 +115,7 @@
             android:textAppearance="@style/Typography.Body03.Medium"
             android:textColor="@color/grey0"
             android:textSize="10sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
