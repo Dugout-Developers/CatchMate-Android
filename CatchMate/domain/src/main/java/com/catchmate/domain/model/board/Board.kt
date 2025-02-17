@@ -1,8 +1,11 @@
 package com.catchmate.domain.model.board
 
+import android.os.Parcelable
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Board(
     val boardId: Long,
     val title: String,
@@ -17,4 +20,4 @@ data class Board(
     val userInfo: UserInfo,
     val buttonStatus: String?,
     val bookMarked: Boolean,
-)
+) : Parcelable

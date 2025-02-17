@@ -1,11 +1,13 @@
 package com.catchmate.presentation.view.chatting
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,7 +74,9 @@ class ChattingHomeFragment :
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
                 // 채팅 없을때 표시할 레이아웃 가시성 처리
+                Log.e("NO CHATTING", "NO")
             } else {
+                Log.e("EXIST CHATTING", "EXIST")
                 if (isApiCalled) {
                     chatRoomList.addAll(response.chatRoomInfoList)
                 }
@@ -82,6 +86,22 @@ class ChattingHomeFragment :
                 isLoading = false
             }
             isApiCalled = false
+        }
+        chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.chattingHomeFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_chattingHomeFragment_to_loginFragment, null, navOptions)
+            }
+        }
+
+        chattingHomeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
+            }
         }
     }
 
@@ -118,9 +138,9 @@ class ChattingHomeFragment :
         isApiCalled = true
     }
 
-    override fun onChattingRoomSelected(chatRoomId: Long) {
+    override fun onChattingRoomSelected(chatRoomInfo: ChatRoomInfo) {
         val bundle = Bundle()
-        bundle.putLong("chatRoomId", chatRoomId)
+        bundle.putParcelable("chatRoomInfo", chatRoomInfo)
         findNavController().navigate(R.id.action_chattingHomeFragment_to_chattingRoomFragment, bundle)
     }
 }
