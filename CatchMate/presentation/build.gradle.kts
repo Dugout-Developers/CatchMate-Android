@@ -37,4 +37,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.circleimageview)
     implementation(libs.glide)
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+    implementation(libs.stomp)
 }
