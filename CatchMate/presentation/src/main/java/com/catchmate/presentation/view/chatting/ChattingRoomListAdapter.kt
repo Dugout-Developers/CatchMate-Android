@@ -87,15 +87,18 @@ class ChattingRoomListAdapter(
                     ),
                 )
             tvTitle.text = chatRoomInfo.boardInfo.title
-            if (chatRoomInfo.participantCount == 1) {
+            if (chatRoomInfo.lastMessageAt == null && chatRoomInfo.lastMessageContent == null) {
                 tvNewBadge.visibility = View.VISIBLE
                 tvPeopleCount.visibility = View.GONE
+                tvLastChat.text = context.getString(R.string.chatting_start_message)
+                tvLastChatTime.text = "방금"
             } else {
                 tvNewBadge.visibility = View.GONE
                 tvPeopleCount.visibility = View.VISIBLE
                 tvPeopleCount.text = chatRoomInfo.participantCount.toString()
+                tvLastChat.text = chatRoomInfo.lastMessageContent
+                tvLastChatTime.text = formatLastChatTime(chatRoomInfo.lastMessageAt!!)
             }
-            tvLastChatTime.text = formatLastChatTime(chatRoomInfo.lastMessageAt)
         }
     }
 }
