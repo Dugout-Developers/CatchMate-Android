@@ -6,5 +6,7 @@ data class ChatRoomInfoDTO(
     val chatRoomId: Long,
     val boardInfo: BoardDTO,
     val participantCount: Int,
-    val lastMessageAt: String,
+    val lastMessageAt: String?,
+    val lastMessageContent: String?,
+    val chatRoomImage: String,
 )

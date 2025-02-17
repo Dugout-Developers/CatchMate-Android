@@ -22,5 +22,7 @@ object ChattingMapper {
             boardInfo = toBoard(dto.boardInfo),
             participantCount = dto.participantCount,
             lastMessageAt = dto.lastMessageAt,
+            lastMessageContent = dto.lastMessageContent,
+            chatRoomImage = dto.chatRoomImage,
         )
 }
