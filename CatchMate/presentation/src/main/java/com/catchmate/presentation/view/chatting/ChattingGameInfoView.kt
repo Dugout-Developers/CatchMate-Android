@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ViewChattingGameInfoBinding
+import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 
 class ChattingGameInfoView(
     context: Context,
@@ -40,14 +41,49 @@ class ChattingGameInfoView(
         binding.tvChattingGameInfoTime.text = time
         binding.tvChattingGameInfoPlace.text = place
 
-        if (homeTeamImage != 0) {
-            binding.ivChattingGameInfoHomeTeam.setImageResource(homeTeamImage)
-        }
-
-        if (awayTeamImage != 0) {
-            binding.ivChattingGameInfoAwayTeam.setImageResource(awayTeamImage)
-        }
+        binding.ivChattingGameInfoHomeTeam.setImageResource(homeTeamImage)
+        binding.ivChattingGameInfoAwayTeam.setImageResource(awayTeamImage)
 
         typedArray.recycle()
+    }
+
+    fun setHomeTeamImageView(
+        homeClubId: Int,
+        isCheerTeam: Boolean,
+    ) {
+        setTeamViewResources(
+            homeClubId,
+            isCheerTeam,
+            binding.ivChattingGameInfoHomeTeam,
+            binding.ivChattingGameInfoHomeTeamLogo,
+            "chattingRoom",
+            context,
+        )
+    }
+
+    fun setAwayTeamImageView(
+        awayClubId: Int,
+        isCheerTeam: Boolean,
+    ) {
+        setTeamViewResources(
+            awayClubId,
+            isCheerTeam,
+            binding.ivChattingGameInfoAwayTeam,
+            binding.ivChattingGameInfoAwayTeamLogo,
+            "chattingRoom",
+            context,
+        )
+    }
+
+    fun setGameDateTextView(date: String) {
+        binding.tvChattingGameInfoDate.text = date
+    }
+
+    fun setGameTimeTextView(time: String) {
+        binding.tvChattingGameInfoTime.text = time
+    }
+
+    fun setGamePlaceTextView(place: String) {
+        binding.tvChattingGameInfoPlace.text = place
     }
 }

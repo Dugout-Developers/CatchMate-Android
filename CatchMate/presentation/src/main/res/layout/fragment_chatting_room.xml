@@ -59,12 +59,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/tiny"
-                app:chattingGameInfoAwayTeamImage="@drawable/vec_favorite_outlined_20dp"
-                app:chattingGameInfoDateText="8월 1일"
-                app:chattingGameInfoHomeTeamImage="@drawable/vec_favorite_filled_20dp"
-                app:chattingGameInfoPlaceText="대전"
-                app:chattingGameInfoTimeText="18:30"
+                app:chattingGameInfoAwayTeamImage="@drawable/shape_chatting_team_rect_r6"
+                app:chattingGameInfoHomeTeamImage="@drawable/shape_chatting_team_rect_r6"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cdv_chatting_room" />
 
