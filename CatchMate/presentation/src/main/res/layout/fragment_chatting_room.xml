@@ -45,37 +45,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.catchmate.presentation.view.chatting.ChattingDateView
-                android:id="@+id/cdv_chatting_room"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:chattingDateText="8월 18일"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.catchmate.presentation.view.chatting.ChattingGameInfoView
                 android:id="@+id/cgiv_chatting_room"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/tiny"
+                android:layout_marginTop="8dp"
                 app:chattingGameInfoAwayTeamImage="@drawable/shape_chatting_team_rect_r6"
                 app:chattingGameInfoHomeTeamImage="@drawable/shape_chatting_team_rect_r6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cdv_chatting_room" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_chatting_room_chat_list"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:paddingTop="@dimen/base"
-                android:paddingBottom="@dimen/base"
+                android:layout_marginTop="@dimen/tiny"
+                android:layout_marginBottom="@dimen/tiny"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cgiv_chatting_room"
                 tools:itemCount="2"
                 tools:listitem="@layout/item_received_chat" />
         </androidx.constraintlayout.widget.ConstraintLayout>
