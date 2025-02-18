@@ -6,6 +6,8 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.temporal.ChronoField
 import java.util.Date
 import java.util.Locale
 
@@ -86,9 +88,14 @@ object DateUtils {
     }
 
     fun formatLastChatTime(dateTime: String): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val formatter = DateTimeFormatterBuilder()
+            .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
+            .optionalStart() // 소수점 이하가 있을 수도 있고 없을 수도 있음
+            .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true) // 최소 0자리, 최대 6자리
+            .optionalEnd()
+            .toFormatter()
         val parsedTime = LocalDateTime.parse(dateTime, formatter)
-            .atZone(ZoneId.of("UTC"))
+            .atZone(ZoneId.of("Asia/Seoul"))
             .toInstant()
         val now = Instant.now()
         val duration = Duration.between(parsedTime, now)
@@ -103,7 +110,7 @@ object DateUtils {
             hours < 24 -> "${hours}시간 전"
             days < 7 -> "${days}일 전"
             else -> {
-                val dateTime = LocalDateTime.ofInstant(parsedTime, ZoneId.systemDefault())
+                val dateTime = LocalDateTime.ofInstant(parsedTime, ZoneId.of("Asia/Seoul"))
                 val formatter = DateTimeFormatter.ofPattern("M월 d일")
                 dateTime.format(formatter)
             }
