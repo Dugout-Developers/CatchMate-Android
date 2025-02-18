@@ -5,6 +5,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
@@ -115,5 +116,14 @@ object DateUtils {
                 dateTime.format(formatter)
             }
         }
+    }
+
+    fun formatChatSendTime(dateTime: String): String {
+        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val parsedTime = ZonedDateTime.parse(dateTime, formatter)
+            .withZoneSameInstant(ZoneId.of("Asia/Seoul")) // 시스템 시간대로 변환
+
+        val outputFormatter = DateTimeFormatter.ofPattern("a h:mm") // "오전 4:55" 형식
+        return parsedTime.format(outputFormatter)
     }
 }
