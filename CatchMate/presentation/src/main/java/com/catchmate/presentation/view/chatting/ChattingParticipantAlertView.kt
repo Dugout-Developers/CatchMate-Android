@@ -30,8 +30,8 @@ class ChattingParticipantAlertView(
     }
 
     private fun setTypedArray(typedArray: TypedArray) {
-        val nickname = typedArray.getText(R.styleable.ChattingParticipantAlertView_chattingParticipantAlertText)
+        val text = typedArray.getText(R.styleable.ChattingParticipantAlertView_chattingParticipantAlertText)
 
-        binding.tvChattingParticipantAlert.text = String.format(resources.getString(R.string.chatting_participant_alert), nickname)
+        binding.tvChattingParticipantAlert.text = text
     }
 }
