@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import retrofit2.Response
@@ -12,6 +13,11 @@ interface ChattingService {
     suspend fun getChattingRoomList(
         @Query("page") page: Int,
     ): Response<GetChattingRoomListResponseDTO?>
+
+    @GET("chat-rooms/{chatRoomId}/user-list")
+    suspend fun getChattingCrewList(
+        @Path("chatRoomId") chatRoomId: Long,
+    ): Response<GetChattingCrewListResponseDTO?>
 
     @GET("chats/{chatRoomId}")
     suspend fun getChattingHistory(
