@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.catchmate.domain.model.chatting.ChatMessageId
+import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.presentation.R
@@ -22,7 +25,6 @@ import com.gmail.bishoybasily.stomp.lib.Event
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
-import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class ChattingRoomFragment : Fragment() {
@@ -33,6 +35,7 @@ class ChattingRoomFragment : Fragment() {
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var chatRoomInfo: ChatRoomInfo? = null
     private var userId: Long = -1L
+    private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +57,11 @@ class ChattingRoomFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+        localDataViewModel.getUserId()
         initChatBox()
         initHeader()
         initChatRoomInfo()
-        getUserId()
         connectToWebSocket()
         initSendBtn()
     }
@@ -74,13 +78,6 @@ class ChattingRoomFragment : Fragment() {
         } else {
             arguments?.getParcelable("chatRoomInfo") as ChatRoomInfo?
         }
-
-    private fun getUserId() {
-        localDataViewModel.getUserId()
-        localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
-            userId = id
-        }
-    }
 
     private fun connectToWebSocket() {
         chattingRoomViewModel.connectToWebSocket().subscribe({ event ->
@@ -104,6 +101,37 @@ class ChattingRoomFragment : Fragment() {
         }, { error ->
             Log.e("Web Socket❌", "구독 중 오류 발생", error)
         })
+    }
+
+    private fun initViewModel() {
+        chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
+                chatListAdapter.submitList(response.chatMessageInfoList) {
+                    // 리스트 갱신 후 콜백을 통해 최신 메시지로 스크롤 이동
+                    binding.rvChattingRoomChatList.smoothScrollToPosition(0)
+                }
+            }
+        }
+        chattingRoomViewModel.getChattingCrewListResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                initRecyclerView()
+            }
+        }
+        localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
+            userId = id
+            chattingRoomViewModel.getChattingCrewList(chatRoomInfo?.chatRoomId!!)
+        }
+    }
+
+    private fun initRecyclerView() {
+        Log.e("userID", userId.toString())
+        chatListAdapter = ChatListAdapter(userId, chattingRoomViewModel.getChattingCrewListResponse.value?.userInfoList!!)
+        binding.rvChattingRoomChatList.apply {
+            adapter = chatListAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+        }
+        chattingRoomViewModel.getChattingHistory(chatRoomInfo?.chatRoomId!!, 0)
     }
 
     private fun initChatRoomInfo() {
@@ -156,7 +184,6 @@ class ChattingRoomFragment : Fragment() {
                 put("messageType", ChatMessageType.TALK.name)
                 put("content", binding.edtChattingRoomChatBox.text.toString())
                 put("senderId", userId)
-                put("sendTime", LocalDateTime.now().toString())
             }.toString()
 
             chattingRoomViewModel.sendChat(
