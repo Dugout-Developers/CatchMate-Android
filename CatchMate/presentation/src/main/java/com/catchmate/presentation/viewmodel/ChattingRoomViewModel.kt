@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.usecase.chatting.ConnectWebSocketUseCase
@@ -66,6 +67,23 @@ class ChattingRoomViewModel
         override fun onCleared() {
             super.onCleared()
             disposables.clear()
+        }
+
+        fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
+            val currentList = _getChattingHistoryResponse.value?.chatMessageInfoList ?: emptyList()
+            val updatedList = listOf(chatMessageInfo) + currentList
+
+            val updatedResponse = _getChattingHistoryResponse.value?.copy(
+                chatMessageInfoList = updatedList
+            ) ?: GetChattingHistoryResponse(
+                chatMessageInfoList = updatedList,
+                totalPages = 1,
+                totalElements = 1,
+                isFirst = true,
+                isLast = true,
+            )
+
+            _getChattingHistoryResponse.postValue(updatedResponse)
         }
 
         fun getChattingHistory(

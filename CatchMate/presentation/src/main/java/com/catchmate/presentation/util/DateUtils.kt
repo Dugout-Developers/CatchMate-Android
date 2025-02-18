@@ -126,4 +126,9 @@ object DateUtils {
         val outputFormatter = DateTimeFormatter.ofPattern("a h:mm") // "오전 4:55" 형식
         return parsedTime.format(outputFormatter)
     }
+
+    fun getCurrentTimeFormatted(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        return ZonedDateTime.now().format(formatter)
+    }
 }

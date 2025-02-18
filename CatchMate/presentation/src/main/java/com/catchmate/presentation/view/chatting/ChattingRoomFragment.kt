@@ -19,6 +19,7 @@ import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
+import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -98,6 +99,21 @@ class ChattingRoomFragment : Fragment() {
     private fun handleWebSocketOpened() {
         chattingRoomViewModel.subscribeToChatRoom(chatRoomInfo?.chatRoomId!!).subscribe({ message ->
             Log.d("✅ Msg", message)
+            // recycler view에 새로운 말풍선뷰 add
+            val jsonObject = JSONObject(message)
+            val messageType = jsonObject.getString("messageType")
+            val senderId = jsonObject.getString("senderId").toLong()
+            val content = jsonObject.getString("content")
+            val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
+            val chatMessageInfo =
+                ChatMessageInfo(
+                    id = chatMessageId,
+                    content = content,
+                    senderId = senderId,
+                    messageType = messageType,
+                )
+            Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
+            chattingRoomViewModel.addChatMessage(chatMessageInfo)
         }, { error ->
             Log.e("Web Socket❌", "구독 중 오류 발생", error)
         })
