@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/xstiny"
+    android:layout_marginBottom="@dimen/xstiny"
     android:background="@drawable/shape_all_rect_r8"
     android:backgroundTint="@color/grey0"
     android:paddingTop="@dimen/xsmall">

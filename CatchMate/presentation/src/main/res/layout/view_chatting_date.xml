@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/tiny"
-    android:paddingBottom="@dimen/tiny">
+    android:layout_height="wrap_content">
 
     <View
         android:id="@+id/divider_chatting_date_left"
@@ -22,6 +20,8 @@
         android:id="@+id/tv_chatting_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:textAppearance="@style/Typography.Caption01.Medium"
         android:textColor="@color/grey500"
         app:layout_constraintBottom_toBottomOf="parent"
