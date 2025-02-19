@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.domain.model.chatting.ChatMessageId
@@ -18,7 +19,6 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
-import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
@@ -147,6 +147,21 @@ class ChattingRoomFragment : Fragment() {
                 } else {
                     Log.e("채팅방 오류", "나가기 실패")
                 }
+            }
+        }
+        chattingRoomViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.chattingRoomFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, null, navOptions)
+            }
+        }
+        chattingRoomViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
