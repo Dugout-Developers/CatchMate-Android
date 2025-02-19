@@ -4,7 +4,7 @@ import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.repository.ChattingRepository
 import javax.inject.Inject
 
-class DeleteChattingRoomUseCase
+class LeaveChattingRoomUseCase
     @Inject
     constructor(
         private val chattingRepository: ChattingRepository,
