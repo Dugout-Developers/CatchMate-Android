@@ -282,7 +282,15 @@ class ChattingRoomFragment : Fragment() {
                     if (userId == info.boardInfo.userInfo.userId) {
                         ivSideSheetSettings.visibility = View.VISIBLE
                         ivSideSheetSettings.setOnClickListener {
-                            // 채팅방 설정 페이지로 이동
+                            // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id 넘김
+                            val bundle = Bundle().apply {
+                                putString("chattingRoomImage", info.chatRoomImage)
+                                putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
+                                putLong("loginUserId", userId)
+                                putLong("writerId", info.boardInfo.userInfo.userId)
+                            }
+                            findNavController().navigate(R.id.action_chattingRoomFragment_to_chattingSettingFragment, bundle)
+                            sideSheetDialog.dismiss()
                         }
                     } else {
                         ivSideSheetSettings.visibility = View.GONE
