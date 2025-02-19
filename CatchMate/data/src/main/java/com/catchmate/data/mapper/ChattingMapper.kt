@@ -25,7 +25,7 @@ object ChattingMapper {
             isLast = dto.isLast,
         )
 
-    private fun toChatRoomInfo(dto: ChatRoomInfoDTO): ChatRoomInfo =
+    fun toChatRoomInfo(dto: ChatRoomInfoDTO): ChatRoomInfo =
         ChatRoomInfo(
             chatRoomId = dto.chatRoomId,
             boardInfo = toBoard(dto.boardInfo),
