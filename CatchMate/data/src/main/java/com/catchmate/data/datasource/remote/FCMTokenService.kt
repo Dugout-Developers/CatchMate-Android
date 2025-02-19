@@ -50,7 +50,9 @@ class FCMTokenService : FirebaseMessagingService() {
 
         val data = message.data
 
-        Log.e("MSG", "${data["boardId"]} / ${data["acceptStatus"]} / $title / $body")
+        // 채팅 알림 - data = {chatRoomId}
+        // 직관 신청 알림 - data = {boardId, acceptStatus}
+        Log.e("MSG", "$data / $title / $body")
         if (title.isNotEmpty() && body.isNotEmpty()) {
             showNotification(data, title, body)
         }
@@ -92,15 +94,28 @@ class FCMTokenService : FirebaseMessagingService() {
         title: String,
         body: String,
     ) {
-        val notificationBuilder = getNotificationBuilder(PUST_NOTIFICATION_CHANNEL_ID)
+        var channelId: String = ""
+        var channelName: String = ""
+        if (data.containsKey("acceptStatus")) { // 직관 신청 알림
+            channelId = ENROLL_CHANNEL_ID
+            channelName = ENROLL_CHANNEL_NAME
+        } else { // 채팅 알림
+            channelId = CHATTING_CHANNEL_ID
+            channelName = CHATTING_CHANNEL_NAME
+        }
+        val notificationBuilder = getNotificationBuilder(channelId)
         val builder = notificationHandler.createNotificationBuilder(data, title, body, notificationBuilder)
-        createNotificationChannel(PUST_NOTIFICATION_CHANNEL_ID, PUST_NOTIFICATION_CHANNEL_NAME, builder)
+        createNotificationChannel(channelId, channelName, builder)
     }
 
     suspend fun getToken(): String = FirebaseMessaging.getInstance().token.await()
 
     companion object {
-        const val PUST_NOTIFICATION_CHANNEL_ID = "CatchmateNotificationChannel"
-        const val PUST_NOTIFICATION_CHANNEL_NAME = "CatchmateNotificationChannel"
+        const val ENROLL_CHANNEL_ID = "EnrollChannel"
+        const val ENROLL_CHANNEL_NAME = "직관 신청 알림"
+        const val CHATTING_CHANNEL_ID = "ChattingChannel"
+        const val CHATTING_CHANNEL_NAME = "채팅 알림"
+        const val EVENT_CHANNEL_ID = "EventChannel"
+        const val EVENT_CHANNEL_NAME = "이벤트 알림"
     }
 }

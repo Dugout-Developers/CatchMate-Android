@@ -25,15 +25,20 @@ class NotificationHandlerImpl
         ): NotificationCompat.Builder {
             val args =
                 Bundle().apply {
-                    putLong("boardId", data["boardId"]?.toLong() ?: 0)
-                    putString("acceptStatus", data["acceptStatus"] ?: "")
+                    if (data.containsKey("acceptStatus")) {
+                        putLong("boardId", data["boardId"]?.toLong() ?: -1)
+                        putString("acceptStatus", data["acceptStatus"] ?: "")
+                    } else {
+                        putLong("chatRoomId", data["chatRoomId"]?.toLong() ?: -1)
+                    }
                 }
-            Log.e("args", "${args.getLong("boardId")} ${args.getString("acceptStatus")}")
+            Log.e("args", "${args.getLong("boardId")} ${args.getString("acceptStatus")} ${args.getLong("chatRoomId")}")
 
             val destinationId =
-                when (data["acceptStatus"]) {
-                    "PENDING" -> R.id.receivedJoinFragment
-                    "ACCEPTED" -> R.id.chattingHomeFragment
+                when {
+                    data["acceptStatus"] == "PENDING" -> R.id.receivedJoinFragment
+                    data["acceptStatus"] == "ACCEPTED" -> R.id.chattingHomeFragment
+                    data.containsKey("chatRoomId") -> R.id.chattingRoomFragment
                     else -> R.id.homeFragment
                 }
             val pendingIntent =
@@ -52,7 +57,7 @@ class NotificationHandlerImpl
 
             val builder =
                 notificationBuilder
-                    .setAutoCancel(true)
+                    .setAutoCancel(true) // 클릭 시 알림 제거
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentText(body)
                     .setContentTitle(title)
