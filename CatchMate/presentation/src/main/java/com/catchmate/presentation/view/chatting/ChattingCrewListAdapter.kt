@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.databinding.ItemChattingParticipantBinding
 
-class ChattingRoomSideSheetCrewAdapter(
+class ChattingCrewListAdapter(
     private val loginUserId: Long,
     private val writerId: Long,
 ) : ListAdapter<GetUserProfileResponse, ChattingRoomSideSheetCrewAdapter.CrewViewHolder>(diffUtil) {
