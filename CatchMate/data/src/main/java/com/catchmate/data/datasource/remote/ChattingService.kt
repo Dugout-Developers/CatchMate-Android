@@ -1,10 +1,12 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.chatting.ChatRoomInfoDTO
+import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -24,6 +26,11 @@ interface ChattingService {
     suspend fun getChattingRoomInfo(
         @Path("chatRoomId") chatRoomId: Long,
     ): Response<ChatRoomInfoDTO?>
+
+    @DELETE("chat-rooms/{chatRoomId}")
+    suspend fun deleteChattingRoom(
+        @Path("chatRoomId") chatRoomId: Long,
+    ): Response<DeleteChattingRoomResponseDTO?>
 
     @GET("chats/{chatRoomId}")
     suspend fun getChattingHistory(

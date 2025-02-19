@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.chatting.ChatMessageIdDTO
 import com.catchmate.data.dto.chatting.ChatMessageInfoDTO
 import com.catchmate.data.dto.chatting.ChatRoomInfoDTO
+import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
@@ -11,6 +12,7 @@ import com.catchmate.data.mapper.UserMapper.toGetUserProfileResponse
 import com.catchmate.domain.model.chatting.ChatMessageId
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
+import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
@@ -62,5 +64,10 @@ object ChattingMapper {
     fun toGetChattingCrewListResponse(dto: GetChattingCrewListResponseDTO): GetChattingCrewListResponse =
         GetChattingCrewListResponse(
             userInfoList = dto.userInfoList.map { toGetUserProfileResponse(it) }
+        )
+
+    fun toDeleteChattingRoomResponse(dto: DeleteChattingRoomResponseDTO): DeleteChattingRoomResponse =
+        DeleteChattingRoomResponse(
+            state = dto.state,
         )
 }
