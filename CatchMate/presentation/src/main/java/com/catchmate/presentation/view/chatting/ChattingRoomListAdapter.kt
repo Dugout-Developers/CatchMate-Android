@@ -71,21 +71,34 @@ class ChattingRoomListAdapter(
         val chatRoomInfo = chattingRoomList[position]
 
         holder.apply {
-            val logoResource = convertTeamLogo(chatRoomInfo.boardInfo.gameInfo.homeClubId)
-            Glide
-                .with(context)
-                .load(logoResource)
-                .into(ivLogo)
-            DrawableCompat
-                .setTint(
-                    ivBg.drawable,
-                    convertTeamColor(
-                        context,
-                        chatRoomInfo.boardInfo.gameInfo.homeClubId,
-                        true,
-                        "chattingHome",
-                    ),
-                )
+            // 채팅방 이미지가 변경된 적 없는 경우 chatRoomImage에 cheerTeamId가 String으로 담겨옴
+            // 해당 변수를 int로 변환할 때 예외 처리를 통해 변경된 적 있을 경우의 imageUrl을 imageView에 표시
+            try {
+                val clubId = chatRoomInfo.chatRoomImage.toInt()
+                val logoResource = convertTeamLogo(clubId)
+                ivLogo.visibility = View.VISIBLE
+                Glide
+                    .with(context)
+                    .load(logoResource)
+                    .into(ivLogo)
+                DrawableCompat
+                    .setTint(
+                        ivBg.drawable,
+                        convertTeamColor(
+                            context,
+                            clubId,
+                            true,
+                            "chattingHome",
+                        ),
+                    )
+            } catch (e: Exception) {
+                ivLogo.visibility = View.GONE
+                Glide
+                    .with(context)
+                    .load(chatRoomInfo.chatRoomImage)
+                    .into(ivBg)
+            }
+
             tvTitle.text = chatRoomInfo.boardInfo.title
             if (chatRoomInfo.lastMessageAt == null && chatRoomInfo.lastMessageContent == null) {
                 tvNewBadge.visibility = View.VISIBLE
