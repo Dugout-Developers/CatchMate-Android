@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,14 +16,18 @@ import com.catchmate.domain.model.chatting.ChatMessageId
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
+import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
+import com.catchmate.presentation.databinding.LayoutApplicationDetailDialogBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.gmail.bishoybasily.stomp.lib.Event
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
@@ -132,6 +137,16 @@ class ChattingRoomFragment : Fragment() {
             if (info != null) {
                 initChatRoomInfo(info)
                 initHeader(info)
+            }
+        }
+        chattingRoomViewModel.deleteChattingRoomResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                if (it.state) {
+                    Log.d("채팅방 나가기 성공", "나가기 성공")
+                    findNavController().popBackStack()
+                } else {
+                    Log.e("채팅방 오류", "나가기 실패")
+                }
             }
         }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
@@ -261,7 +276,8 @@ class ChattingRoomFragment : Fragment() {
 
                     // 버튼 기능
                     ivSideSheetLeaveChattingRoom.setOnClickListener {
-                        // 채팅방 나가기
+                        sideSheetDialog.dismiss()
+                        showChattingRoomLeaveDialog()
                     }
                     if (userId == info.boardInfo.userInfo.userId) {
                         ivSideSheetSettings.visibility = View.VISIBLE
@@ -284,5 +300,36 @@ class ChattingRoomFragment : Fragment() {
             tvHeaderMenuTitle.text = info.boardInfo.title
             tvHeaderMenuMemberCount.text = info.participantCount.toString()
         }
+    }
+
+    private fun showChattingRoomLeaveDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.chatting_leave_dialog_title)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.chatting_leave_dialog_positive_button)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    chattingRoomViewModel.deleteChattingRoom(chatRoomId)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 }

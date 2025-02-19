@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
+import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.usecase.chatting.ConnectWebSocketUseCase
+import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
@@ -34,6 +36,7 @@ class ChattingRoomViewModel
         private val getChattingHistoryUseCase: GetChattingHistoryUseCase,
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
         private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
+        private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
     ) : ViewModel() {
         val disposables = CompositeDisposable()
 
@@ -48,6 +51,10 @@ class ChattingRoomViewModel
         private val _chattingRoomInfo = MutableLiveData<ChatRoomInfo>()
         val chattingRoomInfo: LiveData<ChatRoomInfo>
             get() = _chattingRoomInfo
+
+        private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse> ()
+        val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
+            get() = _deleteChattingRoomResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -135,6 +142,22 @@ class ChattingRoomViewModel
                 result
                     .onSuccess { info ->
                         _chattingRoomInfo.value = info
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun deleteChattingRoom(chatRoomId: Long) {
+            viewModelScope.launch {
+                val result = deleteChattingRoomUseCase(chatRoomId)
+                result
+                    .onSuccess { response ->
+                        _deleteChattingRoomResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
