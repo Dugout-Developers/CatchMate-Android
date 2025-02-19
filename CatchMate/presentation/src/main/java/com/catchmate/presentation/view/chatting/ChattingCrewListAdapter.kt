@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.databinding.ItemChattingParticipantBinding
+import com.catchmate.presentation.interaction.OnKickOutClickListener
 
 class ChattingCrewListAdapter(
     private val loginUserId: Long,
     private val writerId: Long,
-) : ListAdapter<GetUserProfileResponse, ChattingRoomSideSheetCrewAdapter.CrewViewHolder>(diffUtil) {
+    private val pageType: String,
+    private val onKickOutClickListener: OnKickOutClickListener? = null,
+) : ListAdapter<GetUserProfileResponse, ChattingCrewListAdapter.CrewViewHolder>(diffUtil) {
     inner class CrewViewHolder(
         private val binding: ItemChattingParticipantBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -37,6 +40,16 @@ class ChattingCrewListAdapter(
                     ivChattingParticipantLeaderBadge.visibility = View.VISIBLE
                 } else {
                     ivChattingParticipantLeaderBadge.visibility = View.GONE
+                }
+
+                if (pageType == "chattingSetting") {
+                    tvChattingParticipantKickOut.setOnClickListener {
+                        onKickOutClickListener?.onKickOutClicked(profile.userId)
+                    }
+                    // 방장 아닌 사람만 내보내기 버튼 표시
+                    if (profile.userId != writerId) {
+                        tvChattingParticipantKickOut.visibility = View.VISIBLE
+                    }
                 }
             }
         }

@@ -22,8 +22,8 @@
 
     <TextView
         android:id="@+id/tv_chatting_participant_me_badge"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/shape_chatting_me_badge_bg"
         android:gravity="center"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toEndOf="@+id/iv_chatting_participant"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/iv_chatting_participant_leader_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

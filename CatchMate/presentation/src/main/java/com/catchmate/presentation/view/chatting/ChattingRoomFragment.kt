@@ -282,7 +282,7 @@ class ChattingRoomFragment : Fragment() {
                     )
 
                     // 참여자 정보
-                    var crewAdapter = ChattingRoomSideSheetCrewAdapter(userId, info.boardInfo.userInfo.userId)
+                    var crewAdapter = ChattingCrewListAdapter(userId, info.boardInfo.userInfo.userId, "chattingRoom")
                     rvSideSheetParticipantList.apply {
                         adapter = crewAdapter
                         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -297,12 +297,13 @@ class ChattingRoomFragment : Fragment() {
                     if (userId == info.boardInfo.userInfo.userId) {
                         ivSideSheetSettings.visibility = View.VISIBLE
                         ivSideSheetSettings.setOnClickListener {
-                            // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id 넘김
+                            // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id, 채팅방 id 넘김
                             val bundle = Bundle().apply {
                                 putString("chattingRoomImage", info.chatRoomImage)
                                 putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
                                 putLong("loginUserId", userId)
                                 putLong("writerId", info.boardInfo.userInfo.userId)
+                                putLong("chatRoomId", chatRoomId)
                             }
                             findNavController().navigate(R.id.action_chattingRoomFragment_to_chattingSettingFragment, bundle)
                             sideSheetDialog.dismiss()

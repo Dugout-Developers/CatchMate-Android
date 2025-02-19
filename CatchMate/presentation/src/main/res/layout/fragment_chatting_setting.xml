@@ -28,7 +28,6 @@
             android:id="@+id/iv_chatting_setting_thumbnail"
             android:layout_width="68dp"
             android:layout_height="68dp"
-            android:src="@drawable/vec_all_essential_mark_6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
