@@ -1,20 +1,29 @@
 package com.catchmate.presentation.view.chatting
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingSettingBinding
 import com.catchmate.presentation.interaction.OnKickOutClickListener
+import com.catchmate.presentation.util.ImageUtils.convertBitmapToMultipart
 import com.catchmate.presentation.viewmodel.ChattingSettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,13 +36,16 @@ class ChattingSettingFragment :
 
     private val chattingSettingViewModel: ChattingSettingViewModel by viewModels()
 
+    private lateinit var requestAlbumLauncher: ActivityResultLauncher<Intent>
     private lateinit var chattingCrewAdapter: ChattingCrewListAdapter
+
     private lateinit var chattingRoomImage: String
     private lateinit var chattingCrewList: MutableList<GetUserProfileResponse>
     private var loginUserId: Long = -1L
     private var writerId: Long = -1L
     private var chatRoomId: Long = -1L
     private var deletedCrewId: Long = -1L
+    private var updatedBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +73,9 @@ class ChattingSettingFragment :
         super.onViewCreated(view, savedInstanceState)
         initHeader()
         initViewModel()
+        createAlbumBitmap()
         initRecyclerView()
+        initChattingRoomImageView()
     }
 
     override fun onDestroyView() {
@@ -104,6 +118,12 @@ class ChattingSettingFragment :
                 chattingCrewAdapter.submitList(chattingCrewList)
             }
         }
+        chattingSettingViewModel.patchChattingRoomImageResponse.observe(viewLifecycleOwner) { response ->
+            if (response.state) {
+                Log.d("📸채팅방 프로필 변경 성공", "성공")
+                binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -113,6 +133,53 @@ class ChattingSettingFragment :
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
         chattingCrewAdapter.submitList(chattingCrewList)
+    }
+
+    private fun initChattingRoomImageView() {
+        Glide
+            .with(this@ChattingSettingFragment)
+            .load(chattingRoomImage)
+            .error(R.drawable.ic_notification_samsung_device)
+            .into(binding.ivChattingSettingThumbnail)
+        binding.ivChattingSettingThumbnail.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            requestAlbumLauncher.launch(intent)
+        }
+    }
+
+    private fun createAlbumBitmap() {
+        requestAlbumLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) {
+                val option = BitmapFactory.Options()
+                option.inSampleSize = 4
+                if (it.resultCode == Activity.RESULT_OK) {
+                    it.data?.data?.let { uri ->
+                        val inputStream = requireActivity().contentResolver.openInputStream(uri)
+                        val originalBitmap = BitmapFactory.decodeStream(inputStream, null, option)
+                        inputStream?.close()
+
+                        val resizedBitmap =
+                            originalBitmap?.let { bitmap ->
+                                Bitmap.createScaledBitmap(bitmap, 200, 200, true)
+                            }
+
+                        resizedBitmap?.let { bitmap ->
+                            updatedBitmap = bitmap
+                            val multipart =
+                                convertBitmapToMultipart(
+                                    requireContext(),
+                                    bitmap,
+                                    "chat_room_${chatRoomId}_image.jpg",
+                                    "chatRoomImage",
+                                )
+                            chattingSettingViewModel.patchChattingRoomImage(chatRoomId, multipart)
+                        }
+                    }
+                }
+            }
     }
 
     override fun onKickOutClicked(userId: Long) {
