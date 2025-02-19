@@ -42,15 +42,17 @@ object ImageUtils {
     fun convertBitmapToMultipart(
         context: Context,
         bitmap: Bitmap,
+        fileName: String, // 파일 이름 ex)profile_image.jpg
+        formValueName: String, // api에서 요구하는 이미지 파트 변수명 ex)profileImage
     ): MultipartBody.Part {
-        val file = File(context.cacheDir, "profile_image.jpg")
+        val file = File(context.cacheDir, fileName)
         FileOutputStream(file).use { outputStream ->
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             outputStream.close()
         }
 
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val multipart = MultipartBody.Part.createFormData("profileImage", file.name, requestFile)
+        val multipart = MultipartBody.Part.createFormData(formValueName, file.name, requestFile)
         return multipart
     }
 }
