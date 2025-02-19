@@ -1,6 +1,5 @@
 package com.catchmate.presentation.view.chatting
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,14 +33,14 @@ class ChattingRoomFragment : Fragment() {
 
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private var chatRoomInfo: ChatRoomInfo? = null
+    private var chatRoomId: Long = -1L
     private var userId: Long = -1L
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        chatRoomInfo = getChatRoomInfo()
-        Log.e("chatRoomInfo", chatRoomInfo?.chatRoomId.toString())
+        chatRoomId = getChatRoomId()
+        Log.e("chatRoomId", chatRoomId.toString())
     }
 
     override fun onCreateView(
@@ -59,10 +58,9 @@ class ChattingRoomFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
         localDataViewModel.getUserId()
         initChatBox()
-        initHeader()
-        initChatRoomInfo()
         connectToWebSocket()
         initSendBtn()
     }
@@ -73,12 +71,7 @@ class ChattingRoomFragment : Fragment() {
         _binding = null
     }
 
-    private fun getChatRoomInfo(): ChatRoomInfo? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("chatRoomInfo", ChatRoomInfo::class.java)
-        } else {
-            arguments?.getParcelable("chatRoomInfo") as ChatRoomInfo?
-        }
+    private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
 
     private fun connectToWebSocket() {
         chattingRoomViewModel.connectToWebSocket().subscribe({ event ->
@@ -97,7 +90,7 @@ class ChattingRoomFragment : Fragment() {
     }
 
     private fun handleWebSocketOpened() {
-        chattingRoomViewModel.subscribeToChatRoom(chatRoomInfo?.chatRoomId!!).subscribe({ message ->
+        chattingRoomViewModel.subscribeToChatRoom(chatRoomId).subscribe({ message ->
             Log.d("✅ Msg", message)
             // recycler view에 새로운 말풍선뷰 add
             val jsonObject = JSONObject(message)
@@ -134,9 +127,15 @@ class ChattingRoomFragment : Fragment() {
                 initRecyclerView()
             }
         }
+        chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
+            if (info != null) {
+                initChatRoomInfo(info)
+                initHeader(info)
+            }
+        }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
-            chattingRoomViewModel.getChattingCrewList(chatRoomInfo?.chatRoomId!!)
+            chattingRoomViewModel.getChattingCrewList(chatRoomId)
         }
     }
 
@@ -147,24 +146,24 @@ class ChattingRoomFragment : Fragment() {
             adapter = chatListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         }
-        chattingRoomViewModel.getChattingHistory(chatRoomInfo?.chatRoomId!!, 0)
+        chattingRoomViewModel.getChattingHistory(chatRoomId, 0)
     }
 
-    private fun initChatRoomInfo() {
+    private fun initChatRoomInfo(info: ChatRoomInfo) {
         binding.cgivChattingRoom.apply {
-            val isCheerTeam = chatRoomInfo?.boardInfo?.gameInfo?.homeClubId!! == chatRoomInfo?.boardInfo?.cheerClubId!!
+            val isCheerTeam = info.boardInfo.gameInfo.homeClubId == info.boardInfo.cheerClubId
             setHomeTeamImageView(
-                chatRoomInfo?.boardInfo?.gameInfo?.homeClubId!!,
+                info.boardInfo.gameInfo.homeClubId,
                 isCheerTeam,
             )
             setAwayTeamImageView(
-                chatRoomInfo?.boardInfo?.gameInfo?.awayClubId!!,
+                info.boardInfo.gameInfo.awayClubId,
                 !isCheerTeam,
             )
-            val (date, time) = formatISODateTime(chatRoomInfo?.boardInfo?.gameInfo?.gameStartDate!!)
+            val (date, time) = formatISODateTime(info.boardInfo.gameInfo.gameStartDate!!)
             setGameDateTextView(date)
             setGameTimeTextView(time)
-            setGamePlaceTextView(chatRoomInfo?.boardInfo?.gameInfo?.location!!)
+            setGamePlaceTextView(info.boardInfo.gameInfo.location)
         }
     }
 
@@ -203,7 +202,7 @@ class ChattingRoomFragment : Fragment() {
             }.toString()
 
             chattingRoomViewModel.sendChat(
-                chatRoomInfo?.chatRoomId!!,
+                chatRoomId,
                 message,
             ).subscribe ({ isSend ->
                 binding.edtChattingRoomChatBox.setText("")
@@ -218,7 +217,7 @@ class ChattingRoomFragment : Fragment() {
         }
     }
 
-    private fun initHeader() {
+    private fun initHeader(info: ChatRoomInfo) {
         binding.layoutHeaderChattingRoom.apply {
             imgbtnHeaderMenuMenu.setOnClickListener {
                 val sideSheetDialog = SideSheetDialog(requireContext())
@@ -229,8 +228,8 @@ class ChattingRoomFragment : Fragment() {
             imgbtnHeaderMenuBack.setOnClickListener {
                 findNavController().popBackStack()
             }
-            tvHeaderMenuTitle.text = chatRoomInfo?.boardInfo?.title
-            tvHeaderMenuMemberCount.text = chatRoomInfo?.participantCount.toString()
+            tvHeaderMenuTitle.text = info.boardInfo.title
+            tvHeaderMenuMemberCount.text = info.participantCount.toString()
         }
     }
 }

@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatMessageInfo
+import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.usecase.chatting.ConnectWebSocketUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
+import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
 import com.catchmate.domain.usecase.chatting.SendChatUseCase
 import com.catchmate.domain.usecase.chatting.SubscribeChatRoomUseCase
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -31,6 +33,7 @@ class ChattingRoomViewModel
         private val sendChatUseCase: SendChatUseCase,
         private val getChattingHistoryUseCase: GetChattingHistoryUseCase,
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
+        private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
     ) : ViewModel() {
         val disposables = CompositeDisposable()
 
@@ -41,6 +44,10 @@ class ChattingRoomViewModel
         private val _getChattingCrewListResponse = MutableLiveData<GetChattingCrewListResponse>()
         val getChattingCrewListResponse: LiveData<GetChattingCrewListResponse>
             get() = _getChattingCrewListResponse
+
+        private val _chattingRoomInfo = MutableLiveData<ChatRoomInfo>()
+        val chattingRoomInfo: LiveData<ChatRoomInfo>
+            get() = _chattingRoomInfo
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -112,6 +119,22 @@ class ChattingRoomViewModel
                 result
                     .onSuccess { response ->
                         _getChattingCrewListResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun getChattingRoomInfo(chatRoomId: Long) {
+            viewModelScope.launch {
+                val result = getChattingRoomInfoUseCase(chatRoomId)
+                result
+                    .onSuccess { info ->
+                        _chattingRoomInfo.value = info
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

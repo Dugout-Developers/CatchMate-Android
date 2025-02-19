@@ -138,9 +138,9 @@ class ChattingHomeFragment :
         isApiCalled = true
     }
 
-    override fun onChattingRoomSelected(chatRoomInfo: ChatRoomInfo) {
+    override fun onChattingRoomSelected(chatRoomId: Long) {
         val bundle = Bundle()
-        bundle.putParcelable("chatRoomInfo", chatRoomInfo)
+        bundle.putLong("chatRoomId", chatRoomId)
         findNavController().navigate(R.id.action_chattingHomeFragment_to_chattingRoomFragment, bundle)
     }
 }

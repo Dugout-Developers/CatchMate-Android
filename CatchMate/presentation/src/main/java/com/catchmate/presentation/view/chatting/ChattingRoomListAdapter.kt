@@ -44,7 +44,7 @@ class ChattingRoomListAdapter(
         init {
             itemBinding.root.setOnClickListener {
                 val chatRoomInfo = chattingRoomList[absoluteAdapterPosition]
-                onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo)
+                onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo.chatRoomId)
             }
         }
     }
