@@ -99,7 +99,7 @@ class ChatListAdapter(
                     ItemSendChatBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
-                        false
+                        false,
                     )
                 )
 
@@ -108,7 +108,7 @@ class ChatListAdapter(
                     ItemReceivedChatBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
-                        false
+                        false,
                     )
                 )
 
@@ -117,7 +117,7 @@ class ChatListAdapter(
                     ViewChattingDateBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
-                        false
+                        false,
                     )
                 )
 
