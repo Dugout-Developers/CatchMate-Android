@@ -4,12 +4,14 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.ChattingService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.ChattingMapper.toChatRoomInfo
+import com.catchmate.data.mapper.ChattingMapper.toDeleteChattingCrewKickOutResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingCrewListResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingHistoryResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingRoomListResponse
 import com.catchmate.data.mapper.ChattingMapper.toDeleteChattingRoomResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
+import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
@@ -82,6 +84,26 @@ class ChattingRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
                     val body = response.body()?.let { toDeleteChattingRoomResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("ChattingRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun deleteChattingCrewKickOut(
+            chatRoomId: Long,
+            userId: Long,
+        ): Result<DeleteChattingCrewKickOutResponse> =
+            try {
+                val response = chattingApi.deleteChattingCrewKickOut(chatRoomId, userId)
+                if (response.isSuccessful) {
+                    Log.d("ChattingRepo", "통신 성공")
+                    val body = response.body()?.let { toDeleteChattingCrewKickOutResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
