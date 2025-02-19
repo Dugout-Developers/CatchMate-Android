@@ -15,10 +15,11 @@ import com.catchmate.domain.model.chatting.ChatMessageId
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
-import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
+import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
+import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -221,9 +222,61 @@ class ChattingRoomFragment : Fragment() {
         binding.layoutHeaderChattingRoom.apply {
             imgbtnHeaderMenuMenu.setOnClickListener {
                 val sideSheetDialog = SideSheetDialog(requireContext())
-                sideSheetDialog.setContentView(R.layout.layout_chatting_side_sheet)
+                val sideSheetBinding = LayoutChattingSideSheetBinding.inflate(layoutInflater)
+                sideSheetDialog.setContentView(sideSheetBinding.root)
+
+                sideSheetBinding.apply {
+                    // 게시글 정보
+                    val dateTimePair = formatISODateTime(info.boardInfo.gameInfo.gameStartDate!!)
+                    tvSideSheetDate.text = dateTimePair.first
+                    tvSideSheetTime.text = dateTimePair.second
+                    tvSideSheetPlace.text = info.boardInfo.gameInfo.location
+                    tvSideSheetCountBadge.text = "${info.participantCount}/${info.boardInfo.maxPerson}"
+                    tvSideSheetTitle.text = info.boardInfo.title
+                    val isCheerTeam = info.boardInfo.cheerClubId == info.boardInfo.gameInfo.homeClubId
+                    setTeamViewResources(
+                        info.boardInfo.gameInfo.homeClubId,
+                        isCheerTeam,
+                        ivSideSheetHomeTeam,
+                        ivSideSheetHomeLogo,
+                        "chattingRoom",
+                        requireContext(),
+                    )
+                    setTeamViewResources(
+                        info.boardInfo.gameInfo.awayClubId,
+                        !isCheerTeam,
+                        ivSideSheetAwayTeam,
+                        ivSideSheetAwayLogo,
+                        "chattingRoom",
+                        requireContext(),
+                    )
+
+                    // 참여자 정보
+                    var crewAdapter = ChattingRoomSideSheetCrewAdapter(userId, info.boardInfo.userInfo.userId)
+                    rvSideSheetParticipantList.apply {
+                        adapter = crewAdapter
+                        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                    crewAdapter.submitList(chattingRoomViewModel.getChattingCrewListResponse.value?.userInfoList)
+
+                    // 버튼 기능
+                    ivSideSheetLeaveChattingRoom.setOnClickListener {
+                        // 채팅방 나가기
+                    }
+                    if (userId == info.boardInfo.userInfo.userId) {
+                        ivSideSheetSettings.visibility = View.VISIBLE
+                        ivSideSheetSettings.setOnClickListener {
+                            // 채팅방 설정 페이지로 이동
+                        }
+                    } else {
+                        ivSideSheetSettings.visibility = View.GONE
+                    }
+                    toggleSideSheetChattingRoomNotification.setOnCheckedChangeListener { buttonView, isChecked ->
+                        // 토글 상태에 따른 알림 설정 api 호출
+                    }
+                }
+
                 sideSheetDialog.show()
-                // 안 보이는 묹제
             }
             imgbtnHeaderMenuBack.setOnClickListener {
                 findNavController().popBackStack()
