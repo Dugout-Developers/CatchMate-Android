@@ -6,6 +6,8 @@ import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
+import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
+import okhttp3.MultipartBody
 
 interface ChattingRepository {
     suspend fun getChattingRoomList(page: Int): Result<GetChattingRoomListResponse>
@@ -13,6 +15,11 @@ interface ChattingRepository {
     suspend fun getChattingCrewList(chatRoomId: Long): Result<GetChattingCrewListResponse>
 
     suspend fun getChattingRoomInfo(chatRoomId: Long): Result<ChatRoomInfo>
+
+    suspend fun patchChattingRoomImage(
+        chatRoomId: Long,
+        chatRoomImage: MultipartBody.Part,
+    ): Result<PatchChattingRoomImageResponse>
 
     suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse>
 
