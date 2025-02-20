@@ -291,7 +291,13 @@ class EditProfileFragment :
         val json = Gson().toJson(userProfileRequest)
         val requestBody: RequestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
         if (isProfileSelected) {
-            val profileImageFile = convertBitmapToMultipart(requireContext(), editProfileViewModel.profileImage.value!!)
+            val profileImageFile =
+                convertBitmapToMultipart(
+                    requireContext(),
+                    editProfileViewModel.profileImage.value!!,
+                    "profile_image.jpg",
+                    "profileImage",
+                )
             patchUserProfile(requestBody, profileImageFile)
         } else {
             lifecycleScope.launch {

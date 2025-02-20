@@ -147,7 +147,7 @@ object BoardMapper {
             isLast = responseDTO.isLast,
         )
 
-    private fun toBoard(dto: BoardDTO): Board =
+    fun toBoard(dto: BoardDTO): Board =
         Board(
             boardId = dto.boardId,
             title = dto.title,

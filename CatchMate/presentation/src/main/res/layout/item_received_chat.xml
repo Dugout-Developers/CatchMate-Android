@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tiny"
         android:layout_marginTop="@dimen/xstiny"
+        android:paddingBottom="@dimen/tiny"
         android:textAppearance="@style/Typography.Body03.SemiBold"
         android:textColor="@color/grey600"
         app:layout_constraintStart_toEndOf="@+id/iv_received_chat_profile"
@@ -29,8 +30,8 @@
         android:id="@+id/tv_received_chat_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/tiny"
-        android:layout_marginTop="@dimen/tiny"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/shape_chatting_received_chat_bg"
         android:maxWidth="240dp"
         android:paddingLeft="@dimen/small"
@@ -39,7 +40,7 @@
         android:paddingBottom="@dimen/xsmall"
         android:textAppearance="@style/Typography.Body02.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_received_chat_profile"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_received_chat_nickname"
         tools:text="집나간 벨리곰 찾습니다 집나간 벨리곰 찾습니다 집나간 벨리곰 찾습니다 집나간 벨리곰 찾습니다 집나간 벨리곰 찾습니다 집나간 벨리곰 찾습니다" />
 

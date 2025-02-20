@@ -10,4 +10,7 @@ android {
 dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+    implementation(libs.stomp)
 }

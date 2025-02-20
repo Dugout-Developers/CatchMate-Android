@@ -8,4 +8,7 @@
     <string name="chatting_setting_kick_out">내보내기</string>
 
     <string name="chatting_participant_alert">%s 님이 채팅에 참여했어요</string>
+    <string name="chatting_start_message">채팅을 시작해보세요</string>
+    <string name="chatting_leave_dialog_title">채팅방을 나갈까요?</string>
+    <string name="chatting_leave_dialog_positive_button">나가기</string>
 </resources>

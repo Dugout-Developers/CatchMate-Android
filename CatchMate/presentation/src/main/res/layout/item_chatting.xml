@@ -11,13 +11,22 @@
     android:paddingBottom="@dimen/small">
 
     <ImageView
-        android:id="@+id/iv_chatting_item"
+        android:id="@+id/iv_chatting_item_bg"
         android:layout_width="52dp"
         android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/shape_all_rect_r8" />
+
+    <ImageView
+        android:id="@+id/iv_chatting_item_logo"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_chatting_item_bg"
+        app:layout_constraintEnd_toEndOf="@+id/iv_chatting_item_bg"
+        app:layout_constraintStart_toStartOf="@+id/iv_chatting_item_bg"
+        app:layout_constraintTop_toTopOf="@+id/iv_chatting_item_bg" />
 
     <TextView
         android:id="@+id/tv_chatting_item_title"
@@ -31,18 +40,31 @@
         android:textAppearance="@style/Typography.Body01.Medium"
         app:layout_constraintBottom_toTopOf="@+id/layout_chatting_item_info"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item_bg"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="카리나 시구 보러 같이 가실 분" />
 
     <TextView
-        android:id="@+id/tv_chatting_item_count"
+        android:id="@+id/tv_chatting_item_people_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/xstiny"
+        android:layout_marginStart="4dp"
+        android:textAppearance="@style/Typography.Caption01.Medium"
+        android:textColor="@color/grey500"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_item_title"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatting_item_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_chatting_item_title"
+        tools:text="3" />
+
+    <TextView
+        android:id="@+id/tv_chatting_item_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:text="N"
         android:textAppearance="@style/Typography.Caption01.SemiBold"
         android:textColor="@color/brand500"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_chatting_item_title"
         app:layout_constraintStart_toEndOf="@+id/tv_chatting_item_title"
         app:layout_constraintTop_toTopOf="@+id/tv_chatting_item_title" />
@@ -67,7 +89,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item"
+        app:layout_constraintStart_toEndOf="@+id/iv_chatting_item_bg"
         app:layout_constraintTop_toBottomOf="@+id/tv_chatting_item_time">
 
         <TextView
@@ -93,6 +115,7 @@
             android:textAppearance="@style/Typography.Body03.Medium"
             android:textColor="@color/grey0"
             android:textSize="10sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread_inside"

@@ -8,7 +8,7 @@ import com.catchmate.domain.model.enumclass.Club
 import com.catchmate.presentation.R
 
 object ResourceUtil {
-    private fun convertTeamLogo(clubId: Int): Int =
+    fun convertTeamLogo(clubId: Int): Int =
         when (clubId) {
             Club.NC.id -> R.drawable.vec_all_nc_dinos_logo
             Club.SAMSUNG.id -> R.drawable.vec_all_samsung_lions_logo

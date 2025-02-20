@@ -10,22 +10,27 @@
     android:paddingEnd="@dimen/main_grid_margin"
     android:paddingBottom="@dimen/tiny">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_chatting_participant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/temporary_profile" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:paddingRight="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/temporary_profile" />
 
     <TextView
         android:id="@+id/tv_chatting_participant_me_badge"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginLeft="10dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="4dp"
         android:background="@drawable/shape_chatting_me_badge_bg"
         android:gravity="center"
         android:text="@string/chatting_setting_me_badge"
         android:textAppearance="@style/Typography.Caption01.SemiBold"
         android:textColor="@color/grey500"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_chatting_participant"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +39,8 @@
         android:id="@+id/iv_chatting_participant_leader_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/xstiny"
+        android:paddingLeft="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_chatting_participant_me_badge"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +50,7 @@
         android:id="@+id/tv_chatting_participant_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/xstiny"
+        android:layout_marginStart="4dp"
         android:textAppearance="@style/Typography.Body02.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_chatting_participant_leader_badge"
@@ -61,6 +67,7 @@
         android:text="@string/chatting_setting_kick_out"
         android:textAppearance="@style/Typography.Caption01.Medium"
         android:textColor="@color/grey500"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

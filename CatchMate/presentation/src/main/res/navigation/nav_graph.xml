@@ -155,6 +155,9 @@
         <action
             android:id="@+id/action_chattingHomeFragment_to_chattingRoomFragment"
             app:destination="@id/chattingRoomFragment" />
+        <action
+            android:id="@+id/action_chattingHomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/chattingRoomFragment"
@@ -164,6 +167,9 @@
         <action
             android:id="@+id/action_chattingRoomFragment_to_chattingSettingFragment"
             app:destination="@id/chattingSettingFragment" />
+        <action
+            android:id="@+id/action_chattingRoomFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
