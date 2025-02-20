@@ -226,25 +226,27 @@ class ChattingRoomFragment : Fragment() {
 
     private fun initSendBtn() {
         binding.btnChattingRoomChatBoxSend.setOnClickListener {
-            val message = JSONObject().apply {
-                put("messageType", ChatMessageType.TALK.name)
-                put("content", binding.edtChattingRoomChatBox.text.toString())
-                put("senderId", userId)
-            }.toString()
+            val message =
+                JSONObject().apply {
+                    put("messageType", ChatMessageType.TALK.name)
+                    put("content", binding.edtChattingRoomChatBox.text.toString())
+                    put("senderId", userId)
+                }.toString()
 
-            chattingRoomViewModel.sendChat(
-                chatRoomId,
-                message,
-            ).subscribe ({ isSend ->
-                binding.edtChattingRoomChatBox.setText("")
-                if (isSend) {
-                    Log.d("Web Socket📬", "메시지 전달")
-                } else {
-                    Log.e("Web Socket😩", "메시지 전달 실패")
-                }
-            }, { error ->
-                Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
-            })
+            chattingRoomViewModel
+                .sendChat(
+                    chatRoomId,
+                    message,
+                ).subscribe({ isSend ->
+                    binding.edtChattingRoomChatBox.setText("")
+                    if (isSend) {
+                        Log.d("Web Socket📬", "메시지 전달")
+                    } else {
+                        Log.e("Web Socket😩", "메시지 전달 실패")
+                    }
+                }, { error ->
+                    Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
+                })
         }
     }
 
@@ -298,13 +300,14 @@ class ChattingRoomFragment : Fragment() {
                         ivSideSheetSettings.visibility = View.VISIBLE
                         ivSideSheetSettings.setOnClickListener {
                             // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id, 채팅방 id 넘김
-                            val bundle = Bundle().apply {
-                                putString("chattingRoomImage", info.chatRoomImage)
-                                putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
-                                putLong("loginUserId", userId)
-                                putLong("writerId", info.boardInfo.userInfo.userId)
-                                putLong("chatRoomId", chatRoomId)
-                            }
+                            val bundle =
+                                Bundle().apply {
+                                    putString("chattingRoomImage", info.chatRoomImage)
+                                    putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
+                                    putLong("loginUserId", userId)
+                                    putLong("writerId", info.boardInfo.userInfo.userId)
+                                    putLong("chatRoomId", chatRoomId)
+                                }
                             findNavController().navigate(R.id.action_chattingRoomFragment_to_chattingSettingFragment, bundle)
                             sideSheetDialog.dismiss()
                         }

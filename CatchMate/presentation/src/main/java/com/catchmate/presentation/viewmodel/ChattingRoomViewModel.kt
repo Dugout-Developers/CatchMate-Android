@@ -23,8 +23,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ChattingRoomViewModel
@@ -52,7 +52,7 @@ class ChattingRoomViewModel
         val chattingRoomInfo: LiveData<ChatRoomInfo>
             get() = _chattingRoomInfo
 
-        private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse> ()
+        private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
         val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
             get() = _deleteChattingRoomResponse
 
@@ -76,7 +76,10 @@ class ChattingRoomViewModel
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { disposables.add(it) }
 
-        fun sendChat(chatRoomId: Long, message: String): Observable<Boolean> = sendChatUseCase(chatRoomId, message)
+        fun sendChat(
+            chatRoomId: Long,
+            message: String,
+        ): Observable<Boolean> = sendChatUseCase(chatRoomId, message)
 
         override fun onCleared() {
             super.onCleared()
@@ -87,15 +90,16 @@ class ChattingRoomViewModel
             val currentList = _getChattingHistoryResponse.value?.chatMessageInfoList ?: emptyList()
             val updatedList = listOf(chatMessageInfo) + currentList
 
-            val updatedResponse = _getChattingHistoryResponse.value?.copy(
-                chatMessageInfoList = updatedList
-            ) ?: GetChattingHistoryResponse(
-                chatMessageInfoList = updatedList,
-                totalPages = 1,
-                totalElements = 1,
-                isFirst = true,
-                isLast = true,
-            )
+            val updatedResponse =
+                _getChattingHistoryResponse.value?.copy(
+                    chatMessageInfoList = updatedList,
+                ) ?: GetChattingHistoryResponse(
+                    chatMessageInfoList = updatedList,
+                    totalPages = 1,
+                    totalElements = 1,
+                    isFirst = true,
+                    isLast = true,
+                )
 
             _getChattingHistoryResponse.postValue(updatedResponse)
         }

@@ -89,15 +89,18 @@ object DateUtils {
     }
 
     fun formatLastChatTime(dateTime: String): String {
-        val formatter = DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
-            .optionalStart() // 소수점 이하가 있을 수도 있고 없을 수도 있음
-            .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true) // 최소 0자리, 최대 6자리
-            .optionalEnd()
-            .toFormatter()
-        val parsedTime = LocalDateTime.parse(dateTime, formatter)
-            .atZone(ZoneId.of("Asia/Seoul"))
-            .toInstant()
+        val formatter =
+            DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
+                .optionalStart() // 소수점 이하가 있을 수도 있고 없을 수도 있음
+                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true) // 최소 0자리, 최대 6자리
+                .optionalEnd()
+                .toFormatter()
+        val parsedTime =
+            LocalDateTime
+                .parse(dateTime, formatter)
+                .atZone(ZoneId.of("Asia/Seoul"))
+                .toInstant()
         val now = Instant.now()
         val duration = Duration.between(parsedTime, now)
 
@@ -120,8 +123,10 @@ object DateUtils {
 
     fun formatChatSendTime(dateTime: String): String {
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val parsedTime = ZonedDateTime.parse(dateTime, formatter)
-            .withZoneSameInstant(ZoneId.of("Asia/Seoul")) // 시스템 시간대로 변환
+        val parsedTime =
+            ZonedDateTime
+                .parse(dateTime, formatter)
+                .withZoneSameInstant(ZoneId.of("Asia/Seoul")) // 시스템 시간대로 변환
 
         val outputFormatter = DateTimeFormatter.ofPattern("a h:mm") // "오전 4:55" 형식
         return parsedTime.format(outputFormatter)

@@ -19,9 +19,9 @@ import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.repository.ChattingRepository
+import javax.inject.Inject
 import okhttp3.MultipartBody
 import org.json.JSONObject
-import javax.inject.Inject
 
 class ChattingRepositoryImpl
     @Inject
@@ -126,7 +126,13 @@ class ChattingRepositoryImpl
                 val response = chattingApi.deleteChattingCrewKickOut(chatRoomId, userId)
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
-                    val body = response.body()?.let { toDeleteChattingCrewKickOutResponse(it) } ?: throw NullPointerException("Null Response")
+                    val body =
+                        response
+                            .body()
+                            ?.let {
+                                toDeleteChattingCrewKickOutResponse(it)
+                            }
+                            ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

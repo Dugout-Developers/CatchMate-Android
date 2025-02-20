@@ -19,7 +19,7 @@ import com.catchmate.presentation.util.DateUtils.formatChatSendTime
 
 class ChatListAdapter(
     private val userId: Long,
-    private val chattingCrewList: List<GetUserProfileResponse>
+    private val chattingCrewList: List<GetUserProfileResponse>,
 ) : ListAdapter<ChatMessageInfo, RecyclerView.ViewHolder>(diffUtil) {
     inner class SendChatViewHolder(
         private val binding: ItemSendChatBinding,
@@ -38,7 +38,8 @@ class ChatListAdapter(
             val isLastMessage = absoluteAdapterPosition == currentList.lastIndex
             // 현재 메시지와 다음 메시지의 senderId가 같은지 비교
             val isSameSenderAsNext =
-                absoluteAdapterPosition < currentList.lastIndex && currentList[absoluteAdapterPosition + 1].senderId == chatMessageInfo.senderId
+                absoluteAdapterPosition < currentList.lastIndex &&
+                currentList[absoluteAdapterPosition + 1].senderId == chatMessageInfo.senderId
 
             if (isLastMessage || !isSameSenderAsNext) {
                 // 마지막 메시지(서버에서 주는 데이터를 역순으로 스크롤하게 출력했기 때문에 마지막 메시지인지 판단)이거나 다음 메시지와 보낸 사람이 다르면 프로필과 닉네임 표시
@@ -100,7 +101,7 @@ class ChatListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,
-                    )
+                    ),
                 )
 
             OTHER_CHAT ->
@@ -109,7 +110,7 @@ class ChatListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,
-                    )
+                    ),
                 )
 
             DATE ->
@@ -118,7 +119,7 @@ class ChatListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,
-                    )
+                    ),
                 )
 
             else ->
@@ -127,7 +128,7 @@ class ChatListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,
-                    )
+                    ),
                 )
         }
 
@@ -146,8 +147,12 @@ class ChatListAdapter(
     override fun getItemViewType(position: Int): Int =
         when (currentList[position].messageType) {
             ChatMessageType.TALK.name -> {
-                if (currentList[position].senderId == userId) MY_CHAT
-                else OTHER_CHAT
+                if (currentList[position].senderId == userId) {
+                    MY_CHAT
+                }
+                else {
+                    OTHER_CHAT
+                }
             }
             ChatMessageType.DATE.name -> DATE
             ChatMessageType.ENTER.name -> ENTER
@@ -155,17 +160,18 @@ class ChatListAdapter(
         }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<ChatMessageInfo>() {
-            override fun areItemsTheSame(
-                oldItem: ChatMessageInfo,
-                newItem: ChatMessageInfo,
-            ): Boolean = oldItem == newItem
+        val diffUtil =
+            object : DiffUtil.ItemCallback<ChatMessageInfo>() {
+                override fun areItemsTheSame(
+                    oldItem: ChatMessageInfo,
+                    newItem: ChatMessageInfo,
+                ): Boolean = oldItem == newItem
 
-            override fun areContentsTheSame(
-                oldItem: ChatMessageInfo,
-                newItem: ChatMessageInfo,
-            ): Boolean = oldItem == newItem
-        }
+                override fun areContentsTheSame(
+                    oldItem: ChatMessageInfo,
+                    newItem: ChatMessageInfo,
+                ): Boolean = oldItem == newItem
+            }
 
         private const val MY_CHAT = 1
         private const val OTHER_CHAT = 2

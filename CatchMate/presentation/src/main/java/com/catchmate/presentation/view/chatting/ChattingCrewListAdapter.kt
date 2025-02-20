@@ -64,7 +64,7 @@ class ChattingCrewListAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
-            )
+            ),
         )
 
     override fun onBindViewHolder(
@@ -75,16 +75,17 @@ class ChattingCrewListAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<GetUserProfileResponse>() {
-            override fun areItemsTheSame(
-                oldItem: GetUserProfileResponse,
-                newItem: GetUserProfileResponse
-            ): Boolean = oldItem == newItem
+        val diffUtil =
+            object : DiffUtil.ItemCallback<GetUserProfileResponse>() {
+                override fun areItemsTheSame(
+                    oldItem: GetUserProfileResponse,
+                    newItem: GetUserProfileResponse,
+                ): Boolean = oldItem == newItem
 
-            override fun areContentsTheSame(
-                oldItem: GetUserProfileResponse,
-                newItem: GetUserProfileResponse
-            ): Boolean  = oldItem == newItem
-        }
+                override fun areContentsTheSame(
+                    oldItem: GetUserProfileResponse,
+                    newItem: GetUserProfileResponse,
+                ): Boolean = oldItem == newItem
+            }
     }
 }

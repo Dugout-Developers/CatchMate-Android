@@ -22,7 +22,8 @@ class ChatWebSocketClient
                 .addInterceptor(loggingInterceptor)
                 .build()
 
-        val stompClient = StompClient(okHttpClient, intervalMillis).apply {
-            url = BuildConfig.SERVER_SOCKET_URL
-        }
-}
+        val stompClient =
+            StompClient(okHttpClient, intervalMillis).apply {
+                url = BuildConfig.SERVER_SOCKET_URL
+            }
+    }

@@ -13,7 +13,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ChatWebSocketModule {
     @Provides
-    fun provideChatWebSocketRepository(chatWebSocketRepositoryImpl: ChatWebSocketRepositoryImpl): ChatWebSocketRepository = chatWebSocketRepositoryImpl
+    fun provideChatWebSocketRepository(chatWebSocketRepositoryImpl: ChatWebSocketRepositoryImpl): ChatWebSocketRepository =
+        chatWebSocketRepositoryImpl
 
     @Provides
     @Singleton

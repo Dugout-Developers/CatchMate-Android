@@ -67,7 +67,7 @@ object ChattingMapper {
 
     fun toGetChattingCrewListResponse(dto: GetChattingCrewListResponseDTO): GetChattingCrewListResponse =
         GetChattingCrewListResponse(
-            userInfoList = dto.userInfoList.map { toGetUserProfileResponse(it) }
+            userInfoList = dto.userInfoList.map { toGetUserProfileResponse(it) },
         )
 
     fun toDeleteChattingRoomResponse(dto: DeleteChattingRoomResponseDTO): DeleteChattingRoomResponse =
