@@ -5,10 +5,10 @@ import com.catchmate.data.datasource.remote.ChattingService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.ChattingMapper.toChatRoomInfo
 import com.catchmate.data.mapper.ChattingMapper.toDeleteChattingCrewKickOutResponse
+import com.catchmate.data.mapper.ChattingMapper.toDeleteChattingRoomResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingCrewListResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingHistoryResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingRoomListResponse
-import com.catchmate.data.mapper.ChattingMapper.toDeleteChattingRoomResponse
 import com.catchmate.data.mapper.ChattingMapper.toPatchChattingRoomImageResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
@@ -19,9 +19,9 @@ import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.repository.ChattingRepository
-import javax.inject.Inject
 import okhttp3.MultipartBody
 import org.json.JSONObject
+import javax.inject.Inject
 
 class ChattingRepositoryImpl
     @Inject

@@ -227,11 +227,12 @@ class ChattingRoomFragment : Fragment() {
     private fun initSendBtn() {
         binding.btnChattingRoomChatBoxSend.setOnClickListener {
             val message =
-                JSONObject().apply {
-                    put("messageType", ChatMessageType.TALK.name)
-                    put("content", binding.edtChattingRoomChatBox.text.toString())
-                    put("senderId", userId)
-                }.toString()
+                JSONObject()
+                    .apply {
+                        put("messageType", ChatMessageType.TALK.name)
+                        put("content", binding.edtChattingRoomChatBox.text.toString())
+                        put("senderId", userId)
+                    }.toString()
 
             chattingRoomViewModel
                 .sendChat(

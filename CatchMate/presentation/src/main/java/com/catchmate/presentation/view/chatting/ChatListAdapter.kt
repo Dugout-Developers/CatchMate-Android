@@ -39,7 +39,7 @@ class ChatListAdapter(
             // 현재 메시지와 다음 메시지의 senderId가 같은지 비교
             val isSameSenderAsNext =
                 absoluteAdapterPosition < currentList.lastIndex &&
-                currentList[absoluteAdapterPosition + 1].senderId == chatMessageInfo.senderId
+                    currentList[absoluteAdapterPosition + 1].senderId == chatMessageInfo.senderId
 
             if (isLastMessage || !isSameSenderAsNext) {
                 // 마지막 메시지(서버에서 주는 데이터를 역순으로 스크롤하게 출력했기 때문에 마지막 메시지인지 판단)이거나 다음 메시지와 보낸 사람이 다르면 프로필과 닉네임 표시
@@ -149,8 +149,7 @@ class ChatListAdapter(
             ChatMessageType.TALK.name -> {
                 if (currentList[position].senderId == userId) {
                     MY_CHAT
-                }
-                else {
+                } else {
                     OTHER_CHAT
                 }
             }

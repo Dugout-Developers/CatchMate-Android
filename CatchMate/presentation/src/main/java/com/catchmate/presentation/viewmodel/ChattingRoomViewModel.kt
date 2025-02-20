@@ -11,10 +11,10 @@ import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.usecase.chatting.ConnectWebSocketUseCase
-import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
+import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.domain.usecase.chatting.SendChatUseCase
 import com.catchmate.domain.usecase.chatting.SubscribeChatRoomUseCase
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -23,8 +23,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ChattingRoomViewModel
