@@ -161,6 +161,7 @@ object BoardMapper {
             liftUpDate = dto.liftUpDate,
             userInfo = toUserInfo(dto.userInfo),
             buttonStatus = dto.buttonStatus,
+            chatRoomId = dto.chatRoomId,
             bookMarked = dto.bookMarked,
         )
 
