@@ -100,8 +100,10 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                             true
                         }
                         R.id.menuitem_post_update -> {
-                            val bundle = Bundle()
-                            bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                            val bundle = Bundle().apply {
+                                putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                                putBoolean("isEditMode", true)
+                            }
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             Log.e("UPDATE", "")
                             true

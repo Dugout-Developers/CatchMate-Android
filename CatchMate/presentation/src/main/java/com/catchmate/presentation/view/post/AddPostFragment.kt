@@ -42,6 +42,7 @@ class AddPostFragment :
     OnCheerTeamSelectedListener,
     OnPlaceSelectedListener {
     private val addPostViewModel: AddPostViewModel by viewModels()
+    private val isEditMode by lazy { arguments?.getBoolean("isEditMode") ?: false }
 
     override fun onViewCreated(
         view: View,
@@ -51,7 +52,6 @@ class AddPostFragment :
         addPostViewModel.setBoardInfo(getBoardInfo())
         addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
             info?.let {
-                isEditMode = true
                 setBoardData(it)
             }
             initHeader()
@@ -74,6 +74,11 @@ class AddPostFragment :
         initAgeChip()
         initTitleTextView()
 
+        if (!isEditMode) {
+            onBackPressedAction = {
+                showHandleWritingBoardDialog()
+            }
+        }
     }
 
     private fun setBoardData(response: GetBoardResponse) {
