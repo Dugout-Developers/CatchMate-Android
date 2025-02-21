@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_cheerStyleOnboardingFragment_to_signupCompleteFragment"
             app:destination="@id/signupCompleteFragment" />
+        <action
+            android:id="@+id/action_cheerStyleOnboardingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupCompleteFragment"
