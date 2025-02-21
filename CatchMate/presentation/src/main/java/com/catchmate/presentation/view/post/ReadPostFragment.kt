@@ -194,7 +194,11 @@ class ReadPostFragment : Fragment() {
                         // 신청 확인 버튼 클릭 시 내가 보낸 신청 목록 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
                         readPostViewModel.getRequestedEnrollList(boardId)
                     }
-                    EnrollState.VIEW_CHAT -> {} // 채팅 화면으로 이동
+                    EnrollState.VIEW_CHAT -> {
+                        val bundle = Bundle()
+                        bundle.putLong("chatRoomId", readPostViewModel.getBoardResponse.value?.chatRoomId!!)
+                        findNavController().navigate(R.id.action_readPostFragment_to_chattingRoomFragment, bundle)
+                    }
                     null -> {}
                 }
             }

@@ -187,6 +187,7 @@ object BoardMapper {
             gameInfo = toGameInfo(responseDTO.gameInfo),
             userInfo = toUserInfo(responseDTO.userInfo),
             buttonStatus = responseDTO.buttonStatus,
+            chatRoomId = responseDTO.chatRoomId,
             bookMarked = responseDTO.bookMarked,
         )
 

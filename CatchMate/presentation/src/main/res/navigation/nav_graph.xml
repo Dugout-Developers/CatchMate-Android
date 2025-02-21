@@ -99,6 +99,9 @@
         <action
             android:id="@+id/action_readPostFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
