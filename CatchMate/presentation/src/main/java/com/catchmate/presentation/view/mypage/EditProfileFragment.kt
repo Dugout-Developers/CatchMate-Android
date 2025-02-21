@@ -12,13 +12,10 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -32,6 +29,7 @@ import com.catchmate.presentation.interaction.OnEditProfileWatchStyleSelectedLis
 import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
 import com.catchmate.presentation.util.ImageUtils.convertBitmapToMultipart
 import com.catchmate.presentation.util.ImageUtils.convertUrlToMultipart
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.EditProfileViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,12 +41,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 @AndroidEntryPoint
 class EditProfileFragment :
-    Fragment(),
+    BaseFragment<FragmentEditProfileBinding>(FragmentEditProfileBinding::inflate),
     OnEditProfileTeamSelectedListener,
     OnEditProfileWatchStyleSelectedListener {
-    private var _binding: FragmentEditProfileBinding? = null
-    val binding get() = _binding!!
-
     private val editProfileViewModel: EditProfileViewModel by viewModels()
     private val handler = Handler(Looper.getMainLooper())
 
@@ -63,15 +58,6 @@ class EditProfileFragment :
         userInfo = getUserInfo()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -84,11 +70,6 @@ class EditProfileFragment :
         initBottomSheets()
         initNickNameView()
         initFooter()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getUserInfo(): GetUserProfileResponse? =

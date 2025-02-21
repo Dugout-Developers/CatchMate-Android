@@ -2,10 +2,7 @@ package com.catchmate.presentation.view.chatting
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -15,16 +12,14 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChattingHomeFragment :
-    Fragment(),
+    BaseFragment<FragmentChattingHomeBinding>(FragmentChattingHomeBinding::inflate),
     OnChattingRoomSelectedListener {
-    private var _binding: FragmentChattingHomeBinding? = null
-    val binding get() = _binding!!
-
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
     private var currentPage: Int = 0
     private var isLastPage = false
@@ -32,15 +27,6 @@ class ChattingHomeFragment :
     private var isApiCalled = false
     private var isFirstLoad = true
     private var chatRoomList: MutableList<ChatRoomInfo> = mutableListOf()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentChattingHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(
         view: View,
@@ -56,11 +42,6 @@ class ChattingHomeFragment :
             getChattingRoomList()
             isFirstLoad = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initHeader() {

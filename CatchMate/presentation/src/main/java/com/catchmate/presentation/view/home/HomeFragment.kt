@@ -2,10 +2,7 @@ package com.catchmate.presentation.view.home
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -18,20 +15,18 @@ import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPersonFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment :
-    Fragment(),
+    BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
     OnPostItemClickListener,
     OnDateFilterSelectedListener,
     OnClubFilterSelectedListener,
     OnPersonFilterSelectedListener {
-    private var _binding: FragmentHomeBinding? = null
-    val binding get() = _binding!!
-
     private val homeViewModel: HomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
@@ -45,15 +40,6 @@ class HomeFragment :
     private var gameStartDate: String? = null
     private var maxPerson: Int? = null
     private var preferredTeamIdList: Array<Int>? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(
         view: View,
@@ -73,11 +59,6 @@ class HomeFragment :
             getBoardList()
             isFirstLoad = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getTokens() {

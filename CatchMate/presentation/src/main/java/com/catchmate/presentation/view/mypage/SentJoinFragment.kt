@@ -1,10 +1,7 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,16 +10,14 @@ import com.catchmate.domain.model.enroll.EnrollInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSentJoinBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.SentJoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SentJoinFragment :
-    Fragment(),
+    BaseFragment<FragmentSentJoinBinding>(FragmentSentJoinBinding::inflate),
     OnPostItemClickListener {
-    private var _binding: FragmentSentJoinBinding? = null
-    val binding get() = _binding!!
-
     private val sentJoinViewModel: SentJoinViewModel by viewModels()
 
     private var currentPage: Int = 0
@@ -31,15 +26,6 @@ class SentJoinFragment :
     private var isApiCalled = false
     private var isFirstLoad = true
     private var enrollList: MutableList<EnrollInfo> = mutableListOf()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentSentJoinBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(
         view: View,
@@ -54,11 +40,6 @@ class SentJoinFragment :
             getRequestedEnrollList()
             isFirstLoad = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initHeader() {

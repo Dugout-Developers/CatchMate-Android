@@ -28,17 +28,15 @@ import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MyPostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPostFragment :
-    Fragment(),
+    BaseFragment<FragmentMyPostBinding>(FragmentMyPostBinding::inflate),
     OnPostItemClickListener {
-    private var _binding: FragmentMyPostBinding? = null
-    val binding get() = _binding!!
-
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val myPostViewModel: MyPostViewModel by viewModels()
 
@@ -54,15 +52,6 @@ class MyPostFragment :
         userInfo = getUserInfo()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentMyPostBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -74,11 +63,6 @@ class MyPostFragment :
         initViewModel()
         initRecyclerView()
         getMyPostList()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getUserInfo(): GetUserProfileResponse? =
