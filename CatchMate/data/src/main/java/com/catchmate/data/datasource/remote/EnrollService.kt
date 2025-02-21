@@ -5,6 +5,7 @@ import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
 import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
+import com.catchmate.data.dto.enroll.GetRequestedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
@@ -34,6 +35,11 @@ interface EnrollService {
     suspend fun patchEnrollAccept(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollAcceptResponseDTO?>
+
+    @GET("enrolls/{boardId}/description")
+    suspend fun getRequestedEnroll(
+        @Path("boardId") boardId: Long,
+    ): Response<GetRequestedEnrollResponseDTO?>
 
     @GET("enrolls/request")
     suspend fun getRequestedEnrollList(

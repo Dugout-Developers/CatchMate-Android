@@ -4,12 +4,14 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.EnrollService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.EnrollMapper
+import com.catchmate.data.mapper.EnrollMapper.toGetRequestedEnrollResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -80,6 +82,23 @@ class EnrollRepositoryImpl
                                 EnrollMapper.toPatchEnrollAcceptResponse(responseBody)
                             }
                             ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("EnrollRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun getRequestedEnroll(boardId: Long): Result<GetRequestedEnrollResponse> =
+            try {
+                val response = enrollApi.getRequestedEnroll(boardId)
+                if (response.isSuccessful) {
+                    Log.d("EnrollRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { toGetRequestedEnrollResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
