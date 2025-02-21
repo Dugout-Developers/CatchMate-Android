@@ -35,7 +35,7 @@ class ChattingGameInfoView(
         val time = typedArray.getText(R.styleable.ChattingGameInfoView_chattingGameInfoTimeText)
         val place = typedArray.getText(R.styleable.ChattingGameInfoView_chattingGameInfoPlaceText)
         val homeTeamImage = typedArray.getResourceId(R.styleable.ChattingGameInfoView_chattingGameInfoHomeTeamImage, 0)
-        val awayTeamImage = typedArray.getResourceId(R.styleable.ChattingGameInfoView_chattingGameInfoHomeTeamImage, 0)
+        val awayTeamImage = typedArray.getResourceId(R.styleable.ChattingGameInfoView_chattingGameInfoAwayTeamImage, 0)
 
         binding.tvChattingGameInfoDate.text = date
         binding.tvChattingGameInfoTime.text = time
