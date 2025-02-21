@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -47,6 +48,11 @@ class ChattingHomeFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFragmentResultListener("deleteChattingRoomResultKey") { _, bundle ->
+            val deletedChatRoomId = bundle.getLong("chatRoomId")
+            deleteChatRoom(deletedChatRoomId)
+        }
 
         initHeader()
         initViewModel()
@@ -136,6 +142,12 @@ class ChattingHomeFragment :
         isLoading = true
         chattingHomeViewModel.getChattingRoomList(currentPage)
         isApiCalled = true
+    }
+
+    private fun deleteChatRoom(chatRoomId: Long) {
+        chatRoomList = chatRoomList.filter { it.chatRoomId != chatRoomId }.toMutableList()
+        val adapter = binding.rvChattingHome.adapter as ChattingRoomListAdapter
+        adapter.updateList(chatRoomList)
     }
 
     override fun onChattingRoomSelected(chatRoomId: Long) {

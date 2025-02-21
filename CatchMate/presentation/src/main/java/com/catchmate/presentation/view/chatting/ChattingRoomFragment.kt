@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -143,6 +145,7 @@ class ChattingRoomFragment : Fragment() {
             response?.let {
                 if (it.state) {
                     Log.d("채팅방 나가기 성공", "나가기 성공")
+                    setFragmentResult("deleteChattingRoomResultKey", bundleOf("chatRoomId" to chatRoomId))
                     findNavController().popBackStack()
                 } else {
                     Log.e("채팅방 오류", "나가기 실패")
