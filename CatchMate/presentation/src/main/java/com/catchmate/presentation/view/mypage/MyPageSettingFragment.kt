@@ -34,10 +34,16 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
     }
 
     private fun initMenu() {
-        binding.tvMyPageSettingUserInfo.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("email", email)
-            findNavController().navigate(R.id.action_myPageSettingFragment_to_accountInfoFragment, bundle)
+        binding.apply {
+            tvMyPageSettingUserInfo.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("email", email)
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_accountInfoFragment, bundle)
+            }
+            tvMyPageSettingInformation.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_informationFragment)
+            }
         }
+
     }
 }

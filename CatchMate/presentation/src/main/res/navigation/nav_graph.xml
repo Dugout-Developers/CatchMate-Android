@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_myPostFragment"
             app:destination="@id/myPostFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_informationFragment"
+            app:destination="@id/informationFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -202,6 +205,9 @@
         <action
             android:id="@+id/action_myPageSettingFragment_to_notificationSettingFragment"
             app:destination="@id/notificationSettingFragment" />
+        <action
+            android:id="@+id/action_myPageSettingFragment_to_informationFragment"
+            app:destination="@id/informationFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountInfoFragment"
@@ -222,4 +228,9 @@
         android:name="com.catchmate.presentation.view.mypage.ReceivedJoinFragment"
         android:label="fragment_received_join"
         tools:layout="@layout/fragment_received_join" />
+    <fragment
+        android:id="@+id/informationFragment"
+        android:name="com.catchmate.presentation.view.mypage.InformationFragment"
+        android:label="fragment_information"
+        tools:layout="@layout/fragment_information" />
 </navigation>

@@ -111,6 +111,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 bundle.putInt("newCount", myPageViewModel.newCount.value?.newEnrollCount ?: 0)
                 findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment, bundle)
             }
+            tvMyPageInformation.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_informationFragment)
+            }
         }
     }
 }
