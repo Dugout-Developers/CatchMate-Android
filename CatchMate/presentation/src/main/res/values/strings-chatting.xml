@@ -11,4 +11,6 @@
     <string name="chatting_start_message">채팅을 시작해보세요</string>
     <string name="chatting_leave_dialog_title">채팅방을 나갈까요?</string>
     <string name="chatting_leave_dialog_positive_button">나가기</string>
+
+    <string name="chatting_retry_fail">서버에 연결할 수 없습니다. 나중에 다시 시도해주세요.</string>
 </resources>
