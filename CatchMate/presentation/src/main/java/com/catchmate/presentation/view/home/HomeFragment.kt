@@ -46,7 +46,7 @@ class HomeFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-
+        enableDoubleBackPressedExit = true
         getTokens()
         initViewModel()
         initHeader()

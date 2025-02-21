@@ -26,6 +26,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        enableDoubleBackPressedExit = true
         initHeader()
         initViewModel()
         initViews()

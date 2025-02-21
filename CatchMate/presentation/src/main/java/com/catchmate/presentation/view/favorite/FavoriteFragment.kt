@@ -38,6 +38,7 @@ class FavoriteFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        enableDoubleBackPressedExit = true
         initHeader()
         initViewModel()
         initRecyclerView()

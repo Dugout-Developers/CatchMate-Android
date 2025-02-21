@@ -23,6 +23,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        enableDoubleBackPressedExit = true
         initViewModel()
         initKakaoLoginBtn()
         initNaverLoginBtn()

@@ -33,7 +33,7 @@ class ChattingHomeFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-
+        enableDoubleBackPressedExit = true
         initHeader()
         initViewModel()
         initRecyclerView()
