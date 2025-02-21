@@ -20,8 +20,10 @@
         <activity
             android:name="com.catchmate.presentation.view.home.MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
-            tools:replace="android:exported">
+            tools:replace="android:exported"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
