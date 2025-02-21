@@ -13,6 +13,7 @@ class SignupCompleteFragment : BaseFragment<FragmentSignupCompleteBinding>(Fragm
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        enableDoubleBackPressedExit = true
         initFooterButton()
     }
 
