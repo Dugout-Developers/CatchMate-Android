@@ -367,14 +367,7 @@ class AddPostFragment :
         addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("boardEditResponse", response.boardId.toString())
-                val bundle = Bundle()
-                bundle.putLong("boardId", response.boardId)
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.addPostFragment, true)
-                        .build()
-                findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
+                findNavController().popBackStack()
             }
         }
     }
@@ -591,6 +584,7 @@ class AddPostFragment :
                             tempBoard.gameInfo,
                             tempBoard.userInfo,
                             "",
+                            -1L,
                             false,
                         )
                     addPostViewModel.setBoardInfo(board)
