@@ -210,6 +210,12 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
             isWriter = response.userInfo.userId == userId
+            if (response.maxPerson == response.currentPerson) {
+                binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
+                    text = getString(R.string.post_register_closed)
+                    isEnabled = false
+                }
+            }
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
