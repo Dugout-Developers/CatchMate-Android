@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -24,6 +21,7 @@ import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -33,10 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class ChattingRoomFragment : Fragment() {
-    private var _binding: FragmentChattingRoomBinding? = null
-    val binding get() = _binding!!
-
+class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var chatRoomId: Long = -1L
@@ -47,15 +42,6 @@ class ChattingRoomFragment : Fragment() {
         super.onCreate(savedInstanceState)
         chatRoomId = getChatRoomId()
         Log.e("chatRoomId", chatRoomId.toString())
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentChattingRoomBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(
@@ -74,7 +60,6 @@ class ChattingRoomFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         chattingRoomViewModel.disposables.dispose()
-        _binding = null
     }
 
     private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L

@@ -2,20 +2,15 @@ package com.catchmate.presentation.view.onboarding
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.enumclass.Club
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
+import com.catchmate.presentation.view.base.BaseFragment
 
-class TeamOnboardingFragment : Fragment() {
-    private var _binding: FragmentTeamOnboardingBinding? = null
-    val binding get() = _binding!!
-
+class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(FragmentTeamOnboardingBinding::inflate) {
     private lateinit var userInfo: PostUserAdditionalInfoRequest
 
     private var selectedButton: TeamButtonView? = null
@@ -23,15 +18,6 @@ class TeamOnboardingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userInfo = getUserInfo()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentTeamOnboardingBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(
@@ -43,11 +29,6 @@ class TeamOnboardingFragment : Fragment() {
         initHeader()
         initFooterBtn()
         initTeamButtons()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initTitle() {
