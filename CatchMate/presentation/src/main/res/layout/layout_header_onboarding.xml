@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="44dp"
     android:background="@color/grey0">
 
     <ImageButton
         android:id="@+id/imgbtn_onboarding_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="@dimen/main_grid_margin"
-        android:layout_marginTop="@dimen/tab_bar_grid_margin"
-        android:layout_marginBottom="@dimen/tab_bar_grid_margin"
         android:background="@null"
         android:src="@drawable/vec_all_left_arrow_20dp"
         app:layout_constraintBottom_toBottomOf="parent"

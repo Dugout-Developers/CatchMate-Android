@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="44dp"
     android:background="@color/grey0">
 
     <TextView
@@ -11,8 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/main_grid_margin"
-        android:layout_marginTop="@dimen/gutter"
-        android:layout_marginBottom="@dimen/gutter"
         android:textAppearance="@style/Typography.HeadLine03.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,9 +24,9 @@
         android:layout_marginRight="@dimen/tiny"
         android:background="@null"
         android:padding="10dp"
-        app:tint="@color/grey700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vec_chatting_setting_20dp" />
+        app:srcCompat="@drawable/vec_chatting_setting_20dp"
+        app:tint="@color/grey700" />
 </androidx.constraintlayout.widget.ConstraintLayout>
