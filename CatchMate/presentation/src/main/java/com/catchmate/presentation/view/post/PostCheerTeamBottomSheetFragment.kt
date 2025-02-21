@@ -83,15 +83,18 @@ class PostCheerTeamBottomSheetFragment(
     }
 
     private fun initFooter() {
-        binding.layoutFooterPostCheerTeam.btnFooterOne.setOnClickListener {
-            cheerTeamSelectedListener?.onCheerTeamSelected(
-                selectedButton
-                    ?.binding
-                    ?.tvTeamToggleCheckButton
-                    ?.text
-                    .toString(),
-            )
-            dismiss()
+        binding.layoutFooterPostCheerTeam.btnFooterOne.apply {
+            text = getString(R.string.complete)
+            setOnClickListener {
+                cheerTeamSelectedListener?.onCheerTeamSelected(
+                    selectedButton
+                        ?.binding
+                        ?.tvTeamToggleCheckButton
+                        ?.text
+                        .toString(),
+                )
+                dismiss()
+            }
         }
     }
 
