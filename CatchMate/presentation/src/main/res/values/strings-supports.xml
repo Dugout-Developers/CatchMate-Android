@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="information_title">정보</string>
     <string name="information_app_name">CatchMate</string>
     <string name="information_library"><u>Open Source Library</u></string>
 </resources>

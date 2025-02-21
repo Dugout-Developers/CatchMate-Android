@@ -1,19 +1,33 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
+import com.catchmate.presentation.databinding.FragmentInformationBinding
+import com.catchmate.presentation.view.base.BaseFragment
 
-class InformationFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+class InformationFragment : BaseFragment<FragmentInformationBinding>(FragmentInformationBinding::inflate) {
+    override fun onViewCreated(
+        view: View,
         savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_information, container, false)
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            layoutHeaderInformation.apply {
+                imgbtnHeaderTextBack.setOnClickListener {
+                    findNavController().popBackStack()
+                }
+                tvHeaderTextTitle.text = getString(R.string.information_title)
+            }
+            tvAppVersionInformation.text = "v.1.0.0" // 추후 버전 적용
+            tvLibraryHyperlinkInformation.setOnClickListener {
+                // 관련 링크 걸기
+            }
+        }
     }
 }
