@@ -8,6 +8,7 @@ import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
 import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
+import com.catchmate.data.dto.enroll.GetRequestedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
@@ -23,6 +24,7 @@ import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -53,6 +55,12 @@ object EnrollMapper {
         PatchEnrollAcceptResponse(
             enrollId = responseDTO.enrollId,
             acceptStatus = responseDTO.acceptStatus,
+        )
+
+    fun toGetRequestedEnrollResponse(dto: GetRequestedEnrollResponseDTO): GetRequestedEnrollResponse =
+        GetRequestedEnrollResponse(
+            enrollId = dto.enrollId,
+            description = dto.description,
         )
 
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =

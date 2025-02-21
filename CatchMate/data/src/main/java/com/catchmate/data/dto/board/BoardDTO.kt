@@ -16,5 +16,6 @@ data class BoardDTO(
     val liftUpDate: String,
     val userInfo: UserInfoDTO,
     val buttonStatus: String?,
+    val chatRoomId: Long,
     val bookMarked: Boolean,
 )

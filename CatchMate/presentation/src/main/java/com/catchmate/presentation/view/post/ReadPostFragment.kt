@@ -191,10 +191,14 @@ class ReadPostFragment : Fragment() {
                 when (readPostViewModel.boardEnrollState.value) {
                     EnrollState.APPLY -> showEnrollDialog()
                     EnrollState.APPLIED -> {
-                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 목록 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
-                        readPostViewModel.getRequestedEnrollList(boardId)
+                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
+                        readPostViewModel.getRequestedEnroll(boardId)
                     }
-                    EnrollState.VIEW_CHAT -> {} // 채팅 화면으로 이동
+                    EnrollState.VIEW_CHAT -> {
+                        val bundle = Bundle()
+                        bundle.putLong("chatRoomId", readPostViewModel.getBoardResponse.value?.chatRoomId!!)
+                        findNavController().navigate(R.id.action_readPostFragment_to_chattingRoomFragment, bundle)
+                    }
                     null -> {}
                 }
             }
@@ -206,6 +210,12 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
             isWriter = response.userInfo.userId == userId
+            if (response.maxPerson == response.currentPerson) {
+                binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
+                    text = getString(R.string.post_register_closed)
+                    isEnabled = false
+                }
+            }
         }
 
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
@@ -251,8 +261,8 @@ class ReadPostFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { enrollInfo ->
-            if (enrollInfo != null) {
+        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
                 showEnrollRequestDialog()
             }
         }
@@ -496,15 +506,16 @@ class ReadPostFragment : Fragment() {
 
         dialogBinding.apply {
             val enrollInfo = readPostViewModel.getRequestedEnroll.value!!
+            val boardInfo = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(enrollInfo.boardInfo.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(boardInfo.gameInfo.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = enrollInfo.boardInfo.gameInfo.location
+            tvApplicationDetailDialogPlace.text = boardInfo.gameInfo.location
 
-            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClubId == enrollInfo.boardInfo.cheerClubId
+            val isCheerTeam = boardInfo.gameInfo.homeClubId == boardInfo.cheerClubId
             setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.homeClubId,
+                boardInfo.gameInfo.homeClubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -512,7 +523,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.awayClubId,
+                boardInfo.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

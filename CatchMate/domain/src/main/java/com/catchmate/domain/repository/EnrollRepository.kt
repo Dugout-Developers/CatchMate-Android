@@ -5,6 +5,7 @@ import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
+import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -19,6 +20,8 @@ interface EnrollRepository {
     suspend fun patchEnrollReject(enrollId: Long): Result<PatchEnrollRejectResponse>
 
     suspend fun patchEnrollAccept(enrollId: Long): Result<PatchEnrollAcceptResponse>
+
+    suspend fun getRequestedEnroll(boardId: Long): Result<GetRequestedEnrollResponse>
 
     suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse>
 

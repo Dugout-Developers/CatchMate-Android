@@ -19,5 +19,6 @@ data class Board(
     val liftUpDate: String,
     val userInfo: UserInfo,
     val buttonStatus: String?,
+    val chatRoomId: Long,
     val bookMarked: Boolean,
 ) : Parcelable
