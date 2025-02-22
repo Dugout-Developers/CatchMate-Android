@@ -1,5 +1,6 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
@@ -8,6 +9,7 @@ import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
+import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.FavoriteClub
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
@@ -100,5 +102,10 @@ object UserMapper {
             totalElements = dto.totalElements,
             isFirst = dto.isFirst,
             isLast = dto.isLast,
+        )
+
+    fun toDeleteBlockedUserResponse(dto: DeleteBlockedUserResponseDTO): DeleteBlockedUserResponse =
+        DeleteBlockedUserResponse(
+            state = dto.state,
         )
 }

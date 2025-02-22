@@ -1,6 +1,7 @@
 package com.catchmate.domain.repository
 
 import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -29,4 +30,6 @@ interface UserRepository {
         alarmType: AlarmType,
         isEnabled: String,
     ): Result<PatchUserAlarmResponse>
+
+    suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse>
 }
