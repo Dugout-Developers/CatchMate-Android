@@ -106,6 +106,9 @@
         <action
             android:id="@+id/action_readPostFragment_to_chattingRoomFragment"
             app:destination="@id/chattingRoomFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
@@ -145,6 +148,9 @@
         <action
             android:id="@+id/action_myPostFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_myPostFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -270,4 +276,9 @@
         android:name="com.catchmate.presentation.view.mypage.BlockedSettingFragment"
         android:label="fragment_blocked_setting"
         tools:layout="@layout/fragment_blocked_setting" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.catchmate.presentation.view.support.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
 </navigation>

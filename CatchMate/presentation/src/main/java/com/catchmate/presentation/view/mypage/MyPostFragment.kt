@@ -135,6 +135,12 @@ class MyPostFragment :
                             true
                         }
                         R.id.menuItem_my_post_report -> { // 신고
+                            val bundle =
+                                Bundle().apply {
+                                    putString("nickname", userInfo?.nickName!!)
+                                    putLong("userId", userInfo?.userId!!)
+                                }
+                            findNavController().navigate(R.id.action_myPostFragment_to_reportFragment, bundle)
                             true
                         }
                         else -> false
