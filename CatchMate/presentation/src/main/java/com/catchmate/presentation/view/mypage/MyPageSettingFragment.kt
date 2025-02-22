@@ -44,6 +44,9 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
                 bundle.putString("nickname", nickname)
                 findNavController().navigate(R.id.action_myPageSettingFragment_to_serviceCenterFragment)
             }
+            tvMyPageSettingBlockedSetting.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_blockedSettingFragment)
+            }
         }
 
     }

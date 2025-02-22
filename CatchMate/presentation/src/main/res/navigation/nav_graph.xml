@@ -218,6 +218,9 @@
         <action
             android:id="@+id/action_myPageSettingFragment_to_serviceCenterFragment"
             app:destination="@id/serviceCenterFragment" />
+        <action
+            android:id="@+id/action_myPageSettingFragment_to_blockedSettingFragment"
+            app:destination="@id/blockedSettingFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountInfoFragment"
@@ -262,4 +265,9 @@
         android:name="com.catchmate.presentation.view.support.ServiceCenterAnswerFragment"
         android:label="fragment_service_center_answer"
         tools:layout="@layout/fragment_service_center_answer" />
+    <fragment
+        android:id="@+id/blockedSettingFragment"
+        android:name="com.catchmate.presentation.view.mypage.BlockedSettingFragment"
+        android:label="fragment_blocked_setting"
+        tools:layout="@layout/fragment_blocked_setting" />
 </navigation>
