@@ -236,12 +236,12 @@
         tools:layout="@layout/fragment_received_join" />
     <fragment
         android:id="@+id/informationFragment"
-        android:name="com.catchmate.presentation.view.mypage.InformationFragment"
+        android:name="com.catchmate.presentation.view.support.InformationFragment"
         android:label="fragment_information"
         tools:layout="@layout/fragment_information" />
     <fragment
         android:id="@+id/serviceCenterFragment"
-        android:name="com.catchmate.presentation.view.mypage.ServiceCenterFragment"
+        android:name="com.catchmate.presentation.view.support.ServiceCenterFragment"
         android:label="fragment_service_center"
         tools:layout="@layout/fragment_service_center" >
         <action
@@ -250,7 +250,7 @@
     </fragment>
     <fragment
         android:id="@+id/serviceCenterInquiryFragment"
-        android:name="com.catchmate.presentation.view.mypage.ServiceCenterInquiryFragment"
+        android:name="com.catchmate.presentation.view.support.ServiceCenterInquiryFragment"
         android:label="fragment_service_center_inquiry"
         tools:layout="@layout/fragment_service_center_inquiry" />
 </navigation>

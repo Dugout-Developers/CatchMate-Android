@@ -1,4 +1,4 @@
-package com.catchmate.presentation.view.mypage
+package com.catchmate.presentation.view.support
 
 import android.os.Bundle
 import android.view.View

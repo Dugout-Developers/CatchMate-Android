@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey0"
-    tools:context=".view.mypage.ServiceCenterFragment">
+    tools:context=".view.support.ServiceCenterFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_service_center"
