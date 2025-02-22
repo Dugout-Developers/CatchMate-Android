@@ -14,4 +14,5 @@
     <string name="service_center_inquiry_title">자유롭게 적어주세요</string>
     <string name="service_center_inquiry_content_letter_count_limit">/500</string>
     <string name="service_center_inquiry_apply_btn">문의하기</string>
+    <string name="service_center_inquiry_complete">문의가 정상적으로 등록되었습니다.</string>
 </resources>
