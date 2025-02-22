@@ -66,7 +66,11 @@
         android:id="@+id/notificationFragment"
         android:name="com.catchmate.presentation.view.notification.NotificationFragment"
         android:label="fragment_notification"
-        tools:layout="@layout/fragment_notification" />
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_serviceCenterAnswerFragment"
+            app:destination="@id/serviceCenterAnswerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.catchmate.presentation.view.post.AddPostFragment"
@@ -253,4 +257,9 @@
         android:name="com.catchmate.presentation.view.support.ServiceCenterInquiryFragment"
         android:label="fragment_service_center_inquiry"
         tools:layout="@layout/fragment_service_center_inquiry" />
+    <fragment
+        android:id="@+id/serviceCenterAnswerFragment"
+        android:name="com.catchmate.presentation.view.support.ServiceCenterAnswerFragment"
+        android:label="fragment_service_center_answer"
+        tools:layout="@layout/fragment_service_center_answer" />
 </navigation>
