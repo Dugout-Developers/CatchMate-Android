@@ -31,4 +31,9 @@
     <string name="report_content_hint">신고 사유에 대한 설명이 필요한 경우 입력해주세요</string>
     <string name="report_toast">신고 완료되었어요</string>
     <string name="report_btn">신고</string>
+
+    <string name="terms_and_policies_title">약관 및 정책</string>
+    <string name="terms_and_policies_personal_info">개인 정보 처리 방침</string>
+    <string name="terms_and_policies_service_policy">서비스 이용 약관</string>
+    <string name="terms_and_policies_community_guide">커뮤니티 이용 가이드</string>
 </resources>

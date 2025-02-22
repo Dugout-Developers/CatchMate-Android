@@ -47,6 +47,9 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
             tvMyPageSettingBlockedSetting.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageSettingFragment_to_blockedSettingFragment)
             }
+            tvMyPageSettingTemrsAndConditions.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_termsAndPoliciesFragment)
+            }
         }
 
     }

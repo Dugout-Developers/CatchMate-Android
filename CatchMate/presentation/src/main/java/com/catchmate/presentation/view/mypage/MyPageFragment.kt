@@ -122,6 +122,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 bundle.putString("nickname", myPageViewModel.userProfile.value?.nickName)
                 findNavController().navigate(R.id.action_myPageFragment_to_serviceCenterFragment, bundle)
             }
+            tvMyPageTermsAndConditions.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_termsAndPoliciesFragment)
+            }
         }
     }
 }
