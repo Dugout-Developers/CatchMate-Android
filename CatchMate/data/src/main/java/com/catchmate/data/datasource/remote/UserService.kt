@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -27,6 +28,9 @@ interface UserService {
     suspend fun getUserProfileById(
         @Path("profileUserId") profileUserId: Long,
     ): Response<GetUserProfileByIdResponseDTO?>
+
+    @GET("users/block")
+    suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
 
     @POST("users/additional-info")
     suspend fun postUserAdditionalInfo(
