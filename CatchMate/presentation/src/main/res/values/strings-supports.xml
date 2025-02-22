@@ -3,4 +3,15 @@
     <string name="information_title">정보</string>
     <string name="information_app_name">CatchMate</string>
     <string name="information_library"><u>Open Source Library</u></string>
+
+    <string name="service_center_title">%s님,\n무엇을 도와드릴까요?</string>
+    <string name="service_center_account_and_login">계정, 로그인 관련</string>
+    <string name="service_center_board">게시글 관련</string>
+    <string name="service_center_chatting">채팅 관련</string>
+    <string name="service_center_user">유저 관련</string>
+    <string name="service_center_etc">기타</string>
+
+    <string name="service_center_inquiry_title">자유롭게 적어주세요</string>
+    <string name="service_center_inquiry_content_letter_count_limit">/500</string>
+    <string name="service_center_inquiry_apply_btn">문의하기</string>
 </resources>

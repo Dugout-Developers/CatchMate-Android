@@ -126,6 +126,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_informationFragment"
             app:destination="@id/informationFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_serviceCenterFragment"
+            app:destination="@id/serviceCenterFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -208,6 +211,9 @@
         <action
             android:id="@+id/action_myPageSettingFragment_to_informationFragment"
             app:destination="@id/informationFragment" />
+        <action
+            android:id="@+id/action_myPageSettingFragment_to_serviceCenterFragment"
+            app:destination="@id/serviceCenterFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountInfoFragment"
@@ -233,4 +239,18 @@
         android:name="com.catchmate.presentation.view.mypage.InformationFragment"
         android:label="fragment_information"
         tools:layout="@layout/fragment_information" />
+    <fragment
+        android:id="@+id/serviceCenterFragment"
+        android:name="com.catchmate.presentation.view.mypage.ServiceCenterFragment"
+        android:label="fragment_service_center"
+        tools:layout="@layout/fragment_service_center" >
+        <action
+            android:id="@+id/action_serviceCenterFragment_to_serviceCenterInquiryFragment"
+            app:destination="@id/serviceCenterInquiryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/serviceCenterInquiryFragment"
+        android:name="com.catchmate.presentation.view.mypage.ServiceCenterInquiryFragment"
+        android:label="fragment_service_center_inquiry"
+        tools:layout="@layout/fragment_service_center_inquiry" />
 </navigation>

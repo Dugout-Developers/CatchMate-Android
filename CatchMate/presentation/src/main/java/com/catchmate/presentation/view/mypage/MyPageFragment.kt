@@ -36,8 +36,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
             imgbtnSettingHeaderSetting.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString("email", myPageViewModel.userProfile.value?.email)
+                val bundle =
+                    Bundle().apply {
+                        putString("email", myPageViewModel.userProfile.value?.email)
+                        putString("nickname", myPageViewModel.userProfile.value?.nickName)
+                    }
                 findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }
         }
@@ -113,6 +116,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             }
             tvMyPageInformation.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageFragment_to_informationFragment)
+            }
+            tvMyPageServiceCenter.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("nickname", myPageViewModel.userProfile.value?.nickName)
+                findNavController().navigate(R.id.action_myPageFragment_to_serviceCenterFragment, bundle)
             }
         }
     }
