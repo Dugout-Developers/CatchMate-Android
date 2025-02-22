@@ -1,60 +1,105 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.presentation.R
+import com.catchmate.presentation.databinding.FragmentBlockedSettingBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
+import com.catchmate.presentation.interaction.OnBlockedUserSelectedListener
+import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.viewmodel.BlockedSettingViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class BlockedSettingFragment :
+    BaseFragment<FragmentBlockedSettingBinding>(FragmentBlockedSettingBinding::inflate),
+    OnBlockedUserSelectedListener {
+    private lateinit var blockedUserAdapter: BlockedUserListAdapter
+    private val blockedSettingViewModel: BlockedSettingViewModel by viewModels()
+    private var deletedUserId = -1L
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BlockedSettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class BlockedSettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+        blockedSettingViewModel.getBlockedUserList()
+        initView()
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private fun initView() {
+        binding.apply {
+            layoutHeaderBlockedSetting.tvHeaderTextTitle.text = getString(R.string.mypage_setting_block_setting)
+            layoutHeaderBlockedSetting.imgbtnHeaderTextBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            blockedUserAdapter = BlockedUserListAdapter(this@BlockedSettingFragment)
+            rvBlockedUserListBlockedSetting.apply {
+                adapter = blockedUserAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blocked_setting, container, false)
+    private fun initViewModel() {
+        blockedSettingViewModel.getBlockedUserListResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                blockedUserAdapter.submitList(response.userInfoList)
+            }
+        }
+        blockedSettingViewModel.deleteBlockedUserResponse.observe(viewLifecycleOwner) { response ->
+            if (response.state) {
+                blockedSettingViewModel.deleteUserFromList(deletedUserId)
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BlockedSettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BlockedSettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onBlockedUserSelected(
+        pos: Int,
+        userId: Long,
+        nickname: String,
+    ) {
+        deletedUserId = userId
+        showBlockDeleteDialog(userId, nickname)
+    }
+
+    private fun showBlockDeleteDialog(
+        userId: Long,
+        nickname: String,
+    ) {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            val title = getString(R.string.mypage_setting_block_dialog_title)
+            tvSimpleDialogTitle.text = title.format(nickname)
+            tvSimpleDialogNegative.apply {
+                setText(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
                 }
             }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.mypage_setting_block_dialog_pov_btn)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    blockedSettingViewModel.deleteBlockedUser(userId)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 }

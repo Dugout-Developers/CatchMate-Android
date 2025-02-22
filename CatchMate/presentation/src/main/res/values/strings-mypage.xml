@@ -28,6 +28,7 @@
     <string name="mypage_setting_notification_setting_event">이벤트 알림</string>
 
     <string name="mypage_setting_block_setting">차단 설정</string>
+    <string name="mypage_setting_unblock">차단해제</string>
     <string name="mypage_setting_block_dialog_title">\'%s\'\n차단을 해제할까요?</string>
     <string name="mypage_setting_block_dialog_pov_btn">해제</string>
     
