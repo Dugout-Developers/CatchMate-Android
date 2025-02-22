@@ -8,6 +8,7 @@ import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
+import com.catchmate.data.dto.user.PostUserBlockResponseDTO
 import com.catchmate.domain.model.enumclass.AlarmType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,6 +34,11 @@ interface UserService {
 
     @GET("users/block")
     suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
+
+    @POST("users/block/{blockedUserId}")
+    suspend fun postUserBlock(
+        @Path("blockedUserId") blockedUserId: Long,
+    ): Response<PostUserBlockResponseDTO?>
 
     @POST("users/additional-info")
     suspend fun postUserAdditionalInfo(

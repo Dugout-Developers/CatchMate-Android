@@ -6,6 +6,7 @@ import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
 import com.catchmate.data.mapper.UserMapper.toDeleteBlockedUserResponse
 import com.catchmate.data.mapper.UserMapper.toGetBlockedUserListResponse
+import com.catchmate.data.mapper.UserMapper.toPostUserBlockResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
@@ -16,6 +17,7 @@ import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.user.PostUserBlockResponse
 import com.catchmate.domain.repository.UserRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -81,6 +83,23 @@ class UserRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { toGetBlockedUserListResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("UserRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse> =
+            try {
+                val response = userApi.postUserBlock(blockedUserId)
+                if (response.isSuccessful) {
+                    Log.d("UserRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { toPostUserBlockResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

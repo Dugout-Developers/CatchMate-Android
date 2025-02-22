@@ -9,6 +9,7 @@ import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.user.PostUserBlockResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -18,6 +19,8 @@ interface UserRepository {
     suspend fun getUserProfileById(profileUserId: Long): Result<GetUserProfileByIdResponse>
 
     suspend fun getBlockedUserList(): Result<GetBlockedUserListResponse>
+
+    suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse>
 
     suspend fun postUserAdditionalInfo(postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest): Result<PostUserAdditionalInfoResponse>
 
