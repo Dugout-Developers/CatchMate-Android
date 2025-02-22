@@ -8,6 +8,7 @@ import com.catchmate.data.mapper.UserMapper.toDeleteBlockedUserResponse
 import com.catchmate.data.mapper.UserMapper.toGetBlockedUserListResponse
 import com.catchmate.data.mapper.UserMapper.toPostUserBlockResponse
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.exception.UserBlockFailureException
 import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
@@ -103,7 +104,12 @@ class UserRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Result.failure(Exception("UserRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                    if (response.code() == 400) {
+                        val message = stringToJson.getString("message")
+                        Result.failure(UserBlockFailureException(message))
+                    } else {
+                        Result.failure(Exception("UserRepo 통신 실패 : $stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)

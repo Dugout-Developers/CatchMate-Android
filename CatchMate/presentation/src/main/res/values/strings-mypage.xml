@@ -11,6 +11,11 @@
     <string name="mypage_information">정보</string>
 
     <string name="mypage_mypost_menu_block">차단하기</string>
+    <string name="mypage_mypost_user_block_dialog_title">\'%s\'\n정말 차단할까요?</string>
+    <string name="mypage_mypost_user_block_dialog_pov">차단</string>
+    <string name="mypage_mypost_user_block_message">내가 차단한 유저</string>
+    <string name="mypage_mypost_user_block_toast">차단 유저 목록은\n설정 -\'차단 설정\'에서 확인할 수 있어요</string>
+
     <string name="mypage_mypost_menu_report">신고하기</string>
     
     <string name="mypage_setting">설정</string>
