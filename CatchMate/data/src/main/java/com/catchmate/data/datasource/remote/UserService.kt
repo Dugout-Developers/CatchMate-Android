@@ -55,7 +55,7 @@ interface UserService {
     // isEnabled : Y/N
     @PATCH("users/alarm")
     suspend fun patchUserAlarm(
-        @Query("alarmType") alarmType: AlarmType,
+        @Query("alarmType") alarmType: String,
         @Query("isEnabled") isEnabled: String,
     ): Response<PatchUserAlarmResponseDTO?>
 

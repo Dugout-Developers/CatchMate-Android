@@ -11,7 +11,7 @@ class PatchUserAlarmUseCase
         private val userRepository: UserRepository,
     ) {
         suspend fun patchUserAlarm(
-            alarmType: AlarmType,
+            alarmType: String,
             isEnabled: String,
         ): Result<PatchUserAlarmResponse> = userRepository.patchUserAlarm(alarmType, isEnabled)
     }

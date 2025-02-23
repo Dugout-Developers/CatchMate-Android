@@ -30,7 +30,7 @@ interface UserRepository {
     ): Result<PatchUserProfileResponse>
 
     suspend fun patchUserAlarm(
-        alarmType: AlarmType,
+        alarmType: String,
         isEnabled: String,
     ): Result<PatchUserAlarmResponse>
 

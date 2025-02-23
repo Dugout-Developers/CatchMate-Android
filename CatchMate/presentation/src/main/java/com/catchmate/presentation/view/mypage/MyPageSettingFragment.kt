@@ -10,6 +10,10 @@ import com.catchmate.presentation.view.base.BaseFragment
 class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(FragmentMyPageSettingBinding::inflate) {
     private val email by lazy { arguments?.getString("email") ?: ""}
     private val nickname by lazy { arguments?.getString("nickname") ?: "" }
+    private val allAlarm by lazy { arguments?.getString("allAlarm") ?: "" }
+    private val chatAlarm by lazy { arguments?.getString("chatAlarm") ?: "" }
+    private val enrollAlarm by lazy { arguments?.getString("enrollAlarm") ?: "" }
+    private val eventAlarm by lazy { arguments?.getString("eventAlarm") ?: "" }
 
     override fun onViewCreated(
         view: View,
@@ -49,6 +53,16 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
             }
             tvMyPageSettingTemrsAndConditions.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageSettingFragment_to_termsAndPoliciesFragment)
+            }
+            tvMyPageSettingNotificationSetting.setOnClickListener {
+                val bundle =
+                    Bundle().apply {
+                        putString("allAlarm", allAlarm)
+                        putString("chatAlarm", chatAlarm)
+                        putString("enrollAlarm", enrollAlarm)
+                        putString("eventAlarm", eventAlarm)
+                    }
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_notificationSettingFragment, bundle)
             }
         }
 
