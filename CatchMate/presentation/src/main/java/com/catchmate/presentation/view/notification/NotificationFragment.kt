@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.notification.NotificationInfo
@@ -103,6 +104,15 @@ class NotificationFragment :
                 },
             )
         }
+        val itemTouchHelper =
+            ItemTouchHelper(
+                SwipeDeleteCallback(
+                    requireContext(),
+                    binding.rvNotificationList,
+                    notificationList,
+                ),
+            )
+        itemTouchHelper.attachToRecyclerView(binding.rvNotificationList)
     }
 
     override fun onNotificationItemClick(

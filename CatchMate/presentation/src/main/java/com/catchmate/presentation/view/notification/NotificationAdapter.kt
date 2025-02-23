@@ -1,6 +1,7 @@
 package com.catchmate.presentation.view.notification
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -30,6 +31,12 @@ class NotificationAdapter(
     fun updateSelectedNotification(pos: Int) {
         notificationList[pos].read = true
         notifyItemChanged(pos)
+    }
+
+    fun removeItem(pos: Int) {
+        Log.d("알림 어댑터", "remove Item : $pos")
+        notificationList.removeAt(pos)
+        notifyItemRemoved(pos)
     }
 
     inner class ViewHolder(
