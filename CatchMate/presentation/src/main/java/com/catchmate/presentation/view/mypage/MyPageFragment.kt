@@ -36,8 +36,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
             imgbtnSettingHeaderSetting.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString("email", myPageViewModel.userProfile.value?.email)
+                val bundle =
+                    Bundle().apply {
+                        putString("email", myPageViewModel.userProfile.value?.email)
+                        putString("nickname", myPageViewModel.userProfile.value?.nickName)
+                        putString("allAlarm", myPageViewModel.userProfile.value?.allAlarm)
+                        putString("chatAlarm", myPageViewModel.userProfile.value?.chatAlarm)
+                        putString("enrollAlarm", myPageViewModel.userProfile.value?.enrollAlarm)
+                        putString("eventAlarm", myPageViewModel.userProfile.value?.eventAlarm)
+                    }
                 findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }
         }
@@ -110,6 +117,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 val bundle = Bundle()
                 bundle.putInt("newCount", myPageViewModel.newCount.value?.newEnrollCount ?: 0)
                 findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment, bundle)
+            }
+            tvMyPageInformation.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_informationFragment)
+            }
+            tvMyPageServiceCenter.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("nickname", myPageViewModel.userProfile.value?.nickName)
+                findNavController().navigate(R.id.action_myPageFragment_to_serviceCenterFragment, bundle)
+            }
+            tvMyPageTermsAndConditions.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_termsAndPoliciesFragment)
+            }
+            tvMyPageAnnouncement.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_announcementFragment)
             }
         }
     }

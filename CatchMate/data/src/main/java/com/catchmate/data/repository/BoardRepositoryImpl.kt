@@ -4,6 +4,7 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.BoardService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.BoardMapper
+import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
@@ -199,7 +200,12 @@ class BoardRepositoryImpl
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)
-                    Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                    if (response.code() == 400) {
+                        val message = stringToJson.getString("message")
+                        Result.failure(BlockedUserBoardException(message))
+                    } else {
+                        Result.failure(Exception("통신 실패 : ${response.code()} - $stringToJson"))
+                    }
                 }
             } catch (e: ReissueFailureException) {
                 Result.failure(e)

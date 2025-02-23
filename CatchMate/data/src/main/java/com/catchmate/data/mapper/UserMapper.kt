@@ -1,19 +1,25 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
+import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
+import com.catchmate.data.dto.user.PostUserBlockResponseDTO
+import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.FavoriteClub
+import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.user.PostUserBlockResponse
 
 object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
@@ -89,5 +95,24 @@ object UserMapper {
             favoriteClub = toFavoriteClub(responseDTO.favoriteClub),
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
+        )
+
+    fun toGetBlockedUserListResponse(dto: GetBlockedUserListResponseDTO): GetBlockedUserListResponse =
+        GetBlockedUserListResponse(
+            userInfoList = dto.userInfoList.map { toGetUserProfileResponse(it) },
+            totalPages = dto.totalPages,
+            totalElements = dto.totalElements,
+            isFirst = dto.isFirst,
+            isLast = dto.isLast,
+        )
+
+    fun toDeleteBlockedUserResponse(dto: DeleteBlockedUserResponseDTO): DeleteBlockedUserResponse =
+        DeleteBlockedUserResponse(
+            state = dto.state,
+        )
+
+    fun toPostUserBlockResponse(dto: PostUserBlockResponseDTO): PostUserBlockResponse =
+        PostUserBlockResponse(
+            state = dto.state,
         )
 }

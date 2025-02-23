@@ -13,5 +13,6 @@ data class EnrollBoardInfo(
     val gameInfo: GameInfo,
     val userInfo: UserInfo,
     val buttonStatus: String?,
+    val chatRoomId: Long,
     val bookMarked: Boolean,
 )
