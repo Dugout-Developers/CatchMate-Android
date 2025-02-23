@@ -9,5 +9,8 @@
         <item name="android:spotShadowAlpha">0.03</item>
     </style>
 
-    <style name="Theme.CatchMate" parent="Base.Theme.CatchMate" />
+    <style name="Theme.CatchMate" parent="Base.Theme.CatchMate">
+        <!--    default splash screen 투명하게    -->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

@@ -3,6 +3,9 @@
 
     <application>
         <activity
+            android:name=".view.activity.SplashActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.MainActivity"
             android:exported="false" />
     </application>
