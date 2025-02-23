@@ -2,63 +2,55 @@ package com.catchmate.presentation.view.notification
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.catchmate.presentation.R
 import kotlin.math.abs
 
 class SwipeBackgroundHelper {
     companion object {
-        private const val THRESHOLD = 2.5
         private const val OFFSET_PX = 20
+        private const val EXTRA_PADDING = 50
 
         @JvmStatic
         fun paintDrawCommandToStart(
             canvas: Canvas,
             viewItem: View,
-            @DrawableRes iconResId: Int,
             backgroundColor: Int,
             dX: Float,
         ) {
-            val drawCommand = createDrawCommand(viewItem, dX, iconResId, backgroundColor)
+            val drawCommand = createDrawCommand(viewItem, dX, backgroundColor)
             paintDrawCommand(drawCommand, canvas, dX, viewItem)
         }
 
         private fun createDrawCommand(
             viewItem: View,
             dX: Float,
-            iconResId: Int,
             backgroundColor: Int,
         ): DrawCommand {
             val context = viewItem.context
-            var icon = ContextCompat.getDrawable(context, iconResId)
-            icon = DrawableCompat.wrap(icon!!).mutate()
-            icon.colorFilter = PorterDuffColorFilter(
-                ContextCompat.getColor(context, R.color.grey0),
-                PorterDuff.Mode.SRC_IN,
-            )
-            val backgroundColor = getBackgroundColor(backgroundColor, R.color.grey500, dX, viewItem)
-            return DrawCommand(icon, backgroundColor)
+            val backgroundColor = getBackgroundColor(backgroundColor, dX, viewItem)
+            return DrawCommand(context.getString(R.string.dialog_button_delete), backgroundColor)
         }
 
         private fun getBackgroundColor(
-            firstColor: Int,
-            secondColor: Int,
+            color: Int,
             dX: Float,
             viewItem: View,
-        ): Int =
-            when (willActionBeTriggered(dX, viewItem.width)) {
-                true -> ContextCompat.getColor(viewItem.context, firstColor)
-                false -> ContextCompat.getColor(viewItem.context, secondColor)
+        ): Int {
+            val context = viewItem.context
+            val width = viewItem.width.toFloat()
+            return when {
+                abs(dX) < width / 6 -> ContextCompat.getColor(context, R.color.brand100) // 1단계
+                abs(dX) < width / 3 -> ContextCompat.getColor(context, R.color.brand200) // 2단계
+                abs(dX) < width / 2 -> ContextCompat.getColor(context, R.color.brand300) // 3단계
+                abs(dX) < width * 2 / 3 -> ContextCompat.getColor(context, R.color.brand400) // 4단계
+                abs(dX) < width * 5 / 6 -> ContextCompat.getColor(context, R.color.brand500) // 5단계
+                else -> ContextCompat.getColor(context, color) // 6단계
             }
+        }
 
         private fun paintDrawCommand(
             drawCommand: DrawCommand,
@@ -67,48 +59,50 @@ class SwipeBackgroundHelper {
             viewItem: View,
         ) {
             drawBackground(canvas, viewItem, dX, drawCommand.backgroundColor)
-            drawIcon(canvas, viewItem, dX, drawCommand.icon)
+            drawText(canvas, viewItem, dX, drawCommand.text)
         }
 
-        private fun drawIcon(
+        private fun drawText(
             canvas: Canvas,
             viewItem: View,
             dX: Float,
-            icon: Drawable,
+            text: String,
         ) {
-            val topMargin = calculateTopMargin(icon, viewItem)
-            icon.bounds = getStartContainerRectangle(viewItem, icon.intrinsicWidth, topMargin, OFFSET_PX, dX)
-            icon.draw(canvas)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(viewItem.context, R.color.grey0)
+                textSize = 40f
+                textAlign = Paint.Align.CENTER
+            }
+
+            // 기존 아이콘 위치 계산 방식 사용
+            val topMargin = calculateTopMargin(paint, viewItem)
+            val bounds = getStartContainerRectangle(viewItem, text.length * 20, topMargin, OFFSET_PX, dX)
+
+            // 텍스트 위치를 기존 아이콘의 중앙에 배치
+            val textX = (bounds.left + bounds.right) / 2f
+            val textY = (bounds.top + bounds.bottom) / 2f - (paint.descent() + paint.ascent()) / 2
+
+            canvas.drawText(text, textX, textY, paint)
         }
 
         private fun getStartContainerRectangle(
             viewItem: View,
-            iconWidth: Int,
+            textWidth: Int,
             topMargin: Int,
             sideOffset: Int,
             dx: Float,
         ): Rect {
-            Log.d("kkang", "dx..: $dx")
-            if (dx < 0) {
-                val leftBound = viewItem.right + dx.toInt() + sideOffset
-                val rightBound = viewItem.right + dx.toInt() + iconWidth + sideOffset
-                val topBound = viewItem.top + topMargin
-                val bottomBound = viewItem.bottom - topMargin
-                return Rect(leftBound, topBound, rightBound, bottomBound)
-            } else {
-                val leftBound =  dx.toInt() - iconWidth - sideOffset
-                val rightBound =  dx.toInt() - sideOffset
-                val topBound = viewItem.top + topMargin
-                val bottomBound = viewItem.bottom - topMargin
-                Log.d("kkang","leftBound:$leftBound, rightBound:$rightBound")
-                return Rect(leftBound, topBound, rightBound, bottomBound)
-            }
+            val leftBound = viewItem.right + dx.toInt() + sideOffset + EXTRA_PADDING
+            val rightBound = viewItem.right + dx.toInt() + textWidth + sideOffset + EXTRA_PADDING
+            val topBound = viewItem.top + topMargin
+            val bottomBound = viewItem.bottom - topMargin
+            return Rect(leftBound, topBound, rightBound, bottomBound)
         }
 
         private fun calculateTopMargin(
-            icon: Drawable,
+            paint: Paint,
             viewItem: View,
-        ): Int = (viewItem.height - icon.intrinsicHeight) / 2
+        ): Int = (viewItem.height - paint.textSize.toInt()) / 2
 
         private fun drawBackground(
             canvas: Canvas,
@@ -119,7 +113,6 @@ class SwipeBackgroundHelper {
             val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             backgroundPaint.color = color
             val backgroundRectangle = getBackGroundRectangle(viewItem, dX)
-            Log.d("kkang",".....${backgroundRectangle.left},${backgroundRectangle.right}")
             canvas.drawRect(backgroundRectangle, backgroundPaint)
         }
 
@@ -144,14 +137,9 @@ class SwipeBackgroundHelper {
                 )
             }
         }
-
-        private fun willActionBeTriggered(
-            dX: Float,
-            viewWidth: Int,
-        ): Boolean = abs(dX) >= viewWidth / THRESHOLD
     }
     private class DrawCommand(
-        val icon: Drawable,
+        val text: String,
         val backgroundColor: Int,
     )
 }

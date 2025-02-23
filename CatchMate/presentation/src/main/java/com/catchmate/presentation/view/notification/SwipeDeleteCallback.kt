@@ -32,10 +32,11 @@ class SwipeDeleteCallback(
     ) {
         // swipe 발생시킨 아이템 position
         val deletedPos = viewHolder.absoluteAdapterPosition
+        val deletedItemId = data[deletedPos].notificationId
 
         if (direction == ItemTouchHelper.LEFT) {
             // adapter에서 아이템 제거
-            adapter.removeItem(deletedPos)
+            adapter.swipeItem(deletedPos, deletedItemId)
         }
     }
 
@@ -54,7 +55,6 @@ class SwipeDeleteCallback(
                 SwipeBackgroundHelper.paintDrawCommandToStart(
                     c,
                     viewItem,
-                    R.drawable.vec_all_close_20dp,
                     R.color.brand500,
                     dX,
                 )

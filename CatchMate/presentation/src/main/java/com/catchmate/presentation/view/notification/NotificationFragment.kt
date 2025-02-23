@@ -2,6 +2,7 @@ package com.catchmate.presentation.view.notification
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -10,15 +11,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationBinding
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
+import com.catchmate.presentation.interaction.OnNotificationItemSwipeListener
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.NotificationViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationFragment :
     BaseFragment<FragmentNotificationBinding>(FragmentNotificationBinding::inflate),
-    OnNotificationItemClickListener {
+    OnNotificationItemClickListener,
+    OnNotificationItemSwipeListener,
+    OnListItemAllRemovedListener {
     private val notificationViewModel: NotificationViewModel by viewModels()
 
     private var currentPage: Int = 0
@@ -27,6 +33,7 @@ class NotificationFragment :
     private var isApiCalled = false
     private var isFirstLoad = true
     private var notificationList: MutableList<NotificationInfo> = mutableListOf()
+    private var deletedItemPos: Int = -1
 
     override fun onViewCreated(
         view: View,
@@ -78,11 +85,26 @@ class NotificationFragment :
             }
             isApiCalled = false
         }
+        notificationViewModel.deletedNotificationResponse.observe(viewLifecycleOwner) { response ->
+            if (response.state) {
+                val adapter = binding.rvNotificationList.adapter as NotificationAdapter
+                adapter.removeItem(deletedItemPos)
+            } else {
+                Snackbar.make(requireView(), "해당 알림을 삭제할 수 없습니다. 잠시후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initRecyclerView() {
         binding.rvNotificationList.apply {
-            adapter = NotificationAdapter(requireContext(), layoutInflater, this@NotificationFragment)
+            adapter =
+                NotificationAdapter(
+                    requireContext(),
+                    layoutInflater,
+                    this@NotificationFragment,
+                    this@NotificationFragment,
+                    this@NotificationFragment,
+                )
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
@@ -125,6 +147,21 @@ class NotificationFragment :
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.updateSelectedNotification(currentPos)
             }
+        }
+    }
+
+    override fun onNotificationItemSwipe(
+        pos: Int,
+        notificationId: Long,
+    ) {
+        deletedItemPos = pos
+        notificationViewModel.deleteNotification(notificationId)
+    }
+
+    override fun onListItemAllRemoved() {
+        binding.apply {
+            rvNotificationList.visibility = View.GONE
+            layoutNotificationNoList.visibility = View.VISIBLE
         }
     }
 }
