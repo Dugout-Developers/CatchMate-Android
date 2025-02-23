@@ -4,4 +4,4 @@ import okio.IOException
 
 class BlockedUserBoardException(
     message: String,
-): IOException(message)
+) : IOException(message)
