@@ -16,5 +16,6 @@ data class GetBoardResponseDTO(
     val gameInfo: GameInfoDTO,
     val userInfo: UserInfoDTO,
     val buttonStatus: String,
+    val chatRoomId: Long,
     val bookMarked: Boolean,
 )

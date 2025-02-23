@@ -8,11 +8,11 @@
 
     <ImageButton
         android:id="@+id/imgbtn_header_kebab_menu_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="@dimen/main_grid_margin"
-        android:layout_marginTop="@dimen/xsmall"
-        android:layout_marginBottom="@dimen/xsmall"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imgbtn_header_kebab_menu"

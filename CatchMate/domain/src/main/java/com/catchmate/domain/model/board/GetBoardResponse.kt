@@ -19,5 +19,6 @@ data class GetBoardResponse(
     val gameInfo: GameInfo,
     val userInfo: UserInfo,
     val buttonStatus: String,
+    val chatRoomId: Long,
     val bookMarked: Boolean,
 ) : Parcelable

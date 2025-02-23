@@ -5,15 +5,13 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -32,6 +30,7 @@ import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,10 +38,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReadPostFragment : Fragment() {
-    private var _binding: FragmentReadPostBinding? = null
-    val binding get() = _binding!!
-
+class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostBinding::inflate) {
     private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
@@ -55,15 +51,6 @@ class ReadPostFragment : Fragment() {
         Log.d("readpostboardId", boardId.toString())
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentReadPostBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -73,11 +60,6 @@ class ReadPostFragment : Fragment() {
         initViewModel()
         initHeader()
         initWriterInfoLayout()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getBoardId(): Long = arguments?.getLong("boardId")!!
@@ -119,8 +101,11 @@ class ReadPostFragment : Fragment() {
                             true
                         }
                         R.id.menuitem_post_update -> {
-                            val bundle = Bundle()
-                            bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                            val bundle =
+                                Bundle().apply {
+                                    putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                                    putBoolean("isEditMode", true)
+                                }
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             Log.e("UPDATE", "")
                             true
@@ -141,6 +126,17 @@ class ReadPostFragment : Fragment() {
                         }
                         R.id.menuitem_post_report -> {
                             Log.e("REPORT", "")
+                            val userInfo =
+                                readPostViewModel
+                                    .getBoardResponse
+                                    .value
+                                    ?.userInfo!!
+                            val bundle =
+                                Bundle().apply {
+                                    putString("nickname", userInfo.nickName)
+                                    putLong("userId", userInfo.userId)
+                                }
+                            findNavController().navigate(R.id.action_readPostFragment_to_reportFragment, bundle)
                             true
                         }
                         else -> false
@@ -191,10 +187,14 @@ class ReadPostFragment : Fragment() {
                 when (readPostViewModel.boardEnrollState.value) {
                     EnrollState.APPLY -> showEnrollDialog()
                     EnrollState.APPLIED -> {
-                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 목록 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
-                        readPostViewModel.getRequestedEnrollList(boardId)
+                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
+                        readPostViewModel.getRequestedEnroll(boardId)
                     }
-                    EnrollState.VIEW_CHAT -> {} // 채팅 화면으로 이동
+                    EnrollState.VIEW_CHAT -> {
+                        val bundle = Bundle()
+                        bundle.putLong("chatRoomId", readPostViewModel.getBoardResponse.value?.chatRoomId!!)
+                        findNavController().navigate(R.id.action_readPostFragment_to_chattingRoomFragment, bundle)
+                    }
                     null -> {}
                 }
             }
@@ -206,8 +206,19 @@ class ReadPostFragment : Fragment() {
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
             isWriter = response.userInfo.userId == userId
+            if (response.maxPerson == response.currentPerson) {
+                binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
+                    text = getString(R.string.post_register_closed)
+                    isEnabled = false
+                }
+            }
         }
-
+        readPostViewModel.blockedUserBoardMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
+        }
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
             if (code.state) {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
@@ -251,8 +262,8 @@ class ReadPostFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { enrollInfo ->
-            if (enrollInfo != null) {
+        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
                 showEnrollRequestDialog()
             }
         }
@@ -496,15 +507,16 @@ class ReadPostFragment : Fragment() {
 
         dialogBinding.apply {
             val enrollInfo = readPostViewModel.getRequestedEnroll.value!!
+            val boardInfo = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(enrollInfo.boardInfo.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(boardInfo.gameInfo.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = enrollInfo.boardInfo.gameInfo.location
+            tvApplicationDetailDialogPlace.text = boardInfo.gameInfo.location
 
-            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClubId == enrollInfo.boardInfo.cheerClubId
+            val isCheerTeam = boardInfo.gameInfo.homeClubId == boardInfo.cheerClubId
             setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.homeClubId,
+                boardInfo.gameInfo.homeClubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -512,7 +524,7 @@ class ReadPostFragment : Fragment() {
                 requireContext(),
             )
             setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.awayClubId,
+                boardInfo.gameInfo.awayClubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

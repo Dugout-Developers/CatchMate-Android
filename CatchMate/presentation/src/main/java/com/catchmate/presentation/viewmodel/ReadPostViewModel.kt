@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
@@ -12,7 +13,7 @@ import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
-import com.catchmate.domain.model.enroll.EnrollInfo
+import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enumclass.EnrollState
@@ -22,7 +23,7 @@ import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PatchBoardLiftUpUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import com.catchmate.domain.usecase.enroll.DeleteEnrollUseCase
-import com.catchmate.domain.usecase.enroll.GetRequestedEnrollListUseCase
+import com.catchmate.domain.usecase.enroll.GetRequestedEnrollUseCase
 import com.catchmate.domain.usecase.enroll.PostEnrollUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class ReadPostViewModel
         private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
         private val patchBoardLiftUpUseCase: PatchBoardLiftUpUseCase,
-        private val getRequestedEnrollListUseCase: GetRequestedEnrollListUseCase,
+        private val getRequestedEnrollUseCase: GetRequestedEnrollUseCase,
         private val deleteEnrollUseCase: DeleteEnrollUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
@@ -69,8 +70,8 @@ class ReadPostViewModel
         val patchBoardLiftUpResponse: LiveData<PatchBoardLiftUpResponse>
             get() = _patchBoardLiftUpResponse
 
-        private val _getRequestedEnroll = MutableLiveData<EnrollInfo>()
-        val getRequestedEnroll: LiveData<EnrollInfo>
+        private val _getRequestedEnroll = MutableLiveData<GetRequestedEnrollResponse>()
+        val getRequestedEnroll: LiveData<GetRequestedEnrollResponse>
             get() = _getRequestedEnroll
 
         private val _deleteEnrollResponse = MutableLiveData<DeleteEnrollResponse>()
@@ -89,6 +90,10 @@ class ReadPostViewModel
         val bookmarkFailureMessage: LiveData<String>
             get() = _bookmarkFailureMessage
 
+        private val _blockedUserBoardMessage = MutableLiveData<String>()
+        val blockedUserBoardMessage: LiveData<String>
+            get() = _blockedUserBoardMessage
+
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
                 val result = getBoardUseCase.getBoard(boardId)
@@ -98,6 +103,8 @@ class ReadPostViewModel
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
+                        } else if (exception is BlockedUserBoardException) {
+                            _blockedUserBoardMessage.value = exception.message
                         } else {
                             _errorMessage.value = exception.message
                         }
@@ -194,14 +201,12 @@ class ReadPostViewModel
             }
         }
 
-        fun getRequestedEnrollList(boardId: Long) {
+        fun getRequestedEnroll(boardId: Long) {
             viewModelScope.launch {
-                val result = getRequestedEnrollListUseCase.getRequestedEnrollList(0)
+                val result = getRequestedEnrollUseCase(boardId)
                 result
                     .onSuccess { response ->
-                        for (enrollInfo in response.enrollInfoList) {
-                            if (enrollInfo.boardInfo.boardId == boardId) _getRequestedEnroll.value = enrollInfo
-                        }
+                        _getRequestedEnroll.value = response
                     }.onFailure { exception ->
                         when (exception) {
                             is ReissueFailureException -> {

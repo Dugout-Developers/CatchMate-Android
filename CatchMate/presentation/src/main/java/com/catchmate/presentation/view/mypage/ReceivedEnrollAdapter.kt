@@ -97,7 +97,7 @@ class ReceivedEnrollAdapter(
 
             tvEnrollUserGender.text = convertBoardGender(context, info.userInfo.gender)
             tvEnrollUserAge.text = convertBirthDateToAge(info.userInfo.birthDate)
-            tvEnrollSavedDateTime.text = formatDateTimeToEnrollDateTime(info.receiveDate)
+            tvEnrollSavedDateTime.text = formatDateTimeToEnrollDateTime(info.requestDate)
             edtEnrollDescription.setText(info.description)
 
             tvEnrollReject.setOnClickListener {

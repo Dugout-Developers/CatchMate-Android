@@ -6,13 +6,11 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -23,22 +21,22 @@ import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentMyPostBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MyPostViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPostFragment :
-    Fragment(),
+    BaseFragment<FragmentMyPostBinding>(FragmentMyPostBinding::inflate),
     OnPostItemClickListener {
-    private var _binding: FragmentMyPostBinding? = null
-    val binding get() = _binding!!
-
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val myPostViewModel: MyPostViewModel by viewModels()
 
@@ -54,15 +52,6 @@ class MyPostFragment :
         userInfo = getUserInfo()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentMyPostBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -74,11 +63,6 @@ class MyPostFragment :
         initViewModel()
         initRecyclerView()
         getMyPostList()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getUserInfo(): GetUserProfileResponse? =
@@ -147,9 +131,16 @@ class MyPostFragment :
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuItem_my_post_block -> { // 차단
+                            showUserBlockDialog()
                             true
                         }
                         R.id.menuItem_my_post_report -> { // 신고
+                            val bundle =
+                                Bundle().apply {
+                                    putString("nickname", userInfo?.nickName!!)
+                                    putLong("userId", userInfo?.userId!!)
+                                }
+                            findNavController().navigate(R.id.action_myPostFragment_to_reportFragment, bundle)
                             true
                         }
                         else -> false
@@ -193,6 +184,18 @@ class MyPostFragment :
             }
             isApiCalled = false
         }
+        myPostViewModel.postUserBlockResponse.observe(viewLifecycleOwner) { response ->
+            if (response.state) {
+                binding.rvMyPost.visibility = View.GONE
+                binding.layoutMyPostBlockedUser.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), R.string.mypage_mypost_user_block_toast, Toast.LENGTH_SHORT).show()
+            }
+        }
+        myPostViewModel.userBlockFailureMessage.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -226,6 +229,37 @@ class MyPostFragment :
         isLoading = true
         myPostViewModel.getUserBoardList(userInfo?.userId!!, currentPage)
         isApiCalled = true
+    }
+
+    private fun showUserBlockDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            val title = getString(R.string.mypage_mypost_user_block_dialog_title)
+            tvSimpleDialogTitle.text = title.format(userInfo?.nickName)
+            tvSimpleDialogNegative.apply {
+                setText(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.mypage_mypost_user_block_dialog_pov)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    myPostViewModel.postUserBlock(userInfo?.userId!!)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 
     override fun onPostItemClicked(boardId: Long) {
