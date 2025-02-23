@@ -1,6 +1,5 @@
 package com.catchmate.presentation.view.mypage
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,20 +8,19 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
+import com.catchmate.domain.model.enroll.AllReceivedEnrollInfoResponse
 import com.catchmate.presentation.databinding.ItemReceivedJoinBinding
 import com.catchmate.presentation.interaction.OnReceivedEnrollClickListener
 import com.catchmate.presentation.util.DateUtils
 
 class ReceivedJoinAdapter(
-    private val context: Context,
     private val layoutInflater: LayoutInflater,
     private val onReceivedEnrollClickListener: OnReceivedEnrollClickListener,
 ) : RecyclerView.Adapter<ReceivedJoinAdapter.ReceivedJoinViewHolder>() {
-    private var groupedData: MutableMap<Long, List<ReceivedEnrollInfo>> = mutableMapOf()
+    private var list: MutableList<AllReceivedEnrollInfoResponse> = mutableListOf()
 
-    fun updateEnrollInfoList(newList: Map<Long, List<ReceivedEnrollInfo>>) {
-        groupedData = newList.toMutableMap()
+    fun updateList(newList: List<AllReceivedEnrollInfoResponse>) {
+        list = newList.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -66,29 +64,27 @@ class ReceivedJoinAdapter(
         return ReceivedJoinViewHolder(itemBinding)
     }
 
-    override fun getItemCount(): Int = groupedData.size
+    override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(
         holder: ReceivedJoinViewHolder,
         position: Int,
     ) {
-        val boardId = groupedData.keys.elementAt(position)
-        val info = groupedData[boardId] ?: emptyList()
+        val boardInfo = list[position].boardInfo
+        val enrollReceivedInfoList = list[position].enrollReceiveInfoList
 
-        val firstInfo = info.first()
-        Log.e("DATA", "${firstInfo.description} / ${firstInfo.boardInfo.boardId} / ${firstInfo.boardInfo.title}")
         holder.apply {
-            val dateTime = DateUtils.formatISODateTime(firstInfo.boardInfo.gameInfo.gameStartDate!!)
+            val dateTime = DateUtils.formatISODateTime(boardInfo.gameInfo.gameStartDate!!)
             tvGameDate.text = dateTime.first
             tvGameTime.text = dateTime.second
-            tvGamePlace.text = firstInfo.boardInfo.gameInfo.location
-            tvBoardTitle.text = firstInfo.boardInfo.title
+            tvGamePlace.text = boardInfo.gameInfo.location
+            tvBoardTitle.text = boardInfo.title
 
             val adapter = rvProfile.adapter as ReceivedJoinProfileAdapter
-            adapter.updateEnrollInfoList(info)
+            adapter.updateEnrollInfoList(enrollReceivedInfoList)
 
             layoutBoardInfo.setOnClickListener {
-                onReceivedEnrollClickListener.onReceivedEnrollClick(boardId)
+                onReceivedEnrollClickListener.onReceivedEnrollClick(boardInfo.boardId)
             }
         }
     }

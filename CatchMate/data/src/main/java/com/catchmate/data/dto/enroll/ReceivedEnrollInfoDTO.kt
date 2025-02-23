@@ -4,8 +4,7 @@ data class ReceivedEnrollInfoDTO(
     val enrollId: Long,
     val acceptStatus: String,
     val description: String,
-    val receiveDate: String,
+    val requestDate: String,
     val userInfo: UserInfoDTO,
-    val boardInfo: EnrollBoardInfoDTO,
     val new: Boolean,
 )

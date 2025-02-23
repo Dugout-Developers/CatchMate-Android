@@ -1,8 +1,10 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catchmate.presentation.R
@@ -51,7 +53,7 @@ class ReceivedJoinFragment :
 
     private fun initRecyclerView() {
         binding.rvReceivedJoinList.apply {
-            adapter = ReceivedJoinAdapter(requireContext(), layoutInflater, this@ReceivedJoinFragment)
+            adapter = ReceivedJoinAdapter(layoutInflater, this@ReceivedJoinFragment)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
     }
@@ -60,9 +62,23 @@ class ReceivedJoinFragment :
         receivedJoinViewModel.getAllReceivedEnroll()
         receivedJoinViewModel.getAllReceivedEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                val groupedData = response.enrollInfoList.groupBy { it.boardInfo.boardId }
                 val adapter = binding.rvReceivedJoinList.adapter as ReceivedJoinAdapter
-                adapter.updateEnrollInfoList(groupedData)
+                adapter.updateList(response.enrollInfoList)
+            }
+        }
+        receivedJoinViewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            if (!msg.isNullOrEmpty()) {
+                Log.e("Received Join Err", msg)
+            }
+        }
+        receivedJoinViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.receivedJoinFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_receivedJoinFragment_to_loginFragment, null, navOptions)
             }
         }
     }
