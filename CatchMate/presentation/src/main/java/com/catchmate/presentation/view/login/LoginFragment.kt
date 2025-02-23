@@ -25,9 +25,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
         initViewModel()
-        initKakaoLoginBtn()
-        initNaverLoginBtn()
-        initGoogleLoginBtn()
+        initView()
     }
 
     private fun initViewModel() {
@@ -80,21 +78,20 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun initKakaoLoginBtn() {
-        binding.cvLoginKakao.setOnClickListener {
-            loginViewModel.kakaoLogin()
-        }
-    }
-
-    private fun initNaverLoginBtn() {
-        binding.ivLoginNaver.setOnClickListener {
-            loginViewModel.naverLogin()
-        }
-    }
-
-    private fun initGoogleLoginBtn() {
-        binding.ivLoginGoogle.setOnClickListener {
-            loginViewModel.googleLogin()
+    private fun initView() {
+        binding.apply {
+            cvLoginKakao.setOnClickListener {
+                loginViewModel.kakaoLogin()
+            }
+            ivLoginNaver.setOnClickListener {
+                loginViewModel.naverLogin()
+            }
+            ivLoginGoogle.setOnClickListener {
+                loginViewModel.googleLogin()
+            }
+            tvLoginSneakPeek.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            }
         }
     }
 }
