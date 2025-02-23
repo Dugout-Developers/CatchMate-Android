@@ -1,6 +1,8 @@
 package com.catchmate.domain.model.enumclass
 
-enum class ReportType(val text: String) {
+enum class ReportType(
+    val text: String,
+) {
     PROFANITY("욕설 / 비하발언"),
     DEFAMATION("선수 혹은 특정인 비방"),
     PRIVACY_INVASION("개인 사생활 침해"),

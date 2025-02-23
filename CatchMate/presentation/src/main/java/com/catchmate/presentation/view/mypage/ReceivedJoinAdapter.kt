@@ -1,6 +1,5 @@
 package com.catchmate.presentation.view.mypage
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton

@@ -63,12 +63,12 @@ class BlockedUserListAdapter(
             object : DiffUtil.ItemCallback<GetUserProfileResponse>() {
                 override fun areItemsTheSame(
                     oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse
+                    newItem: GetUserProfileResponse,
                 ): Boolean = oldItem.userId == newItem.userId
 
                 override fun areContentsTheSame(
                     oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse
+                    newItem: GetUserProfileResponse,
                 ): Boolean = oldItem.userId == newItem.userId
             }
     }

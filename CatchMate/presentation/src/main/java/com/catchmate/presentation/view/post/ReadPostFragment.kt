@@ -126,10 +126,15 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         }
                         R.id.menuitem_post_report -> {
                             Log.e("REPORT", "")
+                            val userInfo =
+                                readPostViewModel
+                                    .getBoardResponse
+                                    .value
+                                    ?.userInfo!!
                             val bundle =
                                 Bundle().apply {
-                                    putString("nickname", readPostViewModel.getBoardResponse.value?.userInfo?.nickName!!)
-                                    putLong("userId", readPostViewModel.getBoardResponse.value?.userInfo?.userId!!)
+                                    putString("nickname", userInfo.nickName)
+                                    putLong("userId", userInfo.userId)
                                 }
                             findNavController().navigate(R.id.action_readPostFragment_to_reportFragment, bundle)
                             true

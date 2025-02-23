@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding::inflate) {
-    private val nickname by lazy { arguments?.getString("nickname") ?: ""}
+    private val nickname by lazy { arguments?.getString("nickname") ?: "" }
     private val userId by lazy { arguments?.getLong("userId") ?: -1L }
     private val reportViewModel: ReportViewModel by viewModels()
     private var selectedButton: TeamToggleCheckButtonView? = null

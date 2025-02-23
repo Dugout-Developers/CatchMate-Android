@@ -9,7 +9,6 @@ import com.catchmate.data.mapper.UserMapper.toGetBlockedUserListResponse
 import com.catchmate.data.mapper.UserMapper.toPostUserBlockResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.exception.UserBlockFailureException
-import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse

@@ -8,7 +8,7 @@ import com.catchmate.presentation.databinding.FragmentMyPageSettingBinding
 import com.catchmate.presentation.view.base.BaseFragment
 
 class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(FragmentMyPageSettingBinding::inflate) {
-    private val email by lazy { arguments?.getString("email") ?: ""}
+    private val email by lazy { arguments?.getString("email") ?: "" }
     private val nickname by lazy { arguments?.getString("nickname") ?: "" }
     private val allAlarm by lazy { arguments?.getString("allAlarm") ?: "" }
     private val chatAlarm by lazy { arguments?.getString("chatAlarm") ?: "" }
@@ -68,6 +68,5 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
                 findNavController().navigate(R.id.action_myPageSettingFragment_to_announcementFragment)
             }
         }
-
     }
 }

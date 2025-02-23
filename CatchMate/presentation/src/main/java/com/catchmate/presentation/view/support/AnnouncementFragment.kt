@@ -10,6 +10,7 @@ import com.catchmate.presentation.view.base.BaseFragment
 
 class AnnouncementFragment : BaseFragment<FragmentAnnouncementBinding>(FragmentAnnouncementBinding::inflate) {
     private var announcementListAdapter: AnnouncementListAdapter? = null
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.presentation.databinding.ItemAnnouncementBinding
 
-class AnnouncementListAdapter() : ListAdapter<Pair<String, String>, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
+class AnnouncementListAdapter : ListAdapter<Pair<String, String>, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
     inner class AnnouncementViewHolder(
         private val binding: ItemAnnouncementBinding,
     ) : RecyclerView.ViewHolder(binding.root) {

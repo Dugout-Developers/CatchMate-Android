@@ -1,6 +1,5 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse

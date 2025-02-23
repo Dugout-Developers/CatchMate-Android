@@ -69,7 +69,7 @@ class ServiceCenterInquiryFragment : BaseFragment<FragmentServiceCenterInquiryBi
                         val inputText = s?.toString()?.trim()
                         layoutFooterServiceCenterInquiry.btnFooterOne.isEnabled = !inputText.isNullOrEmpty()
                     }
-                }
+                },
             )
         }
     }

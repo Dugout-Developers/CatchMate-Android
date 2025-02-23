@@ -22,6 +22,7 @@ class SupportRepositoryImpl
         retrofitClient: RetrofitClient,
     ) : SupportRepository {
         private val supportApi = retrofitClient.createApi<SupportService>()
+
         override suspend fun postInquiry(request: PostInquiryRequest): Result<PostInquiryResponse> =
             try {
                 val response = supportApi.postInquiry(toPostInquiryRequestDTO(request))
