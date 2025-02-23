@@ -18,7 +18,7 @@
         android:theme="@style/Theme.CatchMate"
         tools:targetApi="31">
         <activity
-            android:name="com.catchmate.presentation.view.home.MainActivity"
+            android:name="com.catchmate.presentation.view.activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
