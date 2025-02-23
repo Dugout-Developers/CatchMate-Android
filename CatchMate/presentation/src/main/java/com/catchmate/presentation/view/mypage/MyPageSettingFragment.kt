@@ -64,6 +64,9 @@ class MyPageSettingFragment : BaseFragment<FragmentMyPageSettingBinding>(Fragmen
                     }
                 findNavController().navigate(R.id.action_myPageSettingFragment_to_notificationSettingFragment, bundle)
             }
+            tvMyPageSettingAnnouncement.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageSettingFragment_to_announcementFragment)
+            }
         }
 
     }

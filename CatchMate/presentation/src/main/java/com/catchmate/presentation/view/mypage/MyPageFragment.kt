@@ -129,6 +129,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             tvMyPageTermsAndConditions.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageFragment_to_termsAndPoliciesFragment)
             }
+            tvMyPageAnnouncement.setOnClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_announcementFragment)
+            }
         }
     }
 }

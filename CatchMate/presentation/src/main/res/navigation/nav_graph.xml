@@ -139,6 +139,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_termsAndPoliciesFragment"
             app:destination="@id/termsAndPoliciesFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_announcementFragment"
+            app:destination="@id/announcementFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -233,6 +236,9 @@
         <action
             android:id="@+id/action_myPageSettingFragment_to_termsAndPoliciesFragment"
             app:destination="@id/termsAndPoliciesFragment" />
+        <action
+            android:id="@+id/action_myPageSettingFragment_to_announcementFragment"
+            app:destination="@id/announcementFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountInfoFragment"
@@ -296,4 +302,9 @@
         android:name="com.catchmate.presentation.view.support.TermsAndPoliciesFragment"
         android:label="fragment_terms_and_policies"
         tools:layout="@layout/fragment_terms_and_policies" />
+    <fragment
+        android:id="@+id/announcementFragment"
+        android:name="com.catchmate.presentation.view.support.AnnouncementFragment"
+        android:label="fragment_announcement"
+        tools:layout="@layout/fragment_announcement" />
 </navigation>
