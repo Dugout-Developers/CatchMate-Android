@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -215,7 +214,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
         readPostViewModel.blockedUserBoardMessage.observe(viewLifecycleOwner) { message ->
             message?.let {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
         }
