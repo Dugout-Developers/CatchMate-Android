@@ -136,7 +136,6 @@ class NotificationFragment :
         val itemTouchHelper =
             ItemTouchHelper(
                 SwipeDeleteCallback(
-                    requireContext(),
                     binding.rvNotificationList,
                     notificationList,
                 ),

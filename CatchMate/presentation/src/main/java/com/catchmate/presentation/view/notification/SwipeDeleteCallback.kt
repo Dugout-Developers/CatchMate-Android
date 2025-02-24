@@ -1,6 +1,5 @@
 package com.catchmate.presentation.view.notification
 
-import android.content.Context
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -8,9 +7,8 @@ import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 
 class SwipeDeleteCallback(
-    val context: Context,
-    val recyclerView: RecyclerView,
-    val data: MutableList<NotificationInfo>,
+    private val recyclerView: RecyclerView,
+    private val data: MutableList<NotificationInfo>,
 ) : ItemTouchHelper.Callback() {
     var adapter: NotificationAdapter = (recyclerView.adapter as NotificationAdapter)
 
