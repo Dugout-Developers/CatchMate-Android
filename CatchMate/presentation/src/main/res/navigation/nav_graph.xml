@@ -70,6 +70,12 @@
         <action
             android:id="@+id/action_notificationFragment_to_serviceCenterAnswerFragment"
             app:destination="@id/serviceCenterAnswerFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_receivedJoinFragment"
+            app:destination="@id/receivedJoinFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_chattingRoomFragment"
+            app:destination="@id/chattingRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"

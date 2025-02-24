@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.enumclass.AcceptState
 import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationBinding
@@ -34,6 +35,7 @@ class NotificationFragment :
     private var isFirstLoad = true
     private var notificationList: MutableList<NotificationInfo> = mutableListOf()
     private var deletedItemPos: Int = -1
+    private var clickedItemPos: Int = -1
 
     override fun onViewCreated(
         view: View,
@@ -93,6 +95,12 @@ class NotificationFragment :
                 Snackbar.make(requireView(), "해당 알림을 삭제할 수 없습니다. 잠시후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
             }
         }
+        notificationViewModel.receivedNotification.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val adapter = binding.rvNotificationList.adapter as NotificationAdapter
+                adapter.updateSelectedNotification(clickedItemPos)
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -140,13 +148,14 @@ class NotificationFragment :
     override fun onNotificationItemClick(
         notificationId: Long,
         currentPos: Int,
+        acceptStatus: String,
     ) {
+        clickedItemPos = currentPos
         notificationViewModel.getReceivedNotification(notificationId)
-        notificationViewModel.receivedNotification.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                val adapter = binding.rvNotificationList.adapter as NotificationAdapter
-                adapter.updateSelectedNotification(currentPos)
-            }
+        if (acceptStatus == AcceptState.PENDING.name) { // pending
+            findNavController().navigate(R.id.action_notificationFragment_to_receivedJoinFragment)
+        } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
+            findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment)
         }
     }
 

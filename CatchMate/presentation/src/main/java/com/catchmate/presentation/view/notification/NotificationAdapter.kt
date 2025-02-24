@@ -71,7 +71,7 @@ class NotificationAdapter(
 
             itemBinding.root.setOnClickListener {
                 val pos = absoluteAdapterPosition
-                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos)
+                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos, notificationList[pos].acceptStatus)
             }
         }
     }

@@ -4,5 +4,6 @@ interface OnNotificationItemClickListener {
     fun onNotificationItemClick(
         notificationId: Long,
         currentPos: Int,
+        acceptStatus: String,
     )
 }
