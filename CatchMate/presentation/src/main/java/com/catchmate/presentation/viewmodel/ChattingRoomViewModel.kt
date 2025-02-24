@@ -107,7 +107,7 @@ class ChattingRoomViewModel
         fun getChattingHistory(
             chatRoomId: Long,
             page: Int,
-            size: Int? = null,
+            size: Int? = 30,
         ) {
             viewModelScope.launch {
                 val result = getChattingHistoryUseCase(chatRoomId, page, size)

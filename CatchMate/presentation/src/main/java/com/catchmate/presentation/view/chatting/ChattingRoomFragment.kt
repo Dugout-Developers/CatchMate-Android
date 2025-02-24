@@ -12,10 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.chatting.ChatMessageId
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
+import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
@@ -38,6 +40,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var chatRoomId: Long = -1L
     private var userId: Long = -1L
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var isFirstLoad = true
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,17 +114,30 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
+                Log.d("빈 채팅방 목록", "empty")
+            } else {
                 Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
-                chatListAdapter.submitList(response.chatMessageInfoList) {
-                    // 리스트 갱신 후 콜백을 통해 최신 메시지로 스크롤 이동
-                    binding.rvChattingRoomChatList.smoothScrollToPosition(0)
+                if (isApiCalled) {
+                    val currentList = chatListAdapter.currentList.toMutableList()
+                    Log.e("IS API CALLED", "🅾️")
+                    currentList.addAll(response.chatMessageInfoList)
+                    chatListAdapter.submitList(currentList)
+                    isApiCalled = false
+                } else {
+                    chatListAdapter.submitList(response.chatMessageInfoList) {
+                        // 수신 메시지 추가 후 콜백을 통해 최신 메시지로 스크롤 이동
+                        binding.rvChattingRoomChatList.smoothScrollToPosition(0)
+                        isApiCalled = false
+                    }
                 }
+                isLastPage = response.isLast
+                isLoading = false
             }
         }
         chattingRoomViewModel.getChattingCrewListResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                initRecyclerView()
+                initRecyclerView(response.userInfoList)
             }
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
@@ -158,14 +178,45 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(list: List<GetUserProfileResponse>) {
         Log.e("userID", userId.toString())
-        chatListAdapter = ChatListAdapter(userId, chattingRoomViewModel.getChattingCrewListResponse.value?.userInfoList!!)
+        chatListAdapter = ChatListAdapter(userId, list)
         binding.rvChattingRoomChatList.apply {
             adapter = chatListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            currentPage += 1
+                            getChattingHistory()
+                        }
+                    }
+                },
+            )
         }
-        chattingRoomViewModel.getChattingHistory(chatRoomId, 0)
+        if (isFirstLoad) {
+            getChattingHistory()
+            isFirstLoad = false
+        }
+    }
+
+    private fun getChattingHistory() {
+        Log.e("api 호출", "호출 $isLoading $isLastPage")
+        if (isLoading || isLastPage) return
+        isLoading = true
+        chattingRoomViewModel.getChattingHistory(chatRoomId, currentPage)
+        isApiCalled = true
     }
 
     private fun initChatRoomInfo(info: ChatRoomInfo) {
