@@ -11,9 +11,9 @@ import com.catchmate.domain.model.enumclass.AcceptState
 import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationBinding
+import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
-import com.catchmate.presentation.interaction.OnNotificationItemSwipeListener
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.NotificationViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class NotificationFragment :
     BaseFragment<FragmentNotificationBinding>(FragmentNotificationBinding::inflate),
     OnNotificationItemClickListener,
-    OnNotificationItemSwipeListener,
+    OnItemSwipeListener,
     OnListItemAllRemovedListener {
     private val notificationViewModel: NotificationViewModel by viewModels()
 
@@ -159,11 +159,11 @@ class NotificationFragment :
     }
 
     override fun onNotificationItemSwipe(
-        pos: Int,
-        notificationId: Long,
+        position: Int,
+        swipedItemId: Long,
     ) {
-        deletedItemPos = pos
-        notificationViewModel.deleteNotification(notificationId)
+        deletedItemPos = position
+        notificationViewModel.deleteNotification(swipedItemId)
     }
 
     override fun onListItemAllRemoved() {
