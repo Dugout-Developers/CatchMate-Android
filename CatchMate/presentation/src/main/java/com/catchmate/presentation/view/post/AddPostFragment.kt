@@ -24,6 +24,7 @@ import com.catchmate.presentation.interaction.OnPlaceSelectedListener
 import com.catchmate.presentation.interaction.OnTeamSelectedListener
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
+import com.catchmate.presentation.util.ControlUtil.hideKeyboardAction
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.view.base.BaseFragment
@@ -73,12 +74,18 @@ class AddPostFragment :
         initBottomSheets()
         initAgeChip()
         initTitleTextView()
+        initKeyboardAction()
 
         if (!isEditMode) {
             onBackPressedAction = {
                 showHandleWritingBoardDialog()
             }
         }
+    }
+
+    private fun initKeyboardAction() {
+        hideKeyboardAction(binding.edtAddPostTitle)
+        hideKeyboardAction(binding.edtAddPostAdditionalInfo)
     }
 
     private fun setBoardData(response: GetBoardResponse) {

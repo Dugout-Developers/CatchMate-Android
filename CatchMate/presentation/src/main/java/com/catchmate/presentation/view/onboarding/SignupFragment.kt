@@ -44,6 +44,12 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
         initNickNameViews()
         initBirthDateEditText()
         initGenderChip()
+        initKeyboardAction()
+    }
+
+    private fun initKeyboardAction() {
+//        hideKeyboardAction(binding.edtSignupNickname)
+//        hideKeyboardAction(binding.edtSignupBirth)
     }
 
     private fun getUserInfo(): PostUserAdditionalInfoRequest =
