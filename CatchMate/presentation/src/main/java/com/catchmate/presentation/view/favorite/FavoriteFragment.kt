@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentFavoriteBinding
-import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.view.base.BaseFragment
@@ -23,7 +23,7 @@ class FavoriteFragment :
     BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteBinding::inflate),
     OnPostItemClickListener,
     OnPostItemToggleClickListener,
-    OnPostItemAllRemovedListener {
+    OnListItemAllRemovedListener {
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private var currentPage: Int = 0
@@ -149,7 +149,7 @@ class FavoriteFragment :
         adapter.removeUnlikedPost(position)
     }
 
-    override fun onPostItemAllRemoved() {
+    override fun onListItemAllRemoved() {
         binding.rvFavoritePost.visibility = View.GONE
         binding.layoutFavoriteNoList.visibility = View.VISIBLE
     }
