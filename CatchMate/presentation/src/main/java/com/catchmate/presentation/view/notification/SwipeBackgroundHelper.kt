@@ -68,11 +68,12 @@ class SwipeBackgroundHelper {
             dX: Float,
             text: String,
         ) {
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = ContextCompat.getColor(viewItem.context, R.color.grey0)
-                textSize = 40f
-                textAlign = Paint.Align.CENTER
-            }
+            val paint =
+                Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = ContextCompat.getColor(viewItem.context, R.color.grey0)
+                    textSize = 40f
+                    textAlign = Paint.Align.CENTER
+                }
 
             // 기존 아이콘 위치 계산 방식 사용
             val topMargin = calculateTopMargin(paint, viewItem)
@@ -116,12 +117,12 @@ class SwipeBackgroundHelper {
             canvas.drawRect(backgroundRectangle, backgroundPaint)
         }
 
-        //백그라운드를 그릴 사각형 정보 계산
+        // 백그라운드를 그릴 사각형 정보 계산
         private fun getBackGroundRectangle(
             viewItem: View,
             dX: Float,
-        ): RectF {
-            return if (dX < 0) {
+        ): RectF =
+            if (dX < 0) {
                 RectF(
                     viewItem.right.toFloat() + dX,
                     viewItem.top.toFloat(),
@@ -130,14 +131,14 @@ class SwipeBackgroundHelper {
                 )
             } else {
                 RectF(
-                    0f ,
+                    0f,
                     viewItem.top.toFloat(),
                     dX,
                     viewItem.bottom.toFloat(),
                 )
             }
-        }
     }
+
     private class DrawCommand(
         val text: String,
         val backgroundColor: Int,

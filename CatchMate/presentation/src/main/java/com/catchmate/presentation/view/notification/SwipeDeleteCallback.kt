@@ -10,7 +10,7 @@ import com.catchmate.presentation.R
 class SwipeDeleteCallback(
     val context: Context,
     val recyclerView: RecyclerView,
-    val data: MutableList<NotificationInfo>
+    val data: MutableList<NotificationInfo>,
 ) : ItemTouchHelper.Callback() {
     var adapter: NotificationAdapter = (recyclerView.adapter as NotificationAdapter)
 
