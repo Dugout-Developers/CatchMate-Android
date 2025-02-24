@@ -5,15 +5,13 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -32,6 +30,7 @@ import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.ReadPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,10 +38,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReadPostFragment : Fragment() {
-    private var _binding: FragmentReadPostBinding? = null
-    val binding get() = _binding!!
-
+class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostBinding::inflate) {
     private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
@@ -55,15 +51,6 @@ class ReadPostFragment : Fragment() {
         Log.d("readpostboardId", boardId.toString())
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentReadPostBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -73,11 +60,6 @@ class ReadPostFragment : Fragment() {
         initViewModel()
         initHeader()
         initWriterInfoLayout()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getBoardId(): Long = arguments?.getLong("boardId")!!
@@ -119,8 +101,11 @@ class ReadPostFragment : Fragment() {
                             true
                         }
                         R.id.menuitem_post_update -> {
-                            val bundle = Bundle()
-                            bundle.putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                            val bundle =
+                                Bundle().apply {
+                                    putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
+                                    putBoolean("isEditMode", true)
+                                }
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             Log.e("UPDATE", "")
                             true
@@ -141,6 +126,17 @@ class ReadPostFragment : Fragment() {
                         }
                         R.id.menuitem_post_report -> {
                             Log.e("REPORT", "")
+                            val userInfo =
+                                readPostViewModel
+                                    .getBoardResponse
+                                    .value
+                                    ?.userInfo!!
+                            val bundle =
+                                Bundle().apply {
+                                    putString("nickname", userInfo.nickName)
+                                    putLong("userId", userInfo.userId)
+                                }
+                            findNavController().navigate(R.id.action_readPostFragment_to_reportFragment, bundle)
                             true
                         }
                         else -> false
@@ -217,7 +213,12 @@ class ReadPostFragment : Fragment() {
                 }
             }
         }
-
+        readPostViewModel.blockedUserBoardMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
+        }
         readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
             if (code.state) {
                 Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()

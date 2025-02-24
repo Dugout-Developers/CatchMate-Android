@@ -30,4 +30,8 @@
     <string name="application">적용</string>
     <string name="reset">초기화</string>
     <string name="all_divider"> | </string>
+
+    <string name="back_pressed_toast">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
+
+    <string name="all_empty_string"></string>
 </resources>

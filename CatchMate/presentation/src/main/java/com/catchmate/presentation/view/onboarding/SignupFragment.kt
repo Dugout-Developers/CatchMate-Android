@@ -6,26 +6,21 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentSignupBinding
 import com.catchmate.presentation.util.DateUtils
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SignupFragment : Fragment() {
-    private var _binding: FragmentSignupBinding? = null
-    val binding get() = _binding!!
-
+class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding::inflate) {
     private val signUpViewModel: SignUpViewModel by viewModels()
     private lateinit var userInfo: PostUserAdditionalInfoRequest
 
@@ -39,15 +34,6 @@ class SignupFragment : Fragment() {
         userInfo = getUserInfo()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentSignupBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -58,11 +44,12 @@ class SignupFragment : Fragment() {
         initNickNameViews()
         initBirthDateEditText()
         initGenderChip()
+        initKeyboardAction()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun initKeyboardAction() {
+//        hideKeyboardAction(binding.edtSignupNickname)
+//        hideKeyboardAction(binding.edtSignupBirth)
     }
 
     private fun getUserInfo(): PostUserAdditionalInfoRequest =

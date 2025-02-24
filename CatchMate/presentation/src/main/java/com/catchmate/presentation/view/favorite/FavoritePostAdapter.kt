@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
-import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.util.DateUtils
@@ -28,7 +28,7 @@ class FavoritePostAdapter(
     private val layoutInflater: LayoutInflater,
     private val onPostItemClickListener: OnPostItemClickListener,
     private val onPostItemToggleClickListener: OnPostItemToggleClickListener,
-    private val onPostItemAllRemovedListener: OnPostItemAllRemovedListener,
+    private val onPostItemAllRemovedListener: OnListItemAllRemovedListener,
 ) : RecyclerView.Adapter<FavoritePostAdapter.FavoritePostViewHolder>() {
     private var likedList: MutableList<Board> = mutableListOf()
 
@@ -42,7 +42,7 @@ class FavoritePostAdapter(
             likedList.removeAt(position)
             notifyItemRemoved(position)
             if (likedList.size == 0) {
-                onPostItemAllRemovedListener.onPostItemAllRemoved()
+                onPostItemAllRemovedListener.onListItemAllRemoved()
             }
         }
     }

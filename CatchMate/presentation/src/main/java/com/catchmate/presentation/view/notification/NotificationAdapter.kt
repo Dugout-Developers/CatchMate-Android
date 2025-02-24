@@ -1,6 +1,7 @@
 package com.catchmate.presentation.view.notification
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,7 +12,9 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemNotificationBinding
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
+import com.catchmate.presentation.interaction.OnNotificationItemSwipeListener
 import com.catchmate.presentation.util.DateUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -19,6 +22,8 @@ class NotificationAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
     private val itemClickListener: OnNotificationItemClickListener,
+    private val itemSwipeListener: OnNotificationItemSwipeListener,
+    private val itemAllRemovedListener: OnListItemAllRemovedListener,
 ) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
     private var notificationList: MutableList<NotificationInfo> = mutableListOf()
 
@@ -30,6 +35,20 @@ class NotificationAdapter(
     fun updateSelectedNotification(pos: Int) {
         notificationList[pos].read = true
         notifyItemChanged(pos)
+    }
+
+    fun removeItem(pos: Int) {
+        Log.d("알림 어댑터", "remove Item : $pos")
+        notificationList.removeAt(pos)
+        notifyItemRemoved(pos)
+        if (notificationList.size == 0) itemAllRemovedListener.onListItemAllRemoved()
+    }
+
+    fun swipeItem(
+        pos: Int,
+        notificationId: Long,
+    ) {
+        itemSwipeListener.onNotificationItemSwipe(pos, notificationId)
     }
 
     inner class ViewHolder(
@@ -52,7 +71,7 @@ class NotificationAdapter(
 
             itemBinding.root.setOnClickListener {
                 val pos = absoluteAdapterPosition
-                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos)
+                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos, notificationList[pos].acceptStatus)
             }
         }
     }

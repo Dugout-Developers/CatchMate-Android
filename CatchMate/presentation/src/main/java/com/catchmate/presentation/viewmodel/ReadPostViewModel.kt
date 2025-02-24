@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
@@ -89,6 +90,10 @@ class ReadPostViewModel
         val bookmarkFailureMessage: LiveData<String>
             get() = _bookmarkFailureMessage
 
+        private val _blockedUserBoardMessage = MutableLiveData<String>()
+        val blockedUserBoardMessage: LiveData<String>
+            get() = _blockedUserBoardMessage
+
         fun getBoard(boardId: Long) {
             viewModelScope.launch {
                 val result = getBoardUseCase.getBoard(boardId)
@@ -98,6 +103,8 @@ class ReadPostViewModel
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
+                        } else if (exception is BlockedUserBoardException) {
+                            _blockedUserBoardMessage.value = exception.message
                         } else {
                             _errorMessage.value = exception.message
                         }

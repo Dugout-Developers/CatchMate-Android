@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.catchmate.domain.NotificationHandler
+import com.catchmate.domain.model.enumclass.AcceptState
 import com.catchmate.presentation.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -36,8 +37,8 @@ class NotificationHandlerImpl
 
             val destinationId =
                 when {
-                    data["acceptStatus"] == "PENDING" -> R.id.receivedJoinFragment
-                    data["acceptStatus"] == "ACCEPTED" -> R.id.chattingHomeFragment
+                    data["acceptStatus"] == AcceptState.PENDING.name -> R.id.receivedJoinFragment
+                    data["acceptStatus"] == AcceptState.ACCEPTED.name -> R.id.chattingHomeFragment
                     data.containsKey("chatRoomId") -> R.id.chattingRoomFragment
                     else -> R.id.homeFragment
                 }

@@ -2,10 +2,7 @@ package com.catchmate.presentation.view.favorite
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -14,21 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentFavoriteBinding
-import com.catchmate.presentation.interaction.OnPostItemAllRemovedListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
+import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FavoriteFragment :
-    Fragment(),
+    BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteBinding::inflate),
     OnPostItemClickListener,
     OnPostItemToggleClickListener,
-    OnPostItemAllRemovedListener {
-    private var _binding: FragmentFavoriteBinding? = null
-    val binding get() = _binding!!
-
+    OnListItemAllRemovedListener {
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private var currentPage: Int = 0
@@ -38,20 +33,12 @@ class FavoriteFragment :
     private var isFirstLoad = true
     private var likedList: MutableList<Board> = mutableListOf()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        enableDoubleBackPressedExit = true
         initHeader()
         initViewModel()
         initRecyclerView()
@@ -60,11 +47,6 @@ class FavoriteFragment :
             getLikedBoard()
             isFirstLoad = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initHeader() {
@@ -167,7 +149,7 @@ class FavoriteFragment :
         adapter.removeUnlikedPost(position)
     }
 
-    override fun onPostItemAllRemoved() {
+    override fun onListItemAllRemoved() {
         binding.rvFavoritePost.visibility = View.GONE
         binding.layoutFavoriteNoList.visibility = View.VISIBLE
     }

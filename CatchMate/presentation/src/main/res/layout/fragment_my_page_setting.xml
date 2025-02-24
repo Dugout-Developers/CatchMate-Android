@@ -56,6 +56,15 @@
             android:paddingBottom="@dimen/small"
             android:text="@string/mypage_setting_notification_setting"
             android:textAppearance="@style/Typography.Body01.Medium" />
+
+        <TextView
+            android:id="@+id/tv_my_page_setting_blocked_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/small"
+            android:paddingBottom="@dimen/small"
+            android:text="@string/mypage_setting_block_setting"
+            android:textAppearance="@style/Typography.Body01.Medium" />
     </LinearLayout>
 
     <LinearLayout

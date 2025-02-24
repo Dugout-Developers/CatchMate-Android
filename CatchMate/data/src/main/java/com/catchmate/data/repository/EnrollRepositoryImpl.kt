@@ -176,6 +176,7 @@ class EnrollRepositoryImpl
             } catch (e: ReissueFailureException) {
                 Result.failure(e)
             } catch (e: Exception) {
+                e.printStackTrace()
                 Result.failure(e)
             }
 

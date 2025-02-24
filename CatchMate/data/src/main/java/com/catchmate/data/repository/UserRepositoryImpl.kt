@@ -4,14 +4,20 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
+import com.catchmate.data.mapper.UserMapper.toDeleteBlockedUserResponse
+import com.catchmate.data.mapper.UserMapper.toGetBlockedUserListResponse
+import com.catchmate.data.mapper.UserMapper.toPostUserBlockResponse
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.domain.exception.UserBlockFailureException
+import com.catchmate.domain.model.user.DeleteBlockedUserResponse
+import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
+import com.catchmate.domain.model.user.PostUserBlockResponse
 import com.catchmate.domain.repository.UserRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -71,6 +77,45 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
+        override suspend fun getBlockedUserList(): Result<GetBlockedUserListResponse> =
+            try {
+                val response = userApi.getBlockedUserList()
+                if (response.isSuccessful) {
+                    Log.d("UserRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { toGetBlockedUserListResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("UserRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse> =
+            try {
+                val response = userApi.postUserBlock(blockedUserId)
+                if (response.isSuccessful) {
+                    Log.d("UserRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { toPostUserBlockResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    if (response.code() == 400) {
+                        val message = stringToJson.getString("message")
+                        Result.failure(UserBlockFailureException(message))
+                    } else {
+                        Result.failure(Exception("UserRepo 통신 실패 : $stringToJson"))
+                    }
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
         override suspend fun postUserAdditionalInfo(
             postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest,
         ): Result<PostUserAdditionalInfoResponse> =
@@ -123,7 +168,7 @@ class UserRepositoryImpl
             }
 
         override suspend fun patchUserAlarm(
-            alarmType: AlarmType,
+            alarmType: String,
             isEnabled: String,
         ): Result<PatchUserAlarmResponse> =
             try {
@@ -137,6 +182,23 @@ class UserRepositoryImpl
                                 UserMapper.toPatchUserAlarmResponse(responseBody)
                             }
                             ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("UserRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse> =
+            try {
+                val response = userApi.deleteBlockedUser(blockedUserId)
+                if (response.isSuccessful) {
+                    Log.d("UserRepo", "통신 성공 : ${response.code()}")
+                    val body = response.body()?.let { toDeleteBlockedUserResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

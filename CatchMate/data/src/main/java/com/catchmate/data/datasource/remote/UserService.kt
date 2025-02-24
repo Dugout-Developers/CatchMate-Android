@@ -1,16 +1,19 @@
 package com.catchmate.data.datasource.remote
 
+import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
+import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
 import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
-import com.catchmate.domain.model.enumclass.AlarmType
+import com.catchmate.data.dto.user.PostUserBlockResponseDTO
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -28,6 +31,14 @@ interface UserService {
         @Path("profileUserId") profileUserId: Long,
     ): Response<GetUserProfileByIdResponseDTO?>
 
+    @GET("users/block")
+    suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
+
+    @POST("users/block/{blockedUserId}")
+    suspend fun postUserBlock(
+        @Path("blockedUserId") blockedUserId: Long,
+    ): Response<PostUserBlockResponseDTO?>
+
     @POST("users/additional-info")
     suspend fun postUserAdditionalInfo(
         @Body postUserAdditionalInfoRequestDTO: PostUserAdditionalInfoRequestDTO,
@@ -43,7 +54,12 @@ interface UserService {
     // isEnabled : Y/N
     @PATCH("users/alarm")
     suspend fun patchUserAlarm(
-        @Query("alarmType") alarmType: AlarmType,
+        @Query("alarmType") alarmType: String,
         @Query("isEnabled") isEnabled: String,
     ): Response<PatchUserAlarmResponseDTO?>
+
+    @DELETE("users/block/{blockedUserId}")
+    suspend fun deleteBlockedUser(
+        @Path("blockedUserId") blockedUserId: Long,
+    ): Response<DeleteBlockedUserResponseDTO?>
 }
