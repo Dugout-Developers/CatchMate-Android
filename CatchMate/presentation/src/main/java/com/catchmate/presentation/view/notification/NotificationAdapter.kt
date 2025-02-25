@@ -12,9 +12,9 @@ import com.bumptech.glide.Glide
 import com.catchmate.domain.model.notification.NotificationInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemNotificationBinding
+import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
-import com.catchmate.presentation.interaction.OnNotificationItemSwipeListener
 import com.catchmate.presentation.util.DateUtils
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -22,7 +22,7 @@ class NotificationAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
     private val itemClickListener: OnNotificationItemClickListener,
-    private val itemSwipeListener: OnNotificationItemSwipeListener,
+    private val itemSwipeListener: OnItemSwipeListener,
     private val itemAllRemovedListener: OnListItemAllRemovedListener,
 ) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
     private var notificationList: MutableList<NotificationInfo> = mutableListOf()

@@ -1,16 +1,17 @@
-package com.catchmate.presentation.view.notification
+package com.catchmate.presentation.view.chatting
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.notification.NotificationInfo
+import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
+import com.catchmate.presentation.view.notification.SwipeBackgroundHelper
 
-class SwipeDeleteCallback(
+class SwipeChattingRoomCallback(
     private val recyclerView: RecyclerView,
-    private val data: MutableList<NotificationInfo>,
+    private val data: MutableList<ChatRoomInfo>,
 ) : ItemTouchHelper.Callback() {
-    var adapter: NotificationAdapter = (recyclerView.adapter as NotificationAdapter)
+    var adapter: ChattingRoomListAdapter = (recyclerView.adapter as ChattingRoomListAdapter)
 
     // dragFlags 0으로 지정해서 드래그 비허용, swipeFlags LEFT로 지정해서 왼쪽 스와이프 허용
     override fun getMovementFlags(
@@ -30,7 +31,7 @@ class SwipeDeleteCallback(
     ) {
         // swipe 발생시킨 아이템 position
         val deletedPos = viewHolder.absoluteAdapterPosition
-        val deletedItemId = data[deletedPos].notificationId
+        val deletedItemId = data[deletedPos].chatRoomId
 
         if (direction == ItemTouchHelper.LEFT) {
             // adapter에서 아이템 제거

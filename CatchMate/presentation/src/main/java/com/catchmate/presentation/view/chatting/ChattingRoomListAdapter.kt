@@ -13,6 +13,7 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemChattingBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
+import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.util.DateUtils.formatLastChatTime
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.convertTeamLogo
@@ -21,12 +22,25 @@ class ChattingRoomListAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
     private val onChattingRoomSelectedListener: OnChattingRoomSelectedListener,
+    private val itemSwipeListener: OnItemSwipeListener,
 ) : RecyclerView.Adapter<ChattingRoomListAdapter.ChattingRoomListViewHolder>() {
     private var chattingRoomList: MutableList<ChatRoomInfo> = mutableListOf()
 
     fun updateList(newList: List<ChatRoomInfo>) {
         chattingRoomList = newList.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun swipeItem(
+        position: Int,
+        swipedItemId: Long,
+    ) {
+        itemSwipeListener.onNotificationItemSwipe(position, swipedItemId)
+    }
+
+    fun removeItem(position: Int) {
+        chattingRoomList.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     inner class ChattingRoomListViewHolder(
