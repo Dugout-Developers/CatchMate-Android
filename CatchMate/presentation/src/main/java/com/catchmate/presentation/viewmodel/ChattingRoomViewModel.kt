@@ -37,6 +37,7 @@ class ChattingRoomViewModel
         private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
         private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
     ) : ViewModel() {
+        private val maxRetry = 5
         private val intervalMillis = 1000L
         lateinit var stompConnection: Disposable
         lateinit var topic: Disposable
@@ -89,6 +90,13 @@ class ChattingRoomViewModel
             var retryCount = 0
             viewModelScope.launch {
                 stompConnection = stompClient.connect()
+                    .retryWhen { error ->
+                        error.takeWhile { retryCount < maxRetry }
+                            .doOnNext {
+                                retryCount++
+                                Log.e("Web Socket🔄", "retry : $retryCount / 5")
+                            }
+                    }
                     .subscribe { event ->
                         when (event.type) {
                             Event.Type.OPENED -> {
@@ -100,6 +108,9 @@ class ChattingRoomViewModel
                             }
                             Event.Type.ERROR -> {
                                 Log.e("Web Socket", "${event.exception}")
+                                if (retryCount >= maxRetry) {
+                                    Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
+                                }
                             }
                             else -> {}
                         }
