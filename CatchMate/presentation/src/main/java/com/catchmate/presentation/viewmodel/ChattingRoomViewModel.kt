@@ -49,8 +49,7 @@ class ChattingRoomViewModel
                     HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     },
-                )
-                .build()
+                ).build()
 
         private val stompClient =
             StompClient(okHttpClient, intervalMillis).apply {
@@ -89,53 +88,56 @@ class ChattingRoomViewModel
         fun connectToWebSocket(chatRoomId: Long) {
             var retryCount = 0
             viewModelScope.launch {
-                stompConnection = stompClient.connect()
-                    .retryWhen { error ->
-                        error.takeWhile { retryCount < maxRetry }
-                            .doOnNext {
-                                retryCount++
-                                Log.e("Web Socket🔄", "retry : $retryCount / 5")
-                            }
-                    }
-                    .subscribe { event ->
-                        when (event.type) {
-                            Event.Type.OPENED -> {
-                                Log.d("Web Socket✅", "연결 성공")
-                                handleWebSocketOpened(chatRoomId)
-                            }
-                            Event.Type.CLOSED -> {
-                                Log.d("Web Socket💤", "연결 해제")
-                            }
-                            Event.Type.ERROR -> {
-                                Log.e("Web Socket", "${event.exception}")
-                                if (retryCount >= maxRetry) {
-                                    Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
+                stompConnection =
+                    stompClient
+                        .connect()
+                        .retryWhen { error ->
+                            error
+                                .takeWhile { retryCount < maxRetry }
+                                .doOnNext {
+                                    retryCount++
+                                    Log.e("Web Socket🔄", "retry : $retryCount / 5")
                                 }
+                        }.subscribe { event ->
+                            when (event.type) {
+                                Event.Type.OPENED -> {
+                                    Log.d("Web Socket✅", "연결 성공")
+                                    handleWebSocketOpened(chatRoomId)
+                                }
+                                Event.Type.CLOSED -> {
+                                    Log.d("Web Socket💤", "연결 해제")
+                                }
+                                Event.Type.ERROR -> {
+                                    Log.e("Web Socket", "${event.exception}")
+                                    if (retryCount >= maxRetry) {
+                                        Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
+                                    }
+                                }
+                                else -> {}
                             }
-                            else -> {}
                         }
-                    }
             }
         }
 
         private fun handleWebSocketOpened(chatRoomId: Long) {
-            topic = stompClient.join("/topic/chat.$chatRoomId").subscribe { message ->
-                Log.d("✅ Msg", message)
-                val jsonObject = JSONObject(message)
-                val messageType = jsonObject.getString("messageType")
-                val senderId = jsonObject.getString("senderId").toLong()
-                val content = jsonObject.getString("content")
-                val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
-                val chatMessageInfo =
-                    ChatMessageInfo(
-                        id = chatMessageId,
-                        content = content,
-                        senderId = senderId,
-                        messageType = messageType,
-                    )
-                Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
-                addChatMessage(chatMessageInfo)
-            }
+            topic =
+                stompClient.join("/topic/chat.$chatRoomId").subscribe { message ->
+                    Log.d("✅ Msg", message)
+                    val jsonObject = JSONObject(message)
+                    val messageType = jsonObject.getString("messageType")
+                    val senderId = jsonObject.getString("senderId").toLong()
+                    val content = jsonObject.getString("content")
+                    val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
+                    val chatMessageInfo =
+                        ChatMessageInfo(
+                            id = chatMessageId,
+                            content = content,
+                            senderId = senderId,
+                            messageType = messageType,
+                        )
+                    Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
+                    addChatMessage(chatMessageInfo)
+                }
         }
 
         fun sendMessage(
@@ -158,7 +160,6 @@ class ChattingRoomViewModel
                 })
             }
         }
-
 
         override fun onCleared() {
             super.onCleared()
