@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -14,8 +13,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.chatting.ChatMessageId
-import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -24,12 +21,10 @@ import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
-import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.gmail.bishoybasily.stomp.lib.Event
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.snackbar.Snackbar
