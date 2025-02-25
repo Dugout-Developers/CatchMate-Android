@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -31,6 +32,7 @@ import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -62,55 +64,17 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
         localDataViewModel.getUserId()
         initChatBox()
-        connectToWebSocket()
+        chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingRoomViewModel.disposables.dispose()
+        chattingRoomViewModel.topic.dispose()
+        chattingRoomViewModel.stompConnection.dispose()
     }
 
     private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
-
-    private fun connectToWebSocket() {
-        chattingRoomViewModel.connectToWebSocket().subscribe({ event ->
-            when (event.type) {
-                Event.Type.OPENED -> {
-                    Log.d("Web Socket✅", "연결 성공")
-                    handleWebSocketOpened()
-                }
-                Event.Type.CLOSED -> Log.d("Web Socket💤", "연결 해제")
-                Event.Type.ERROR -> Log.e("Web Socket❌", "에러 발생")
-                else -> {}
-            }
-        }, { error ->
-            Log.e("Web Socket❌", "오류 발생", error)
-        })
-    }
-
-    private fun handleWebSocketOpened() {
-        chattingRoomViewModel.subscribeToChatRoom(chatRoomId).subscribe({ message ->
-            Log.d("✅ Msg", message)
-            // recycler view에 새로운 말풍선뷰 add
-            val jsonObject = JSONObject(message)
-            val messageType = jsonObject.getString("messageType")
-            val senderId = jsonObject.getString("senderId").toLong()
-            val content = jsonObject.getString("content")
-            val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
-            val chatMessageInfo =
-                ChatMessageInfo(
-                    id = chatMessageId,
-                    content = content,
-                    senderId = senderId,
-                    messageType = messageType,
-                )
-            Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
-            chattingRoomViewModel.addChatMessage(chatMessageInfo)
-        }, { error ->
-            Log.e("Web Socket❌", "구독 중 오류 발생", error)
-        })
-    }
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
@@ -175,6 +139,13 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
+        }
+        chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
+            if (isSent) {
+                binding.edtChattingRoomChatBox.setText("")
+            } else {
+                Snackbar.make(requireView(), "메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -273,20 +244,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         put("senderId", userId)
                     }.toString()
 
-            chattingRoomViewModel
-                .sendChat(
-                    chatRoomId,
-                    message,
-                ).subscribe({ isSend ->
-                    binding.edtChattingRoomChatBox.setText("")
-                    if (isSend) {
-                        Log.d("Web Socket📬", "메시지 전달")
-                    } else {
-                        Log.e("Web Socket😩", "메시지 전달 실패")
-                    }
-                }, { error ->
-                    Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
-                })
+            chattingRoomViewModel.sendMessage(chatRoomId, message)
         }
     }
 

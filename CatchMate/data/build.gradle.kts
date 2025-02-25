@@ -15,12 +15,10 @@ android {
 
     val googleWebClientId = properties["google_web_client_id"] as? String ?: ""
     val serverDomain = properties["server_domain"] as? String ?: ""
-    val serverSocketUrl = properties["server_socket_url"] as? String ?: ""
 
     defaultConfig {
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", googleWebClientId)
         buildConfigField("String", "SERVER_DOMAIN", serverDomain)
-        buildConfigField("String", "SERVER_SOCKET_URL", serverSocketUrl)
     }
 
     buildFeatures {
@@ -51,8 +49,4 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.security.crypto.ktx)
-
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.stomp)
 }
