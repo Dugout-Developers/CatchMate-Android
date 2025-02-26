@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.catchmate.presentation.viewmodel.MainActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding!!
 
     private val localDataViewModel: LocalDataViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val permissionList =
         arrayOf(
@@ -35,8 +37,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         requestPermissions(permissionList, 0)
+
         initViewModel()
         localDataViewModel.getAccessToken()
+        initNavController()
+        initBottomNavigationView()
     }
 
     override fun onDestroy() {
@@ -45,6 +50,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
+        mainActivityViewModel.isGuestLogin.observe(this) { isGuest ->
+            Log.e("메인a", "guest mode")
+        }
         localDataViewModel.accessToken.observe(this) { accessToken ->
             if (accessToken.isNullOrEmpty()) {
                 Log.e("메인a", "accesstoken null or empty")
@@ -53,8 +61,6 @@ class MainActivity : AppCompatActivity() {
                 Log.e("메인a", "accesstoken not null or empty")
                 binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
             }
-            initNavController()
-            initBottomNavigationView()
         }
     }
 
@@ -89,31 +95,27 @@ class MainActivity : AppCompatActivity() {
         binding.bottomnavigationviewMain.apply {
             setOnItemSelectedListener {
                 if (it.itemId == selectedItemId) {
-                    return@setOnItemSelectedListener false
+                    return@setOnItemSelectedListener true
                 }
+                val isGuest = mainActivityViewModel.isGuestLogin.value ?: false
                 when (it.itemId) {
                     R.id.menuitem_home -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
                     }
-                    R.id.menuitem_favorite -> {
-                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
-                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
-                        } else {
-                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.favoriteFragment)
-                        }
-                    }
-                    R.id.menuitem_post -> {
-                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
-                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
-                        } else {
-                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.addPostFragment)
-                        }
-                    }
+                    R.id.menuitem_favorite,
+                    R.id.menuitem_post,
                     R.id.menuitem_chatting -> {
-                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
+                        if (isGuest) {
                             Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                            return@setOnItemSelectedListener false
                         } else {
-                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.chattingHomeFragment)
+                            val destinationId =
+                                when (it.itemId) {
+                                    R.id.menuitem_favorite -> R.id.favoriteFragment
+                                    R.id.menuitem_post -> R.id.addPostFragment
+                                    else -> R.id.chattingHomeFragment
+                                }
+                            binding.fragmentcontainerviewMain.findNavController().navigate(destinationId)
                         }
                     }
                     else -> {

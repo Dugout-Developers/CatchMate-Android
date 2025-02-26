@@ -30,8 +30,10 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initHeader()
         initViewModel()
+        localDataViewModel.getProvider()
+        localDataViewModel.getRefreshToken()
+        initHeader()
     }
 
     private fun initHeader() {
@@ -60,8 +62,6 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
     }
 
     private fun initViewModel() {
-        localDataViewModel.getProvider()
-        localDataViewModel.getRefreshToken()
         localDataViewModel.provider.observe(viewLifecycleOwner) { provider ->
             initLoginInfo(provider)
         }
@@ -70,22 +70,22 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
                 initLogoutBtn()
             }
         }
+        accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
+            Log.e("LOGOUT", response.state.toString())
+            // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
+            localDataViewModel.logout()
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.accountInfoFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+        }
     }
 
     private fun initLogoutBtn() {
         binding.btnAccountInfoLogout.setOnClickListener {
             accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
-            accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
-                Log.e("LOGOUT", response.state.toString())
-                // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
-                localDataViewModel.logout()
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.accountInfoFragment, true)
-                        .build()
-                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
-            }
         }
     }
 }
