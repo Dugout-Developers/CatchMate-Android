@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomnavigationviewMain.apply {
             setOnItemSelectedListener {
                 if (it.itemId == selectedItemId) {
-                    return@setOnItemSelectedListener true
+                    return@setOnItemSelectedListener false
                 }
                 val isGuest = mainActivityViewModel.isGuestLogin.value ?: false
                 when (it.itemId) {
@@ -107,7 +107,6 @@ class MainActivity : AppCompatActivity() {
                     R.id.menuitem_chatting -> {
                         if (isGuest) {
                             Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
-                            return@setOnItemSelectedListener false
                         } else {
                             val destinationId =
                                 when (it.itemId) {
