@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,10 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         requestPermissions(permissionList, 0)
-        initNavController()
-        initBottomNavigationView()
-
-        getTokens()
+        initViewModel()
+        localDataViewModel.getAccessToken()
     }
 
     override fun onDestroy() {
@@ -45,8 +44,7 @@ class MainActivity : AppCompatActivity() {
         _binding = null
     }
 
-    private fun getTokens() {
-        localDataViewModel.getAccessToken()
+    private fun initViewModel() {
         localDataViewModel.accessToken.observe(this) { accessToken ->
             if (accessToken.isNullOrEmpty()) {
                 Log.e("메인a", "accesstoken null or empty")
@@ -55,6 +53,8 @@ class MainActivity : AppCompatActivity() {
                 Log.e("메인a", "accesstoken not null or empty")
                 binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
             }
+            initNavController()
+            initBottomNavigationView()
         }
     }
 
@@ -96,13 +96,25 @@ class MainActivity : AppCompatActivity() {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
                     }
                     R.id.menuitem_favorite -> {
-                        binding.fragmentcontainerviewMain.findNavController().navigate(R.id.favoriteFragment)
+                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
+                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.favoriteFragment)
+                        }
                     }
                     R.id.menuitem_post -> {
-                        binding.fragmentcontainerviewMain.findNavController().navigate(R.id.addPostFragment)
+                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
+                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.addPostFragment)
+                        }
                     }
                     R.id.menuitem_chatting -> {
-                        binding.fragmentcontainerviewMain.findNavController().navigate(R.id.chattingHomeFragment)
+                        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
+                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            binding.fragmentcontainerviewMain.findNavController().navigate(R.id.chattingHomeFragment)
+                        }
                     }
                     else -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.myPageFragment)

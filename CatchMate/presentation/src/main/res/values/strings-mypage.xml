@@ -48,4 +48,7 @@
 
     <string name="mypage_received_join_enroll_reject">거절</string>
     <string name="mypage_received_join_enroll_accept">수락</string>
+
+    <string name="mypage_guest_title">로그인이 필요해요</string>
+    <string name="mypage_guest_content">로그인하고 캐치메이트에서 직관 친구를 찾아보세요</string>
 </resources>

@@ -89,7 +89,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             ivLoginGoogle.setOnClickListener {
                 loginViewModel.googleLogin()
             }
-            tvLoginSneakPeek.setOnClickListener {
+            tvLoginGuest.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
         }
