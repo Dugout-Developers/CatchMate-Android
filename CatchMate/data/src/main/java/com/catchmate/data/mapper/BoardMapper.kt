@@ -95,7 +95,7 @@ object BoardMapper {
             watchStyle = dto.watchStyle,
         )
 
-    private fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
+    fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
         FavoriteClub(
             id = dto.id,
             name = dto.name,

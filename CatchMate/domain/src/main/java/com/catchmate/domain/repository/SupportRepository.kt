@@ -1,6 +1,8 @@
 package com.catchmate.domain.repository
 
 import com.catchmate.domain.model.support.GetInquiryResponse
+import com.catchmate.domain.model.support.GetNoticeListResponse
+import com.catchmate.domain.model.support.NoticeInfo
 import com.catchmate.domain.model.support.PostInquiryRequest
 import com.catchmate.domain.model.support.PostInquiryResponse
 import com.catchmate.domain.model.support.PostUserReportRequest
@@ -15,4 +17,8 @@ interface SupportRepository {
         reportedUserId: Long,
         request: PostUserReportRequest,
     ): Result<PostUserReportResponse>
+
+    suspend fun getNoticeList(): Result<GetNoticeListResponse>
+
+    suspend fun getNoticeDetail(noticeId: Long): Result<NoticeInfo>
 }

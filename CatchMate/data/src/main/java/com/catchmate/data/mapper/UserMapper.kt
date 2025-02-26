@@ -10,6 +10,7 @@ import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.data.dto.user.PostUserBlockResponseDTO
+import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.FavoriteClub
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
@@ -36,14 +37,6 @@ object UserMapper {
             favoriteClub = toFavoriteClub(getUserProfileResponseDTO.favoriteClub),
             birthDate = getUserProfileResponseDTO.birthDate,
             watchStyle = getUserProfileResponseDTO.watchStyle,
-        )
-
-    private fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
-        FavoriteClub(
-            dto.id,
-            dto.name,
-            dto.homeStadium,
-            dto.region,
         )
 
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =

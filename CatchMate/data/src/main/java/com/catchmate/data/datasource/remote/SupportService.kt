@@ -1,6 +1,8 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.support.GetInquiryResponseDTO
+import com.catchmate.data.dto.support.GetNoticeListResponseDTO
+import com.catchmate.data.dto.support.NoticeInfoDTO
 import com.catchmate.data.dto.support.PostInquiryRequestDTO
 import com.catchmate.data.dto.support.PostInquiryResponseDTO
 import com.catchmate.data.dto.support.PostUserReportRequestDTO
@@ -27,4 +29,12 @@ interface SupportService {
         @Path("reportedUserId") reportedUserId: Long,
         @Body postUserReportRequestDTO: PostUserReportRequestDTO,
     ): Response<PostUserReportResponseDTO?>
+
+    @GET("notices/list")
+    suspend fun getNoticeList(): Response<GetNoticeListResponseDTO?>
+
+    @GET("notices/{noticeId}")
+    suspend fun getNoticeDetail(
+        @Path("noticeId") noticeId: Long,
+    ): Response<NoticeInfoDTO?>
 }
