@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.support.NoticeInfo
 import com.catchmate.presentation.databinding.ItemAnnouncementBinding
 import com.catchmate.presentation.interaction.OnAnnouncementItemClickListener
+import com.catchmate.presentation.util.DateUtils.formatInquiryAnsweredDate
 
 class AnnouncementListAdapter(
     private val onAnnouncementItemClickListener: OnAnnouncementItemClickListener,
@@ -17,7 +18,7 @@ class AnnouncementListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NoticeInfo) {
             binding.tvTitleItemAnnouncement.text = data.title
-            binding.tvTeamAndDateInfoAnnouncement.text = data.userInfo.nickName + " | " + data.createdAt
+            binding.tvTeamAndDateInfoAnnouncement.text = "${data.userInfo.nickName} | ${formatInquiryAnsweredDate(data.updatedAt)}"
             binding.cvItemAnnouncement.setOnClickListener {
                 onAnnouncementItemClickListener.onAnnouncementItemClick(data.noticeId)
             }
