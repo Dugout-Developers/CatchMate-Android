@@ -312,5 +312,14 @@
         android:id="@+id/announcementFragment"
         android:name="com.catchmate.presentation.view.support.AnnouncementFragment"
         android:label="fragment_announcement"
-        tools:layout="@layout/fragment_announcement" />
+        tools:layout="@layout/fragment_announcement" >
+        <action
+            android:id="@+id/action_announcementFragment_to_announcementDetailFragment"
+            app:destination="@id/announcementDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/announcementDetailFragment"
+        android:name="com.catchmate.presentation.view.support.AnnouncementDetailFragment"
+        android:label="fragment_announcement_detail"
+        tools:layout="@layout/fragment_announcement_detail" />
 </navigation>

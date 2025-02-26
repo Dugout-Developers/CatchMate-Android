@@ -5,15 +5,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.support.NoticeInfo
 import com.catchmate.presentation.databinding.ItemAnnouncementBinding
+import com.catchmate.presentation.interaction.OnAnnouncementItemClickListener
 
-class AnnouncementListAdapter : ListAdapter<Pair<String, String>, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
+class AnnouncementListAdapter(
+    private val onAnnouncementItemClickListener: OnAnnouncementItemClickListener,
+) : ListAdapter<NoticeInfo, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
     inner class AnnouncementViewHolder(
         private val binding: ItemAnnouncementBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Pair<String, String>) {
-            binding.tvTitleItemAnnouncement.text = data.first
-            binding.tvTeamAndDateInfoAnnouncement.text = data.second
+        fun bind(data: NoticeInfo) {
+            binding.tvTitleItemAnnouncement.text = data.title
+            binding.tvTeamAndDateInfoAnnouncement.text = data.userInfo.nickName + " | " + data.createdAt
+            binding.cvItemAnnouncement.setOnClickListener {
+                onAnnouncementItemClickListener.onAnnouncementItemClick(data.noticeId)
+            }
         }
     }
 
@@ -38,15 +45,15 @@ class AnnouncementListAdapter : ListAdapter<Pair<String, String>, AnnouncementLi
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<Pair<String, String>>() {
+            object : DiffUtil.ItemCallback<NoticeInfo>() {
                 override fun areItemsTheSame(
-                    oldItem: Pair<String, String>,
-                    newItem: Pair<String, String>,
+                    oldItem: NoticeInfo,
+                    newItem: NoticeInfo,
                 ): Boolean = oldItem == newItem
 
                 override fun areContentsTheSame(
-                    oldItem: Pair<String, String>,
-                    newItem: Pair<String, String>,
+                    oldItem: NoticeInfo,
+                    newItem: NoticeInfo,
                 ): Boolean = oldItem == newItem
             }
     }
