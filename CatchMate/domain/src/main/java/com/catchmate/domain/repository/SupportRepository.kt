@@ -11,5 +11,8 @@ interface SupportRepository {
 
     suspend fun postInquiry(request: PostInquiryRequest): Result<PostInquiryResponse>
 
-    suspend fun portUserReport(request: PostUserReportRequest): Result<PostUserReportResponse>
+    suspend fun portUserReport(
+        reportedUserId: Long,
+        request: PostUserReportRequest,
+    ): Result<PostUserReportResponse>
 }

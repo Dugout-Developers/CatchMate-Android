@@ -58,9 +58,12 @@ class SupportRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun portUserReport(request: PostUserReportRequest): Result<PostUserReportResponse> =
+        override suspend fun portUserReport(
+            reportedUserId: Long,
+            request: PostUserReportRequest,
+        ): Result<PostUserReportResponse> =
             try {
-                val response = supportApi.postUserReport(toPostUserReportRequestDTO(request))
+                val response = supportApi.postUserReport(reportedUserId, toPostUserReportRequestDTO(request))
                 if (response.isSuccessful) {
                     Log.d("Support Repo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { toPostUserReportResponse(it) } ?: throw NullPointerException("Null Response")

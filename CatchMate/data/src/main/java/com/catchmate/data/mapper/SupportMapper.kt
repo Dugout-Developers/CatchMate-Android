@@ -25,7 +25,6 @@ object SupportMapper {
 
     fun toPostUserReportRequestDTO(request: PostUserReportRequest): PostUserReportRequestDTO =
         PostUserReportRequestDTO(
-            reportedUserId = request.reportedUserId,
             reportType = request.reportType,
             content = request.content,
         )

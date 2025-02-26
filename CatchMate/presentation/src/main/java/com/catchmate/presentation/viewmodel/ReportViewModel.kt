@@ -30,9 +30,12 @@ class ReportViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun postUserReport(request: PostUserReportRequest) {
+        fun postUserReport(
+            reportedUserId: Long,
+            request: PostUserReportRequest,
+        ) {
             viewModelScope.launch {
-                val result = postUserReportUseCase(request)
+                val result = postUserReportUseCase(reportedUserId, request)
                 result
                     .onSuccess { response ->
                         _postUserReportResponse.value = response

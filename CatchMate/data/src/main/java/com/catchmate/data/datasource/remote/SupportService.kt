@@ -22,8 +22,9 @@ interface SupportService {
         @Body postInquiryRequestDTO: PostInquiryRequestDTO,
     ): Response<PostInquiryResponseDTO?>
 
-    @POST("reports")
+    @POST("reports/{reportedUserId}")
     suspend fun postUserReport(
+        @Path("reportedUserId") reportedUserId: Long,
         @Body postUserReportRequestDTO: PostUserReportRequestDTO,
     ): Response<PostUserReportResponseDTO?>
 }

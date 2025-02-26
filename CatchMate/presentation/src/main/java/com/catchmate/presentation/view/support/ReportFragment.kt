@@ -42,11 +42,10 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
                 // 신고 버튼 클릭 시 선택된 신고 타입과 edt 값(있으면) 넘기기
                 val request =
                     PostUserReportRequest(
-                        userId,
                         getSelectedReportType(),
                         edtContentReport.text.toString(),
                     )
-                reportViewModel.postUserReport(request)
+                reportViewModel.postUserReport(userId, request)
             }
         }
 
