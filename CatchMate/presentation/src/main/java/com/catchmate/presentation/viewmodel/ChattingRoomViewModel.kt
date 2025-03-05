@@ -1,44 +1,60 @@
 package com.catchmate.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.chatting.ChatMessageId
 import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
-import com.catchmate.domain.usecase.chatting.ConnectWebSocketUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
-import com.catchmate.domain.usecase.chatting.SendChatUseCase
-import com.catchmate.domain.usecase.chatting.SubscribeChatRoomUseCase
+import com.catchmate.presentation.BuildConfig
+import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.gmail.bishoybasily.stomp.lib.Event
+import com.gmail.bishoybasily.stomp.lib.StompClient
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
 class ChattingRoomViewModel
     @Inject
     constructor(
-        private val connectWebSocketUseCase: ConnectWebSocketUseCase,
-        private val subscribeChatRoomUseCase: SubscribeChatRoomUseCase,
-        private val sendChatUseCase: SendChatUseCase,
         private val getChattingHistoryUseCase: GetChattingHistoryUseCase,
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
         private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
         private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
     ) : ViewModel() {
-        val disposables = CompositeDisposable()
+        private val maxRetry = 5
+        private val intervalMillis = 1000L
+        lateinit var stompConnection: Disposable
+        lateinit var topic: Disposable
+
+        private val okHttpClient =
+            OkHttpClient
+                .Builder()
+                .addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    },
+                ).build()
+
+        private val stompClient =
+            StompClient(okHttpClient, intervalMillis).apply {
+                url = BuildConfig.SERVER_SOCKET_URL
+            }
 
         private val _getChattingHistoryResponse = MutableLiveData<GetChattingHistoryResponse>()
         val getChattingHistoryResponse: LiveData<GetChattingHistoryResponse>
@@ -64,26 +80,91 @@ class ChattingRoomViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun connectToWebSocket(): Observable<Event> =
-            connectWebSocketUseCase()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .doOnSubscribe { disposables.add(it) }
+        private val _isMessageSent = MutableLiveData<Boolean>()
+        val isMessageSent: LiveData<Boolean>
+            get() = _isMessageSent
 
-        fun subscribeToChatRoom(chatRoomId: Long): Observable<String> =
-            subscribeChatRoomUseCase(chatRoomId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { disposables.add(it) }
+        /** WebSocket 연결 */
+        fun connectToWebSocket(chatRoomId: Long) {
+            var retryCount = 0
+            viewModelScope.launch {
+                stompConnection =
+                    stompClient
+                        .connect()
+                        .retryWhen { error ->
+                            error
+                                .takeWhile { retryCount < maxRetry }
+                                .doOnNext {
+                                    retryCount++
+                                    Log.e("Web Socket🔄", "retry : $retryCount / 5")
+                                }
+                        }.subscribe { event ->
+                            when (event.type) {
+                                Event.Type.OPENED -> {
+                                    Log.d("Web Socket✅", "연결 성공")
+                                    handleWebSocketOpened(chatRoomId)
+                                }
+                                Event.Type.CLOSED -> {
+                                    Log.d("Web Socket💤", "연결 해제")
+                                }
+                                Event.Type.ERROR -> {
+                                    Log.e("Web Socket", "${event.exception}")
+                                    if (retryCount >= maxRetry) {
+                                        Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
+                                    }
+                                }
+                                else -> {}
+                            }
+                        }
+            }
+        }
 
-        fun sendChat(
+        private fun handleWebSocketOpened(chatRoomId: Long) {
+            topic =
+                stompClient.join("/topic/chat.$chatRoomId").subscribe { message ->
+                    Log.d("✅ Msg", message)
+                    val jsonObject = JSONObject(message)
+                    val messageType = jsonObject.getString("messageType")
+                    val senderId = jsonObject.getString("senderId").toLong()
+                    val content = jsonObject.getString("content")
+                    val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
+                    val chatMessageInfo =
+                        ChatMessageInfo(
+                            id = chatMessageId,
+                            content = content,
+                            senderId = senderId,
+                            messageType = messageType,
+                        )
+                    Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
+                    addChatMessage(chatMessageInfo)
+                }
+        }
+
+        fun sendMessage(
             chatRoomId: Long,
             message: String,
-        ): Observable<Boolean> = sendChatUseCase(chatRoomId, message)
+        ) {
+            // 전달 성공 시 view의 edt 텍스트 비우기
+            viewModelScope.launch {
+                stompClient.send("/app/chat.$chatRoomId", message).subscribe({ isSend ->
+                    if (isSend) {
+                        Log.d("Web Socket📬", "메시지 전달")
+                        _isMessageSent.value = true
+                    } else {
+                        Log.e("Web Socket😩", "메시지 전달 실패")
+                        _isMessageSent.value = false
+                    }
+                }, { error ->
+                    Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
+                    _isMessageSent.value = false
+                })
+            }
+        }
 
         override fun onCleared() {
             super.onCleared()
-            disposables.clear()
+            topic.dispose()
+            stompConnection.dispose()
         }
 
         fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
@@ -107,7 +188,7 @@ class ChattingRoomViewModel
         fun getChattingHistory(
             chatRoomId: Long,
             page: Int,
-            size: Int? = null,
+            size: Int? = 30,
         ) {
             viewModelScope.launch {
                 val result = getChattingHistoryUseCase(chatRoomId, page, size)

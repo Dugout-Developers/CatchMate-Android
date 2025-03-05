@@ -1,14 +1,27 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("catchmate.android.library")
     alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
+val properties = Properties()
+properties.load(FileInputStream(rootProject.file("local.properties")))
+
 android {
     namespace = "com.catchmate.presentation"
+
+    val serverSocketUrl = properties["server_socket_url"] as? String ?: ""
+
+    defaultConfig {
+        buildConfigField("String", "SERVER_SOCKET_URL", serverSocketUrl)
+    }
 
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        buildConfig = true
     }
     kapt {
         correctErrorTypes = true
@@ -35,6 +48,7 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     implementation(libs.circleimageview)
     implementation(libs.glide)
     implementation(libs.rxjava)

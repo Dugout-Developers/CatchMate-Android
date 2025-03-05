@@ -6,27 +6,28 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.catchmate.domain.model.chatting.ChatMessageId
-import com.catchmate.domain.model.chatting.ChatMessageInfo
+import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enumclass.ChatMessageType
+import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
-import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.gmail.bishoybasily.stomp.lib.Event
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -36,6 +37,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var chatRoomId: Long = -1L
     private var userId: Long = -1L
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var isFirstLoad = true
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,69 +59,44 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
         localDataViewModel.getUserId()
         initChatBox()
-        connectToWebSocket()
+        chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingRoomViewModel.disposables.dispose()
+        chattingRoomViewModel.topic.dispose()
+        chattingRoomViewModel.stompConnection.dispose()
     }
 
     private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
 
-    private fun connectToWebSocket() {
-        chattingRoomViewModel.connectToWebSocket().subscribe({ event ->
-            when (event.type) {
-                Event.Type.OPENED -> {
-                    Log.d("Web Socket✅", "연결 성공")
-                    handleWebSocketOpened()
-                }
-                Event.Type.CLOSED -> Log.d("Web Socket💤", "연결 해제")
-                Event.Type.ERROR -> Log.e("Web Socket❌", "에러 발생")
-                else -> {}
-            }
-        }, { error ->
-            Log.e("Web Socket❌", "오류 발생", error)
-        })
-    }
-
-    private fun handleWebSocketOpened() {
-        chattingRoomViewModel.subscribeToChatRoom(chatRoomId).subscribe({ message ->
-            Log.d("✅ Msg", message)
-            // recycler view에 새로운 말풍선뷰 add
-            val jsonObject = JSONObject(message)
-            val messageType = jsonObject.getString("messageType")
-            val senderId = jsonObject.getString("senderId").toLong()
-            val content = jsonObject.getString("content")
-            val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
-            val chatMessageInfo =
-                ChatMessageInfo(
-                    id = chatMessageId,
-                    content = content,
-                    senderId = senderId,
-                    messageType = messageType,
-                )
-            Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
-            chattingRoomViewModel.addChatMessage(chatMessageInfo)
-        }, { error ->
-            Log.e("Web Socket❌", "구독 중 오류 발생", error)
-        })
-    }
-
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
+                Log.d("빈 채팅방 목록", "empty")
+            } else {
                 Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
-                chatListAdapter.submitList(response.chatMessageInfoList) {
-                    // 리스트 갱신 후 콜백을 통해 최신 메시지로 스크롤 이동
-                    binding.rvChattingRoomChatList.smoothScrollToPosition(0)
+                if (isApiCalled) {
+                    val currentList = chatListAdapter.currentList.toMutableList()
+                    Log.e("IS API CALLED", "🅾️")
+                    currentList.addAll(response.chatMessageInfoList)
+                    chatListAdapter.submitList(currentList)
+                    isApiCalled = false
+                } else {
+                    chatListAdapter.submitList(response.chatMessageInfoList) {
+                        // 수신 메시지 추가 후 콜백을 통해 최신 메시지로 스크롤 이동
+                        binding.rvChattingRoomChatList.smoothScrollToPosition(0)
+                        isApiCalled = false
+                    }
                 }
+                isLastPage = response.isLast
+                isLoading = false
             }
         }
         chattingRoomViewModel.getChattingCrewListResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                initRecyclerView()
+                initRecyclerView(response.userInfoList)
             }
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
@@ -128,6 +109,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             response?.let {
                 if (it.state) {
                     Log.d("채팅방 나가기 성공", "나가기 성공")
+                    setFragmentResult("deleteChattingRoomResultKey", bundleOf("chatRoomId" to chatRoomId))
                     findNavController().popBackStack()
                 } else {
                     Log.e("채팅방 오류", "나가기 실패")
@@ -153,16 +135,54 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             userId = id
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
         }
+        chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
+            if (isSent) {
+                binding.edtChattingRoomChatBox.setText("")
+            } else {
+                Snackbar.make(requireView(), "메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(list: List<GetUserProfileResponse>) {
         Log.e("userID", userId.toString())
-        chatListAdapter = ChatListAdapter(userId, chattingRoomViewModel.getChattingCrewListResponse.value?.userInfoList!!)
+        chatListAdapter = ChatListAdapter(userId, list)
         binding.rvChattingRoomChatList.apply {
             adapter = chatListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int,
+                    ) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val lastVisibleItemPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager)
+                                .findLastCompletelyVisibleItemPosition()
+                        val itemTotalCount = recyclerView.adapter!!.itemCount
+
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            currentPage += 1
+                            getChattingHistory()
+                        }
+                    }
+                },
+            )
         }
-        chattingRoomViewModel.getChattingHistory(chatRoomId, 0)
+        if (isFirstLoad) {
+            getChattingHistory()
+            isFirstLoad = false
+        }
+    }
+
+    private fun getChattingHistory() {
+        Log.e("api 호출", "호출 $isLoading $isLastPage")
+        if (isLoading || isLastPage) return
+        isLoading = true
+        chattingRoomViewModel.getChattingHistory(chatRoomId, currentPage)
+        isApiCalled = true
     }
 
     private fun initChatRoomInfo(info: ChatRoomInfo) {
@@ -219,20 +239,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         put("senderId", userId)
                     }.toString()
 
-            chattingRoomViewModel
-                .sendChat(
-                    chatRoomId,
-                    message,
-                ).subscribe({ isSend ->
-                    binding.edtChattingRoomChatBox.setText("")
-                    if (isSend) {
-                        Log.d("Web Socket📬", "메시지 전달")
-                    } else {
-                        Log.e("Web Socket😩", "메시지 전달 실패")
-                    }
-                }, { error ->
-                    Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
-                })
+            chattingRoomViewModel.sendMessage(chatRoomId, message)
         }
     }
 

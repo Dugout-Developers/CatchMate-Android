@@ -1,9 +1,14 @@
 package com.catchmate.presentation.view.activity
 
 import android.Manifest
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -45,6 +50,22 @@ class MainActivity : AppCompatActivity() {
         }
         initNavController()
         initBottomNavigationView()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            if (currentFocus is EditText) {
+                val view = currentFocus as EditText
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains((ev.rawX.toInt()), ev.rawY.toInt())) {
+                    view.clearFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onDestroy() {

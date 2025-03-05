@@ -74,6 +74,7 @@ object ResourceUtil {
         setTeamLogoOpacity(logoView, isCheerTeam)
 
         // 배경색 설정
-        DrawableCompat.setTint(backgroundView.background, convertTeamColor(context, clubId, isCheerTeam, currentPage))
+        val drawable = backgroundView.background.mutate()
+        DrawableCompat.setTint(drawable, convertTeamColor(context, clubId, isCheerTeam, currentPage))
     }
 }
