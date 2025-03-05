@@ -38,8 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         requestPermissions(permissionList, 0)
 
+
         initViewModel()
-        localDataViewModel.getAccessToken()
+        if (intent?.extras == null) {
+            localDataViewModel.getAccessToken()
+        }
         initNavController()
         initBottomNavigationView()
     }
