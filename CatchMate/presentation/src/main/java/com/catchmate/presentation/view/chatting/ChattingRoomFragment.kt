@@ -35,20 +35,15 @@ import org.json.JSONObject
 class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private var chatRoomId: Long = -1L
     private var userId: Long = -1L
     private var currentPage: Int = 0
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
+    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
     private lateinit var chatListAdapter: ChatListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        chatRoomId = getChatRoomId()
-        Log.e("chatRoomId", chatRoomId.toString())
-    }
 
     override fun onViewCreated(
         view: View,
@@ -61,6 +56,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         initChatBox()
         chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
+        onBackPressedAction = { setOnBackPressedAction() }
     }
 
     override fun onDestroyView() {
@@ -68,8 +64,6 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.topic.dispose()
         chattingRoomViewModel.stompConnection.dispose()
     }
-
-    private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
@@ -243,6 +237,19 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
     }
 
+    private fun setOnBackPressedAction() {
+        if (isPendingIntent) {
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.chattingRoomFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_chattingRoomFragment_to_homeFragment, null, navOptions)
+        } else {
+            findNavController().popBackStack()
+        }
+    }
+
     private fun initHeader(info: ChatRoomInfo) {
         binding.layoutHeaderChattingRoom.apply {
             imgbtnHeaderMenuMenu.setOnClickListener {
@@ -315,7 +322,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                 sideSheetDialog.show()
             }
             imgbtnHeaderMenuBack.setOnClickListener {
-                findNavController().popBackStack()
+                setOnBackPressedAction()
             }
             tvHeaderMenuTitle.text = info.boardInfo.title
             tvHeaderMenuMemberCount.text = info.participantCount.toString()

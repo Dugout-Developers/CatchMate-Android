@@ -38,17 +38,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostBinding::inflate) {
-    private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var isWriter = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        boardId = getBoardId()
-        Log.d("readpostboardId", boardId.toString())
-    }
+    private val boardId by lazy { arguments?.getLong("boardId") ?: -1L }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
 
     override fun onViewCreated(
         view: View,
@@ -59,9 +54,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         initViewModel()
         initHeader()
         initWriterInfoLayout()
+        onBackPressedAction = { setOnBackPressedAction() }
     }
-
-    private fun getBoardId(): Long = arguments?.getLong("boardId")!!
 
     private fun getUserId() {
         localDataViewModel.getUserId()
@@ -72,10 +66,23 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
     }
 
+    private fun setOnBackPressedAction() {
+        if (isPendingIntent) {
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.readPostFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_readPostFragment_to_homeFragment, null, navOptions)
+        } else {
+            findNavController().popBackStack()
+        }
+    }
+
     private fun initHeader() {
         binding.layoutReadPostHeader.apply {
             imgbtnHeaderKebabMenuBack.setOnClickListener {
-                findNavController().popBackStack()
+                setOnBackPressedAction()
             }
             imgbtnHeaderKebabMenu.setOnClickListener {
                 val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)

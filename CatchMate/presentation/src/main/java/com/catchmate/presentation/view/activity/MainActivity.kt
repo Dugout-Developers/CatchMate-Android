@@ -2,7 +2,6 @@ package com.catchmate.presentation.view.activity
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -76,16 +75,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        intent.extras?.let { bundle ->
-            for (key in bundle.keySet()) {
-                Log.e("intent_extras", "Key: $key, Value: ${bundle.get(key)}")
-            }
-        }
     }
 
     private fun initViewModel() {
