@@ -13,6 +13,7 @@ import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.LoginViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,6 +81,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 }
             }
         }
+        loginViewModel.noCredentialException.observe(viewLifecycleOwner) { exception ->
+            Snackbar.make(requireView(), exception, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     private fun initView() {
@@ -91,7 +95,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 loginViewModel.naverLogin()
             }
             ivLoginGoogle.setOnClickListener {
-                loginViewModel.googleLogin()
+                loginViewModel.googleLogin(requireActivity())
             }
             tvLoginGuest.setOnClickListener {
                 mainActivityViewModel.setGuestLogin(true)

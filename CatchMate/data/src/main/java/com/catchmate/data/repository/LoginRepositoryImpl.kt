@@ -1,5 +1,6 @@
 package com.catchmate.data.repository
 
+import android.app.Activity
 import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
@@ -25,9 +26,9 @@ class LoginRepositoryImpl
             return AuthMapper.toPostLoginRequest(postLoginRequestDTO)
         }
 
-        override suspend fun loginWithGoogle(): PostLoginRequest? {
-            val result = googleLoginDataSource.getCredential()
-            val postLoginRequestDTO = googleLoginDataSource.handleSignIn(result)
+        override suspend fun loginWithGoogle(activity: Activity): PostLoginRequest? {
+            val result = googleLoginDataSource.getCredential(activity)
+            val postLoginRequestDTO = result?.let { googleLoginDataSource.handleSignIn(it) }
             return if (postLoginRequestDTO == null) {
                 null
             } else {

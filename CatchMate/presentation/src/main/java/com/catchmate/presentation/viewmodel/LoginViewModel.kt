@@ -1,5 +1,6 @@
 package com.catchmate.presentation.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,10 @@ class LoginViewModel
         val postLoginResponse: LiveData<PostLoginResponse>
             get() = _postLoginResponse
 
+        private val _noCredentialException = MutableLiveData<String>()
+        val noCredentialException: LiveData<String>
+            get() = _noCredentialException
+
         fun kakaoLogin() {
             viewModelScope.launch {
                 _postLoginRequest.value = socialLoginUseCase.loginWithKakao()
@@ -39,12 +44,13 @@ class LoginViewModel
             }
         }
 
-        fun googleLogin() {
+        fun googleLogin(activity: Activity) {
             viewModelScope.launch {
-                try {
-                    _postLoginRequest.value = socialLoginUseCase.loginWithGoogle()
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                val result = socialLoginUseCase.loginWithGoogle(activity)
+                if (result != null) {
+                    _postLoginRequest.value = result!!
+                } else {
+                    _noCredentialException.value = "앱 로그인을 위해서 기기에 Google 계정을 추가해주세요."
                 }
             }
         }

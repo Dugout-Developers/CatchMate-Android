@@ -1,11 +1,12 @@
 package com.catchmate.data.datasource.local
 
-import android.content.Context
+import android.app.Activity
 import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.BuildConfig
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
@@ -13,7 +14,6 @@ import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -21,17 +21,16 @@ import javax.inject.Inject
 class GoogleLoginDataSource
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun getCredential(): GetCredentialResponse {
-            val credentialManager = CredentialManager.create(context)
+        suspend fun getCredential(activity: Activity): GetCredentialResponse? {
+            val credentialManager = CredentialManager.create(activity)
 
             val googleIdOption: GetGoogleIdOption =
                 GetGoogleIdOption
                     .Builder()
-                    .setFilterByAuthorizedAccounts(false)
                     .setAutoSelectEnabled(true)
+                    .setFilterByAuthorizedAccounts(false)
                     .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
                     .build()
 
@@ -41,7 +40,12 @@ class GoogleLoginDataSource
                     .addCredentialOption(googleIdOption)
                     .build()
 
-            return credentialManager.getCredential(context, request)
+            return try {
+                credentialManager.getCredential(activity, request)
+            } catch (e: NoCredentialException) {
+                Log.e("GoogleLoginError", "No credentials found: ${e.message}")
+                null
+            }
         }
 
         fun handleSignIn(result: GetCredentialResponse): PostLoginRequestDTO? {
