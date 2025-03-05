@@ -15,7 +15,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
 
-    private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val permissionList =
@@ -43,11 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         requestPermissions(permissionList, 0)
 
-
         initViewModel()
-        if (intent?.extras == null) {
-            localDataViewModel.getAccessToken()
-        }
         initNavController()
         initBottomNavigationView()
     }
@@ -76,15 +70,6 @@ class MainActivity : AppCompatActivity() {
     private fun initViewModel() {
         mainActivityViewModel.isGuestLogin.observe(this) { isGuest ->
             Log.e("메인a", "guest mode")
-        }
-        localDataViewModel.accessToken.observe(this) { accessToken ->
-            if (accessToken.isNullOrEmpty()) {
-                Log.e("메인a", "accesstoken null or empty")
-                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.loginFragment)
-            } else {
-                Log.e("메인a", "accesstoken not null or empty")
-                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
-            }
         }
     }
 
