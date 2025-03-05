@@ -1,6 +1,8 @@
 package com.catchmate.presentation.view.notification
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -42,12 +44,25 @@ class NotificationHandlerImpl
                     data.containsKey("chatRoomId") -> R.id.chattingRoomFragment
                     else -> R.id.homeFragment
                 }
-            val pendingIntent =
+
+            val deepLinkIntent =
                 NavDeepLinkBuilder(context)
                     .setGraph(R.navigation.nav_graph)
                     .setDestination(destinationId)
                     .setArguments(args)
-                    .createPendingIntent()
+                    .createTaskStackBuilder()
+                    .intents
+                    .last()
+
+            deepLinkIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+            val pendingIntent =
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    deepLinkIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
 
             val icon =
                 if (Build.MANUFACTURER.equals("Samsung", true)) {

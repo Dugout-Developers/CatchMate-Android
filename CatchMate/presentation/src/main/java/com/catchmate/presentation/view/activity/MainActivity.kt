@@ -2,6 +2,7 @@ package com.catchmate.presentation.view.activity
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
 
+    private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val permissionList =
@@ -36,12 +40,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        installSplashScreen()
+
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         requestPermissions(permissionList, 0)
 
+        Log.e("intent", "${intent.data} / ${intent.extras}")
+
         initViewModel()
+        if (intent.extras == null) {
+            localDataViewModel.getAccessToken()
+        }
         initNavController()
         initBottomNavigationView()
     }
@@ -67,9 +78,28 @@ class MainActivity : AppCompatActivity() {
         _binding = null
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent.extras?.let { bundle ->
+            for (key in bundle.keySet()) {
+                Log.e("intent_extras", "Key: $key, Value: ${bundle.get(key)}")
+            }
+        }
+    }
+
     private fun initViewModel() {
         mainActivityViewModel.isGuestLogin.observe(this) { isGuest ->
             Log.e("메인a", "guest mode")
+        }
+        localDataViewModel.accessToken.observe(this) { accessToken ->
+            if (accessToken.isNullOrEmpty()) {
+                Log.e("splash", "accesstoken null or empty")
+                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.loginFragment)
+            } else {
+                Log.e("splash", "accesstoken not null or empty")
+                binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
+            }
         }
     }
 

@@ -9,8 +9,13 @@
         <item name="android:spotShadowAlpha">0.03</item>
     </style>
 
-    <style name="Theme.CatchMate" parent="Base.Theme.CatchMate">
-        <!--    default splash screen 투명하게    -->
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="Theme.CatchMate" parent="Base.Theme.CatchMate"/>
+
+    <style name="Theme.CatchMate.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand500</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_splash_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brand500</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.CatchMate</item>
     </style>
 </resources>
