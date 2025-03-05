@@ -15,6 +15,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChattingHomeFragment :
     BaseFragment<FragmentChattingHomeBinding>(FragmentChattingHomeBinding::inflate),
     OnChattingRoomSelectedListener,
-    OnItemSwipeListener {
+    OnItemSwipeListener,
+    OnListItemAllRemovedListener {
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
     private var currentPage: Int = 0
     private var isLastPage = false
@@ -66,9 +68,11 @@ class ChattingHomeFragment :
     private fun initViewModel() {
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
-                // 채팅 없을때 표시할 레이아웃 가시성 처리
-                Log.e("NO CHATTING", "NO")
+                binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+                binding.rvChattingHome.visibility = View.GONE
             } else {
+                binding.rvChattingHome.visibility = View.VISIBLE
+                binding.layoutChattingHomeNoList.visibility = View.GONE
                 Log.e("EXIST CHATTING", "EXIST")
                 if (isApiCalled) {
                     chatRoomList.addAll(response.chatRoomInfoList)
@@ -111,6 +115,7 @@ class ChattingHomeFragment :
                 ChattingRoomListAdapter(
                     requireContext(),
                     layoutInflater,
+                    this@ChattingHomeFragment,
                     this@ChattingHomeFragment,
                     this@ChattingHomeFragment,
                 )
@@ -170,5 +175,10 @@ class ChattingHomeFragment :
     ) {
         deletedItemPos = position
         chattingHomeViewModel.leaveChattingRoom(swipedItemId)
+    }
+
+    override fun onListItemAllRemoved() {
+        binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+        binding.rvChattingHome.visibility = View.GONE
     }
 }
