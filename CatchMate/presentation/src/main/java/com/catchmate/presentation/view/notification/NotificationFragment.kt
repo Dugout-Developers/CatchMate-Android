@@ -154,6 +154,8 @@ class NotificationFragment :
             findNavController().navigate(R.id.action_notificationFragment_to_receivedJoinFragment)
         } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
             findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment)
+        } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
+            Snackbar.make(requireView(), "이미 거절한 직관 신청이예요.", Snackbar.LENGTH_SHORT).show()
         }
     }
 
