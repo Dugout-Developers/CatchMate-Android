@@ -206,7 +206,7 @@
                 app:layout_constraintTop_toTopOf="@+id/tbv_kiwoom"
                 app:layout_constraintEnd_toStartOf="@+id/tbv_baseball_beginner"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:teamLogoImage="@drawable/vec_all_bottom_sheet_handle_62dp"
+                app:teamLogoImage="@drawable/img_pacifist_icon"
                 app:teamNameText="@string/pacifist"
                 app:teamToggleBg="@drawable/selector_all_team_toggle"/>
 
@@ -220,7 +220,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toEndOf="@+id/tbv_pacifist"
                 app:layout_constraintTop_toTopOf="@+id/tbv_kiwoom"
-                app:teamLogoImage="@drawable/vec_all_bottom_sheet_handle_62dp"
+                app:teamLogoImage="@drawable/imb_baseball_beginner_icon"
                 app:teamNameText="@string/baseball_beginner"
                 app:teamToggleBg="@drawable/selector_all_team_toggle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
