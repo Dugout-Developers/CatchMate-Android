@@ -18,7 +18,7 @@ interface SupportRepository {
         request: PostUserReportRequest,
     ): Result<PostUserReportResponse>
 
-    suspend fun getNoticeList(): Result<GetNoticeListResponse>
+    suspend fun getNoticeList(page: Int): Result<GetNoticeListResponse>
 
     suspend fun getNoticeDetail(noticeId: Long): Result<NoticeInfo>
 }

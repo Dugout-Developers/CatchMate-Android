@@ -82,9 +82,9 @@ class SupportRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getNoticeList(): Result<GetNoticeListResponse> =
+        override suspend fun getNoticeList(page: Int): Result<GetNoticeListResponse> =
             try {
-                val response = supportApi.getNoticeList()
+                val response = supportApi.getNoticeList(page)
                 if (response.isSuccessful) {
                     Log.d("Support Repo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { toGetNoticeListResponse(it) } ?: throw NullPointerException("Null Response")

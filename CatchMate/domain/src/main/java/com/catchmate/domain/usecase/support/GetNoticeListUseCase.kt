@@ -9,5 +9,5 @@ class GetNoticeListUseCase
     constructor(
         private val supportRepository: SupportRepository,
     ) {
-        suspend operator fun invoke(): Result<GetNoticeListResponse> = supportRepository.getNoticeList()
+        suspend operator fun invoke(page: Int): Result<GetNoticeListResponse> = supportRepository.getNoticeList(page)
     }

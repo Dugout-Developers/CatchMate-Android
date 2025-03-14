@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SupportService {
     @GET("inquiries/{inquiryId}")
@@ -31,7 +32,9 @@ interface SupportService {
     ): Response<PostUserReportResponseDTO?>
 
     @GET("notices/list")
-    suspend fun getNoticeList(): Response<GetNoticeListResponseDTO?>
+    suspend fun getNoticeList(
+        @Query("page") page: Int,
+    ): Response<GetNoticeListResponseDTO?>
 
     @GET("notices/{noticeId}")
     suspend fun getNoticeDetail(

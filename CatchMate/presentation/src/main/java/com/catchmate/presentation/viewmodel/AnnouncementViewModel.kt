@@ -29,9 +29,9 @@ class AnnouncementViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getNoticeList() {
+        fun getNoticeList(page: Int) {
             viewModelScope.launch {
-                val result = getNoticeListUseCase()
+                val result = getNoticeListUseCase(page)
                 result
                     .onSuccess { response ->
                         _getNoticeListResponse.value = response
