@@ -80,8 +80,11 @@ class SentJoinFragment :
     private fun initViewModel() {
         sentJoinViewModel.requestedEnrollList.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
-                // 목록 없을때 layout 표시
+                binding.rvSentJoinPostList.visibility = View.GONE
+                binding.layoutSentJoinNoList.visibility = View.VISIBLE
             } else {
+                binding.rvSentJoinPostList.visibility = View.VISIBLE
+                binding.layoutSentJoinNoList.visibility = View.GONE
                 if (isApiCalled) {
                     enrollList.addAll(response.enrollInfoList)
                 }
