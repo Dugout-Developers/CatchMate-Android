@@ -97,7 +97,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
 
     private fun initHeader() {
         binding.layoutCheerStyleOnboardingHeader.apply {
-            imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            imgbtnOnboardingIndicator4.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
             imgbtnOnboardingBack.setOnClickListener {
                 findNavController().popBackStack()
             }

@@ -100,7 +100,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
 
     private fun initHeader() {
         binding.layoutSignupHeader.apply {
-            imgbtnOnboardingIndicator1.apply {
+            imgbtnOnboardingIndicator2.apply {
                 setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
             }
             imgbtnOnboardingBack.setOnClickListener {
