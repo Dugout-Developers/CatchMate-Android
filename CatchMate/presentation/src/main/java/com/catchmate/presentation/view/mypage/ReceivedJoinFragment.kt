@@ -95,8 +95,11 @@ class ReceivedJoinFragment :
     private fun initViewModel() {
         receivedJoinViewModel.getAllReceivedEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
-
+                binding.rvReceivedJoinList.visibility = View.GONE
+                binding.layoutReceivedJoinNoList.visibility = View.VISIBLE
             } else {
+                binding.rvReceivedJoinList.visibility = View.VISIBLE
+                binding.layoutReceivedJoinNoList.visibility = View.GONE
                 if (isApiCalled) {
                     receivedJoinList.addAll(response.enrollInfoList)
                 }
