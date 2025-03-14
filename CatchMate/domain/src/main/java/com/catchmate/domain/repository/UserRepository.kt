@@ -17,7 +17,7 @@ interface UserRepository {
 
     suspend fun getUserProfileById(profileUserId: Long): Result<GetUserProfileByIdResponse>
 
-    suspend fun getBlockedUserList(): Result<GetBlockedUserListResponse>
+    suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse>
 
     suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse>
 

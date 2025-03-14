@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentBlockedSettingBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
@@ -22,6 +24,11 @@ class BlockedSettingFragment :
     private lateinit var blockedUserAdapter: BlockedUserListAdapter
     private val blockedSettingViewModel: BlockedSettingViewModel by viewModels()
     private var deletedUserId = -1L
+    private var currentPage: Int = 0
+    private var isLastPage = false
+    private var isLoading = false
+    private var isApiCalled = false
+    private var blockedUserList: MutableList<GetUserProfileResponse> = mutableListOf()
 
     override fun onViewCreated(
         view: View,
@@ -29,8 +36,8 @@ class BlockedSettingFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        blockedSettingViewModel.getBlockedUserList()
         initView()
+        getBlockedUserList()
     }
 
     private fun initView() {
@@ -43,21 +50,58 @@ class BlockedSettingFragment :
             rvBlockedUserListBlockedSetting.apply {
                 adapter = blockedUserAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                addOnScrollListener(
+                    object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(
+                            recyclerView: RecyclerView,
+                            dx: Int,
+                            dy: Int,
+                        ) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            val lastVisibleItemPosition =
+                                (recyclerView.layoutManager as LinearLayoutManager)
+                                    .findLastCompletelyVisibleItemPosition()
+                            val itemTotalCount = recyclerView.adapter!!.itemCount
+                            if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                                currentPage += 1
+                                getBlockedUserList()
+                            }
+                        }
+                    }
+                )
             }
         }
     }
 
     private fun initViewModel() {
         blockedSettingViewModel.getBlockedUserListResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                blockedUserAdapter.submitList(response.userInfoList)
+            if (response.isFirst && response.isLast && response.totalElements == 0) {
+                binding.rvBlockedUserListBlockedSetting.visibility = View.GONE
+                binding.layoutBlockedSettingNoList.visibility = View.VISIBLE
+            } else {
+                binding.rvBlockedUserListBlockedSetting.visibility = View.VISIBLE
+                binding.layoutBlockedSettingNoList.visibility = View.GONE
+                if (isApiCalled) {
+                    blockedUserList.addAll(response.userInfoList)
+                }
+                blockedUserAdapter.submitList(blockedUserList)
+                isLastPage = response.isLast
+                isLoading = false
             }
+            isApiCalled = false
         }
         blockedSettingViewModel.deleteBlockedUserResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
                 blockedSettingViewModel.deleteUserFromList(deletedUserId)
             }
         }
+    }
+
+    private fun getBlockedUserList() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+        blockedSettingViewModel.getBlockedUserList(currentPage)
+        isApiCalled = true
     }
 
     override fun onBlockedUserSelected(

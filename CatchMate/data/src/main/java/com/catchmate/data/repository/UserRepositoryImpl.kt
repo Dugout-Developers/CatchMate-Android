@@ -77,9 +77,9 @@ class UserRepositoryImpl
                 Result.failure(e)
             }
 
-        override suspend fun getBlockedUserList(): Result<GetBlockedUserListResponse> =
+        override suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse> =
             try {
-                val response = userApi.getBlockedUserList()
+                val response = userApi.getBlockedUserList(page)
                 if (response.isSuccessful) {
                     Log.d("UserRepo", "통신 성공 : ${response.code()}")
                     val body = response.body()?.let { toGetBlockedUserListResponse(it) } ?: throw NullPointerException("Null Response")

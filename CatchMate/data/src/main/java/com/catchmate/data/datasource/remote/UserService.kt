@@ -32,7 +32,9 @@ interface UserService {
     ): Response<GetUserProfileByIdResponseDTO?>
 
     @GET("users/block")
-    suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
+    suspend fun getBlockedUserList(
+        @Query("page") page: Int,
+    ): Response<GetBlockedUserListResponseDTO?>
 
     @POST("users/block/{blockedUserId}")
     suspend fun postUserBlock(
