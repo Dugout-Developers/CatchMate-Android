@@ -52,7 +52,9 @@ interface EnrollService {
     ): Response<GetReceivedEnrollResponseDTO?>
 
     @GET("enrolls/receive/all")
-    suspend fun getAllReceivedEnroll(): Response<GetAllReceivedEnrollResponseDTO?>
+    suspend fun getAllReceivedEnroll(
+        @Query("page") page: Int,
+    ): Response<GetAllReceivedEnrollResponseDTO?>
 
     @GET("enrolls/new-count")
     suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
