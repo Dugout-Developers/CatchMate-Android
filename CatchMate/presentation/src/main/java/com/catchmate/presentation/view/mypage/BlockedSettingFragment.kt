@@ -1,9 +1,11 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentBlockedSettingBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.interaction.OnBlockedUserSelectedListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.BlockedSettingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -93,6 +96,23 @@ class BlockedSettingFragment :
         blockedSettingViewModel.deleteBlockedUserResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
                 blockedSettingViewModel.deleteUserFromList(deletedUserId)
+            }
+        }
+        blockedSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.blockedSettingFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_blockedSettingFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        blockedSettingViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }

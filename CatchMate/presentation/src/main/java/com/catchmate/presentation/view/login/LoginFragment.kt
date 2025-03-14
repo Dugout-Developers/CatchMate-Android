@@ -9,10 +9,13 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
+import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.LoginViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +24,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val loginViewModel: LoginViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val navigateCode by lazy {
+        val code = arguments?.getInt("navigateCode")
+        if (code == NAVIGATE_CODE_REISSUE) showAlertDialog()
+        code
+    }
 
     override fun onViewCreated(
         view: View,
@@ -103,5 +111,26 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
         }
+    }
+
+    private fun showAlertDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutAlertDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+        dialogBinding.apply {
+            tvAlertDialogTitle.setText(R.string.login_information_expired)
+            tvAlertDialogPositive.apply {
+                setText(R.string.complete)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 }

@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAccountInfoBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.AccountInfoViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -81,11 +82,32 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
                     .build()
             findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
         }
+        accountInfoViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.accountInfoFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        accountInfoViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
+            }
+        }
     }
 
     private fun initLogoutBtn() {
-        binding.btnAccountInfoLogout.setOnClickListener {
-            accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
+        binding.layoutFooterAccountInfo.btnFooterOne.apply {
+            isEnabled = true
+            setText(R.string.mypage_setting_user_logout)
+            setOnClickListener {
+                accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
+            }
         }
     }
 }

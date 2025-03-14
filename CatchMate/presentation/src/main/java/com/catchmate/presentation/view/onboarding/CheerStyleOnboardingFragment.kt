@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
@@ -146,7 +147,9 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                             .Builder()
                             .setPopUpTo(R.id.cheerStyleOnboardingFragment, true)
                             .build()
-                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, null, navOptions)
+                    val bundle = Bundle()
+                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, bundle, navOptions)
                 }
             }
         }

@@ -27,6 +27,7 @@ import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
@@ -285,7 +286,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         .Builder()
                         .setPopUpTo(R.id.readPostFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, bundle, navOptions)
             }
         }
         readPostViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->

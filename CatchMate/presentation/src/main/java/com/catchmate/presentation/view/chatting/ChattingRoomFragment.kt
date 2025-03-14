@@ -21,6 +21,7 @@ import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
@@ -117,7 +118,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         .Builder()
                         .setPopUpTo(R.id.chattingRoomFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, bundle, navOptions)
             }
         }
         chattingRoomViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->

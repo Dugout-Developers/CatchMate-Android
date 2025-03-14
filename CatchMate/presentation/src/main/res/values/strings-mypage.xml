@@ -25,6 +25,7 @@
     <string name="mypage_setting_user_info_title">로그인 정보</string>
 
     <string name="mypage_setting_user_info_delete_account"><u>탈퇴하기</u></string>
+    <string name="mypage_setting_user_logout">로그아웃</string>
 
     <string name="mypage_setting_notification_setting">알림 설정</string>
     <string name="mypage_setting_notification_setting_all">전체 알림</string>

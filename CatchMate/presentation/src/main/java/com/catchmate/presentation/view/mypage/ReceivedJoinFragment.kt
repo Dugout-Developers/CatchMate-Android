@@ -12,6 +12,7 @@ import com.catchmate.domain.model.enroll.AllReceivedEnrollInfoResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentReceivedJoinBinding
 import com.catchmate.presentation.interaction.OnReceivedEnrollClickListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ReceivedJoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -122,7 +123,9 @@ class ReceivedJoinFragment :
                         .Builder()
                         .setPopUpTo(R.id.receivedJoinFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_receivedJoinFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_receivedJoinFragment_to_loginFragment, bundle, navOptions)
             }
         }
     }

@@ -14,6 +14,7 @@ import com.catchmate.presentation.databinding.FragmentFavoriteBinding
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,7 +83,9 @@ class FavoriteFragment :
                         .Builder()
                         .setPopUpTo(R.id.favoriteFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
             }
         }
 

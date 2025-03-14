@@ -16,6 +16,7 @@ import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -91,7 +92,9 @@ class ChattingHomeFragment :
                         .Builder()
                         .setPopUpTo(R.id.chattingHomeFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_chattingHomeFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingHomeFragment_to_loginFragment, bundle, navOptions)
             }
         }
         chattingHomeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->

@@ -25,6 +25,7 @@ import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -164,7 +165,9 @@ class MyPostFragment :
                         .Builder()
                         .setPopUpTo(R.id.myPostFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_myPostFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_myPostFragment_to_loginFragment, bundle, navOptions)
             }
         }
         myPostViewModel.getUserBoardListResponse.observe(viewLifecycleOwner) { response ->
