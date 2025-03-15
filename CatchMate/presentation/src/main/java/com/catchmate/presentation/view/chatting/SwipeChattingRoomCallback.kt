@@ -3,13 +3,11 @@ package com.catchmate.presentation.view.chatting
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.view.notification.SwipeBackgroundHelper
 
 class SwipeChattingRoomCallback(
     private val recyclerView: RecyclerView,
-    private val data: MutableList<ChatRoomInfo>,
 ) : ItemTouchHelper.Callback() {
     var adapter: ChattingRoomListAdapter = (recyclerView.adapter as ChattingRoomListAdapter)
 
@@ -31,11 +29,14 @@ class SwipeChattingRoomCallback(
     ) {
         // swipe 발생시킨 아이템 position
         val deletedPos = viewHolder.absoluteAdapterPosition
-        val deletedItemId = data[deletedPos].chatRoomId
+        // 안전하게 접근
+        if (deletedPos != RecyclerView.NO_POSITION && deletedPos < adapter.currentList.size) {
+            val deletedItemId = adapter.currentList[deletedPos].chatRoomId
 
-        if (direction == ItemTouchHelper.LEFT) {
-            // adapter에서 아이템 제거
-            adapter.swipeItem(deletedPos, deletedItemId)
+            if (direction == ItemTouchHelper.LEFT) {
+                // adapter에서 아이템 제거
+                adapter.swipeItem(deletedPos, deletedItemId)
+            }
         }
     }
 
