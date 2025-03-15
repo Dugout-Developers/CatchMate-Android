@@ -309,7 +309,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     } else {
                         ivSideSheetSettings.visibility = View.GONE
                     }
-                    toggleSideSheetChattingRoomNotification.isChecked = info.isNotificationEnabled
+                    toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
                     toggleSideSheetChattingRoomNotification.setOnClickListener {
                         isNotificationEnabled = !isNotificationEnabled
                         toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
