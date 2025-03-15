@@ -42,6 +42,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
+    private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +102,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) {
+                isNotificationEnabled = info.isNotificationEnabled
                 initChatRoomInfo(info)
                 initHeader(info)
             }
@@ -307,8 +309,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     } else {
                         ivSideSheetSettings.visibility = View.GONE
                     }
-                    toggleSideSheetChattingRoomNotification.setOnCheckedChangeListener { buttonView, isChecked ->
-                        // 토글 상태에 따른 알림 설정 api 호출
+                    toggleSideSheetChattingRoomNotification.isChecked = info.isNotificationEnabled
+                    toggleSideSheetChattingRoomNotification.setOnClickListener {
+                        isNotificationEnabled = !isNotificationEnabled
+                        toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
+                        chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
                     }
                 }
 
