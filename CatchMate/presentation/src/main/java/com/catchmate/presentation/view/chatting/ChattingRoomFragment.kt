@@ -35,7 +35,7 @@ import org.json.JSONObject
 class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private var chatRoomId: Long = -1L
+    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
     private var userId: Long = -1L
     private var currentPage: Int = 0
     private var isLastPage = false
@@ -45,22 +45,16 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        chatRoomId = getChatRoomId()
-        Log.e("chatRoomId", chatRoomId.toString())
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        localDataViewModel.getAccessToken()
         initViewModel()
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
         localDataViewModel.getUserId()
         initChatBox()
-        chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
     }
 
@@ -69,8 +63,6 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.topic.dispose()
         chattingRoomViewModel.stompConnection.dispose()
     }
-
-    private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
@@ -136,6 +128,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
+        }
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            chattingRoomViewModel.connectToWebSocket(chatRoomId, token)
         }
         chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
             if (isSent) {

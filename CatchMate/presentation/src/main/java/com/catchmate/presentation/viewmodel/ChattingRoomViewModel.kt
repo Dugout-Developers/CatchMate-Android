@@ -45,19 +45,8 @@ class ChattingRoomViewModel
         lateinit var stompConnection: Disposable
         lateinit var topic: Disposable
 
-        private val okHttpClient =
-            OkHttpClient
-                .Builder()
-                .addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    },
-                ).build()
-
-        private val stompClient =
-            StompClient(okHttpClient, intervalMillis).apply {
-                url = BuildConfig.SERVER_SOCKET_URL
-            }
+        private var okHttpClient: OkHttpClient? = null
+        private var stompClient: StompClient? = null
 
         private val _getChattingHistoryResponse = MutableLiveData<GetChattingHistoryResponse>()
         val getChattingHistoryResponse: LiveData<GetChattingHistoryResponse>
@@ -92,11 +81,38 @@ class ChattingRoomViewModel
             get() = _isMessageSent
 
         /** WebSocket 연결 */
-        fun connectToWebSocket(chatRoomId: Long) {
+        fun connectToWebSocket(
+            chatRoomId: Long,
+            accessToken: String,
+        ) {
             var retryCount = 0
+
+            okHttpClient =
+                OkHttpClient
+                    .Builder()
+                    .addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        },
+                    )
+                    .addInterceptor { chain ->
+                        val request =
+                            chain.request().newBuilder()
+                                .header("AccessToken", accessToken)
+                                .header("ChatRoomId", chatRoomId.toString())
+                                .build()
+                        chain.proceed(request)
+                    }
+                    .build()
+
+            stompClient =
+                StompClient(okHttpClient!!, intervalMillis).apply {
+                    url = BuildConfig.SERVER_SOCKET_URL
+                }
+
             viewModelScope.launch {
                 stompConnection =
-                    stompClient
+                    stompClient!!
                         .connect()
                         .retryWhen { error ->
                             error
@@ -128,7 +144,7 @@ class ChattingRoomViewModel
 
         private fun handleWebSocketOpened(chatRoomId: Long) {
             topic =
-                stompClient.join("/topic/chat.$chatRoomId").subscribe { message ->
+                stompClient?.join("/topic/chat.$chatRoomId")!!.subscribe { message ->
                     Log.d("✅ Msg", message)
                     val jsonObject = JSONObject(message)
                     val messageType = jsonObject.getString("messageType")
@@ -153,7 +169,7 @@ class ChattingRoomViewModel
         ) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
-                stompClient.send("/app/chat.$chatRoomId", message).subscribe({ isSend ->
+                stompClient?.send("/app/chat.$chatRoomId", message)!!.subscribe({ isSend ->
                     if (isSend) {
                         Log.d("Web Socket📬", "메시지 전달")
                         _isMessageSent.value = true
