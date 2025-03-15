@@ -2,6 +2,7 @@ package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
+import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -33,6 +34,9 @@ interface UserService {
 
     @GET("users/block")
     suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
+
+    @GET("users/has-unread")
+    suspend fun getUnreadInfo(): Response<GetUnreadInfoResponseDTO?>
 
     @POST("users/block/{blockedUserId}")
     suspend fun postUserBlock(
