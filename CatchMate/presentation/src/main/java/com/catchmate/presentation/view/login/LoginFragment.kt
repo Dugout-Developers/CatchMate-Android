@@ -24,11 +24,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val loginViewModel: LoginViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-    private val navigateCode by lazy {
-        val code = arguments?.getInt("navigateCode")
-        if (code == NAVIGATE_CODE_REISSUE) showAlertDialog()
-        code
-    }
+    private val navigateCode by lazy { arguments?.getInt("navigateCode") }
 
     override fun onViewCreated(
         view: View,
@@ -38,6 +34,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         enableDoubleBackPressedExit = true
         initViewModel()
         initView()
+        if (navigateCode == NAVIGATE_CODE_REISSUE) showAlertDialog()
     }
 
     private fun initViewModel() {
