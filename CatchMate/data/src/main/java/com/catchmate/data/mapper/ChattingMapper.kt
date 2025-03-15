@@ -9,6 +9,7 @@ import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import com.catchmate.data.dto.chatting.PatchChattingRoomImageResponseDTO
+import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toBoard
 import com.catchmate.data.mapper.UserMapper.toGetUserProfileResponse
 import com.catchmate.domain.model.chatting.ChatMessageId
@@ -20,6 +21,7 @@ import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 
 object ChattingMapper {
     fun toGetChattingRoomListResponse(dto: GetChattingRoomListResponseDTO): GetChattingRoomListResponse =
@@ -82,6 +84,11 @@ object ChattingMapper {
 
     fun toPatchChattingRoomImageResponse(dto: PatchChattingRoomImageResponseDTO): PatchChattingRoomImageResponse =
         PatchChattingRoomImageResponse(
+            state = dto.state,
+        )
+
+    fun toPutChattingRoomAlarmResponse(dto: PutChattingRoomAlarmResponseDTO): PutChattingRoomAlarmResponse =
+        PutChattingRoomAlarmResponse(
             state = dto.state,
         )
 }

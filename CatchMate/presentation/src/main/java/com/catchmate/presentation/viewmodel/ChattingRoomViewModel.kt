@@ -12,10 +12,12 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
+import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
 import com.catchmate.presentation.BuildConfig
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import com.gmail.bishoybasily.stomp.lib.Event
@@ -36,6 +38,7 @@ class ChattingRoomViewModel
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
         private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
         private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
+        private val putChattingRoomAlarmUseCase: PutChattingRoomAlarmUseCase,
     ) : ViewModel() {
         private val maxRetry = 5
         private val intervalMillis = 1000L
@@ -71,6 +74,10 @@ class ChattingRoomViewModel
         private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
         val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
             get() = _deleteChattingRoomResponse
+
+        private val _putChattingRoomAlarmResponse = MutableLiveData<PutChattingRoomAlarmResponse>()
+        val putChattingRoomAlarmResponse: LiveData<PutChattingRoomAlarmResponse>
+            get() = _putChattingRoomAlarmResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -243,6 +250,25 @@ class ChattingRoomViewModel
                 result
                     .onSuccess { response ->
                         _deleteChattingRoomResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun putChattingRoomAlarm(
+            chatRoomId: Long,
+            enable: Boolean,
+        ) {
+            viewModelScope.launch {
+                val result = putChattingRoomAlarmUseCase(chatRoomId, enable)
+                result
+                    .onSuccess { response ->
+                        _putChattingRoomAlarmResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
