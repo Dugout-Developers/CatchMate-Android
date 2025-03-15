@@ -41,6 +41,9 @@ object ChattingMapper {
             lastMessageAt = dto.lastMessageAt,
             lastMessageContent = dto.lastMessageContent,
             chatRoomImage = dto.chatRoomImage,
+            unreadMessageCount = dto.unreadMessageCount,
+            isNewChatRoom = dto.isNewChatRoom,
+            isNotificationEnabled = dto.isNotificationEnabled,
         )
 
     fun toGetChattingHistoryResponse(dto: GetChattingHistoryResponseDTO): GetChattingHistoryResponse =
