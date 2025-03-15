@@ -50,10 +50,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        localDataViewModel.getAccessToken()
+        localDataViewModel.getUserId()
         initViewModel()
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
-        localDataViewModel.getUserId()
         initChatBox()
         initSendBtn()
     }
@@ -127,10 +126,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
+            localDataViewModel.getAccessToken()
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
         }
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-            chattingRoomViewModel.connectToWebSocket(chatRoomId, token)
+            chattingRoomViewModel.connectToWebSocket(chatRoomId, userId, token)
         }
         chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
             if (isSent) {

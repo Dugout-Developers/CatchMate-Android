@@ -83,6 +83,7 @@ class ChattingRoomViewModel
         /** WebSocket 연결 */
         fun connectToWebSocket(
             chatRoomId: Long,
+            userId: Long,
             accessToken: String,
         ) {
             var retryCount = 0
@@ -125,7 +126,7 @@ class ChattingRoomViewModel
                             when (event.type) {
                                 Event.Type.OPENED -> {
                                     Log.d("Web Socket✅", "연결 성공")
-                                    handleWebSocketOpened(chatRoomId)
+                                    handleWebSocketOpened(chatRoomId, userId)
                                 }
                                 Event.Type.CLOSED -> {
                                     Log.d("Web Socket💤", "연결 해제")
@@ -142,7 +143,10 @@ class ChattingRoomViewModel
             }
         }
 
-        private fun handleWebSocketOpened(chatRoomId: Long) {
+        private fun handleWebSocketOpened(
+            chatRoomId: Long,
+            userId: Long,
+        ) {
             topic =
                 stompClient?.join("/topic/chat.$chatRoomId")!!.subscribe { message ->
                     Log.d("✅ Msg", message)
@@ -160,7 +164,24 @@ class ChattingRoomViewModel
                         )
                     Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
                     addChatMessage(chatMessageInfo)
+                    sendIsMsgRead(chatRoomId, userId)
                 }
+        }
+
+        private fun sendIsMsgRead(
+            chatRoomId: Long,
+            userId: Long,
+        ) {
+            viewModelScope.launch {
+                val msg =
+                    JSONObject().apply {
+                        put("chatRoomId", chatRoomId)
+                        put("userId", userId)
+                    }.toString()
+                stompClient?.send("/app/chat/read", msg)!!.subscribe{ isRead ->
+                    Log.d("✅ isRead", isRead.toString())
+                }
+            }
         }
 
         fun sendMessage(
@@ -190,7 +211,7 @@ class ChattingRoomViewModel
             stompConnection.dispose()
         }
 
-        fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
+        private fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
             val currentList = _getChattingHistoryResponse.value?.chatMessageInfoList ?: emptyList()
             val updatedList = listOf(chatMessageInfo) + currentList
 
