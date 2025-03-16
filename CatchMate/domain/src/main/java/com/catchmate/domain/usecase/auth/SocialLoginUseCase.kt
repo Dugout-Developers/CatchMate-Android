@@ -10,7 +10,7 @@ class SocialLoginUseCase
     constructor(
         private val loginRepository: LoginRepository,
     ) {
-        suspend fun loginWithKakao(): PostLoginRequest = loginRepository.loginWithKakao()
+        suspend fun loginWithKakao(): PostLoginRequest? = loginRepository.loginWithKakao()
 
         suspend fun loginWithNaver(): PostLoginRequest = loginRepository.loginWithNaver()
 

@@ -46,6 +46,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         "${request.providerId}\n${request.picture}\n${request.fcmToken}",
                 )
                 loginViewModel.postAuthLogin(request)
+            } else {
+                Log.e("로그인 취소", "로그인 취소")
             }
         }
         loginViewModel.postLoginResponse.observe(viewLifecycleOwner) { loginResponse ->

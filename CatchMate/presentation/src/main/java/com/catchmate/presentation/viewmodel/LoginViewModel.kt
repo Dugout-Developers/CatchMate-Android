@@ -20,8 +20,8 @@ class LoginViewModel
         private val socialLoginUseCase: SocialLoginUseCase,
         private val postAuthLoginUseCase: PostAuthLoginUseCase,
     ) : ViewModel() {
-        private val _postLoginRequest = MutableLiveData<PostLoginRequest>()
-        val postLoginRequest: LiveData<PostLoginRequest>
+        private val _postLoginRequest = MutableLiveData<PostLoginRequest?>()
+        val postLoginRequest: LiveData<PostLoginRequest?>
             get() = _postLoginRequest
 
         private val _postLoginResponse = MutableLiveData<PostLoginResponse>()
