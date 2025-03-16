@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e("메인a", "accesstoken not null or empty")
                 binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
+                binding.bottomnavigationviewMain.selectedItemId = R.id.menuitem_home
             }
         }
     }
@@ -97,12 +98,30 @@ class MainActivity : AppCompatActivity() {
                             visibility = View.VISIBLE
                             animate().alpha(1f).setDuration(100).start()
                         }
+                        updateBottomNavigationSelection(destination.id)
                     }
                     else -> {
                         bottomnavigationviewMain.visibility = View.GONE
                     }
                 }
             }
+        }
+    }
+
+    private fun updateBottomNavigationSelection(destinationId: Int) {
+        val menuItemId = when (destinationId) {
+            R.id.homeFragment -> R.id.menuitem_home
+            R.id.favoriteFragment -> R.id.menuitem_favorite
+            R.id.addPostFragment -> R.id.menuitem_post
+            R.id.chattingHomeFragment -> R.id.menuitem_chatting
+            R.id.myPageFragment -> R.id.menuitem_mypage
+            else -> null
+        }
+        menuItemId?.let {
+            // 선택 리스너를 일시적으로 제거하지 않으면 무한 루프가 발생 가능
+            binding.bottomnavigationviewMain.setOnItemSelectedListener(null)
+            binding.bottomnavigationviewMain.selectedItemId = it
+            initBottomNavigationView() // 리스너 다시 설정
         }
     }
 
