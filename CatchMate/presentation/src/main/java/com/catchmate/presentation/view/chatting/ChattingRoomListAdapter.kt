@@ -69,7 +69,7 @@ class ChattingRoomListAdapter(
                     Glide
                         .with(root.context)
                         .load(chatRoomInfo.chatRoomImage)
-                        .into(ivChattingItemLogo)
+                        .into(ivChattingItemBg)
                 }
 
                 tvChattingItemTitle.text = chatRoomInfo.boardInfo.title
@@ -85,8 +85,12 @@ class ChattingRoomListAdapter(
                     tvChattingItemPeopleCount.text = chatRoomInfo.participantCount.toString()
                     tvChattingItemLastChat.text = chatRoomInfo.lastMessageContent
                     tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.lastMessageAt!!)
-                    tvChattingItemUnreadMessageCount.visibility = View.VISIBLE
-                    tvChattingItemUnreadMessageCount.text = chatRoomInfo.unreadMessageCount.toString()
+                    if (chatRoomInfo.unreadMessageCount == 0) {
+                        tvChattingItemUnreadMessageCount.visibility = View.GONE
+                    } else {
+                        tvChattingItemUnreadMessageCount.visibility = View.VISIBLE
+                        tvChattingItemUnreadMessageCount.text = chatRoomInfo.unreadMessageCount.toString()
+                    }
                 }
             }
         }

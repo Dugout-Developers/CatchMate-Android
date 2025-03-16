@@ -1,6 +1,7 @@
 package com.catchmate.presentation.view.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
@@ -10,12 +11,18 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.catchmate.presentation.viewmodel.MainViewModel
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.badge.ExperimentalBadgeUtils
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding!!
 
     private val localDataViewModel: LocalDataViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    private var chatBadgeDrawable: BadgeDrawable? = null
 
     val permissionList =
         arrayOf(
@@ -41,8 +50,16 @@ class MainActivity : AppCompatActivity() {
         requestPermissions(permissionList, 0)
         initNavController()
         initBottomNavigationView()
+        observeChatNotifications()
 
         getTokens()
+    }
+
+    private fun observeChatNotifications() {
+        mainViewModel.getUnreadInfoResponse.observe(this) { info ->
+            updateChatBadge(info.hasUnreadChat)
+            updateHomeNotificationBadge(info.hasUnreadNotification)
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -151,5 +168,62 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    @OptIn(ExperimentalBadgeUtils::class)
+    fun updateChatBadge(showBadge: Boolean) {
+        val bottomNavigationMenuView = binding.bottomnavigationviewMain.getChildAt(0) as BottomNavigationMenuView
+
+        // 채팅 메뉴 위치 찾기
+        val chatMenuItemPosition = findMenuItemPosition(R.id.menuitem_chatting)
+        val menuItemView = bottomNavigationMenuView.getChildAt(chatMenuItemPosition)
+
+        if (showBadge) {
+            if (chatBadgeDrawable == null) {
+                chatBadgeDrawable = BadgeDrawable.create(this)
+                chatBadgeDrawable?.apply {
+                    backgroundColor = getColor(R.color.system_blue)
+                    isVisible = true
+                    clearNumber()
+                    horizontalOffset = 100
+                    verticalOffset = 50
+                }
+            } else {
+                chatBadgeDrawable?.isVisible = true
+            }
+
+            // 메뉴 항목에 뱃지 부착
+            chatBadgeDrawable?.let { badge ->
+                BadgeUtils.attachBadgeDrawable(badge, menuItemView)
+            }
+        } else {
+            // 뱃지 숨기기
+            chatBadgeDrawable?.isVisible = false
+        }
+    }
+
+    // 메뉴 ID에 해당하는 위치 찾기
+    private fun findMenuItemPosition(menuItemId: Int): Int {
+        val menu = binding.bottomnavigationviewMain.menu
+        for (i in 0 until menu.size()) {
+            if (menu.getItem(i).itemId == menuItemId) {
+                return i
+            }
+        }
+        // 기본값 - 채팅 메뉴 위치
+        return 3
+    }
+
+    fun refreshNotificationStatus() {
+        mainViewModel.getUnreadInfo()
+    }
+
+    private fun updateHomeNotificationBadge(hasUnreadNotification: Boolean) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentcontainerview_main) as NavHostFragment
+        val homeFragment = navHostFragment.childFragmentManager.fragments
+            .find { it is HomeFragment } as? HomeFragment
+        homeFragment?.updateNotificationBadge(hasUnreadNotification)
     }
 }

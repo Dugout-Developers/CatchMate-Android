@@ -15,6 +15,7 @@ import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.view.home.MainActivity
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -55,6 +56,7 @@ class ChattingHomeFragment :
             getChattingRoomList()
             isFirstLoad = false
         }
+        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     override fun onDestroyView() {
