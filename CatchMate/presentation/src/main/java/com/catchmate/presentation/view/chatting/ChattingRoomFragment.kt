@@ -59,8 +59,8 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingRoomViewModel.topic.dispose()
-        chattingRoomViewModel.stompConnection.dispose()
+        chattingRoomViewModel.topic?.dispose()
+        chattingRoomViewModel.stompClient?.disconnect()
     }
 
     private fun initViewModel() {

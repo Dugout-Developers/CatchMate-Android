@@ -20,14 +20,16 @@ import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
 import com.catchmate.presentation.BuildConfig
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
-import com.gmail.bishoybasily.stomp.lib.Event
-import com.gmail.bishoybasily.stomp.lib.StompClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompHeader
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,11 +44,10 @@ class ChattingRoomViewModel
     ) : ViewModel() {
         private val maxRetry = 5
         private val intervalMillis = 1000L
-        lateinit var stompConnection: Disposable
-        lateinit var topic: Disposable
 
+        var topic: Disposable? = null
+        var stompClient: StompClient? = null
         private var okHttpClient: OkHttpClient? = null
-        private var stompClient: StompClient? = null
 
         private val _getChattingHistoryResponse = MutableLiveData<GetChattingHistoryResponse>()
         val getChattingHistoryResponse: LiveData<GetChattingHistoryResponse>
@@ -86,60 +87,47 @@ class ChattingRoomViewModel
             userId: Long,
             accessToken: String,
         ) {
-            var retryCount = 0
-
-            okHttpClient =
-                OkHttpClient
-                    .Builder()
-                    .addInterceptor(
-                        HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
-                        },
-                    )
-                    .addInterceptor { chain ->
-                        val request =
-                            chain.request().newBuilder()
-                                .header("AccessToken", accessToken)
-                                .header("ChatRoomId", chatRoomId.toString())
-                                .build()
-                        chain.proceed(request)
-                    }
-                    .build()
-
-            stompClient =
-                StompClient(okHttpClient!!, intervalMillis).apply {
-                    url = BuildConfig.SERVER_SOCKET_URL
-                }
-
             viewModelScope.launch {
-                stompConnection =
-                    stompClient!!
-                        .connect()
-                        .retryWhen { error ->
-                            error
-                                .takeWhile { retryCount < maxRetry }
-                                .doOnNext {
-                                    retryCount++
-                                    Log.e("Web Socket🔄", "retry : $retryCount / 5")
-                                }
-                        }.subscribe { event ->
-                            when (event.type) {
-                                Event.Type.OPENED -> {
-                                    Log.d("Web Socket✅", "연결 성공")
-                                    handleWebSocketOpened(chatRoomId, userId)
-                                }
-                                Event.Type.CLOSED -> {
-                                    Log.d("Web Socket💤", "연결 해제")
-                                }
-                                Event.Type.ERROR -> {
-                                    Log.e("Web Socket", "${event.exception}")
-                                    if (retryCount >= maxRetry) {
-                                        Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
-                                    }
-                                }
-                                else -> {}
-                            }
+                okHttpClient =
+                    OkHttpClient
+                        .Builder()
+                        .addInterceptor(
+                            HttpLoggingInterceptor().apply {
+                                level = HttpLoggingInterceptor.Level.BODY
+                            },
+                        )
+                        .build()
+
+                val headerMap = mapOf(
+                    "AccessToken" to accessToken,
+                    "ChatRoomId" to chatRoomId.toString(),
+                )
+
+                stompClient =
+                    Stomp.over(
+                        Stomp.ConnectionProvider.OKHTTP,
+                        BuildConfig.SERVER_SOCKET_URL,
+                        headerMap,
+                        okHttpClient,
+                    )
+
+                stompClient?.connect()
+
+                stompClient?.lifecycle()?.subscribe { event ->
+                    when (event.type) {
+                        LifecycleEvent.Type.OPENED -> {
+                            Log.d("Web Socket✅", "연결 성공")
+                            handleWebSocketOpened(chatRoomId, userId)
                         }
+                        LifecycleEvent.Type.CLOSED -> {
+                            Log.d("Web Socket💤", "연결 해제")
+                        }
+                        LifecycleEvent.Type.ERROR -> {
+                            Log.e("Web Socket", "${event.exception.message}")
+                        }
+                        else -> {}
+                    }
+                }
             }
         }
 
@@ -148,9 +136,9 @@ class ChattingRoomViewModel
             userId: Long,
         ) {
             topic =
-                stompClient?.join("/topic/chat.$chatRoomId")!!.subscribe { message ->
-                    Log.d("✅ Msg", message)
-                    val jsonObject = JSONObject(message)
+                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe { message ->
+                    Log.d("✅ Msg", message.payload)
+                    val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
                     val senderId = jsonObject.getString("senderId").toLong()
                     val content = jsonObject.getString("content")
@@ -178,9 +166,7 @@ class ChattingRoomViewModel
                         put("chatRoomId", chatRoomId)
                         put("userId", userId)
                     }.toString()
-                stompClient?.send("/app/chat/read", msg)!!.subscribe{ isRead ->
-                    Log.d("✅ isRead", isRead.toString())
-                }
+                stompClient?.send("/app/chat/read", msg)?.subscribe()
             }
         }
 
@@ -190,14 +176,9 @@ class ChattingRoomViewModel
         ) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
-                stompClient?.send("/app/chat.$chatRoomId", message)!!.subscribe({ isSend ->
-                    if (isSend) {
-                        Log.d("Web Socket📬", "메시지 전달")
-                        _isMessageSent.value = true
-                    } else {
-                        Log.e("Web Socket😩", "메시지 전달 실패")
-                        _isMessageSent.value = false
-                    }
+                stompClient?.send("/app/chat.$chatRoomId", message)?.subscribe({
+                    Log.d("Web Socket📬", "메시지 전달")
+                    _isMessageSent.value = true
                 }, { error ->
                     Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
                     _isMessageSent.value = false
@@ -207,8 +188,8 @@ class ChattingRoomViewModel
 
         override fun onCleared() {
             super.onCleared()
-            topic.dispose()
-            stompConnection.dispose()
+            topic?.dispose()
+            stompClient?.disconnect()
         }
 
         private fun addChatMessage(chatMessageInfo: ChatMessageInfo) {

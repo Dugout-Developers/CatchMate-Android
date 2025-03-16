@@ -61,8 +61,8 @@ class ChattingHomeFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingHomeViewModel.topic.dispose()
-        chattingHomeViewModel.stompConnection.dispose()
+        chattingHomeViewModel.topic?.dispose()
+        chattingHomeViewModel.stompClient?.disconnect()
     }
 
     private fun initHeader() {
