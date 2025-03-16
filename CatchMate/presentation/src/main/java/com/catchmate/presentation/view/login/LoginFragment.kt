@@ -99,7 +99,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 loginViewModel.kakaoLogin()
             }
             ivLoginNaver.setOnClickListener {
-                loginViewModel.naverLogin()
+                loginViewModel.naverLogin(requireActivity())
             }
             ivLoginGoogle.setOnClickListener {
                 loginViewModel.googleLogin(requireActivity())

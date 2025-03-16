@@ -12,7 +12,7 @@ class SocialLoginUseCase
     ) {
         suspend fun loginWithKakao(): PostLoginRequest? = loginRepository.loginWithKakao()
 
-        suspend fun loginWithNaver(): PostLoginRequest = loginRepository.loginWithNaver()
+        suspend fun loginWithNaver(activity: Activity): PostLoginRequest? = loginRepository.loginWithNaver(activity)
 
         suspend fun loginWithGoogle(activity: Activity): PostLoginRequest? = loginRepository.loginWithGoogle(activity)
     }

@@ -21,8 +21,8 @@ class LoginRepositoryImpl
             return AuthMapper.toPostLoginRequest(postLoginRequestDTO)
         }
 
-        override suspend fun loginWithNaver(): PostLoginRequest {
-            val postLoginRequestDTO = naverLoginDataSource.loginWithNaver()
+        override suspend fun loginWithNaver(activity: Activity): PostLoginRequest? {
+            val postLoginRequestDTO = naverLoginDataSource.loginWithNaver(activity)
             return AuthMapper.toPostLoginRequest(postLoginRequestDTO)
         }
 

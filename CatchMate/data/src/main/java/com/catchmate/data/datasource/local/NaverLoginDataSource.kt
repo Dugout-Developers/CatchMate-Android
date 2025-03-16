@@ -1,5 +1,6 @@
 package com.catchmate.data.datasource.local
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
@@ -20,10 +21,9 @@ import kotlin.coroutines.resumeWithException
 class NaverLoginDataSource
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun loginWithNaver(): PostLoginRequestDTO =
+        suspend fun loginWithNaver(activity: Activity): PostLoginRequestDTO =
             suspendCancellableCoroutine { continuation ->
                 val nidProfileCallback =
                     object : NidProfileCallback<NidProfileResponse> {
@@ -86,7 +86,7 @@ class NaverLoginDataSource
                         }
                     }
 
-                NaverIdLoginSDK.authenticate(context, oAuthLoginCallback)
+                NaverIdLoginSDK.authenticate(activity, oAuthLoginCallback)
             }
 
         private fun loginFail() {

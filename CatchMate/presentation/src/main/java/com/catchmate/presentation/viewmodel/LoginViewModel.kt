@@ -38,9 +38,9 @@ class LoginViewModel
             }
         }
 
-        fun naverLogin() {
+        fun naverLogin(activity: Activity) {
             viewModelScope.launch {
-                _postLoginRequest.value = socialLoginUseCase.loginWithNaver()
+                _postLoginRequest.value = socialLoginUseCase.loginWithNaver(activity)
             }
         }
 

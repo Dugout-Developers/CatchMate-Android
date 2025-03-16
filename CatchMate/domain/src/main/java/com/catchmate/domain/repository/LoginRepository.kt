@@ -6,7 +6,7 @@ import com.catchmate.domain.model.auth.PostLoginRequest
 interface LoginRepository {
     suspend fun loginWithKakao(): PostLoginRequest?
 
-    suspend fun loginWithNaver(): PostLoginRequest
+    suspend fun loginWithNaver(activity: Activity): PostLoginRequest?
 
     suspend fun loginWithGoogle(activity: Activity): PostLoginRequest?
 }
