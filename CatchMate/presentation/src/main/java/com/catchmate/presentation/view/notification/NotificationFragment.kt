@@ -91,7 +91,7 @@ class NotificationFragment :
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.removeItem(deletedItemPos)
             } else {
-                Snackbar.make(requireView(), "해당 알림을 삭제할 수 없습니다. 잠시후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.notification_delete_error_snackbar, Snackbar.LENGTH_SHORT).show()
             }
         }
         notificationViewModel.receivedNotification.observe(viewLifecycleOwner) { response ->
@@ -155,7 +155,7 @@ class NotificationFragment :
         } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
             findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment)
         } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
-            Snackbar.make(requireView(), "이미 거절한 직관 신청이예요.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), R.string.notification_already_done_snackbar, Snackbar.LENGTH_SHORT).show()
         }
     }
 
