@@ -59,6 +59,22 @@ class ChattingHomeFragment :
         (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 화면이 다시 보일 때만 새로고침 (최초 실행 시에는 제외)
+        if (!isFirstLoad) {
+            Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
+            // 페이지 초기화
+            currentPage = 0
+            isLastPage = false
+            isLoading = false
+
+            chattingRoomListAdapter.submitList(emptyList())
+            // 채팅방 목록 새로 불러오기
+            chattingHomeViewModel.getChattingRoomList(currentPage)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         chattingHomeViewModel.topic?.dispose()
@@ -77,15 +93,23 @@ class ChattingHomeFragment :
             chattingHomeViewModel.connectToWebSocket(token)
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
+            Log.d("ChattingHomeFragment", "응답 받음: isFirst=${response.isFirst}, isLast=${response.isLast}, size=${response.chatRoomInfoList.size}")
             if (response.isFirst && response.isLast && response.totalElements == 0) {
                 // 채팅 없을때 표시할 레이아웃 가시성 처리
                 Log.e("NO CHATTING", "NO")
             } else {
                 Log.e("EXIST CHATTING", "EXIST")
+                // 새로고침 상태이거나 currentPage가 0이면 리스트를 새로 설정
                 if (isApiCalled) {
-                    val currentList = chattingRoomListAdapter.currentList.toMutableList()
-                    currentList.addAll(response.chatRoomInfoList)
-                    chattingRoomListAdapter.submitList(currentList)
+                    if (currentPage == 0) {
+                        // 새 리스트로 교체
+                        chattingRoomListAdapter.submitList(response.chatRoomInfoList)
+                    } else {
+                        // 페이징 시 기존 리스트에 추가
+                        val currentList = chattingRoomListAdapter.currentList.toMutableList()
+                        currentList.addAll(response.chatRoomInfoList)
+                        chattingRoomListAdapter.submitList(currentList)
+                    }
                     isApiCalled = false
                 } else {
                     chattingRoomListAdapter.submitList(response.chatRoomInfoList)
