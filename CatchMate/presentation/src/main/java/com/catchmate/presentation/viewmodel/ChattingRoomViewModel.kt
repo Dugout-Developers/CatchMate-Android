@@ -12,20 +12,23 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
+import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
 import com.catchmate.presentation.BuildConfig
 import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
-import com.gmail.bishoybasily.stomp.lib.Event
-import com.gmail.bishoybasily.stomp.lib.StompClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.LifecycleEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,25 +39,14 @@ class ChattingRoomViewModel
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
         private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
         private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
+        private val putChattingRoomAlarmUseCase: PutChattingRoomAlarmUseCase,
     ) : ViewModel() {
         private val maxRetry = 5
         private val intervalMillis = 1000L
-        lateinit var stompConnection: Disposable
-        lateinit var topic: Disposable
 
-        private val okHttpClient =
-            OkHttpClient
-                .Builder()
-                .addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    },
-                ).build()
-
-        private val stompClient =
-            StompClient(okHttpClient, intervalMillis).apply {
-                url = BuildConfig.SERVER_SOCKET_URL
-            }
+        var topic: Disposable? = null
+        var stompClient: StompClient? = null
+        private var okHttpClient: OkHttpClient? = null
 
         private val _getChattingHistoryResponse = MutableLiveData<GetChattingHistoryResponse>()
         val getChattingHistoryResponse: LiveData<GetChattingHistoryResponse>
@@ -72,6 +64,10 @@ class ChattingRoomViewModel
         val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
             get() = _deleteChattingRoomResponse
 
+        private val _putChattingRoomAlarmResponse = MutableLiveData<PutChattingRoomAlarmResponse>()
+        val putChattingRoomAlarmResponse: LiveData<PutChattingRoomAlarmResponse>
+            get() = _putChattingRoomAlarmResponse
+
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
             get() = _errorMessage
@@ -84,46 +80,72 @@ class ChattingRoomViewModel
         val isMessageSent: LiveData<Boolean>
             get() = _isMessageSent
 
+        private val _isInstability = MutableLiveData<Boolean>()
+        val isInstability: LiveData<Boolean>
+            get() = _isInstability
+
         /** WebSocket 연결 */
-        fun connectToWebSocket(chatRoomId: Long) {
-            var retryCount = 0
+        fun connectToWebSocket(
+            chatRoomId: Long,
+            userId: Long,
+            accessToken: String,
+        ) {
             viewModelScope.launch {
-                stompConnection =
-                    stompClient
-                        .connect()
-                        .retryWhen { error ->
-                            error
-                                .takeWhile { retryCount < maxRetry }
-                                .doOnNext {
-                                    retryCount++
-                                    Log.e("Web Socket🔄", "retry : $retryCount / 5")
-                                }
-                        }.subscribe { event ->
-                            when (event.type) {
-                                Event.Type.OPENED -> {
-                                    Log.d("Web Socket✅", "연결 성공")
-                                    handleWebSocketOpened(chatRoomId)
-                                }
-                                Event.Type.CLOSED -> {
-                                    Log.d("Web Socket💤", "연결 해제")
-                                }
-                                Event.Type.ERROR -> {
-                                    Log.e("Web Socket", "${event.exception}")
-                                    if (retryCount >= maxRetry) {
-                                        Log.e("Web Socket🚫", "최대 재시도 횟수 초과")
-                                    }
-                                }
-                                else -> {}
-                            }
+                okHttpClient =
+                    OkHttpClient
+                        .Builder()
+                        .addInterceptor(
+                            HttpLoggingInterceptor().apply {
+                                level = HttpLoggingInterceptor.Level.BODY
+                            },
+                        ).build()
+
+                val headerMap =
+                    mapOf(
+                        "AccessToken" to accessToken,
+                        "ChatRoomId" to chatRoomId.toString(),
+                    )
+
+                stompClient =
+                    Stomp.over(
+                        Stomp.ConnectionProvider.OKHTTP,
+                        BuildConfig.SERVER_SOCKET_URL,
+                        headerMap,
+                        okHttpClient,
+                    )
+
+                stompClient?.connect()
+
+                stompClient?.lifecycle()?.subscribe({ event ->
+                    when (event.type) {
+                        LifecycleEvent.Type.OPENED -> {
+                            Log.d("Web Socket✅", "연결 성공")
+                            handleWebSocketOpened(chatRoomId, userId)
                         }
+                        LifecycleEvent.Type.CLOSED -> {
+                            Log.d("Web Socket💤", "연결 해제")
+                        }
+                        LifecycleEvent.Type.ERROR -> {
+                            Log.e("Web Socket", "${event.exception.message}")
+                            _isInstability.postValue(true)
+                        }
+                        else -> {}
+                    }
+                }, { error ->
+                    Log.e("Web Socket", "${error.message}")
+                    _isInstability.postValue(true)
+                })
             }
         }
 
-        private fun handleWebSocketOpened(chatRoomId: Long) {
+        private fun handleWebSocketOpened(
+            chatRoomId: Long,
+            userId: Long,
+        ) {
             topic =
-                stompClient.join("/topic/chat.$chatRoomId").subscribe { message ->
-                    Log.d("✅ Msg", message)
-                    val jsonObject = JSONObject(message)
+                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe { message ->
+                    Log.d("✅ Msg", message.payload)
+                    val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
                     val senderId = jsonObject.getString("senderId").toLong()
                     val content = jsonObject.getString("content")
@@ -137,7 +159,23 @@ class ChattingRoomViewModel
                         )
                     Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
                     addChatMessage(chatMessageInfo)
+                    sendIsMsgRead(chatRoomId, userId)
                 }
+        }
+
+        private fun sendIsMsgRead(
+            chatRoomId: Long,
+            userId: Long,
+        ) {
+            viewModelScope.launch {
+                val msg =
+                    JSONObject()
+                        .apply {
+                            put("chatRoomId", chatRoomId)
+                            put("userId", userId)
+                        }.toString()
+                stompClient?.send("/app/chat/read", msg)?.subscribe()
+            }
         }
 
         fun sendMessage(
@@ -146,14 +184,9 @@ class ChattingRoomViewModel
         ) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
-                stompClient.send("/app/chat.$chatRoomId", message).subscribe({ isSend ->
-                    if (isSend) {
-                        Log.d("Web Socket📬", "메시지 전달")
-                        _isMessageSent.value = true
-                    } else {
-                        Log.e("Web Socket😩", "메시지 전달 실패")
-                        _isMessageSent.value = false
-                    }
+                stompClient?.send("/app/chat.$chatRoomId", message)?.subscribe({
+                    Log.d("Web Socket📬", "메시지 전달")
+                    _isMessageSent.value = true
                 }, { error ->
                     Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
                     _isMessageSent.value = false
@@ -163,11 +196,11 @@ class ChattingRoomViewModel
 
         override fun onCleared() {
             super.onCleared()
-            topic.dispose()
-            stompConnection.dispose()
+            topic?.dispose()
+            stompClient?.disconnect()
         }
 
-        fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
+        private fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
             val currentList = _getChattingHistoryResponse.value?.chatMessageInfoList ?: emptyList()
             val updatedList = listOf(chatMessageInfo) + currentList
 
@@ -243,6 +276,25 @@ class ChattingRoomViewModel
                 result
                     .onSuccess { response ->
                         _deleteChattingRoomResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun putChattingRoomAlarm(
+            chatRoomId: Long,
+            enable: Boolean,
+        ) {
+            viewModelScope.launch {
+                val result = putChattingRoomAlarmUseCase(chatRoomId, enable)
+                result
+                    .onSuccess { response ->
+                        _putChattingRoomAlarmResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

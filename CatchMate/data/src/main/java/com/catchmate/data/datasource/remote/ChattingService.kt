@@ -7,12 +7,14 @@ import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import com.catchmate.data.dto.chatting.PatchChattingRoomImageResponseDTO
+import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -39,6 +41,12 @@ interface ChattingService {
         @Path("chatRoomId") chatRoomId: Long,
         @Part chatRoomImage: MultipartBody.Part,
     ): Response<PatchChattingRoomImageResponseDTO?>
+
+    @PUT("chat-rooms/{chatRoomId}/notification")
+    suspend fun putChattingRoomAlarm(
+        @Path("chatRoomId") chatRoomId: Long,
+        @Query("enable") enable: Boolean,
+    ): Response<PutChattingRoomAlarmResponseDTO?>
 
     @DELETE("chat-rooms/{chatRoomId}")
     suspend fun deleteChattingRoom(

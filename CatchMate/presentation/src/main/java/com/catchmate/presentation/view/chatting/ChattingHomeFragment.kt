@@ -10,13 +10,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.view.home.MainActivity
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,13 +27,14 @@ class ChattingHomeFragment :
     OnChattingRoomSelectedListener,
     OnItemSwipeListener {
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
     private var currentPage: Int = 0
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
     private var deletedItemPos: Int = -1
-    private var chatRoomList: MutableList<ChatRoomInfo> = mutableListOf()
+    private lateinit var chattingRoomListAdapter: ChattingRoomListAdapter
 
     override fun onViewCreated(
         view: View,
@@ -45,7 +47,7 @@ class ChattingHomeFragment :
             val deletedChatRoomId = bundle.getLong("chatRoomId")
             deleteChatRoom(deletedChatRoomId)
         }
-
+        localDataViewModel.getAccessToken()
         initHeader()
         initViewModel()
         initRecyclerView()
@@ -54,6 +56,29 @@ class ChattingHomeFragment :
             getChattingRoomList()
             isFirstLoad = false
         }
+        (requireActivity() as MainActivity).refreshNotificationStatus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 화면이 다시 보일 때만 새로고침 (최초 실행 시에는 제외)
+        if (!isFirstLoad) {
+            Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
+            // 페이지 초기화
+            currentPage = 0
+            isLastPage = false
+            isLoading = false
+
+            chattingRoomListAdapter.submitList(emptyList())
+            // 채팅방 목록 새로 불러오기
+            chattingHomeViewModel.getChattingRoomList(currentPage)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        chattingHomeViewModel.topic?.dispose()
+        chattingHomeViewModel.stompClient?.disconnect()
     }
 
     private fun initHeader() {
@@ -64,21 +89,33 @@ class ChattingHomeFragment :
     }
 
     private fun initViewModel() {
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            chattingHomeViewModel.connectToWebSocket(token)
+        }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
                 // 채팅 없을때 표시할 레이아웃 가시성 처리
                 Log.e("NO CHATTING", "NO")
             } else {
                 Log.e("EXIST CHATTING", "EXIST")
+                // 새로고침 상태이거나 currentPage가 0이면 리스트를 새로 설정
                 if (isApiCalled) {
-                    chatRoomList.addAll(response.chatRoomInfoList)
+                    if (currentPage == 0) {
+                        // 새 리스트로 교체
+                        chattingRoomListAdapter.submitList(response.chatRoomInfoList)
+                    } else {
+                        // 페이징 시 기존 리스트에 추가
+                        val currentList = chattingRoomListAdapter.currentList.toMutableList()
+                        currentList.addAll(response.chatRoomInfoList)
+                        chattingRoomListAdapter.submitList(currentList)
+                    }
+                    isApiCalled = false
+                } else {
+                    chattingRoomListAdapter.submitList(response.chatRoomInfoList)
                 }
-                val adapter = binding.rvChattingHome.adapter as ChattingRoomListAdapter
-                adapter.updateList(chatRoomList)
                 isLastPage = response.isLast
                 isLoading = false
             }
-            isApiCalled = false
         }
         chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
@@ -97,8 +134,7 @@ class ChattingHomeFragment :
         }
         chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
-                val adapter = binding.rvChattingHome.adapter as ChattingRoomListAdapter
-                adapter.removeItem(deletedItemPos)
+                chattingRoomListAdapter.removeItem(deletedItemPos)
             } else {
                 Snackbar.make(requireView(), "해당 채팅방을 나갈 수 없습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
             }
@@ -106,14 +142,9 @@ class ChattingHomeFragment :
     }
 
     private fun initRecyclerView() {
+        chattingRoomListAdapter = ChattingRoomListAdapter(this@ChattingHomeFragment, this@ChattingHomeFragment)
         binding.rvChattingHome.apply {
-            adapter =
-                ChattingRoomListAdapter(
-                    requireContext(),
-                    layoutInflater,
-                    this@ChattingHomeFragment,
-                    this@ChattingHomeFragment,
-                )
+            adapter = chattingRoomListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
@@ -139,7 +170,6 @@ class ChattingHomeFragment :
             ItemTouchHelper(
                 SwipeChattingRoomCallback(
                     binding.rvChattingHome,
-                    chatRoomList,
                 ),
             )
         itemTouchHelper.attachToRecyclerView(binding.rvChattingHome)
@@ -153,9 +183,8 @@ class ChattingHomeFragment :
     }
 
     private fun deleteChatRoom(chatRoomId: Long) {
-        chatRoomList = chatRoomList.filter { it.chatRoomId != chatRoomId }.toMutableList()
-        val adapter = binding.rvChattingHome.adapter as ChattingRoomListAdapter
-        adapter.updateList(chatRoomList)
+        val newList = chattingRoomListAdapter.currentList.filter { it.chatRoomId != chatRoomId }.toMutableList()
+        chattingRoomListAdapter.submitList(newList)
     }
 
     override fun onChattingRoomSelected(chatRoomId: Long) {
