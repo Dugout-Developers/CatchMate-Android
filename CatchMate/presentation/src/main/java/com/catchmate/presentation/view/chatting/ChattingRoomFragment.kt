@@ -1,10 +1,14 @@
 package com.catchmate.presentation.view.chatting
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -136,7 +140,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             if (isSent) {
                 binding.edtChattingRoomChatBox.setText("")
             } else {
-                Snackbar.make(requireView(), "메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                showConnectInstabilitySnackbar(R.string.chatting_message_send_fail)
+            }
+        }
+        chattingRoomViewModel.isInstability.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                showConnectInstabilitySnackbar(R.string.chatting_connect_instability)
             }
         }
     }
@@ -351,5 +360,29 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             }
         }
         dialog.show()
+    }
+
+    private fun showConnectInstabilitySnackbar(str: Int) {
+        val snackbarView = layoutInflater.inflate(R.layout.layout_chatting_custom_snackbar, null)
+        val snackbarText = snackbarView.findViewById<TextView>(R.id.tv_chatting_custom_snackbar)
+        snackbarText.setText(str)
+        val params = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+        )
+        params.topToBottom = R.id.layout_header_chatting_room
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+        snackbarView.alpha = 0f
+
+        val rootView = binding.root
+        rootView.addView(snackbarView, params)
+        snackbarView.animate().alpha(1f).setDuration(300).start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            snackbarView.animate().alpha(0f).setDuration(300)
+                .withEndAction { rootView.removeView(snackbarView) }.start()
+        }, 1000)
     }
 }

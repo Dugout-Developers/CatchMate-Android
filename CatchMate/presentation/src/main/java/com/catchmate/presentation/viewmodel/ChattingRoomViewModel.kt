@@ -81,6 +81,10 @@ class ChattingRoomViewModel
         val isMessageSent: LiveData<Boolean>
             get() = _isMessageSent
 
+        private val _isInstability = MutableLiveData<Boolean>()
+        val isInstability: LiveData<Boolean>
+            get() = _isInstability
+
         /** WebSocket 연결 */
         fun connectToWebSocket(
             chatRoomId: Long,
@@ -113,7 +117,7 @@ class ChattingRoomViewModel
 
                 stompClient?.connect()
 
-                stompClient?.lifecycle()?.subscribe { event ->
+                stompClient?.lifecycle()?.subscribe ({ event ->
                     when (event.type) {
                         LifecycleEvent.Type.OPENED -> {
                             Log.d("Web Socket✅", "연결 성공")
@@ -124,10 +128,14 @@ class ChattingRoomViewModel
                         }
                         LifecycleEvent.Type.ERROR -> {
                             Log.e("Web Socket", "${event.exception.message}")
+                            _isInstability.postValue(true)
                         }
                         else -> {}
                     }
-                }
+                }, { error ->
+                    Log.e("Web Socket", "${error.message}")
+                    _isInstability.postValue(true)
+                })
             }
         }
 
