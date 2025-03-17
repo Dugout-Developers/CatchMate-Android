@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
+import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -13,6 +14,7 @@ import com.catchmate.data.dto.user.PostUserBlockResponseDTO
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.FavoriteClub
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
+import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -114,5 +116,11 @@ object UserMapper {
     fun toPostUserBlockResponse(dto: PostUserBlockResponseDTO): PostUserBlockResponse =
         PostUserBlockResponse(
             state = dto.state,
+        )
+
+    fun toGetUnreadInfoResponse(dto: GetUnreadInfoResponseDTO): GetUnreadInfoResponse =
+        GetUnreadInfoResponse(
+            hasUnreadChat = dto.hasUnreadChat,
+            hasUnreadNotification = dto.hasUnreadNotification,
         )
 }
