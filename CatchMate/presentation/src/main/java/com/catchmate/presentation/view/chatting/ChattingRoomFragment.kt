@@ -31,7 +31,6 @@ import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -366,10 +365,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         val snackbarView = layoutInflater.inflate(R.layout.layout_chatting_custom_snackbar, null)
         val snackbarText = snackbarView.findViewById<TextView>(R.id.tv_chatting_custom_snackbar)
         snackbarText.setText(str)
-        val params = ConstraintLayout.LayoutParams(
-            ConstraintLayout.LayoutParams.MATCH_PARENT,
-            ConstraintLayout.LayoutParams.WRAP_CONTENT,
-        )
+        val params =
+            ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            )
         params.topToBottom = R.id.layout_header_chatting_room
         params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
         params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
@@ -378,11 +378,19 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
         val rootView = binding.root
         rootView.addView(snackbarView, params)
-        snackbarView.animate().alpha(1f).setDuration(300).start()
+        snackbarView
+            .animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            snackbarView.animate().alpha(0f).setDuration(300)
-                .withEndAction { rootView.removeView(snackbarView) }.start()
+            snackbarView
+                .animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction { rootView.removeView(snackbarView) }
+                .start()
         }, 1000)
     }
 }

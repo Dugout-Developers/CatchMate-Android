@@ -126,14 +126,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateBottomNavigationSelection(destinationId: Int) {
-        val menuItemId = when (destinationId) {
-            R.id.homeFragment -> R.id.menuitem_home
-            R.id.favoriteFragment -> R.id.menuitem_favorite
-            R.id.addPostFragment -> R.id.menuitem_post
-            R.id.chattingHomeFragment -> R.id.menuitem_chatting
-            R.id.myPageFragment -> R.id.menuitem_mypage
-            else -> null
-        }
+        val menuItemId =
+            when (destinationId) {
+                R.id.homeFragment -> R.id.menuitem_home
+                R.id.favoriteFragment -> R.id.menuitem_favorite
+                R.id.addPostFragment -> R.id.menuitem_post
+                R.id.chattingHomeFragment -> R.id.menuitem_chatting
+                R.id.myPageFragment -> R.id.menuitem_mypage
+                else -> null
+            }
         menuItemId?.let {
             // 선택 리스너를 일시적으로 제거하지 않으면 무한 루프가 발생 가능
             binding.bottomnavigationviewMain.setOnItemSelectedListener(null)
@@ -222,8 +223,8 @@ class MainActivity : AppCompatActivity() {
     private fun updateHomeNotificationBadge(hasUnreadNotification: Boolean) {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentcontainerview_main) as NavHostFragment
-        val homeFragment = navHostFragment.childFragmentManager.fragments
-            .find { it is HomeFragment } as? HomeFragment
+        val homeFragment =
+            navHostFragment.childFragmentManager.fragments.find { it is HomeFragment } as? HomeFragment
         homeFragment?.updateNotificationBadge(hasUnreadNotification)
     }
 }

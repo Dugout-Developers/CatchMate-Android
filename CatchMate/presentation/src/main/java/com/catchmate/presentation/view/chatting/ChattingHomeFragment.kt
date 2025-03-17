@@ -93,7 +93,6 @@ class ChattingHomeFragment :
             chattingHomeViewModel.connectToWebSocket(token)
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
-            Log.d("ChattingHomeFragment", "응답 받음: isFirst=${response.isFirst}, isLast=${response.isLast}, size=${response.chatRoomInfoList.size}")
             if (response.isFirst && response.isLast && response.totalElements == 0) {
                 // 채팅 없을때 표시할 레이아웃 가시성 처리
                 Log.e("NO CHATTING", "NO")

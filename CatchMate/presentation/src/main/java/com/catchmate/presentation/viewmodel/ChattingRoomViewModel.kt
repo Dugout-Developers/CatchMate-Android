@@ -29,7 +29,6 @@ import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
-import ua.naiksoftware.stomp.dto.StompHeader
 import javax.inject.Inject
 
 @HiltViewModel
@@ -99,13 +98,13 @@ class ChattingRoomViewModel
                             HttpLoggingInterceptor().apply {
                                 level = HttpLoggingInterceptor.Level.BODY
                             },
-                        )
-                        .build()
+                        ).build()
 
-                val headerMap = mapOf(
-                    "AccessToken" to accessToken,
-                    "ChatRoomId" to chatRoomId.toString(),
-                )
+                val headerMap =
+                    mapOf(
+                        "AccessToken" to accessToken,
+                        "ChatRoomId" to chatRoomId.toString(),
+                    )
 
                 stompClient =
                     Stomp.over(
@@ -117,7 +116,7 @@ class ChattingRoomViewModel
 
                 stompClient?.connect()
 
-                stompClient?.lifecycle()?.subscribe ({ event ->
+                stompClient?.lifecycle()?.subscribe({ event ->
                     when (event.type) {
                         LifecycleEvent.Type.OPENED -> {
                             Log.d("Web Socket✅", "연결 성공")
@@ -170,10 +169,11 @@ class ChattingRoomViewModel
         ) {
             viewModelScope.launch {
                 val msg =
-                    JSONObject().apply {
-                        put("chatRoomId", chatRoomId)
-                        put("userId", userId)
-                    }.toString()
+                    JSONObject()
+                        .apply {
+                            put("chatRoomId", chatRoomId)
+                            put("userId", userId)
+                        }.toString()
                 stompClient?.send("/app/chat/read", msg)?.subscribe()
             }
         }

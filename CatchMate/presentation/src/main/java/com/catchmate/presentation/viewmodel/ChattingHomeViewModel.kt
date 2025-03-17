@@ -58,12 +58,12 @@ class ChattingHomeViewModel
                             HttpLoggingInterceptor().apply {
                                 level = HttpLoggingInterceptor.Level.BODY
                             },
-                        )
-                        .build()
+                        ).build()
 
-                val headerMap = mapOf(
-                    "AccessToken" to accessToken,
-                )
+                val headerMap =
+                    mapOf(
+                        "AccessToken" to accessToken,
+                    )
 
                 stompClient =
                     Stomp.over(
@@ -114,12 +114,13 @@ class ChattingHomeViewModel
             val currentList = (currentResponse?.chatRoomInfoList ?: emptyList()).toMutableList()
             val targetIndex = currentList.indexOfFirst { it.chatRoomId == chatRoomId }
             if (currentList.isNotEmpty() && targetIndex != -1) { // 해당하는 채팅방이 현재 목록에 있을때만 반영되도록
-                currentList[targetIndex] = currentList[targetIndex].copy(
-                    lastMessageContent = newContent,
-                    lastMessageAt = newSentTime,
-                    isNewChatRoom = false,
-                    unreadMessageCount = currentList[targetIndex].unreadMessageCount + 1,
-                )
+                currentList[targetIndex] =
+                    currentList[targetIndex].copy(
+                        lastMessageContent = newContent,
+                        lastMessageAt = newSentTime,
+                        isNewChatRoom = false,
+                        unreadMessageCount = currentList[targetIndex].unreadMessageCount + 1,
+                    )
                 val updatedResponse = currentResponse?.copy(chatRoomInfoList = currentList)!!
                 _getChattingRoomListResponse.postValue(updatedResponse)
             }
