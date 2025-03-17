@@ -71,7 +71,17 @@ class NotificationAdapter(
 
             itemBinding.root.setOnClickListener {
                 val pos = absoluteAdapterPosition
-                itemClickListener.onNotificationItemClick(notificationList[pos].notificationId, pos, notificationList[pos].acceptStatus)
+                val chatRoomId = notificationList[pos].boardInfo.chatRoomId
+                itemClickListener.onNotificationItemClick(
+                    notificationList[pos].notificationId,
+                    pos,
+                    notificationList[pos].acceptStatus,
+                    if (chatRoomId == -1L) {
+                        null
+                    } else {
+                        chatRoomId
+                    },
+                )
             }
         }
     }
