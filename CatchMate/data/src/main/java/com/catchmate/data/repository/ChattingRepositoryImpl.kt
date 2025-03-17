@@ -10,6 +10,7 @@ import com.catchmate.data.mapper.ChattingMapper.toGetChattingCrewListResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingHistoryResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingRoomListResponse
 import com.catchmate.data.mapper.ChattingMapper.toPatchChattingRoomImageResponse
+import com.catchmate.data.mapper.ChattingMapper.toPutChattingRoomAlarmResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
@@ -18,6 +19,7 @@ import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
 import org.json.JSONObject
@@ -90,6 +92,26 @@ class ChattingRepositoryImpl
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
                     val body = response.body()?.let { toPatchChattingRoomImageResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("ChattingRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+        override suspend fun putChattingRoomAlarm(
+            chatRoomId: Long,
+            enable: Boolean,
+        ): Result<PutChattingRoomAlarmResponse> =
+            try {
+                val response = chattingApi.putChattingRoomAlarm(chatRoomId, enable)
+                if (response.isSuccessful) {
+                    Log.d("ChattingRepo", "통신 성공")
+                    val body = response.body()?.let { toPutChattingRoomAlarmResponse(it) } ?: throw NullPointerException("Null Response")
                     Result.success(body)
                 } else {
                     val stringToJson = JSONObject(response.errorBody()?.string()!!)

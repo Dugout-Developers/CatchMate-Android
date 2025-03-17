@@ -7,6 +7,7 @@ import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import okhttp3.MultipartBody
 
 interface ChattingRepository {
@@ -20,6 +21,11 @@ interface ChattingRepository {
         chatRoomId: Long,
         chatRoomImage: MultipartBody.Part,
     ): Result<PatchChattingRoomImageResponse>
+
+    suspend fun putChattingRoomAlarm(
+        chatRoomId: Long,
+        enable: Boolean,
+    ): Result<PutChattingRoomAlarmResponse>
 
     suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse>
 

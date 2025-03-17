@@ -93,7 +93,7 @@ object DateUtils {
             DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .optionalStart() // 소수점 이하가 있을 수도 있고 없을 수도 있음
-                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true) // 최소 0자리, 최대 6자리
+                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true) // 최소 0자리, 최대 6자리
                 .optionalEnd()
                 .toFormatter()
         val parsedTime =

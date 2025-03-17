@@ -260,6 +260,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/selector_chatting_notification_btn"
+        android:clickable="false"
         android:textOff="@null"
         android:textOn="@null"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"

@@ -1,10 +1,14 @@
 package com.catchmate.presentation.view.chatting
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -28,7 +32,6 @@ import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -44,6 +47,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private var isFirstLoad = true
     private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
     private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
+    private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onViewCreated(
@@ -51,19 +55,18 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        localDataViewModel.getUserId()
         initViewModel()
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
-        localDataViewModel.getUserId()
         initChatBox()
-        chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
         onBackPressedAction = { setOnBackPressedAction() }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingRoomViewModel.topic.dispose()
-        chattingRoomViewModel.stompConnection.dispose()
+        chattingRoomViewModel.topic?.dispose()
+        chattingRoomViewModel.stompClient?.disconnect()
     }
 
     private fun initViewModel() {
@@ -96,6 +99,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) {
+                isNotificationEnabled = info.isNotificationEnabled
                 initChatRoomInfo(info)
                 initHeader(info)
             }
@@ -130,13 +134,22 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
+            localDataViewModel.getAccessToken()
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
+        }
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            chattingRoomViewModel.connectToWebSocket(chatRoomId, userId, token)
         }
         chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
             if (isSent) {
                 binding.edtChattingRoomChatBox.setText("")
             } else {
-                Snackbar.make(requireView(), "메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                showConnectInstabilitySnackbar(R.string.chatting_message_send_fail)
+            }
+        }
+        chattingRoomViewModel.isInstability.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                showConnectInstabilitySnackbar(R.string.chatting_connect_instability)
             }
         }
     }
@@ -317,8 +330,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     } else {
                         ivSideSheetSettings.visibility = View.GONE
                     }
-                    toggleSideSheetChattingRoomNotification.setOnCheckedChangeListener { buttonView, isChecked ->
-                        // 토글 상태에 따른 알림 설정 api 호출
+                    toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
+                    toggleSideSheetChattingRoomNotification.setOnClickListener {
+                        isNotificationEnabled = !isNotificationEnabled
+                        toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
+                        chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
                     }
                 }
 
@@ -361,5 +377,38 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             }
         }
         dialog.show()
+    }
+
+    private fun showConnectInstabilitySnackbar(str: Int) {
+        val snackbarView = layoutInflater.inflate(R.layout.layout_chatting_custom_snackbar, null)
+        val snackbarText = snackbarView.findViewById<TextView>(R.id.tv_chatting_custom_snackbar)
+        snackbarText.setText(str)
+        val params =
+            ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            )
+        params.topToBottom = R.id.layout_header_chatting_room
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+        snackbarView.alpha = 0f
+
+        val rootView = binding.root
+        rootView.addView(snackbarView, params)
+        snackbarView
+            .animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            snackbarView
+                .animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction { rootView.removeView(snackbarView) }
+                .start()
+        }, 1000)
     }
 }

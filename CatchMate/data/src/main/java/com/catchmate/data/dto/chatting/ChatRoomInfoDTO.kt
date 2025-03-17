@@ -9,4 +9,7 @@ data class ChatRoomInfoDTO(
     val lastMessageAt: String?,
     val lastMessageContent: String?,
     val chatRoomImage: String,
+    val unreadMessageCount: Int,
+    val isNewChatRoom: Boolean,
+    val isNotificationEnabled: Boolean,
 )
