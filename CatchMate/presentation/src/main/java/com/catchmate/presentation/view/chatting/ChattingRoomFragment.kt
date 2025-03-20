@@ -40,7 +40,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var userId: Long = -1L
-    private var currentPage: Int = 0
+    private var lastChatMessageId: String? = null
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
@@ -71,7 +71,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (response.isFirst && response.isLast && response.chatMessageInfoList.isEmpty()) {
                 Log.d("빈 채팅방 목록", "empty")
             } else {
                 Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
@@ -174,8 +174,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
                         if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
-                            currentPage += 1
-                            getChattingHistory()
+                            if (chatListAdapter.currentList.isNotEmpty() && lastVisibleItemPosition >= 0 &&
+                                lastVisibleItemPosition < chatListAdapter.currentList.size) {
+                                lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
+                                getChattingHistory()
+                            }
                         }
                     }
                 },
@@ -191,7 +194,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         Log.e("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
-        chattingRoomViewModel.getChattingHistory(chatRoomId, currentPage)
+        chattingRoomViewModel.getChattingHistory(chatRoomId, lastChatMessageId)
         isApiCalled = true
     }
 
