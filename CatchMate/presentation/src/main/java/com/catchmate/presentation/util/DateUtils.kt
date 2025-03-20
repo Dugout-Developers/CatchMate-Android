@@ -25,17 +25,20 @@ object DateUtils {
         }
     }
 
+    // 게시글 등록 시 bottom sheet 통해 선택된 날짜, 시간 값 포맷
     fun formatGameDateTime(
         date: String,
         time: String,
     ): String = "$date $time:00"
 
+    // 게시글 수정 시 받아온 날짜+시간 값 화면에 표시되는 형식으로 포맷
     fun formatGameDateTimeEditBoard(dateTime: String): String {
         val (date, time) = dateTime.split("T")
         val newTime = time.substringBefore(".")
         return "$date $newTime"
     }
 
+    // 날짜+시간 값 한 번에 표시되도록 포맷(readPost, addPost)
     fun formatPlayDate(dateTime: String): String {
         val (date, time) = dateTime.split(" ", "T")
 
@@ -48,6 +51,17 @@ object DateUtils {
         return outputDateFormat.format(formattedDate) + " | " + formattedTime
     }
 
+    fun formatInquiryAnsweredDate(dateTime: String): String {
+        val (date, time) = dateTime.split("T")
+
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate: Date = inputDateFormat.parse(date)
+        val outputDateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
+
+        return outputDateFormat.format(formattedDate)
+    }
+
+    // 날짜+시간 값 분리해서 원하는 형태로 포맷 후 Pair로 반환 - 날짜:M월 d일 E요일
     fun formatISODateTime(dateTime: String): Pair<String, String> {
         val (date, time) = dateTime.split("T")
 
@@ -68,6 +82,7 @@ object DateUtils {
         return outputDateFormat.format(formattedDate)
     }
 
+    // 날짜+시간 값 분리해서 원하는 형태로 포맷 후 Pair로 반환 - 날짜:MM.dd
     fun formatISODateTimeToDateTime(dateTime: String): Pair<String, String> {
         val (date, time) = dateTime.split("T")
 
@@ -80,6 +95,7 @@ object DateUtils {
         return Pair(outputDateFormat.format(formattedDate), time.substring(0, 5))
     }
 
+    // 받은 신청 화면에서 직관 신청 등록된 시간 표시하는 포맷 함수
     fun formatDateTimeToEnrollDateTime(dateTime: String): String {
         val (date, time) = dateTime.split("T")
         val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -88,6 +104,7 @@ object DateUtils {
         return outputDataFormat.format(formattedDate) + " " + time.substring(0, 5)
     }
 
+    // 마지막 채팅 시간 포맷하는 함수
     fun formatLastChatTime(dateTime: String): String {
         val formatter =
             DateTimeFormatterBuilder()
@@ -121,6 +138,7 @@ object DateUtils {
         }
     }
 
+    // 채팅 전송 시간 포맷하는 함수
     fun formatChatSendTime(dateTime: String): String {
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
         val parsedTime =
@@ -132,6 +150,7 @@ object DateUtils {
         return parsedTime.format(outputFormatter)
     }
 
+    // 채팅 수신 시 날짜값 포맷하는 함수
     fun getCurrentTimeFormatted(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
         return ZonedDateTime.now().format(formatter)

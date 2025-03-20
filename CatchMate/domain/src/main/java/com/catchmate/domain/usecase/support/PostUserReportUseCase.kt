@@ -10,6 +10,8 @@ class PostUserReportUseCase
     constructor(
         private val supportRepository: SupportRepository,
     ) {
-        suspend operator fun invoke(request: PostUserReportRequest): Result<PostUserReportResponse> =
-            supportRepository.portUserReport(request)
+        suspend operator fun invoke(
+            reportedUserId: Long,
+            request: PostUserReportRequest,
+        ): Result<PostUserReportResponse> = supportRepository.portUserReport(reportedUserId, request)
     }

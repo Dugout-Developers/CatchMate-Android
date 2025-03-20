@@ -166,21 +166,28 @@ class NotificationFragment :
     override fun onNotificationItemClick(
         notificationId: Long,
         currentPos: Int,
-        acceptStatus: String,
+        acceptStatus: String?,
         chatRoomId: Long?,
+        inquiryId: Long?,
     ) {
         clickedItemPos = currentPos
         notificationViewModel.getReceivedNotification(notificationId)
-        if (acceptStatus == AcceptState.PENDING.name) { // pending
-            findNavController().navigate(R.id.action_notificationFragment_to_receivedJoinFragment)
-        } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
-            val bundle = Bundle()
-            bundle.putLong("chatRoomId", chatRoomId!!)
-            findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment, bundle)
-        } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
-            Snackbar.make(requireView(), R.string.notification_already_rejected_snackbar, Snackbar.LENGTH_SHORT).show()
+        if (inquiryId == null) {
+            if (acceptStatus == AcceptState.PENDING.name) { // pending
+                findNavController().navigate(R.id.action_notificationFragment_to_receivedJoinFragment)
+            } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
+                val bundle = Bundle()
+                bundle.putLong("chatRoomId", chatRoomId!!)
+                findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment, bundle)
+            } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
+                Snackbar.make(requireView(), R.string.notification_already_rejected_snackbar, Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(requireView(), R.string.notification_already_accepted_snackbar, Snackbar.LENGTH_SHORT).show()
+            }
         } else {
-            Snackbar.make(requireView(), R.string.notification_already_accepted_snackbar, Snackbar.LENGTH_SHORT).show()
+            val bundle = Bundle()
+            bundle.putLong("inquiryId", inquiryId)
+            findNavController().navigate(R.id.action_notificationFragment_to_serviceCenterAnswerFragment, bundle)
         }
     }
 

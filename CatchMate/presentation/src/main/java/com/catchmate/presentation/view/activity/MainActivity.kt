@@ -26,7 +26,6 @@ import com.catchmate.presentation.databinding.ActivityMainBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.view.home.HomeFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.catchmate.presentation.viewmodel.MainActivityViewModel
 import com.catchmate.presentation.viewmodel.MainViewModel
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
@@ -42,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding!!
 
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private val mainActivityViewModel: MainActivityViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
     private var chatBadgeDrawable: BadgeDrawable? = null
 
@@ -101,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        mainActivityViewModel.isGuestLogin.observe(this) { isGuest ->
+        mainViewModel.isGuestLogin.observe(this) { isGuest ->
             Log.e("메인a", "guest mode $isGuest")
         }
         localDataViewModel.accessToken.observe(this) { accessToken ->
@@ -168,7 +166,7 @@ class MainActivity : AppCompatActivity() {
                 if (it.itemId == selectedItemId) {
                     return@setOnItemSelectedListener false
                 }
-                val isGuest = mainActivityViewModel.isGuestLogin.value ?: false
+                val isGuest = mainViewModel.isGuestLogin.value ?: false
                 when (it.itemId) {
                     R.id.menuitem_home -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)

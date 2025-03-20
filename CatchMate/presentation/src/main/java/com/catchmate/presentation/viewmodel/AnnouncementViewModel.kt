@@ -5,22 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.support.PostUserReportRequest
-import com.catchmate.domain.model.support.PostUserReportResponse
-import com.catchmate.domain.usecase.support.PostUserReportUseCase
+import com.catchmate.domain.model.support.GetNoticeListResponse
+import com.catchmate.domain.usecase.support.GetNoticeListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportViewModel
+class AnnouncementViewModel
     @Inject
     constructor(
-        private val postUserReportUseCase: PostUserReportUseCase,
+        private val getNoticeListUseCase: GetNoticeListUseCase,
     ) : ViewModel() {
-        private val _postUserReportResponse = MutableLiveData<PostUserReportResponse>()
-        val postUserReportResponse: LiveData<PostUserReportResponse>
-            get() = _postUserReportResponse
+        private val _getNoticeListResponse = MutableLiveData<GetNoticeListResponse>()
+        val getNoticeListResponse: LiveData<GetNoticeListResponse>
+            get() = _getNoticeListResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -30,15 +29,12 @@ class ReportViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun postUserReport(
-            reportedUserId: Long,
-            request: PostUserReportRequest,
-        ) {
+        fun getNoticeList(page: Int) {
             viewModelScope.launch {
-                val result = postUserReportUseCase(reportedUserId, request)
+                val result = getNoticeListUseCase(page)
                 result
                     .onSuccess { response ->
-                        _postUserReportResponse.value = response
+                        _getNoticeListResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

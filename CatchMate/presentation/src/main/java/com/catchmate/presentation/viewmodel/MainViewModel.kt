@@ -21,6 +21,9 @@ class MainViewModel
         val getUnreadInfoResponse: LiveData<GetUnreadInfoResponse>
             get() = _getUnreadInfoResponse
 
+        private val _isGuestLogin = MutableLiveData<Boolean>()
+        val isGuestLogin: LiveData<Boolean> get() = _isGuestLogin
+
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
             get() = _errorMessage
@@ -28,6 +31,10 @@ class MainViewModel
         private val _navigateToLogin = MutableLiveData<Boolean>()
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
+
+        fun setGuestLogin(isGuest: Boolean) {
+            _isGuestLogin.value = isGuest
+        }
 
         fun getUnreadInfo() {
             viewModelScope.launch {

@@ -14,7 +14,7 @@ import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.LoginViewModel
-import com.catchmate.presentation.viewmodel.MainActivityViewModel
+import com.catchmate.presentation.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
     private val loginViewModel: LoginViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val navigateCode by lazy { arguments?.getInt("navigateCode") }
 
     override fun onViewCreated(
@@ -82,7 +82,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
                         localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)
                         localDataViewModel.saveProvider(loginViewModel.postLoginRequest.value?.provider!!)
-                        mainActivityViewModel.setGuestLogin(false)
+                        mainViewModel.setGuestLogin(false)
                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     }
                 }
@@ -105,7 +105,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 loginViewModel.googleLogin(requireActivity())
             }
             tvLoginGuest.setOnClickListener {
-                mainActivityViewModel.setGuestLogin(true)
+                mainViewModel.setGuestLogin(true)
                 localDataViewModel.saveAccessToken("")
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
