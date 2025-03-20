@@ -70,23 +70,21 @@ class FCMTokenService : FirebaseMessagingService() {
         channerName: String,
         notificationBuilder: NotificationCompat.Builder,
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            val channel = notificationManager.getNotificationChannel(channerId)
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val channel = notificationManager.getNotificationChannel(channerId)
 
-            if (channel == null) {
-                val newChannel =
-                    NotificationChannel(
-                        channerId,
-                        channerName,
-                        NotificationManager.IMPORTANCE_HIGH,
-                    )
-                newChannel.enableVibration(true)
-                notificationManager.createNotificationChannel(newChannel)
-            }
-            val requestCode = UUID.randomUUID().hashCode()
-            notificationManager.notify(requestCode, notificationBuilder.build())
+        if (channel == null) {
+            val newChannel =
+                NotificationChannel(
+                    channerId,
+                    channerName,
+                    NotificationManager.IMPORTANCE_HIGH,
+                )
+            newChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(newChannel)
         }
+        val requestCode = UUID.randomUUID().hashCode()
+        notificationManager.notify(requestCode, notificationBuilder.build())
     }
 
     private fun showNotification(
@@ -94,18 +92,18 @@ class FCMTokenService : FirebaseMessagingService() {
         title: String,
         body: String,
     ) {
-        var channelId: String = ""
-        var channelName: String = ""
-        if (data.containsKey("acceptStatus")) { // 직관 신청 알림
-            channelId = ENROLL_CHANNEL_ID
-            channelName = ENROLL_CHANNEL_NAME
-        } else { // 채팅 알림
-            channelId = CHATTING_CHANNEL_ID
-            channelName = CHATTING_CHANNEL_NAME
-        }
-        val notificationBuilder = getNotificationBuilder(channelId)
+//        var channelId: String = ""
+//        var channelName: String = ""
+//        if (data.containsKey("acceptStatus")) { // 직관 신청 알림
+//            channelId = ENROLL_CHANNEL_ID
+//            channelName = ENROLL_CHANNEL_NAME
+//        } else { // 채팅 알림
+//            channelId = CHATTING_CHANNEL_ID
+//            channelName = CHATTING_CHANNEL_NAME
+//        }
+        val notificationBuilder = getNotificationBuilder(CATCHMATE_CHANNEL_ID)
         val builder = notificationHandler.createNotificationBuilder(data, title, body, notificationBuilder)
-        createNotificationChannel(channelId, channelName, builder)
+        createNotificationChannel(CATCHMATE_CHANNEL_ID, CATCHMATE_CHANNEL_NAME, builder)
     }
 
     suspend fun getToken(): String = FirebaseMessaging.getInstance().token.await()
@@ -117,5 +115,7 @@ class FCMTokenService : FirebaseMessagingService() {
         const val CHATTING_CHANNEL_NAME = "채팅 알림"
         const val EVENT_CHANNEL_ID = "EventChannel"
         const val EVENT_CHANNEL_NAME = "이벤트 알림"
+        const val CATCHMATE_CHANNEL_ID = "CatchMateNotificationChannel"
+        const val CATCHMATE_CHANNEL_NAME = "캐치메이트 알림"
     }
 }
