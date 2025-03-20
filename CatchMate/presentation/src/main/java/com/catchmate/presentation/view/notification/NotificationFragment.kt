@@ -178,7 +178,9 @@ class NotificationFragment :
             bundle.putLong("chatRoomId", chatRoomId!!)
             findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment, bundle)
         } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
-            Snackbar.make(requireView(), R.string.notification_already_done_snackbar, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), R.string.notification_already_rejected_snackbar, Snackbar.LENGTH_SHORT).show()
+        } else {
+            Snackbar.make(requireView(), R.string.notification_already_accepted_snackbar, Snackbar.LENGTH_SHORT).show()
         }
     }
 
