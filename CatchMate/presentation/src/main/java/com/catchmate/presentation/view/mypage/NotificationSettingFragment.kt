@@ -1,5 +1,8 @@
 package com.catchmate.presentation.view.mypage
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +13,7 @@ import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentNotificationSettingBinding
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
+import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.NotificationSettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,13 +26,30 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
     private val eventAlarm by lazy { arguments?.getString("eventAlarm") ?: "" }
     private val notificationSettingViewModel: NotificationSettingViewModel by viewModels()
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
-        super.onViewCreated(view, savedInstanceState)
-        initViewModel()
-        initView()
+    override fun onResume() {
+        super.onResume()
+        checkNotificationPermission()
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val mainActivity = requireActivity() as MainActivity
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+
+            if (mainActivity.checkSelfPermission(permission)
+                == PackageManager.PERMISSION_GRANTED) {
+                Log.e("알림 권한 상태", "허용됨")
+                initViewModel()
+                initView()
+            } else {
+                Log.e("알림 권한 상태", "거부됨")
+                mainActivity.showPermissionRationaleDialog(
+                    onCancelled = {
+                        findNavController().popBackStack()
+                    }
+                )
+            }
+        }
     }
 
     private fun initView() {

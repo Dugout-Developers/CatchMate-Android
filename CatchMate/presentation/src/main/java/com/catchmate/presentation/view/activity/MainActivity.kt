@@ -3,8 +3,12 @@ package com.catchmate.presentation.view.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -13,20 +17,23 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ActivityMainBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.view.home.HomeFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MainActivityViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.catchmate.presentation.viewmodel.MainViewModel
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,12 +46,10 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private var chatBadgeDrawable: BadgeDrawable? = null
 
-    val permissionList =
-        arrayOf(
-            Manifest.permission.INTERNET,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.POST_NOTIFICATIONS,
-        )
+    companion object {
+        const val REQUEST_PERMISSION_CODE_STORAGE = 100
+        const val REQUEST_PERMISSION_CODE_NOTIFICATION = 200
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        requestPermissions(permissionList, 0)
+        requestStoragePermission()
 
         Log.e("intent", "${intent.data} / ${intent.extras}")
 
@@ -97,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         mainActivityViewModel.isGuestLogin.observe(this) { isGuest ->
-            Log.e("메인a", "guest mode")
+            Log.e("메인a", "guest mode $isGuest")
         }
         localDataViewModel.accessToken.observe(this) { accessToken ->
             if (accessToken.isNullOrEmpty()) {
@@ -172,7 +177,10 @@ class MainActivity : AppCompatActivity() {
                     R.id.menuitem_post,
                     R.id.menuitem_chatting -> {
                         if (isGuest) {
-                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT)
+                                .apply {
+                                    anchorView = binding.bottomnavigationviewMain
+                                }.show()
                         } else {
                             val destinationId =
                                 when (it.itemId) {
@@ -198,8 +206,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationMenuView = binding.bottomnavigationviewMain.getChildAt(0) as BottomNavigationMenuView
 
         // 채팅 메뉴 위치 찾기
-        val chatMenuItemPosition = findMenuItemPosition(R.id.menuitem_chatting)
-        val menuItemView = bottomNavigationMenuView.getChildAt(chatMenuItemPosition)
+        val menuItemView = bottomNavigationMenuView.getChildAt(3)
 
         if (showBadge) {
             if (chatBadgeDrawable == null) {
@@ -225,18 +232,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 메뉴 ID에 해당하는 위치 찾기
-    private fun findMenuItemPosition(menuItemId: Int): Int {
-        val menu = binding.bottomnavigationviewMain.menu
-        for (i in 0 until menu.size()) {
-            if (menu.getItem(i).itemId == menuItemId) {
-                return i
-            }
-        }
-        // 기본값 - 채팅 메뉴 위치
-        return 3
-    }
-
     fun refreshNotificationStatus() {
         mainViewModel.getUnreadInfo()
     }
@@ -247,5 +242,67 @@ class MainActivity : AppCompatActivity() {
         val homeFragment =
             navHostFragment.childFragmentManager.fragments.find { it is HomeFragment } as? HomeFragment
         homeFragment?.updateNotificationBadge(hasUnreadNotification)
+    }
+
+    private fun requestStoragePermission() {
+        Log.e("권한", "requestStoragePermission 호출됨")
+        val storagePermission =
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+        requestPermissions(storagePermission, REQUEST_PERMISSION_CODE_STORAGE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_PERMISSION_CODE_STORAGE -> {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("저장소 권한", "부여됨")
+                } else {
+                    Log.e("저장소 권한", "거부됨")
+                }
+            }
+        }
+    }
+
+    fun showPermissionRationaleDialog(onCancelled: () -> Unit = {}) {
+        val builder = MaterialAlertDialogBuilder(this@MainActivity)
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+        dialogBinding.apply {
+            tvSimpleDialogTitle.text = getString(R.string.notification_permission_dialog_title)
+
+            tvSimpleDialogNegative.apply {
+                text = getString(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
+                    onCancelled()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                text = getString(R.string.notification_permission_dialog_pov_btn)
+                setTextColor(
+                    ContextCompat.getColor(this@MainActivity, R.color.brand500),
+                )
+                setOnClickListener {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", this@MainActivity.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 }

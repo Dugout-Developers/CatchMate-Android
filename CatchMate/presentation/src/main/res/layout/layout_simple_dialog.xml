@@ -50,7 +50,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/sub_grid_margin"
-                android:layout_marginTop="@dimen/small"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="@dimen/sub_grid_margin"
                 android:clickable="true"
@@ -59,27 +58,25 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/divider_simple_dialog_vertical"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_simple_dialog_horisontal"
                 tools:text="Menu" />
 
             <View
                 android:id="@+id/divider_simple_dialog_vertical"
                 android:layout_width="1dp"
                 android:layout_height="18dp"
-                android:layout_marginTop="@dimen/small"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="@dimen/sub_grid_margin"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_simple_dialog_horisontal" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_simple_dialog_horizontal" />
 
             <TextView
                 android:id="@+id/tv_simple_dialog_positive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="@dimen/small"
                 android:layout_marginRight="@dimen/sub_grid_margin"
                 android:layout_marginBottom="@dimen/sub_grid_margin"
                 android:clickable="true"
@@ -89,7 +86,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/divider_simple_dialog_vertical"
-                app:layout_constraintTop_toBottomOf="@+id/divider_simple_dialog_horisontal"
                 tools:text="Menu" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
