@@ -175,9 +175,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.menuitem_favorite,
                     R.id.menuitem_post,
-                    R.id.menuitem_chatting -> {
+                    R.id.menuitem_chatting, -> {
                         if (isGuest) {
-                            Snackbar.make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT)
+                            Snackbar
+                                .make(this, R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT)
                                 .apply {
                                     anchorView = binding.bottomnavigationviewMain
                                 }.show()

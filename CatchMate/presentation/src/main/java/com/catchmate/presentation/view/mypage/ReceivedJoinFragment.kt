@@ -81,7 +81,7 @@ class ReceivedJoinFragment :
                             getAllReceivedEnroll()
                         }
                     }
-                }
+                },
             )
         }
     }

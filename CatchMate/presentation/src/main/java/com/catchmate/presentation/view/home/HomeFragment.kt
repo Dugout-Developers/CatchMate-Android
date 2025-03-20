@@ -22,10 +22,10 @@ import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

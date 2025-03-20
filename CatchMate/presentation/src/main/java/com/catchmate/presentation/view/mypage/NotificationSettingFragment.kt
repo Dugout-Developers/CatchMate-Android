@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -37,7 +36,8 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
             val permission = Manifest.permission.POST_NOTIFICATIONS
 
             if (mainActivity.checkSelfPermission(permission)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED
+                ) {
                 Log.e("알림 권한 상태", "허용됨")
                 initViewModel()
                 initView()
@@ -46,7 +46,7 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
                 mainActivity.showPermissionRationaleDialog(
                     onCancelled = {
                         findNavController().popBackStack()
-                    }
+                    },
                 )
             }
         }

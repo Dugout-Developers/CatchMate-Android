@@ -1,7 +1,6 @@
 package com.catchmate.data.datasource.local
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
@@ -11,7 +10,6 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject

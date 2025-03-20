@@ -174,8 +174,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
                         if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
-                            if (chatListAdapter.currentList.isNotEmpty() && lastVisibleItemPosition >= 0 &&
-                                lastVisibleItemPosition < chatListAdapter.currentList.size) {
+                            if (chatListAdapter.currentList.isNotEmpty() &&
+                                lastVisibleItemPosition >= 0 &&
+                                lastVisibleItemPosition < chatListAdapter.currentList.size
+                                ) {
                                 lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
                                 getChattingHistory()
                             }
