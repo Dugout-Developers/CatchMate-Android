@@ -14,7 +14,7 @@ import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBindin
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.catchmate.presentation.viewmodel.MainActivityViewModel
+import com.catchmate.presentation.viewmodel.MainViewModel
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBinding>(FragmentCheerStyleOnboardingBinding::inflate) {
     private val signUpViewModel: SignUpViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var userInfo: PostUserAdditionalInfoRequest
 
@@ -135,7 +135,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                 localDataViewModel.saveRefreshToken(response.refreshToken)
                 localDataViewModel.saveUserId(response.userId)
                 localDataViewModel.saveProvider(userInfo.provider)
-                mainActivityViewModel.setGuestLogin(false)
+                mainViewModel.setGuestLogin(false)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
         }
