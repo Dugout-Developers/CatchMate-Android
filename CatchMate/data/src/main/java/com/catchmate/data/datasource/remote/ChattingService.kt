@@ -62,7 +62,7 @@ interface ChattingService {
     @GET("chats/{chatRoomId}")
     suspend fun getChattingHistory(
         @Path("chatRoomId") chatRoomId: Long,
-        @Query("page") page: Int,
+        @Query("lastMessageId") lastMessageId: String?,
         @Query("size") size: Int?, // default = 20
     ): Response<GetChattingHistoryResponseDTO?>
 }

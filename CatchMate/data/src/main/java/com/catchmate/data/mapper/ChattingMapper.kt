@@ -49,15 +49,15 @@ object ChattingMapper {
     fun toGetChattingHistoryResponse(dto: GetChattingHistoryResponseDTO): GetChattingHistoryResponse =
         GetChattingHistoryResponse(
             chatMessageInfoList = dto.chatMessageInfoList.map { toChatMessageInfo(it) },
-            totalPages = dto.totalPages,
-            totalElements = dto.totalElements,
             isFirst = dto.isFirst,
             isLast = dto.isLast,
+            lastMessageId = dto.lastMessageId,
         )
 
     private fun toChatMessageInfo(dto: ChatMessageInfoDTO): ChatMessageInfo =
         ChatMessageInfo(
             id = toChatMessageId(dto.id),
+            chatMessageId = dto.chatMessageId,
             roomId = dto.roomId,
             content = dto.content,
             senderId = dto.senderId,
