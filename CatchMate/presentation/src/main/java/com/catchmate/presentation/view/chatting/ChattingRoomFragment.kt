@@ -177,7 +177,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                             if (chatListAdapter.currentList.isNotEmpty() &&
                                 lastVisibleItemPosition >= 0 &&
                                 lastVisibleItemPosition < chatListAdapter.currentList.size
-                                ) {
+                            ) {
                                 lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
                                 getChattingHistory()
                             }

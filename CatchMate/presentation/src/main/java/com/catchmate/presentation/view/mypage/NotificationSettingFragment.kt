@@ -37,7 +37,7 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
 
             if (mainActivity.checkSelfPermission(permission)
                 == PackageManager.PERMISSION_GRANTED
-                ) {
+            ) {
                 Log.e("알림 권한 상태", "허용됨")
                 initViewModel()
                 initView()
