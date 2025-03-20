@@ -41,9 +41,6 @@ class ChattingRoomViewModel
         private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
         private val putChattingRoomAlarmUseCase: PutChattingRoomAlarmUseCase,
     ) : ViewModel() {
-        private val maxRetry = 5
-        private val intervalMillis = 1000L
-
         var topic: Disposable? = null
         var stompClient: StompClient? = null
         private var okHttpClient: OkHttpClient? = null
@@ -147,17 +144,21 @@ class ChattingRoomViewModel
                     Log.d("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
+                    val chatMessageId = jsonObject.getString("chatMessageId")
                     val senderId = jsonObject.getString("senderId").toLong()
                     val content = jsonObject.getString("content")
-                    val chatMessageId = ChatMessageId(date = getCurrentTimeFormatted())
+                    val roomId = jsonObject.getString("roomId").toLong()
+                    val id = ChatMessageId(date = getCurrentTimeFormatted())
                     val chatMessageInfo =
                         ChatMessageInfo(
-                            id = chatMessageId,
+                            id = id,
+                            chatMessageId = chatMessageId,
+                            roomId = roomId,
                             content = content,
                             senderId = senderId,
                             messageType = messageType,
                         )
-                    Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${chatMessageId.date}")
+                    Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${id.date} - $chatMessageId")
                     addChatMessage(chatMessageInfo)
                     sendIsMsgRead(chatRoomId, userId)
                 }
@@ -209,10 +210,9 @@ class ChattingRoomViewModel
                     chatMessageInfoList = updatedList,
                 ) ?: GetChattingHistoryResponse(
                     chatMessageInfoList = updatedList,
-                    totalPages = 1,
-                    totalElements = 1,
                     isFirst = true,
                     isLast = true,
+                    lastMessageId = updatedList.last().chatMessageId,
                 )
 
             _getChattingHistoryResponse.postValue(updatedResponse)
@@ -220,11 +220,11 @@ class ChattingRoomViewModel
 
         fun getChattingHistory(
             chatRoomId: Long,
-            page: Int,
-            size: Int? = 30,
+            lastMessageId: String? = null,
+            size: Int? = 20,
         ) {
             viewModelScope.launch {
-                val result = getChattingHistoryUseCase(chatRoomId, page, size)
+                val result = getChattingHistoryUseCase(chatRoomId, lastMessageId, size)
                 result
                     .onSuccess { response ->
                         _getChattingHistoryResponse.value = response

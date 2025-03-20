@@ -14,8 +14,10 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
+import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
-import com.catchmate.presentation.view.home.MainActivity
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -25,7 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChattingHomeFragment :
     BaseFragment<FragmentChattingHomeBinding>(FragmentChattingHomeBinding::inflate),
     OnChattingRoomSelectedListener,
-    OnItemSwipeListener {
+    OnItemSwipeListener,
+    OnListItemAllRemovedListener {
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var currentPage: Int = 0
@@ -49,8 +52,8 @@ class ChattingHomeFragment :
         }
         localDataViewModel.getAccessToken()
         initHeader()
-        initViewModel()
         initRecyclerView()
+        initViewModel()
 
         if (isFirstLoad) {
             getChattingRoomList()
@@ -94,9 +97,11 @@ class ChattingHomeFragment :
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             if (response.isFirst && response.isLast && response.totalElements == 0) {
-                // 채팅 없을때 표시할 레이아웃 가시성 처리
-                Log.e("NO CHATTING", "NO")
+                binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+                binding.rvChattingHome.visibility = View.GONE
             } else {
+                binding.rvChattingHome.visibility = View.VISIBLE
+                binding.layoutChattingHomeNoList.visibility = View.GONE
                 Log.e("EXIST CHATTING", "EXIST")
                 // 새로고침 상태이거나 currentPage가 0이면 리스트를 새로 설정
                 if (isApiCalled) {
@@ -124,7 +129,9 @@ class ChattingHomeFragment :
                         .Builder()
                         .setPopUpTo(R.id.chattingHomeFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_chattingHomeFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingHomeFragment_to_loginFragment, bundle, navOptions)
             }
         }
         chattingHomeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
@@ -142,7 +149,7 @@ class ChattingHomeFragment :
     }
 
     private fun initRecyclerView() {
-        chattingRoomListAdapter = ChattingRoomListAdapter(this@ChattingHomeFragment, this@ChattingHomeFragment)
+        chattingRoomListAdapter = ChattingRoomListAdapter(this@ChattingHomeFragment, this@ChattingHomeFragment, this@ChattingHomeFragment)
         binding.rvChattingHome.apply {
             adapter = chattingRoomListAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -199,5 +206,10 @@ class ChattingHomeFragment :
     ) {
         deletedItemPos = position
         chattingHomeViewModel.leaveChattingRoom(swipedItemId)
+    }
+
+    override fun onListItemAllRemoved() {
+        binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+        binding.rvChattingHome.visibility = View.GONE
     }
 }

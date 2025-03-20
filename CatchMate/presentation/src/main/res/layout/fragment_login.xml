@@ -165,7 +165,7 @@
         app:layout_constraintTop_toTopOf="@+id/iv_login_google" />
 
     <TextView
-        android:id="@+id/tv_login_sneak_peek"
+        android:id="@+id/tv_login_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="78dp"

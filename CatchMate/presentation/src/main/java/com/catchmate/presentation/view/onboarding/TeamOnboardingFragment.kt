@@ -69,8 +69,8 @@ class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(Fragm
 
     private fun initHeader() {
         binding.layoutTeamOnboardingHeader.apply {
-            imgbtnOnboardingIndicator2.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
-            imgbtnOnboardingIndicator1.setOnClickListener {
+            imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            imgbtnOnboardingIndicator2.setOnClickListener {
                 findNavController().popBackStack()
             }
             imgbtnOnboardingBack.setOnClickListener {

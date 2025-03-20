@@ -15,4 +15,7 @@
     <string name="chatting_retry_fail">서버에 연결할 수 없습니다. 나중에 다시 시도해주세요.</string>
     <string name="chatting_connect_instability">채팅방 연결이 불안정합니다.</string>
     <string name="chatting_message_send_fail">메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.</string>
+
+    <string name="chatting_no_list_title">참여한 채팅이 없어요</string>
+    <string name="chatting_no_list_content">마음에 드는 직관 글에 참여하여\n채팅을 시작해보세요!</string>
 </resources>

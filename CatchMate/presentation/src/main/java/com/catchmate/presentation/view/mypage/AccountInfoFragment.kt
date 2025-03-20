@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAccountInfoBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.AccountInfoViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -30,8 +31,10 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initHeader()
         initViewModel()
+        localDataViewModel.getProvider()
+        localDataViewModel.getRefreshToken()
+        initHeader()
     }
 
     private fun initHeader() {
@@ -60,8 +63,6 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
     }
 
     private fun initViewModel() {
-        localDataViewModel.getProvider()
-        localDataViewModel.getRefreshToken()
         localDataViewModel.provider.observe(viewLifecycleOwner) { provider ->
             initLoginInfo(provider)
         }
@@ -70,21 +71,42 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
                 initLogoutBtn()
             }
         }
-    }
-
-    private fun initLogoutBtn() {
-        binding.btnAccountInfoLogout.setOnClickListener {
-            accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
-            accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
-                Log.e("LOGOUT", response.state.toString())
-                // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
-                localDataViewModel.logout()
+        accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
+            Log.e("LOGOUT", response.state.toString())
+            // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
+            localDataViewModel.logout()
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.accountInfoFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+        }
+        accountInfoViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
                 val navOptions =
                     NavOptions
                         .Builder()
                         .setPopUpTo(R.id.accountInfoFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        accountInfoViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
+            }
+        }
+    }
+
+    private fun initLogoutBtn() {
+        binding.layoutFooterAccountInfo.btnFooterOne.apply {
+            isEnabled = true
+            setText(R.string.mypage_setting_user_logout)
+            setOnClickListener {
+                accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
             }
         }
     }

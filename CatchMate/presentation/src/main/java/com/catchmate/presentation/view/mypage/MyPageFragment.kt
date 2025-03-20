@@ -1,9 +1,11 @@
 package com.catchmate.presentation.view.mypage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -12,14 +14,17 @@ import com.catchmate.presentation.databinding.FragmentMyPageBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MyPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding::inflate) {
     private val myPageViewModel: MyPageViewModel by viewModels()
+    private val localDataViewModel: LocalDataViewModel by viewModels()
 
     override fun onViewCreated(
         view: View,
@@ -27,8 +32,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
-        initHeader()
         initViewModel()
+        localDataViewModel.getAccessToken()
+        initHeader()
         initViews()
     }
 
@@ -81,8 +87,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     }
 
     private fun initViewModel() {
-        myPageViewModel.getUserProfile()
-        myPageViewModel.getEnrollNewCount()
         myPageViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             initProfile(response)
         }
@@ -94,6 +98,36 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     visibility = View.VISIBLE
                     text = response.newEnrollCount.toString()
                 }
+            }
+        }
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            if (token.isNullOrEmpty()) {
+                binding.apply {
+                    layoutHeaderMyPage.imgbtnSettingHeaderSetting.visibility = View.GONE
+                    svMyPage.visibility = View.GONE
+                    viewMyPageProfile.visibility = View.GONE
+                    layoutGuestMyPage.visibility = View.VISIBLE
+                }
+            } else {
+                myPageViewModel.getUserProfile()
+                myPageViewModel.getEnrollNewCount()
+            }
+        }
+        myPageViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.myPageFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_myPageFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        myPageViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
@@ -131,6 +165,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             }
             tvMyPageAnnouncement.setOnClickListener {
                 findNavController().navigate(R.id.action_myPageFragment_to_announcementFragment)
+            }
+            layoutGuestMyPage.setOnClickListener {
+                Log.e("눌림", "눌렸어")
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.myPageFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_myPageFragment_to_loginFragment, null, navOptions)
             }
         }
     }

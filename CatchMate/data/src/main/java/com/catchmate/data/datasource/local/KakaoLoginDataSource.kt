@@ -6,6 +6,8 @@ import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
@@ -24,12 +26,16 @@ class KakaoLoginDataSource
         private val isKakaoTalkLoginAvailable: Boolean
             get() = userApiClient.isKakaoTalkLoginAvailable(context)
 
-        suspend fun loginWithKakao(): PostLoginRequestDTO =
+        suspend fun loginWithKakao(): PostLoginRequestDTO? =
             suspendCancellableCoroutine { continuation ->
                 val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                     if (error != null) {
                         loginFail(error)
-                        continuation.resumeWithException(error)
+                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            continuation.resume(null)
+                        } else {
+                            continuation.resumeWithException(error)
+                        }
                     } else if (token != null) {
                         val loginType = if (isKakaoTalkLoginAvailable) KAKAO_TALK else KAKAO_ACCOUNT
                         Log.i("KakaoLoginSuccess", "${loginType}으로 로그인 성공 ${token.accessToken}")

@@ -33,7 +33,9 @@ interface UserService {
     ): Response<GetUserProfileByIdResponseDTO?>
 
     @GET("users/block")
-    suspend fun getBlockedUserList(): Response<GetBlockedUserListResponseDTO?>
+    suspend fun getBlockedUserList(
+        @Query("page") page: Int,
+    ): Response<GetBlockedUserListResponseDTO?>
 
     @GET("users/has-unread")
     suspend fun getUnreadInfo(): Response<GetUnreadInfoResponseDTO?>

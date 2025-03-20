@@ -36,7 +36,7 @@ interface ChattingRepository {
 
     suspend fun getChattingHistory(
         chatRoomId: Long,
-        page: Int,
+        lastMessageId: String?,
         size: Int?,
     ): Result<GetChattingHistoryResponse>
 }

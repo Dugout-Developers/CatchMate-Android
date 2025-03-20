@@ -1,6 +1,8 @@
 package com.catchmate.presentation.view.notification
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -29,8 +31,14 @@ class NotificationHandlerImpl
                     if (data.containsKey("acceptStatus")) {
                         putLong("boardId", data["boardId"]?.toLong() ?: -1)
                         putString("acceptStatus", data["acceptStatus"] ?: "")
+                        if (data["acceptStatus"] == AcceptState.PENDING.name) {
+                            putBoolean("isPendingIntent", true)
+                        } else if (data["acceptStatus"] == AcceptState.ACCEPTED.name) {
+                            putBoolean("isPendingIntent", true)
+                        }
                     } else {
                         putLong("chatRoomId", data["chatRoomId"]?.toLong() ?: -1)
+                        putBoolean("isPendingIntent", true)
                     }
                 }
             Log.e("args", "${args.getLong("boardId")} ${args.getString("acceptStatus")} ${args.getLong("chatRoomId")}")
@@ -42,12 +50,25 @@ class NotificationHandlerImpl
                     data.containsKey("chatRoomId") -> R.id.chattingRoomFragment
                     else -> R.id.homeFragment
                 }
-            val pendingIntent =
+
+            val deepLinkIntent =
                 NavDeepLinkBuilder(context)
                     .setGraph(R.navigation.nav_graph)
                     .setDestination(destinationId)
                     .setArguments(args)
-                    .createPendingIntent()
+                    .createTaskStackBuilder()
+                    .editIntentAt(0)
+                    ?.apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    }
+
+            val pendingIntent =
+                PendingIntent.getActivity(
+                    context,
+                    System.currentTimeMillis().toInt(),
+                    deepLinkIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
 
             val icon =
                 if (Build.MANUFACTURER.equals("Samsung", true)) {

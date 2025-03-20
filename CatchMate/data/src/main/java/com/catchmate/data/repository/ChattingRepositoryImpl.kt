@@ -168,11 +168,11 @@ class ChattingRepositoryImpl
 
         override suspend fun getChattingHistory(
             chatRoomId: Long,
-            page: Int,
+            lastMessageId: String?,
             size: Int?,
         ): Result<GetChattingHistoryResponse> =
             try {
-                val response = chattingApi.getChattingHistory(chatRoomId, page, size)
+                val response = chattingApi.getChattingHistory(chatRoomId, lastMessageId, size)
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
                     val body = response.body()?.let { toGetChattingHistoryResponse(it) } ?: throw NullPointerException("Null Response")

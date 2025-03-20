@@ -1,4 +1,12 @@
 <resources>
+    <string name="tac_title_1">딱 맞는 직관 친구 찾기를 위한</string>
+    <string name="tac_title_2">동의가 필요해요</string>
+    <string name="tac_all_check_title">모두 동의하기</string>
+    <string name="tac_terms_title">캐치메이트 이용약관</string>
+    <string name="tac_content_1">[필수] 캐치메이트 이용약관 동의</string>
+    <string name="tac_content_2">[필수] 개인정보 수집 이용 동의</string>
+    <string name="tac_content_3">[선택] 푸시알림 수신 동의</string>
+
     <string name="signup_title_1">딱 맞는 직관 친구 찾기를 위해</string>
     <string name="signup_title_2">정보를 입력해주세요</string>
     <string name="signup_nickname">닉네임</string>

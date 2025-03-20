@@ -19,14 +19,18 @@ object AuthMapper {
             fcmToken = postLoginRequest.fcmToken,
         )
 
-    fun toPostLoginRequest(postLoginRequestDTO: PostLoginRequestDTO): PostLoginRequest =
-        PostLoginRequest(
-            providerId = postLoginRequestDTO.providerId,
-            provider = postLoginRequestDTO.provider,
-            email = postLoginRequestDTO.email,
-            picture = postLoginRequestDTO.picture,
-            fcmToken = postLoginRequestDTO.fcmToken,
-        )
+    fun toPostLoginRequest(postLoginRequestDTO: PostLoginRequestDTO?): PostLoginRequest? =
+        if (postLoginRequestDTO == null) {
+            null
+        } else {
+            PostLoginRequest(
+                providerId = postLoginRequestDTO.providerId,
+                provider = postLoginRequestDTO.provider,
+                email = postLoginRequestDTO.email,
+                picture = postLoginRequestDTO.picture,
+                fcmToken = postLoginRequestDTO.fcmToken,
+            )
+        }
 
     fun toPostLoginResponse(postLoginResponseDTO: PostLoginResponseDTO): PostLoginResponse =
         PostLoginResponse(

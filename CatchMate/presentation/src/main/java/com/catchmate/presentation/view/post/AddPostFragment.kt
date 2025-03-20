@@ -27,6 +27,7 @@ import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.ControlUtil.hideKeyboardAction
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.AddPostViewModel
 import com.google.android.material.chip.Chip
@@ -190,7 +191,9 @@ class AddPostFragment :
                             .Builder()
                             .setPopUpTo(R.id.addPostFragment, true)
                             .build()
-                    findNavController().navigate(R.id.action_addPostFragment_to_loginFragment, null, navOptions)
+                    val bundle = Bundle()
+                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                    findNavController().navigate(R.id.action_addPostFragment_to_loginFragment, bundle, navOptions)
                 }
             }
         }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.support.PostInquiryRequest
@@ -12,6 +11,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentServiceCenterInquiryBinding
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ServiceCenterViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,7 +77,7 @@ class ServiceCenterInquiryFragment : BaseFragment<FragmentServiceCenterInquiryBi
     private fun initViewModel() {
         serviceCenterViewModel.postInquiryResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
-                Toast.makeText(requireContext(), R.string.service_center_inquiry_complete, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.service_center_inquiry_complete, Snackbar.LENGTH_SHORT).show()
                 binding.edtContentServiceCenterInquiry.setText(R.string.all_empty_string)
             }
         }

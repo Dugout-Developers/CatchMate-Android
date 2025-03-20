@@ -13,6 +13,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemChattingBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
+import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.util.DateUtils.formatLastChatTime
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.convertTeamLogo
@@ -20,6 +21,7 @@ import com.catchmate.presentation.util.ResourceUtil.convertTeamLogo
 class ChattingRoomListAdapter(
     private val onChattingRoomSelectedListener: OnChattingRoomSelectedListener,
     private val itemSwipeListener: OnItemSwipeListener,
+    private val onListItemAllRemovedListener: OnListItemAllRemovedListener,
 ) : ListAdapter<ChatRoomInfo, ChattingRoomListAdapter.ChattingRoomListViewHolder>(diffUtil) {
     fun swipeItem(
         position: Int,
@@ -33,6 +35,9 @@ class ChattingRoomListAdapter(
         if (position >= 0 && position < mutableList.size) {
             mutableList.removeAt(position)
             submitList(mutableList)
+            if (mutableList.size == 0) {
+                onListItemAllRemovedListener.onListItemAllRemoved()
+            }
         }
     }
 

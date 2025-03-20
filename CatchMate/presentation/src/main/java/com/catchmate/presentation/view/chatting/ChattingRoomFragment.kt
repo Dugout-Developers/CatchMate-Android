@@ -25,6 +25,7 @@ import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
@@ -38,13 +39,14 @@ import org.json.JSONObject
 class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
     private var userId: Long = -1L
-    private var currentPage: Int = 0
+    private var lastChatMessageId: String? = null
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
+    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
     private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
 
@@ -58,6 +60,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
         initChatBox()
         initSendBtn()
+        onBackPressedAction = { setOnBackPressedAction() }
     }
 
     override fun onDestroyView() {
@@ -68,7 +71,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (response.isFirst && response.isLast && response.chatMessageInfoList.isEmpty()) {
                 Log.d("빈 채팅방 목록", "empty")
             } else {
                 Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
@@ -119,7 +122,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         .Builder()
                         .setPopUpTo(R.id.chattingRoomFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, bundle, navOptions)
             }
         }
         chattingRoomViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
@@ -169,8 +174,13 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
                         if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
-                            currentPage += 1
-                            getChattingHistory()
+                            if (chatListAdapter.currentList.isNotEmpty() &&
+                                lastVisibleItemPosition >= 0 &&
+                                lastVisibleItemPosition < chatListAdapter.currentList.size
+                            ) {
+                                lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
+                                getChattingHistory()
+                            }
                         }
                     }
                 },
@@ -186,7 +196,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         Log.e("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
-        chattingRoomViewModel.getChattingHistory(chatRoomId, currentPage)
+        chattingRoomViewModel.getChattingHistory(chatRoomId, lastChatMessageId)
         isApiCalled = true
     }
 
@@ -245,6 +255,19 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     }.toString()
 
             chattingRoomViewModel.sendMessage(chatRoomId, message)
+        }
+    }
+
+    private fun setOnBackPressedAction() {
+        if (isPendingIntent) {
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.chattingRoomFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_chattingRoomFragment_to_homeFragment, null, navOptions)
+        } else {
+            findNavController().popBackStack()
         }
     }
 
@@ -323,7 +346,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                 sideSheetDialog.show()
             }
             imgbtnHeaderMenuBack.setOnClickListener {
-                findNavController().popBackStack()
+                setOnBackPressedAction()
             }
             tvHeaderMenuTitle.text = info.boardInfo.title
             tvHeaderMenuMemberCount.text = info.participantCount.toString()
