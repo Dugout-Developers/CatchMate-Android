@@ -3,12 +3,15 @@ package com.catchmate.presentation.view.support
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.support.PostInquiryRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentServiceCenterInquiryBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ServiceCenterViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -79,6 +82,23 @@ class ServiceCenterInquiryFragment : BaseFragment<FragmentServiceCenterInquiryBi
             response?.let {
                 Snackbar.make(requireView(), R.string.service_center_inquiry_complete, Snackbar.LENGTH_SHORT).show()
                 binding.edtContentServiceCenterInquiry.setText(R.string.all_empty_string)
+            }
+        }
+        serviceCenterViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.serviceCenterInquiryFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_serviceCenterInquiryFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        serviceCenterViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
