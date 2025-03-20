@@ -317,12 +317,20 @@
         android:id="@+id/serviceCenterInquiryFragment"
         android:name="com.catchmate.presentation.view.support.ServiceCenterInquiryFragment"
         android:label="fragment_service_center_inquiry"
-        tools:layout="@layout/fragment_service_center_inquiry" />
+        tools:layout="@layout/fragment_service_center_inquiry" >
+        <action
+            android:id="@+id/action_serviceCenterInquiryFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/serviceCenterAnswerFragment"
         android:name="com.catchmate.presentation.view.support.ServiceCenterAnswerFragment"
         android:label="fragment_service_center_answer"
-        tools:layout="@layout/fragment_service_center_answer" />
+        tools:layout="@layout/fragment_service_center_answer" >
+        <action
+            android:id="@+id/action_serviceCenterAnswerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/blockedSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.BlockedSettingFragment"
@@ -336,7 +344,11 @@
         android:id="@+id/reportFragment"
         android:name="com.catchmate.presentation.view.support.ReportFragment"
         android:label="fragment_report"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/termsAndPoliciesFragment"
         android:name="com.catchmate.presentation.view.support.TermsAndPoliciesFragment"
@@ -350,12 +362,19 @@
         <action
             android:id="@+id/action_announcementFragment_to_announcementDetailFragment"
             app:destination="@id/announcementDetailFragment" />
+        <action
+            android:id="@+id/action_announcementFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/announcementDetailFragment"
         android:name="com.catchmate.presentation.view.support.AnnouncementDetailFragment"
         android:label="fragment_announcement_detail"
-        tools:layout="@layout/fragment_announcement_detail" />
+        tools:layout="@layout/fragment_announcement_detail" >
+        <action
+            android:id="@+id/action_announcementDetailFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/termsAndConditionFragment"
         android:name="com.catchmate.presentation.view.onboarding.TermsAndConditionFragment"

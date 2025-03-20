@@ -71,17 +71,29 @@ class NotificationAdapter(
 
             itemBinding.root.setOnClickListener {
                 val pos = absoluteAdapterPosition
-                val chatRoomId = notificationList[pos].boardInfo.chatRoomId
-                itemClickListener.onNotificationItemClick(
-                    notificationList[pos].notificationId,
-                    pos,
-                    notificationList[pos].acceptStatus,
-                    if (chatRoomId == -1L) {
-                        null
-                    } else {
-                        chatRoomId
-                    },
-                )
+                val currentNotice = notificationList[pos]
+                if (currentNotice.boardInfo == null) {
+                    itemClickListener.onNotificationItemClick(
+                        currentNotice.notificationId,
+                        pos,
+                        null,
+                        null,
+                        currentNotice.inquiryInfo?.inquiryId,
+                    )
+                } else {
+                    val chatRoomId = currentNotice.boardInfo?.chatRoomId
+                    itemClickListener.onNotificationItemClick(
+                        currentNotice.notificationId,
+                        pos,
+                        currentNotice.acceptStatus,
+                        if (chatRoomId == -1L) {
+                            null
+                        } else {
+                            chatRoomId
+                        },
+                        null,
+                    )
+                }
             }
         }
     }
@@ -106,16 +118,24 @@ class NotificationAdapter(
         position: Int,
     ) {
         val info = notificationList[position]
-        Glide
-            .with(context)
-            .load(info.senderProfileImageUrl)
-            .into(holder.ivNotificationItemProfile)
+        if (info.boardInfo == null) {
+            Glide
+                .with(context)
+                .load(R.drawable.ic_notification_samsung_device)
+                .into(holder.ivNotificationItemProfile)
+            val (date, _) = info.createdAt.split("T")
+            holder.tvNotificationItemDate.text = date.replace("-", ".")
+        } else {
+            Glide
+                .with(context)
+                .load(info.senderProfileImageUrl)
+                .into(holder.ivNotificationItemProfile)
+            val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo!!.gameInfo.gameStartDate!!)
+            holder.tvNotificationItemDate.text = dateTime.first + " | "
+            holder.tvNotificationItemTime.text = dateTime.second + " | "
+            holder.tvNotificationItemPlace.text = info.boardInfo!!.gameInfo.location
+        }
         holder.tvNotificationItemTitle.text = info.body
-        val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo.gameInfo.gameStartDate!!)
-        holder.tvNotificationItemDate.text = dateTime.first + " | "
-        holder.tvNotificationItemTime.text = dateTime.second + " | "
-        holder.tvNotificationItemPlace.text = info.boardInfo.gameInfo.location
-
         if (info.read) {
             holder.layoutNotification.setBackgroundColor(ContextCompat.getColor(context, R.color.grey50))
             holder.tvNotificationItemTitle.setTextColor(ContextCompat.getColor(context, R.color.grey500))

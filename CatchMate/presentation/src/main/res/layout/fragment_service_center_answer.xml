@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.support.ServiceCenterAnswerFragment" >
+    android:background="@color/grey50"
+    tools:context=".view.support.ServiceCenterAnswerFragment">
 
     <include
         android:id="@+id/layout_header_service_center_answer"
@@ -26,7 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/layout_title_service_center_answer"

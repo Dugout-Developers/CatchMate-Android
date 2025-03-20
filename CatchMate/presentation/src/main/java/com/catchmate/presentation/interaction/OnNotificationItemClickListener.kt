@@ -4,7 +4,8 @@ interface OnNotificationItemClickListener {
     fun onNotificationItemClick(
         notificationId: Long,
         currentPos: Int,
-        acceptStatus: String,
+        acceptStatus: String?= null,
         chatRoomId: Long? = null,
+        inquiryId: Long? = null,
     )
 }
