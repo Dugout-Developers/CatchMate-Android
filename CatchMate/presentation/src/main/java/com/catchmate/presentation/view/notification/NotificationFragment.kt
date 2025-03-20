@@ -1,8 +1,10 @@
 package com.catchmate.presentation.view.notification
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.catchmate.presentation.databinding.FragmentNotificationBinding
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.interaction.OnNotificationItemClickListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.NotificationViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -91,13 +94,30 @@ class NotificationFragment :
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.removeItem(deletedItemPos)
             } else {
-                Snackbar.make(requireView(), "해당 알림을 삭제할 수 없습니다. 잠시후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.notification_delete_error_snackbar, Snackbar.LENGTH_SHORT).show()
             }
         }
         notificationViewModel.receivedNotification.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.updateSelectedNotification(clickedItemPos)
+            }
+        }
+        notificationViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.notificationFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_notificationFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        notificationViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }
@@ -147,13 +167,20 @@ class NotificationFragment :
         notificationId: Long,
         currentPos: Int,
         acceptStatus: String,
+        chatRoomId: Long?,
     ) {
         clickedItemPos = currentPos
         notificationViewModel.getReceivedNotification(notificationId)
         if (acceptStatus == AcceptState.PENDING.name) { // pending
             findNavController().navigate(R.id.action_notificationFragment_to_receivedJoinFragment)
         } else if (acceptStatus == AcceptState.ACCEPTED.name) { // accepted
-            findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment)
+            val bundle = Bundle()
+            bundle.putLong("chatRoomId", chatRoomId!!)
+            findNavController().navigate(R.id.action_notificationFragment_to_chattingRoomFragment, bundle)
+        } else if (acceptStatus == AcceptState.ALREADY_REJECTED.name) { // already_rejected
+            Snackbar.make(requireView(), R.string.notification_already_rejected_snackbar, Snackbar.LENGTH_SHORT).show()
+        } else {
+            Snackbar.make(requireView(), R.string.notification_already_accepted_snackbar, Snackbar.LENGTH_SHORT).show()
         }
     }
 

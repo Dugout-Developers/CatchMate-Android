@@ -54,9 +54,9 @@ class BlockedSettingViewModel
             _getBlockedUserListResponse.postValue(updatedResponse)
         }
 
-        fun getBlockedUserList() {
+        fun getBlockedUserList(page: Int) {
             viewModelScope.launch {
-                val result = getBlockedUserListUseCase()
+                val result = getBlockedUserListUseCase(page)
                 result
                     .onSuccess { response ->
                         _getBlockedUserListResponse.value = response

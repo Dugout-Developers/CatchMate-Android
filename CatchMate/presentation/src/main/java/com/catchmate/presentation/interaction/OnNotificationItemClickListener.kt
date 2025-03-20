@@ -5,5 +5,6 @@ interface OnNotificationItemClickListener {
         notificationId: Long,
         currentPos: Int,
         acceptStatus: String,
+        chatRoomId: Long? = null,
     )
 }

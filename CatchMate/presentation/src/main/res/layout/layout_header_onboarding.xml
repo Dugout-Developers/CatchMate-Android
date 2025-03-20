@@ -45,6 +45,18 @@
         android:id="@+id/imgbtn_onboarding_indicator3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="4dp"
+        android:src="@drawable/vec_onboarding_indicator_deactivate_6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgbtn_onboarding_indicator4"
+        tools:layout_editor_absoluteX="360dp" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_onboarding_indicator4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/main_grid_margin"
         android:background="@null"
         android:padding="4dp"

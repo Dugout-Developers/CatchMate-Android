@@ -7,7 +7,6 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -26,11 +25,13 @@ import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MyPostViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -164,7 +165,9 @@ class MyPostFragment :
                         .Builder()
                         .setPopUpTo(R.id.myPostFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_myPostFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_myPostFragment_to_loginFragment, bundle, navOptions)
             }
         }
         myPostViewModel.getUserBoardListResponse.observe(viewLifecycleOwner) { response ->
@@ -188,12 +191,12 @@ class MyPostFragment :
             if (response.state) {
                 binding.rvMyPost.visibility = View.GONE
                 binding.layoutMyPostBlockedUser.visibility = View.VISIBLE
-                Toast.makeText(requireContext(), R.string.mypage_mypost_user_block_toast, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.mypage_mypost_user_block_toast, Snackbar.LENGTH_SHORT).show()
             }
         }
         myPostViewModel.userBlockFailureMessage.observe(viewLifecycleOwner) { msg ->
             msg?.let {
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

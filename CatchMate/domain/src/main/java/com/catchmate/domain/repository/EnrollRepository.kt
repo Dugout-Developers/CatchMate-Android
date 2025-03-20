@@ -27,7 +27,7 @@ interface EnrollRepository {
 
     suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse>
 
-    suspend fun getAllReceivedEnroll(): Result<GetAllReceivedEnrollResponse>
+    suspend fun getAllReceivedEnroll(page: Int): Result<GetAllReceivedEnrollResponse>
 
     suspend fun getEnrollNewCount(): Result<GetEnrollNewCountResponse>
 

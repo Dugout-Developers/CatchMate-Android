@@ -2,7 +2,6 @@ package com.catchmate.presentation.view.support
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.enumclass.ReportType
@@ -12,6 +11,7 @@ import com.catchmate.presentation.databinding.FragmentReportBinding
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.view.post.TeamToggleCheckButtonView
 import com.catchmate.presentation.viewmodel.ReportViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,7 +80,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
     private fun initViewModel() {
         reportViewModel.postUserReportResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
-                Toast.makeText(requireContext(), R.string.report_toast, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.report_toast, Snackbar.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
         }

@@ -10,6 +10,7 @@ import com.catchmate.data.mapper.ChattingMapper.toGetChattingCrewListResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingHistoryResponse
 import com.catchmate.data.mapper.ChattingMapper.toGetChattingRoomListResponse
 import com.catchmate.data.mapper.ChattingMapper.toPatchChattingRoomImageResponse
+import com.catchmate.data.mapper.ChattingMapper.toPutChattingRoomAlarmResponse
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
@@ -18,6 +19,7 @@ import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
 import org.json.JSONObject
@@ -101,6 +103,26 @@ class ChattingRepositoryImpl
                 Result.failure(e)
             }
 
+        override suspend fun putChattingRoomAlarm(
+            chatRoomId: Long,
+            enable: Boolean,
+        ): Result<PutChattingRoomAlarmResponse> =
+            try {
+                val response = chattingApi.putChattingRoomAlarm(chatRoomId, enable)
+                if (response.isSuccessful) {
+                    Log.d("ChattingRepo", "통신 성공")
+                    val body = response.body()?.let { toPutChattingRoomAlarmResponse(it) } ?: throw NullPointerException("Null Response")
+                    Result.success(body)
+                } else {
+                    val stringToJson = JSONObject(response.errorBody()?.string()!!)
+                    Result.failure(Exception("ChattingRepo 통신 실패 : ${response.code()} - $stringToJson"))
+                }
+            } catch (e: ReissueFailureException) {
+                Result.failure(e)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
         override suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse> =
             try {
                 val response = chattingApi.deleteChattingRoom(chatRoomId)
@@ -146,11 +168,11 @@ class ChattingRepositoryImpl
 
         override suspend fun getChattingHistory(
             chatRoomId: Long,
-            page: Int,
+            lastMessageId: String?,
             size: Int?,
         ): Result<GetChattingHistoryResponse> =
             try {
-                val response = chattingApi.getChattingHistory(chatRoomId, page, size)
+                val response = chattingApi.getChattingHistory(chatRoomId, lastMessageId, size)
                 if (response.isSuccessful) {
                     Log.d("ChattingRepo", "통신 성공")
                     val body = response.body()?.let { toGetChattingHistoryResponse(it) } ?: throw NullPointerException("Null Response")

@@ -4,13 +4,17 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.catchmate.presentation.viewmodel.MainActivityViewModel
 import com.catchmate.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBinding>(FragmentCheerStyleOnboardingBinding::inflate) {
     private val signUpViewModel: SignUpViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private lateinit var userInfo: PostUserAdditionalInfoRequest
 
@@ -34,6 +39,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
         initTitle()
         initHeader()
         initFooterButton()
@@ -85,14 +91,14 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                                     .replace(" 스타일", "")
                             },
                     )
-                postUserAdditionalInfo(newUserInfo)
+                signUpViewModel.postUserAdditionalInfo(newUserInfo)
             }
         }
     }
 
     private fun initHeader() {
         binding.layoutCheerStyleOnboardingHeader.apply {
-            imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
+            imgbtnOnboardingIndicator4.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
             imgbtnOnboardingBack.setOnClickListener {
                 findNavController().popBackStack()
             }
@@ -121,8 +127,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
         }
     }
 
-    private fun postUserAdditionalInfo(userAdditionalInfoRequest: PostUserAdditionalInfoRequest) {
-        signUpViewModel.postUserAdditionalInfo(userAdditionalInfoRequest)
+    private fun initViewModel() {
         signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
@@ -130,8 +135,26 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                 localDataViewModel.saveRefreshToken(response.refreshToken)
                 localDataViewModel.saveUserId(response.userId)
                 localDataViewModel.saveProvider(userInfo.provider)
+                mainActivityViewModel.setGuestLogin(false)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
+        }
+        signUpViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                if (isTrue) {
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.cheerStyleOnboardingFragment, true)
+                            .build()
+                    val bundle = Bundle()
+                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, bundle, navOptions)
+                }
+            }
+        }
+        signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Log.e("SIGN UP ERR", message.toString())
         }
     }
 }

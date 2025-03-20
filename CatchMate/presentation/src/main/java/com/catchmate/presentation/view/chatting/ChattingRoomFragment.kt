@@ -1,10 +1,14 @@
 package com.catchmate.presentation.view.chatting
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -21,13 +25,13 @@ import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.DateUtils.formatISODateTime
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingRoomViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -35,45 +39,39 @@ import org.json.JSONObject
 class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
-    private var chatRoomId: Long = -1L
     private var userId: Long = -1L
-    private var currentPage: Int = 0
+    private var lastChatMessageId: String? = null
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
+    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
+    private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        chatRoomId = getChatRoomId()
-        Log.e("chatRoomId", chatRoomId.toString())
-    }
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        localDataViewModel.getUserId()
         initViewModel()
         chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
-        localDataViewModel.getUserId()
         initChatBox()
-        chattingRoomViewModel.connectToWebSocket(chatRoomId)
         initSendBtn()
+        onBackPressedAction = { setOnBackPressedAction() }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        chattingRoomViewModel.topic.dispose()
-        chattingRoomViewModel.stompConnection.dispose()
+        chattingRoomViewModel.topic?.dispose()
+        chattingRoomViewModel.stompClient?.disconnect()
     }
-
-    private fun getChatRoomId(): Long = arguments?.getLong("chatRoomId") ?: -1L
 
     private fun initViewModel() {
         chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (response.isFirst && response.isLast && response.chatMessageInfoList.isEmpty()) {
                 Log.d("빈 채팅방 목록", "empty")
             } else {
                 Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
@@ -101,6 +99,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) {
+                isNotificationEnabled = info.isNotificationEnabled
                 initChatRoomInfo(info)
                 initHeader(info)
             }
@@ -123,7 +122,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         .Builder()
                         .setPopUpTo(R.id.chattingRoomFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingRoomFragment_to_loginFragment, bundle, navOptions)
             }
         }
         chattingRoomViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
@@ -133,13 +134,22 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
+            localDataViewModel.getAccessToken()
             chattingRoomViewModel.getChattingCrewList(chatRoomId)
+        }
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            chattingRoomViewModel.connectToWebSocket(chatRoomId, userId, token)
         }
         chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
             if (isSent) {
                 binding.edtChattingRoomChatBox.setText("")
             } else {
-                Snackbar.make(requireView(), "메시지 전송에 실패하였습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                showConnectInstabilitySnackbar(R.string.chatting_message_send_fail)
+            }
+        }
+        chattingRoomViewModel.isInstability.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                showConnectInstabilitySnackbar(R.string.chatting_connect_instability)
             }
         }
     }
@@ -164,8 +174,13 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
                         if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
-                            currentPage += 1
-                            getChattingHistory()
+                            if (chatListAdapter.currentList.isNotEmpty() &&
+                                lastVisibleItemPosition >= 0 &&
+                                lastVisibleItemPosition < chatListAdapter.currentList.size
+                            ) {
+                                lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
+                                getChattingHistory()
+                            }
                         }
                     }
                 },
@@ -181,7 +196,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         Log.e("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
-        chattingRoomViewModel.getChattingHistory(chatRoomId, currentPage)
+        chattingRoomViewModel.getChattingHistory(chatRoomId, lastChatMessageId)
         isApiCalled = true
     }
 
@@ -240,6 +255,19 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     }.toString()
 
             chattingRoomViewModel.sendMessage(chatRoomId, message)
+        }
+    }
+
+    private fun setOnBackPressedAction() {
+        if (isPendingIntent) {
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.chattingRoomFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_chattingRoomFragment_to_homeFragment, null, navOptions)
+        } else {
+            findNavController().popBackStack()
         }
     }
 
@@ -307,15 +335,18 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     } else {
                         ivSideSheetSettings.visibility = View.GONE
                     }
-                    toggleSideSheetChattingRoomNotification.setOnCheckedChangeListener { buttonView, isChecked ->
-                        // 토글 상태에 따른 알림 설정 api 호출
+                    toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
+                    toggleSideSheetChattingRoomNotification.setOnClickListener {
+                        isNotificationEnabled = !isNotificationEnabled
+                        toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
+                        chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
                     }
                 }
 
                 sideSheetDialog.show()
             }
             imgbtnHeaderMenuBack.setOnClickListener {
-                findNavController().popBackStack()
+                setOnBackPressedAction()
             }
             tvHeaderMenuTitle.text = info.boardInfo.title
             tvHeaderMenuMemberCount.text = info.participantCount.toString()
@@ -351,5 +382,38 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             }
         }
         dialog.show()
+    }
+
+    private fun showConnectInstabilitySnackbar(str: Int) {
+        val snackbarView = layoutInflater.inflate(R.layout.layout_chatting_custom_snackbar, null)
+        val snackbarText = snackbarView.findViewById<TextView>(R.id.tv_chatting_custom_snackbar)
+        snackbarText.setText(str)
+        val params =
+            ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            )
+        params.topToBottom = R.id.layout_header_chatting_room
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+
+        snackbarView.alpha = 0f
+
+        val rootView = binding.root
+        rootView.addView(snackbarView, params)
+        snackbarView
+            .animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            snackbarView
+                .animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction { rootView.removeView(snackbarView) }
+                .start()
+        }, 1000)
     }
 }

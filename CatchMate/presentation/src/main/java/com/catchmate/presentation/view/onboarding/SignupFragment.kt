@@ -44,12 +44,6 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
         initNickNameViews()
         initBirthDateEditText()
         initGenderChip()
-        initKeyboardAction()
-    }
-
-    private fun initKeyboardAction() {
-//        hideKeyboardAction(binding.edtSignupNickname)
-//        hideKeyboardAction(binding.edtSignupBirth)
     }
 
     private fun getUserInfo(): PostUserAdditionalInfoRequest =
@@ -100,7 +94,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
 
     private fun initHeader() {
         binding.layoutSignupHeader.apply {
-            imgbtnOnboardingIndicator1.apply {
+            imgbtnOnboardingIndicator2.apply {
                 setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
             }
             imgbtnOnboardingBack.setOnClickListener {

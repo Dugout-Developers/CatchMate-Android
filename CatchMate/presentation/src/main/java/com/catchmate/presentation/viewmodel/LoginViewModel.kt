@@ -1,5 +1,6 @@
 package com.catchmate.presentation.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,13 +20,17 @@ class LoginViewModel
         private val socialLoginUseCase: SocialLoginUseCase,
         private val postAuthLoginUseCase: PostAuthLoginUseCase,
     ) : ViewModel() {
-        private val _postLoginRequest = MutableLiveData<PostLoginRequest>()
-        val postLoginRequest: LiveData<PostLoginRequest>
+        private val _postLoginRequest = MutableLiveData<PostLoginRequest?>()
+        val postLoginRequest: LiveData<PostLoginRequest?>
             get() = _postLoginRequest
 
         private val _postLoginResponse = MutableLiveData<PostLoginResponse>()
         val postLoginResponse: LiveData<PostLoginResponse>
             get() = _postLoginResponse
+
+        private val _noCredentialException = MutableLiveData<String>()
+        val noCredentialException: LiveData<String>
+            get() = _noCredentialException
 
         fun kakaoLogin() {
             viewModelScope.launch {
@@ -33,18 +38,19 @@ class LoginViewModel
             }
         }
 
-        fun naverLogin() {
+        fun naverLogin(activity: Activity) {
             viewModelScope.launch {
-                _postLoginRequest.value = socialLoginUseCase.loginWithNaver()
+                _postLoginRequest.value = socialLoginUseCase.loginWithNaver(activity)
             }
         }
 
-        fun googleLogin() {
+        fun googleLogin(activity: Activity) {
             viewModelScope.launch {
-                try {
-                    _postLoginRequest.value = socialLoginUseCase.loginWithGoogle()
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                val result = socialLoginUseCase.loginWithGoogle(activity)
+                if (result != null) {
+                    _postLoginRequest.value = result!!
+                } else {
+                    _noCredentialException.value = "앱 로그인을 위해서 기기에 Google 계정을 추가해주세요."
                 }
             }
         }

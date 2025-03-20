@@ -11,8 +11,11 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_termsAndConditionFragment"
+            app:destination="@id/termsAndConditionFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -38,6 +41,9 @@
         <action
             android:id="@+id/action_cheerStyleOnboardingFragment_to_signupCompleteFragment"
             app:destination="@id/signupCompleteFragment" />
+        <action
+            android:id="@+id/action_cheerStyleOnboardingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupCompleteFragment"
@@ -76,6 +82,9 @@
         <action
             android:id="@+id/action_notificationFragment_to_chattingRoomFragment"
             app:destination="@id/chattingRoomFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -148,6 +157,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_announcementFragment"
             app:destination="@id/announcementFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -168,7 +180,11 @@
         android:id="@+id/editProfileFragment"
         android:name="com.catchmate.presentation.view.mypage.EditProfileFragment"
         android:label="fragment_edit_profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/sentJoinFragment"
         android:name="com.catchmate.presentation.view.mypage.SentJoinFragment"
@@ -177,6 +193,9 @@
         <action
             android:id="@+id/action_sentJoinFragment_to_readPostFragment"
             app:destination="@id/readPostFragment" />
+        <action
+            android:id="@+id/action_sentJoinFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/chattingHomeFragment"
@@ -201,6 +220,9 @@
         <action
             android:id="@+id/action_chattingRoomFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_chattingRoomFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -218,7 +240,11 @@
         android:id="@+id/chattingSettingFragment"
         android:name="com.catchmate.presentation.view.chatting.ChattingSettingFragment"
         android:label="fragment_chatting_setting"
-        tools:layout="@layout/fragment_chatting_setting" />
+        tools:layout="@layout/fragment_chatting_setting" >
+        <action
+            android:id="@+id/action_chattingSettingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myPageSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.MyPageSettingFragment"
@@ -259,7 +285,11 @@
         android:id="@+id/notificationSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.NotificationSettingFragment"
         android:label="fragment_notification_setting"
-        tools:layout="@layout/fragment_notification_setting" />
+        tools:layout="@layout/fragment_notification_setting" >
+        <action
+            android:id="@+id/action_notificationSettingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/receivedJoinFragment"
         android:name="com.catchmate.presentation.view.mypage.ReceivedJoinFragment"
@@ -297,7 +327,11 @@
         android:id="@+id/blockedSettingFragment"
         android:name="com.catchmate.presentation.view.mypage.BlockedSettingFragment"
         android:label="fragment_blocked_setting"
-        tools:layout="@layout/fragment_blocked_setting" />
+        tools:layout="@layout/fragment_blocked_setting" >
+        <action
+            android:id="@+id/action_blockedSettingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reportFragment"
         android:name="com.catchmate.presentation.view.support.ReportFragment"
@@ -312,7 +346,7 @@
         android:id="@+id/announcementFragment"
         android:name="com.catchmate.presentation.view.support.AnnouncementFragment"
         android:label="fragment_announcement"
-        tools:layout="@layout/fragment_announcement" >
+        tools:layout="@layout/fragment_announcement">
         <action
             android:id="@+id/action_announcementFragment_to_announcementDetailFragment"
             app:destination="@id/announcementDetailFragment" />
@@ -322,4 +356,13 @@
         android:name="com.catchmate.presentation.view.support.AnnouncementDetailFragment"
         android:label="fragment_announcement_detail"
         tools:layout="@layout/fragment_announcement_detail" />
+    <fragment
+        android:id="@+id/termsAndConditionFragment"
+        android:name="com.catchmate.presentation.view.onboarding.TermsAndConditionFragment"
+        android:label="fragment_terms_and_condition"
+        tools:layout="@layout/fragment_terms_and_condition" >
+        <action
+            android:id="@+id/action_termsAndConditionFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
 </navigation>

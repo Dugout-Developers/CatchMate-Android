@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -29,6 +30,7 @@ import com.catchmate.presentation.interaction.OnEditProfileWatchStyleSelectedLis
 import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
 import com.catchmate.presentation.util.ImageUtils.convertBitmapToMultipart
 import com.catchmate.presentation.util.ImageUtils.convertUrlToMultipart
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.EditProfileViewModel
 import com.google.gson.Gson
@@ -124,6 +126,23 @@ class EditProfileFragment :
         editProfileViewModel.watchStyle.observe(viewLifecycleOwner) { str ->
             str?.let {
                 binding.tvEditProfileWatchStyle.text = it
+            }
+        }
+        editProfileViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.editProfileFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_editProfileFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        editProfileViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }

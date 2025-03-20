@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -28,6 +27,7 @@ import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.GenderUtils
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import com.catchmate.presentation.util.ResourceUtil.setTeamViewResources
 import com.catchmate.presentation.view.base.BaseFragment
@@ -39,17 +39,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostBinding::inflate) {
-    private var boardId: Long = 0L
     private var userId: Long = -1L
     private val readPostViewModel: ReadPostViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var isWriter = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        boardId = getBoardId()
-        Log.d("readpostboardId", boardId.toString())
-    }
+    private val boardId by lazy { arguments?.getLong("boardId") ?: -1L }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
 
     override fun onViewCreated(
         view: View,
@@ -60,9 +55,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         initViewModel()
         initHeader()
         initWriterInfoLayout()
+        onBackPressedAction = { setOnBackPressedAction() }
     }
-
-    private fun getBoardId(): Long = arguments?.getLong("boardId")!!
 
     private fun getUserId() {
         localDataViewModel.getUserId()
@@ -73,10 +67,23 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
     }
 
+    private fun setOnBackPressedAction() {
+        if (isPendingIntent) {
+            val navOptions =
+                NavOptions
+                    .Builder()
+                    .setPopUpTo(R.id.readPostFragment, true)
+                    .build()
+            findNavController().navigate(R.id.action_readPostFragment_to_homeFragment, null, navOptions)
+        } else {
+            findNavController().popBackStack()
+        }
+    }
+
     private fun initHeader() {
         binding.layoutReadPostHeader.apply {
             imgbtnHeaderKebabMenuBack.setOnClickListener {
-                findNavController().popBackStack()
+                setOnBackPressedAction()
             }
             imgbtnHeaderKebabMenu.setOnClickListener {
                 val popup = PopupMenu(requireContext(), imgbtnHeaderKebabMenu, Gravity.CENTER, 0, R.style.CustomPopupMenu)
@@ -215,7 +222,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
         readPostViewModel.blockedUserBoardMessage.observe(viewLifecycleOwner) { message ->
             message?.let {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
         }
@@ -279,7 +286,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         .Builder()
                         .setPopUpTo(R.id.readPostFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_readPostFragment_to_loginFragment, bundle, navOptions)
             }
         }
         readPostViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->

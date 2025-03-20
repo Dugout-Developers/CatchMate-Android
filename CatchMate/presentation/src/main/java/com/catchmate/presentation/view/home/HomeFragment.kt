@@ -3,6 +3,8 @@ package com.catchmate.presentation.view.home
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.OptIn
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -15,9 +17,15 @@ import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPersonFilterSelectedListener
 import com.catchmate.presentation.interaction.OnPostItemClickListener
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
+import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.HomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.badge.ExperimentalBadgeUtils
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +48,7 @@ class HomeFragment :
     private var gameStartDate: String? = null
     private var maxPerson: Int? = null
     private var preferredTeamIdList: Array<Int>? = null
+    private var notificationBadgeDrawable: BadgeDrawable? = null
 
     override fun onViewCreated(
         view: View,
@@ -47,9 +56,8 @@ class HomeFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
-        getTokens()
         initViewModel()
-        initHeader()
+        localDataViewModel.getAccessToken()
         initDateFilter()
         initTeamFilter()
         initHeadCountFilter()
@@ -58,6 +66,32 @@ class HomeFragment :
         if (isFirstLoad) {
             getBoardList()
             isFirstLoad = false
+        }
+        (requireActivity() as MainActivity).refreshNotificationStatus()
+    }
+
+    @OptIn(ExperimentalBadgeUtils::class)
+    fun updateNotificationBadge(hasUnreadNotification: Boolean) {
+        if (hasUnreadNotification) {
+            if (notificationBadgeDrawable == null) {
+                notificationBadgeDrawable = BadgeDrawable.create(requireContext())
+                notificationBadgeDrawable?.apply {
+                    backgroundColor = getColor(requireContext(), R.color.system_red) // 알림 색상 지정
+                    isVisible = true
+                    clearNumber()
+                    horizontalOffset = 30
+                    verticalOffset = 20
+                }
+            } else {
+                notificationBadgeDrawable?.isVisible = true
+            }
+
+            notificationBadgeDrawable?.let { badge ->
+                BadgeUtils.attachBadgeDrawable(badge, binding.layoutHeaderHome.imgbtnHeaderHomeNotification)
+            }
+        } else {
+            // 뱃지 숨기기
+            notificationBadgeDrawable?.isVisible = false
         }
     }
 
@@ -73,12 +107,22 @@ class HomeFragment :
     private fun initHeader() {
         binding.layoutHeaderHome.apply {
             imgbtnHeaderHomeNotification.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                if (!localDataViewModel.accessToken.value.isNullOrEmpty()) {
+                    findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                } else {
+                    Snackbar.make(requireView(), R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
     private fun initViewModel() {
+        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
+            if (!token.isNullOrEmpty()) {
+                getTokens()
+            }
+            initHeader()
+        }
         homeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
                 val navOptions =
@@ -86,7 +130,9 @@ class HomeFragment :
                         .Builder()
                         .setPopUpTo(R.id.homeFragment, true)
                         .build()
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment, null, navOptions)
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment, bundle, navOptions)
             }
         }
 
@@ -204,9 +250,13 @@ class HomeFragment :
     }
 
     override fun onPostItemClicked(boardId: Long) {
-        val bundle = Bundle()
-        bundle.putLong("boardId", boardId)
-        findNavController().navigate(R.id.action_homeFragment_to_readPostFragment, bundle)
+        if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
+            Snackbar.make(requireView(), R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
+        } else {
+            val bundle = Bundle()
+            bundle.putLong("boardId", boardId)
+            findNavController().navigate(R.id.action_homeFragment_to_readPostFragment, bundle)
+        }
     }
 
     override fun onDateSelected(date: String?) {

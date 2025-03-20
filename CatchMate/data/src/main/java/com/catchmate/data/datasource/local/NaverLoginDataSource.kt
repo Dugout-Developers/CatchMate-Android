@@ -1,6 +1,6 @@
 package com.catchmate.data.datasource.local
 
-import android.content.Context
+import android.app.Activity
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
@@ -10,7 +10,6 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -20,10 +19,9 @@ import kotlin.coroutines.resumeWithException
 class NaverLoginDataSource
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun loginWithNaver(): PostLoginRequestDTO =
+        suspend fun loginWithNaver(activity: Activity): PostLoginRequestDTO =
             suspendCancellableCoroutine { continuation ->
                 val nidProfileCallback =
                     object : NidProfileCallback<NidProfileResponse> {
@@ -86,7 +84,7 @@ class NaverLoginDataSource
                         }
                     }
 
-                NaverIdLoginSDK.authenticate(context, oAuthLoginCallback)
+                NaverIdLoginSDK.authenticate(activity, oAuthLoginCallback)
             }
 
         private fun loginFail() {

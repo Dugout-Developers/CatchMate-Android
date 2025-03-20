@@ -11,7 +11,7 @@ class GetChattingHistoryUseCase
     ) {
         suspend operator fun invoke(
             chatRoomId: Long,
-            page: Int,
+            lastMessageId: String?,
             size: Int?,
-        ): Result<GetChattingHistoryResponse> = chattingRepository.getChattingHistory(chatRoomId, page, size)
+        ): Result<GetChattingHistoryResponse> = chattingRepository.getChattingHistory(chatRoomId, lastMessageId, size)
     }

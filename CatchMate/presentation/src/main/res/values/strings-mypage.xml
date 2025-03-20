@@ -25,6 +25,7 @@
     <string name="mypage_setting_user_info_title">로그인 정보</string>
 
     <string name="mypage_setting_user_info_delete_account"><u>탈퇴하기</u></string>
+    <string name="mypage_setting_user_logout">로그아웃</string>
 
     <string name="mypage_setting_notification_setting">알림 설정</string>
     <string name="mypage_setting_notification_setting_all">전체 알림</string>
@@ -45,7 +46,13 @@
     <string name="new_badge">N</string>
 
     <string name="mypost_no_list_msg">작성한 게시글이 없어요</string>
+    <string name="sent_join_no_list_msg">보낸 신청이 없어요</string>
+    <string name="received_join_no_list_msg">받은 신청이 없어요</string>
+    <string name="blocked_setting_no_list_msg">차단한 유저가 없어요</string>
 
     <string name="mypage_received_join_enroll_reject">거절</string>
     <string name="mypage_received_join_enroll_accept">수락</string>
+
+    <string name="mypage_guest_title">로그인이 필요해요</string>
+    <string name="mypage_guest_content">로그인하고 캐치메이트에서 직관 친구를 찾아보세요</string>
 </resources>

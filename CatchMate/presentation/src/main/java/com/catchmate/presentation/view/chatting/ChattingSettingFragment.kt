@@ -12,6 +12,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -21,6 +22,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingSettingBinding
 import com.catchmate.presentation.interaction.OnKickOutClickListener
 import com.catchmate.presentation.util.ImageUtils.convertBitmapToMultipart
+import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingSettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,6 +105,23 @@ class ChattingSettingFragment :
             if (response.state) {
                 Log.d("📸채팅방 프로필 변경 성공", "성공")
                 binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
+            }
+        }
+        chattingSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+            if (isTrue) {
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.chattingSettingFragment, true)
+                        .build()
+                val bundle = Bundle()
+                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                findNavController().navigate(R.id.action_chattingSettingFragment_to_loginFragment, bundle, navOptions)
+            }
+        }
+        chattingSettingViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Log.e("Reissue Error", it)
             }
         }
     }

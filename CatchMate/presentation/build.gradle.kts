@@ -54,4 +54,5 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
     implementation(libs.stomp)
+    implementation(libs.androidx.core.splashscreen)
 }

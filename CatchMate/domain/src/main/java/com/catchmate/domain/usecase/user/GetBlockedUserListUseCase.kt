@@ -9,5 +9,5 @@ class GetBlockedUserListUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend operator fun invoke(): Result<GetBlockedUserListResponse> = userRepository.getBlockedUserList()
+        suspend operator fun invoke(page: Int): Result<GetBlockedUserListResponse> = userRepository.getBlockedUserList(page)
     }
