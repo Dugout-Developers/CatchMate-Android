@@ -17,7 +17,6 @@ import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoResponseDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
-import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
 import com.catchmate.domain.model.enroll.AllReceivedEnrollInfoResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
@@ -36,7 +35,6 @@ import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
 import com.catchmate.domain.model.enroll.ReceivedEnrollInfoResponse
 import com.catchmate.domain.model.enroll.UserInfo
-import com.catchmate.domain.model.user.FavoriteClub
 
 object EnrollMapper {
     fun toPostEnrollRequestDTO(request: PostEnrollRequest): PostEnrollRequestDTO =

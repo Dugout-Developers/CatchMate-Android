@@ -13,6 +13,5 @@ class PostUserReportUseCase
         suspend operator fun invoke(
             reportedUserId: Long,
             request: PostUserReportRequest,
-        ): Result<PostUserReportResponse> =
-            supportRepository.portUserReport(reportedUserId, request)
+        ): Result<PostUserReportResponse> = supportRepository.portUserReport(reportedUserId, request)
     }

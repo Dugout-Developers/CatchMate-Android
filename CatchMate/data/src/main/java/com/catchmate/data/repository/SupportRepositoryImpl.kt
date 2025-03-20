@@ -28,6 +28,7 @@ class SupportRepositoryImpl
         retrofitClient: RetrofitClient,
     ) : SupportRepository {
         private val supportApi = retrofitClient.createApi<SupportService>()
+
         override suspend fun getInquiry(inquiryId: Long): Result<GetInquiryResponse> =
             try {
                 val response = supportApi.getInquiry(inquiryId)

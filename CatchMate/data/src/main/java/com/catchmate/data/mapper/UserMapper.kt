@@ -1,7 +1,6 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
-import com.catchmate.data.dto.user.FavoriteClubDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
@@ -13,7 +12,6 @@ import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.data.dto.user.PostUserBlockResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
-import com.catchmate.domain.model.user.FavoriteClub
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
