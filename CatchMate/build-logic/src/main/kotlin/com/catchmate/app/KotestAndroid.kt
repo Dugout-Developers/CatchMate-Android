@@ -1,5 +1,6 @@
 package com.catchmate.app
 
+import com.android.build.gradle.TestedExtension
 import org.gradle.api.Project
 
 internal fun Project.configureKotestAndroid() {
@@ -8,9 +9,9 @@ internal fun Project.configureKotestAndroid() {
 }
 
 internal fun Project.configureJUnitAndroid() {
-    androidExtension.apply {
-        testOptions {
-            unitTests.all { it.useJUnitPlatform() }
-        }
+    val extension = androidExtension as TestedExtension
+
+    extension.testOptions {
+        unitTests.all { it.useJUnitPlatform() }
     }
 }
