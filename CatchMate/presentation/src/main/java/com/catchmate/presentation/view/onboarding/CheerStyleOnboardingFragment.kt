@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
@@ -25,6 +26,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var userInfo: PostUserAdditionalInfoRequest
+    private val pushNotificationAgree by lazy { arguments?.getBoolean("PushNotificationAgree") ?: false }
 
     private var selectedButton: CheerStyleButtonView? = null
 
@@ -136,6 +138,8 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                 localDataViewModel.saveUserId(response.userId)
                 localDataViewModel.saveProvider(userInfo.provider)
                 mainViewModel.setGuestLogin(false)
+                val isEnabled = if (pushNotificationAgree) "Y" else "N"
+                signUpViewModel.patchUserAlarm(AlarmType.ALL.name, isEnabled)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
         }
@@ -155,6 +159,9 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
         }
         signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             Log.e("SIGN UP ERR", message.toString())
+        }
+        signUpViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { response ->
+            Log.d("알림 설정 완료", "${response.alarmType} - ${response.isEnabled}")
         }
     }
 }

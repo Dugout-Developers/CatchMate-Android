@@ -1,8 +1,10 @@
 package com.catchmate.presentation.view.onboarding
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentTermsAndConditionBinding
 import com.catchmate.presentation.view.base.BaseFragment
@@ -12,14 +14,23 @@ class TermsAndConditionFragment : BaseFragment<FragmentTermsAndConditionBinding>
     private var isFirstChecked = false
     private var isSecondChecked = false
     private var isThirdChecked = false
+    private lateinit var userInfo: PostUserAdditionalInfoRequest
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        userInfo = getUserInfo()
         initView()
     }
+
+    private fun getUserInfo(): PostUserAdditionalInfoRequest =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
+        } else {
+            arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
+        }
 
     private fun initView() {
         binding.apply {
@@ -32,7 +43,10 @@ class TermsAndConditionFragment : BaseFragment<FragmentTermsAndConditionBinding>
             layoutFooterTermsAndCondition.btnFooterOne.apply {
                 setText(R.string.next)
                 setOnClickListener {
-                    findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment)
+                    val bundle = Bundle()
+                    bundle.putSerializable("userInfo", userInfo)
+                    bundle.putBoolean("PushNotificationAgree", isThirdChecked)
+                    findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment, bundle)
                 }
             }
 

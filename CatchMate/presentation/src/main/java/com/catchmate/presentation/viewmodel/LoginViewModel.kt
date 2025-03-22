@@ -24,13 +24,21 @@ class LoginViewModel
         val postLoginRequest: LiveData<PostLoginRequest?>
             get() = _postLoginRequest
 
-        private val _postLoginResponse = MutableLiveData<PostLoginResponse>()
-        val postLoginResponse: LiveData<PostLoginResponse>
+        private val _postLoginResponse = MutableLiveData<PostLoginResponse?>()
+        val postLoginResponse: LiveData<PostLoginResponse?>
             get() = _postLoginResponse
 
         private val _noCredentialException = MutableLiveData<String>()
         val noCredentialException: LiveData<String>
             get() = _noCredentialException
+
+        fun initPostLoginRequest() {
+            _postLoginRequest.value = null
+        }
+
+        fun initPostLoginResponse() {
+            _postLoginResponse.value = null
+        }
 
         fun kakaoLogin() {
             viewModelScope.launch {

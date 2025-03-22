@@ -69,12 +69,13 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
         localDataViewModel.refreshToken.observe(viewLifecycleOwner) { token ->
             if (token != null) {
                 initLogoutBtn()
+                initWithdrawBtn()
             }
         }
         accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
             Log.e("LOGOUT", response.state.toString())
             // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
-            localDataViewModel.logout()
+            localDataViewModel.logoutAndWithdraw()
             val navOptions =
                 NavOptions
                     .Builder()
@@ -99,6 +100,17 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
                 Log.e("Reissue Error", it)
             }
         }
+        accountInfoViewModel.withdrawResponse.observe(viewLifecycleOwner) { response ->
+            if (response.state) {
+                localDataViewModel.logoutAndWithdraw()
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.accountInfoFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+            }
+        }
     }
 
     private fun initLogoutBtn() {
@@ -108,6 +120,12 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
             setOnClickListener {
                 accountInfoViewModel.logout(localDataViewModel.refreshToken.value!!)
             }
+        }
+    }
+
+    private fun initWithdrawBtn() {
+        binding.tvAccountInfoDeleteAccount.setOnClickListener {
+            accountInfoViewModel.withdraw()
         }
     }
 }

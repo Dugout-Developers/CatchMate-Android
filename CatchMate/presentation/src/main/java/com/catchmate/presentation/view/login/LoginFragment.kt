@@ -77,6 +77,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         val bundle = Bundle()
                         bundle.putSerializable("userInfo", userInfo)
                         findNavController().navigate(R.id.action_loginFragment_to_termsAndConditionFragment, bundle)
+                        loginViewModel.initPostLoginRequest()
+                        loginViewModel.initPostLoginResponse()
                     }
                     false -> {
                         localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
