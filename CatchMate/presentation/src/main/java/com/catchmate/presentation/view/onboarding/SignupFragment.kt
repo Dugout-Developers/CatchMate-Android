@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding::inflate) {
     private val signUpViewModel: SignUpViewModel by viewModels()
     private lateinit var userInfo: PostUserAdditionalInfoRequest
+    private val pushNotificationAgree by lazy { arguments?.getBoolean("PushNotificationAgree") ?: false }
 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
@@ -86,6 +87,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
                     )
                 val bundle = Bundle()
                 bundle.putSerializable("userInfo", newUserInfo)
+                bundle.putBoolean("PushNotificationAgree", pushNotificationAgree)
 
                 findNavController().navigate(R.id.action_signupFragment_to_teamOnboardingFragment, bundle)
             }
