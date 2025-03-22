@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey0">
+
+    <ImageButton
+        android:id="@+id/imgbtn_header_kebab_menu_back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/main_grid_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgbtn_header_kebab_menu"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vec_all_left_arrow_20dp" />
+
+    <TextView
+        android:id="@+id/tv_header_kebab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Typography.Body01.SemiBold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imgbtn_header_kebab_menu_back"
+        app:layout_constraintStart_toEndOf="@+id/imgbtn_header_kebab_menu_back"
+        app:layout_constraintTop_toTopOf="@+id/imgbtn_header_kebab_menu_back" />
+
+    <ImageButton
+        android:id="@+id/imgbtn_header_kebab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/main_grid_margin"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/imgbtn_header_kebab_menu_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vec_all_kebab_20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
