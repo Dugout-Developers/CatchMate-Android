@@ -1,6 +1,7 @@
 package com.catchmate.domain.repository
 
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
+import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
@@ -37,4 +38,6 @@ interface UserRepository {
     ): Result<PatchUserAlarmResponse>
 
     suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse>
+
+    suspend fun deleteUserAccount(): Result<DeleteUserAccountResponse>
 }

@@ -1,6 +1,7 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
+import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
@@ -68,4 +69,7 @@ interface UserService {
     suspend fun deleteBlockedUser(
         @Path("blockedUserId") blockedUserId: Long,
     ): Response<DeleteBlockedUserResponseDTO?>
+
+    @DELETE("users/withdraw")
+    suspend fun deleteUserAccount(): Response<DeleteUserAccountResponseDTO?>
 }
