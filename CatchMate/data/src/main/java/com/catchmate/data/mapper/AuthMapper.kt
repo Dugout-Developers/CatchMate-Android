@@ -32,6 +32,15 @@ object AuthMapper {
             )
         }
 
+    fun toGooglePostLoginRequest(postLoginRequestDTO: PostLoginRequestDTO): PostLoginRequest =
+        PostLoginRequest(
+            providerId = postLoginRequestDTO.providerId,
+            provider = postLoginRequestDTO.provider,
+            email = postLoginRequestDTO.email,
+            picture = postLoginRequestDTO.picture,
+            fcmToken = postLoginRequestDTO.fcmToken,
+        )
+
     fun toPostLoginResponse(postLoginResponseDTO: PostLoginResponseDTO): PostLoginResponse =
         PostLoginResponse(
             accessToken = postLoginResponseDTO.accessToken,

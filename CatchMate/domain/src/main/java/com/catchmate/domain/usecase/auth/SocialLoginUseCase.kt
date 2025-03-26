@@ -1,6 +1,7 @@
 package com.catchmate.domain.usecase.auth
 
 import android.app.Activity
+import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.repository.LoginRepository
 import javax.inject.Inject
@@ -14,5 +15,5 @@ class SocialLoginUseCase
 
         suspend fun loginWithNaver(activity: Activity): PostLoginRequest? = loginRepository.loginWithNaver(activity)
 
-        suspend fun loginWithGoogle(activity: Activity): PostLoginRequest? = loginRepository.loginWithGoogle(activity)
+        suspend fun loginWithGoogle(activity: Activity): Result<PostLoginRequest> = loginRepository.loginWithGoogle(activity)
     }
