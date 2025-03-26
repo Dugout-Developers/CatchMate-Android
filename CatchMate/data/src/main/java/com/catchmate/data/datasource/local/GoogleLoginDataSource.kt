@@ -6,11 +6,11 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.BuildConfig
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
 import com.catchmate.domain.exception.GoogleLoginException
+import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -24,7 +24,7 @@ class GoogleLoginDataSource
     constructor(
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun getCredential(activity: Activity): com.catchmate.domain.exception.Result<GetCredentialResponse> {
+        suspend fun getCredential(activity: Activity): Result<GetCredentialResponse> {
             val credentialManager = CredentialManager.create(activity)
 
             val googleIdOption: GetGoogleIdOption =
@@ -43,26 +43,26 @@ class GoogleLoginDataSource
 
             return try {
                 val result = credentialManager.getCredential(activity, request)
-                com.catchmate.domain.exception.Result.Success(result)
+                Result.Success(result)
             } catch (e: Exception) {
                 when (e) {
                     is GoogleLoginException.NoCredentials -> {
                         Log.e("GOOGLE - NOCredentials", "")
-                        com.catchmate.domain.exception.Result.Error(exception = e)
+                        Result.Error(exception = e)
                     }
                     is GoogleLoginException.Cancelled -> {
                         Log.e("GOOGLE - Cancelled", "")
-                        com.catchmate.domain.exception.Result.Error(exception = e)
+                        Result.Error(exception = e)
                     }
                     else -> {
                         Log.e("GOOGLE - ELSE", "")
-                        com.catchmate.domain.exception.Result.Error(exception = e)
+                        Result.Error(exception = e)
                     }
                 }
             }
         }
 
-        fun handleSignIn(result: GetCredentialResponse): com.catchmate.domain.exception.Result<PostLoginRequestDTO> {
+        fun handleSignIn(result: GetCredentialResponse): Result<PostLoginRequestDTO> {
             val credential = result.credential
 
             return if (credential is CustomCredential) {
@@ -85,21 +85,21 @@ class GoogleLoginDataSource
                                         fcmTokenService.getToken()
                                     },
                             )
-                        com.catchmate.domain.exception.Result.Success(loginRequestDTO)
+                        Result.Success(loginRequestDTO)
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("GoogleInfoError", "Received an invalid google id token response", e)
-                        com.catchmate.domain.exception.Result.Error(exception = e)
+                        Result.Error(exception = e)
                     } catch (e: Exception) {
                         Log.e("GoogleInfoError", "Unexpected error parsing credentials", e)
-                        com.catchmate.domain.exception.Result.Error(exception = e)
+                        Result.Error(exception = e)
                     }
                 } else {
                     Log.e("GoogleInfoError", "Unexpected type of credential")
-                    com.catchmate.domain.exception.Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
+                    Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
                 }
             } else {
                 Log.e("GoogleInfoError", "Unexpected type of credential")
-                com.catchmate.domain.exception.Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
+                Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
             }
         }
     }

@@ -1,8 +1,6 @@
 package com.catchmate.data.repository
 
 import android.app.Activity
-import androidx.credentials.exceptions.GetCredentialCancellationException
-import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
@@ -12,7 +10,6 @@ import com.catchmate.domain.exception.GoogleLoginException
 import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.repository.LoginRepository
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import javax.inject.Inject
 
 class LoginRepositoryImpl
@@ -44,7 +41,7 @@ class LoginRepositoryImpl
                             is Result.Success -> {
                                 val loginDTO = signInResult.data
                                 Result.Success(
-                                    toGooglePostLoginRequest(loginDTO)
+                                    toGooglePostLoginRequest(loginDTO),
                                 )
                             }
                             is Result.Error -> {
@@ -69,4 +66,4 @@ class LoginRepositoryImpl
             } catch (e: Exception) {
                 Result.Error(exception = GoogleLoginException.Unknown(e))
             }
-        }
+    }

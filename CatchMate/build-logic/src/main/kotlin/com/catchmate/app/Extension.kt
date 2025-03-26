@@ -1,12 +1,12 @@
 package com.catchmate.app
 
+import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.getByType
-import com.android.build.gradle.LibraryExtension
 
 internal val Project.applicationExtension: BaseAppModuleExtension
     get() = extensions.getByType<BaseAppModuleExtension>()

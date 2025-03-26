@@ -65,19 +65,19 @@ class LoginViewModel
                     is Result.Error -> {
                         when (result.exception) {
                             is GoogleLoginException.Cancelled -> {
-                                Log.e("GoogleLoginError","로그인이 취소되었습니다.")
+                                Log.e("GoogleLoginError", "로그인이 취소되었습니다.")
                             }
                             is GoogleLoginException.NoCredentials -> {
                                 _noCredentialException.value = "앱 로그인을 위해서 기기에 Google 계정을 등록해주세요."
                             }
                             is GoogleLoginException.TokenParsing -> {
-                                Log.e("GoogleLoginError","로그인 정보 처리 중 오류가 발생했습니다.")
+                                Log.e("GoogleLoginError", "로그인 정보 처리 중 오류가 발생했습니다.")
                             }
                             is GoogleLoginException.Unknown -> {
-                                Log.e("GoogleLoginError","알 수 없는 오류가 발생했습니다.")
+                                Log.e("GoogleLoginError", "알 수 없는 오류가 발생했습니다.")
                             }
                             else -> {
-                                Log.e("GoogleLoginError","로그인 중 오류가 발생했습니다.")
+                                Log.e("GoogleLoginError", "로그인 중 오류가 발생했습니다.")
                             }
                         }
                     }
