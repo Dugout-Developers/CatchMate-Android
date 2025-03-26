@@ -1,6 +1,6 @@
 [versions]
 # Application
-android-gradle-plugin = "8.0.2"
+android-gradle-plugin = "8.1.4"
 android-desugar-jdk-libs = "1.2.2"
 
 # AndroidX

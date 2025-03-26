@@ -1,21 +1,20 @@
 package com.catchmate.app
 
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.getByType
 
-internal val Project.applicationExtension: CommonExtension<*, *, *, *>
-    get() = extensions.getByType<ApplicationExtension>()
+internal val Project.applicationExtension: BaseAppModuleExtension
+    get() = extensions.getByType<BaseAppModuleExtension>()
 
-internal val Project.libraryExtension: CommonExtension<*, *, *, *>
+internal val Project.libraryExtension: LibraryExtension
     get() = extensions.getByType<LibraryExtension>()
 
-internal val Project.androidExtension: CommonExtension<*, *, *, *>
+internal val Project.androidExtension
     get() =
         runCatching { libraryExtension }
             .recoverCatching { applicationExtension }

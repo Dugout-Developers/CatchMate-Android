@@ -1,5 +1,7 @@
 package com.catchmate.app
 
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -12,11 +14,12 @@ internal fun Project.configureKotlinAndroid() {
     pluginManager.apply("org.jetbrains.kotlin.android")
 
     // Android Settings
-    androidExtension.apply {
-        compileSdk = 34
+    (androidExtension as BaseExtension).apply {
+        compileSdkVersion(34)
 
         defaultConfig {
-            minSdk = 31
+            (this as DefaultConfig).minSdk = 31
+            targetSdk = 34
         }
 
         compileOptions {
