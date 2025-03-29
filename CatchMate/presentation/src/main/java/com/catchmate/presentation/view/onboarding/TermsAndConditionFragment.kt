@@ -1,5 +1,7 @@
 package com.catchmate.presentation.view.onboarding
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -79,6 +81,24 @@ class TermsAndConditionFragment : BaseFragment<FragmentTermsAndConditionBinding>
                 cbCheckThirdTermsAndCondition.isChecked = !cbCheckThirdTermsAndCondition.isChecked
                 isThirdChecked = cbCheckThirdTermsAndCondition.isChecked
                 updateButtonState()
+            }
+
+            ivCheckFirstTermsAndCondition.setOnClickListener {
+                val url = "https://catchmate.notion.site/19690504ec15803588a7ca69b306bf3e"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
+
+            ivCheckSecondTermsAndCondition.setOnClickListener {
+                val url = "https://catchmate.notion.site/19690504ec15804ba163fcf8fa0ab937"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
+
+            ivCheckThirdTermsAndCondition.setOnClickListener {
+                val url = "https://catchmate.notion.site/1b890504ec15805fa95ef55c252d53e6"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
             }
         }
     }
