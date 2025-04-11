@@ -110,8 +110,8 @@ class ChattingRoomViewModel
                         headerMap,
                         okHttpClient,
                     ).apply {
-                        withClientHeartbeat(30000)
-                        withServerHeartbeat(30000)
+                        withClientHeartbeat(25000)
+                        withServerHeartbeat(35000)
                     }
 
                 stompClient?.connect()
@@ -142,8 +142,9 @@ class ChattingRoomViewModel
             chatRoomId: Long,
             userId: Long,
         ) {
+            // 채팅방 구독
             topic =
-                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe { message ->
+                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe ({ message ->
                     Log.d("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
@@ -164,7 +165,9 @@ class ChattingRoomViewModel
                     Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${id.date} - $chatMessageId")
                     addChatMessage(chatMessageInfo)
                     sendIsMsgRead(chatRoomId, userId)
-                }
+                }, { error ->
+                    Log.e("ws opened", "chatroom subscribe error / ${error.printStackTrace()}", error)
+                })
         }
 
         private fun sendIsMsgRead(
