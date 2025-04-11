@@ -109,7 +109,10 @@ class ChattingRoomViewModel
                         BuildConfig.SERVER_SOCKET_URL,
                         headerMap,
                         okHttpClient,
-                    )
+                    ).apply {
+                        withClientHeartbeat(30000)
+                        withServerHeartbeat(30000)
+                    }
 
                 stompClient?.connect()
 
