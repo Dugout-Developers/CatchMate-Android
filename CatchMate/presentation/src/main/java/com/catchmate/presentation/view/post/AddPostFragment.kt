@@ -92,6 +92,7 @@ class AddPostFragment :
     private fun setBoardData(response: GetBoardResponse) {
         binding.apply {
             edtAddPostTitle.setText(response.title)
+            tvAddPostTitleLetterCount.text = response.title.length.toString()
             tvAddPostPeopleCount.text = if (response.maxPerson != 0) response.maxPerson.toString() else ""
             response.gameInfo.gameStartDate?.let {
                 addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(it))
@@ -369,8 +370,14 @@ class AddPostFragment :
     }
 
     private fun initTitleTextView() {
-        binding.edtAddPostTitle.doAfterTextChanged {
-            checkInputFieldsAreEmpty()
+        binding.edtAddPostTitle.apply {
+            doOnTextChanged { text, _, _, _ ->
+                val currentLen = text?.length ?: 0
+                binding.tvAddPostTitleLetterCount.text = currentLen.toString()
+            }
+            doAfterTextChanged {
+                checkInputFieldsAreEmpty()
+            }
         }
     }
 
