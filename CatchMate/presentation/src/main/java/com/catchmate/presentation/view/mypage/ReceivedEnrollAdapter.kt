@@ -71,7 +71,7 @@ class ReceivedEnrollAdapter(
             Glide
                 .with(context)
                 .load(info.userInfo.profileImageUrl)
-                .error(R.drawable.temporary_profile)
+                .error(R.drawable.vec_all_default_profile)
                 .into(ivEnrollUserProfile)
 
             tvEnrollUserNickname.text = info.userInfo.nickName

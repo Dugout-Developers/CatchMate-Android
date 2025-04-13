@@ -82,7 +82,7 @@ class ReceivedJoinProfileAdapter(
             Glide
                 .with(context)
                 .load(info.userInfo.profileImageUrl)
-                .error(R.drawable.temporary_profile)
+                .error(R.drawable.vec_all_default_profile)
                 .into(ivProfileImage)
             tvProfileNickname.text = info.userInfo.nickName
             tvProfileTeam.text = ClubUtils.convertClubIdToName(info.userInfo.favoriteClub.id)

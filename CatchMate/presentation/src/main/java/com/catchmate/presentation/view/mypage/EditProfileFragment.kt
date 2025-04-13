@@ -115,7 +115,7 @@ class EditProfileFragment :
             Glide
                 .with(this@EditProfileFragment)
                 .load(uri)
-                .error(R.drawable.temporary_profile)
+                .error(R.drawable.vec_all_default_profile)
                 .into(binding.ivEditProfileThumbnail)
         }
         editProfileViewModel.setCheerClub(userInfo?.favoriteClub?.id!!)
@@ -151,7 +151,7 @@ class EditProfileFragment :
         Glide
             .with(this@EditProfileFragment)
             .load(userInfo?.profileImageUrl)
-            .error(R.drawable.temporary_profile)
+            .error(R.drawable.vec_all_default_profile)
             .into(binding.ivEditProfileThumbnail)
         binding.ivEditProfileThumbnail.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)

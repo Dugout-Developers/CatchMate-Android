@@ -50,8 +50,8 @@ class ChatListAdapter(
                 binding.tvReceivedChatNickname.text = currentUserInfo?.nickName ?: "알수없음"
                 Glide
                     .with(binding.root)
-                    .load(currentUserInfo?.profileImageUrl ?: R.drawable.temporary_profile)
-                    .error(R.drawable.temporary_profile)
+                    .load(currentUserInfo?.profileImageUrl ?: R.drawable.vec_all_default_profile)
+                    .error(R.drawable.vec_all_default_profile)
                     .into(binding.ivReceivedChatProfile)
             } else {
                 // 연속된 메시지라면 프로필과 닉네임 뷰 숨기기
