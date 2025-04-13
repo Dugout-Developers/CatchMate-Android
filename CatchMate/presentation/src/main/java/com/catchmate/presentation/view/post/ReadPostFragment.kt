@@ -26,6 +26,7 @@ import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.AgeUtils
 import com.catchmate.presentation.util.ClubUtils
 import com.catchmate.presentation.util.DateUtils
+import com.catchmate.presentation.util.DateUtils.checkIsFinishedGame
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
@@ -45,6 +46,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
     private var isWriter = false
     private val boardId by lazy { arguments?.getLong("boardId") ?: -1L }
     private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
+    private var isFinishedGame = false
 
     override fun onViewCreated(
         view: View,
@@ -192,7 +194,13 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             }
             btnLikedFooterRegister.setOnClickListener {
                 when (readPostViewModel.boardEnrollState.value) {
-                    EnrollState.APPLY -> showEnrollDialog()
+                    EnrollState.APPLY -> {
+                        if (isFinishedGame) {
+                            showFinishedGameAlertDialog()
+                        } else {
+                            showEnrollDialog()
+                        }
+                    }
                     EnrollState.APPLIED -> {
                         // 신청 확인 버튼 클릭 시 내가 보낸 신청 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
                         readPostViewModel.getRequestedEnroll(boardId)
@@ -303,6 +311,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         binding.apply {
             tvReadPostTitle.text = post.title
             tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate!!)
+            isFinishedGame = checkIsFinishedGame(post.gameInfo.gameStartDate!!)
             tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
             val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
@@ -432,6 +441,39 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun showFinishedGameAlertDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvSimpleDialogTitle.setText(R.string.post_finished_game_alert_title)
+
+            tvSimpleDialogNegative.apply {
+                setText(R.string.dialog_button_cancel)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+            tvSimpleDialogPositive.apply {
+                setText(R.string.dialog_button_enroll)
+                setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.brand500),
+                )
+                setOnClickListener {
+                    dialog.dismiss()
+                    Thread.sleep(400)
+                    showEnrollDialog()
+                }
+            }
+        }
+
+        dialog.show()
     }
 
     private fun showEnrollDialog() {
