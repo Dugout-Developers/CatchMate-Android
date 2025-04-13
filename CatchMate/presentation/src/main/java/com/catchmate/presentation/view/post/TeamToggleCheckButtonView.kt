@@ -45,17 +45,8 @@ class TeamToggleCheckButtonView(
         val teamLogo = typedArray.getResourceId(R.styleable.TeamToggleCheckButtonView_teamToggleCheckButtonLogoImage, 0)
         val teamName = typedArray.getText(R.styleable.TeamToggleCheckButtonView_teamToggleCheckButtonTeamNameText)
 
-        if (toggleBg != 0) {
-            binding.toggleTeamToggleCheckButton.setBackgroundResource(toggleBg)
-        } else {
-            binding.toggleTeamToggleCheckButton.visibility = View.GONE
-        }
-        if (teamLogo != 0) {
-            binding.ivTeamToggleCheckButton.setImageResource(teamLogo)
-        } else {
-            binding.ivTeamToggleCheckButton.visibility = View.GONE
-        }
-
+        binding.toggleTeamToggleCheckButton.setBackgroundResource(toggleBg)
+        binding.ivTeamToggleCheckButton.setImageResource(teamLogo)
         binding.tvTeamToggleCheckButton.text = teamName
 
         typedArray.recycle()
