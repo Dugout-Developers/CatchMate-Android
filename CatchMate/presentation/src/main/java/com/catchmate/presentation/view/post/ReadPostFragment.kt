@@ -261,6 +261,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             if (response != null) {
                 Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
                 readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
+                Snackbar.make(requireView(), R.string.post_enroll_success, Snackbar.LENGTH_SHORT).show()
             }
         }
         readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
