@@ -42,6 +42,9 @@
     <string name="edit_profile_my_club">나의 응원구단</string>
     <string name="edit_profile_my_watch_style">나의 응원 스타일</string>
     <string name="edit_profile_watch_style_hint">응원 스타일을 선택해보세요</string>
+    <string name="edit_profile_dialog_title">프로필 사진 설정</string>
+    <string name="edit_profile_dialog_default_image">기본 이미지 적용</string>
+    <string name="edit_profile_dialog_album">앨범에서 사진 선택</string>
 
     <string name="new_badge">N</string>
 

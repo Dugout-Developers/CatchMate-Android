@@ -16,6 +16,8 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -25,6 +27,7 @@ import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.UserProfileRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentEditProfileBinding
+import com.catchmate.presentation.databinding.LayoutEditProfileDialogBinding
 import com.catchmate.presentation.interaction.OnEditProfileTeamSelectedListener
 import com.catchmate.presentation.interaction.OnEditProfileWatchStyleSelectedListener
 import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
@@ -33,11 +36,11 @@ import com.catchmate.presentation.util.ImageUtils.convertUrlToMultipart
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.EditProfileViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -94,7 +97,7 @@ class EditProfileFragment :
         binding.layoutFooterEditProfile.btnFooterOne.apply {
             text = getString(R.string.finish)
             setOnClickListener {
-                getProfileData()
+                patchUserProfile()
             }
         }
     }
@@ -128,6 +131,12 @@ class EditProfileFragment :
                 binding.tvEditProfileWatchStyle.text = it
             }
         }
+        editProfileViewModel.patchUserProfileResponse.observe(viewLifecycleOwner) { response ->
+            Log.e("PROFILE PATCH STATE", response.state.toString())
+            if (response.state) {
+                findNavController().popBackStack()
+            }
+        }
         editProfileViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
                 val navOptions =
@@ -154,10 +163,35 @@ class EditProfileFragment :
             .error(R.drawable.vec_all_default_profile)
             .into(binding.ivEditProfileThumbnail)
         binding.ivEditProfileThumbnail.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-            requestAlbumLauncher.launch(intent)
+            showImageSelectDialog()
         }
+    }
+
+    private fun showImageSelectDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutEditProfileDialogBinding.inflate(layoutInflater)
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialogBinding.apply {
+            tvEditProfileDialogDefaultImage.setOnClickListener {
+                val defaultImageDrawable = ResourcesCompat.getDrawable(resources, R.drawable.vec_all_default_profile, null)
+                val defaultImageBitmap = defaultImageDrawable?.toBitmap()
+                if (defaultImageBitmap != null) {
+                    editProfileViewModel.setProfileImage(defaultImageBitmap)
+                    isProfileSelected = true
+                    checkPatchProfileAvailable()
+                }
+                dialog.dismiss()
+            }
+            tvEditProfileDialogAlbum.setOnClickListener {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                requestAlbumLauncher.launch(intent)
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun createAlbumBitmap() {
@@ -184,7 +218,7 @@ class EditProfileFragment :
                         resizedBitmap?.let { bitmap ->
                             editProfileViewModel.setProfileImage(bitmap)
                             isProfileSelected = true
-                            checkAllFieldsAreFilled()
+                            checkPatchProfileAvailable()
                         }
                     }
                 }
@@ -259,18 +293,18 @@ class EditProfileFragment :
                     setText(R.string.signup_nickname_usable)
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.system_blue))
                     isValid = true
-                    checkAllFieldsAreFilled()
+                    checkPatchProfileAvailable()
                 } else {
                     setText(R.string.signup_nickname_unusable)
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.system_red))
                     isValid = false
-                    checkAllFieldsAreFilled()
+                    checkPatchProfileAvailable()
                 }
             }
         }
     }
 
-    private fun checkAllFieldsAreFilled() {
+    private fun checkPatchProfileAvailable() {
         binding.apply {
             layoutFooterEditProfile.btnFooterOne.isEnabled =
                 isValid &&
@@ -278,7 +312,7 @@ class EditProfileFragment :
         }
     }
 
-    private fun getProfileData() {
+    private fun patchUserProfile() {
         val nickName = editProfileViewModel.nickName.value!!
         val cheerClub = editProfileViewModel.cheerClub.value!!
         val watchStyle = editProfileViewModel.watchStyle.value!!
@@ -298,24 +332,11 @@ class EditProfileFragment :
                     "profile_image.jpg",
                     "profileImage",
                 )
-            patchUserProfile(requestBody, profileImageFile)
+            editProfileViewModel.patchUserProfile(requestBody, profileImageFile)
         } else {
             lifecycleScope.launch {
                 val profileImageFile = convertUrlToMultipart(requireContext(), userInfo?.profileImageUrl!!)
-                patchUserProfile(requestBody, profileImageFile)
-            }
-        }
-    }
-
-    private fun patchUserProfile(
-        request: RequestBody,
-        profileImage: MultipartBody.Part,
-    ) {
-        editProfileViewModel.patchUserProfile(request, profileImage)
-        editProfileViewModel.patchUserProfileResponse.observe(viewLifecycleOwner) { response ->
-            Log.e("PROFILE PATCH STATE", response.state.toString())
-            if (response.state) {
-                findNavController().popBackStack()
+                editProfileViewModel.patchUserProfile(requestBody, profileImageFile)
             }
         }
     }
