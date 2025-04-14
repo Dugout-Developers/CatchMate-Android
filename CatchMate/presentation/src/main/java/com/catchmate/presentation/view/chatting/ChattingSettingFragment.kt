@@ -136,11 +136,17 @@ class ChattingSettingFragment :
     }
 
     private fun initChattingRoomImageView() {
-        Glide
-            .with(this@ChattingSettingFragment)
-            .load(chattingRoomImage)
-            .error(R.drawable.ic_notification_samsung_device)
-            .into(binding.ivChattingSettingThumbnail)
+        val clubList =
+            listOf(
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+            )
+        if (chattingRoomImage !in clubList) {
+            Glide
+                .with(this@ChattingSettingFragment)
+                .load(chattingRoomImage)
+                .into(binding.ivChattingSettingThumbnail)
+        }
+
         binding.ivChattingSettingThumbnail.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
