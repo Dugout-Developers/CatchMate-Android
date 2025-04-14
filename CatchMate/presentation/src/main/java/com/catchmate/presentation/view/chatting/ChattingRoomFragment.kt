@@ -341,6 +341,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
                         chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
                     }
+                    layoutSideSheetPostInfo.setOnClickListener {
+                        val bundle = Bundle()
+                        bundle.putLong("boardId", chattingRoomViewModel.chattingRoomInfo.value?.boardInfo?.boardId!!)
+                        findNavController().navigate(R.id.action_chattingRoomFragment_to_readPostFragment, bundle)
+                        sideSheetDialog.dismiss()
+                    }
                 }
 
                 sideSheetDialog.show()
