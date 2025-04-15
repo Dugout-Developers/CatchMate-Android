@@ -46,6 +46,7 @@ class AddPostFragment :
     private val addPostViewModel: AddPostViewModel by viewModels()
     private val isEditMode by lazy { arguments?.getBoolean("isEditMode") ?: false }
     private var isTempSave = false
+    private var isTempDialogShown = false
 
     private var isAgeRegardlessChecked = false
     private var isAgeTeenagerChecked = false
@@ -59,25 +60,8 @@ class AddPostFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        addPostViewModel.setBoardInfo(getBoardInfo())
-        addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
-            info?.let {
-                setBoardData(it)
-            }
-            initHeader()
-            if (!isEditMode) {
-                addPostViewModel.getTempBoard()
-                addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
-                    showImportTempBoardDialog()
-                }
-                addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
-                    if (!message.isNullOrEmpty()) {
-                        Log.d("NO TEMP BOARD", message)
-                    }
-                }
-            }
-        }
         initViewModel()
+        addPostViewModel.setBoardInfo(getBoardInfo())
         initFooter()
         initAdditionalInfoEdt()
         initBottomSheets()
@@ -86,8 +70,15 @@ class AddPostFragment :
         initKeyboardAction()
 
         if (!isEditMode) {
+            addPostViewModel.getTempBoard()
             onBackPressedAction = {
-                showHandleWritingBoardDialog()
+                val isAllFieldsEmpty = checkInputFieldsEmpty()
+                Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                if (!isTempDialogShown && !isAllFieldsEmpty) {
+                    showHandleWritingBoardDialog()
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         }
     }
@@ -162,13 +153,25 @@ class AddPostFragment :
                     saveTempBoard()
                 }
                 imgbtnHeaderTextBack.setOnClickListener {
-                    showHandleWritingBoardDialog()
+                    val isAllFieldsEmpty = checkInputFieldsEmpty()
+                    Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                    if (!isTempDialogShown && !isAllFieldsEmpty) {
+                        showHandleWritingBoardDialog()
+                    } else {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }
     }
 
     private fun initViewModel() {
+        addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
+            info?.let {
+                setBoardData(it)
+            }
+            initHeader()
+        }
         addPostViewModel.homeTeamName.observe(viewLifecycleOwner) { homeTeamName ->
             if (homeTeamName != null) {
                 binding.tvAddPostHomeTeam.text = homeTeamName
@@ -232,6 +235,14 @@ class AddPostFragment :
             if (response != null) {
                 Log.d("boardEditResponse", response.boardId.toString())
                 findNavController().popBackStack()
+            }
+        }
+        addPostViewModel.getTempBoardResponse.observe(viewLifecycleOwner) { response ->
+            showImportTempBoardDialog()
+        }
+        addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                Log.d("NO TEMP BOARD", message)
             }
         }
     }
@@ -373,7 +384,7 @@ class AddPostFragment :
                 binding.tvAddPostTitleLetterCount.text = currentLen.toString()
             }
             doAfterTextChanged {
-                checkInputFieldsAreEmpty()
+                checkInputFieldsValid()
             }
         }
     }
@@ -463,7 +474,7 @@ class AddPostFragment :
             }
 
             doAfterTextChanged {
-                checkInputFieldsAreEmpty()
+                checkInputFieldsValid()
             }
         }
     }
@@ -547,7 +558,7 @@ class AddPostFragment :
             }
     }
 
-    private fun checkInputFieldsAreEmpty() {
+    private fun checkInputFieldsValid() {
         val title = binding.edtAddPostTitle.text.toString()
         val peopleCount = binding.tvAddPostPeopleCount.text.toString()
         val dateTime = addPostViewModel.gameDateTime.value.toString()
@@ -566,6 +577,25 @@ class AddPostFragment :
             cheerTeam.isNotEmpty() &&
             place.isNotEmpty() &&
             additionalInfo.isNotEmpty()
+    }
+
+    private fun checkInputFieldsEmpty(): Boolean {
+        val title = binding.edtAddPostTitle.text.toString()
+        val peopleCount = binding.tvAddPostPeopleCount.text.toString()
+        val dateTime = addPostViewModel.gameDateTime.value
+        val homeTeam = addPostViewModel.homeTeamName.value
+        val awayTeam = addPostViewModel.awayTeamName.value
+        val cheerTeam = binding.tvAddPostCheerTeam.text.toString()
+        val place = binding.tvAddPostPlace.text.toString()
+        val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
+        return title.isEmpty() &&
+                peopleCount.isEmpty() &&
+                dateTime.isNullOrEmpty() &&
+                homeTeam.isNullOrEmpty() &&
+                awayTeam.isNullOrEmpty() &&
+                cheerTeam.isEmpty() &&
+                place.isEmpty() &&
+                additionalInfo.isEmpty()
     }
 
     private fun getCheckedAgeRange(checkedChipIds: List<Int>): MutableList<String> {
@@ -596,6 +626,7 @@ class AddPostFragment :
             tvSimpleDialogNegative.apply {
                 setText(R.string.temporary_storage_import_negative)
                 setOnClickListener {
+                    isTempDialogShown = false
                     dialog.dismiss()
                 }
             }
@@ -605,6 +636,7 @@ class AddPostFragment :
                     ContextCompat.getColor(requireContext(), R.color.brand500),
                 )
                 setOnClickListener {
+                    isTempDialogShown = true
                     val tempBoard = addPostViewModel.getTempBoardResponse.value!!
                     val board =
                         GetBoardResponse(
@@ -664,7 +696,7 @@ class AddPostFragment :
 
     override fun onPeopleCountSelected(count: Int) {
         binding.tvAddPostPeopleCount.text = count.toString()
-        checkInputFieldsAreEmpty()
+        checkInputFieldsValid()
     }
 
     override fun onDateTimeSelected(
@@ -672,7 +704,7 @@ class AddPostFragment :
         time: String,
     ) {
         addPostViewModel.setGameDate(DateUtils.formatGameDateTime(date, time))
-        checkInputFieldsAreEmpty()
+        checkInputFieldsValid()
     }
 
     override fun onTeamSelected(
@@ -684,16 +716,16 @@ class AddPostFragment :
         } else {
             addPostViewModel.setAwayTeamName(teamName)
         }
-        checkInputFieldsAreEmpty()
+        checkInputFieldsValid()
     }
 
     override fun onCheerTeamSelected(cheerTeamName: String) {
         binding.tvAddPostCheerTeam.text = cheerTeamName
-        checkInputFieldsAreEmpty()
+        checkInputFieldsValid()
     }
 
     override fun onPlaceSelected(place: String) {
         binding.tvAddPostPlace.text = place
-        checkInputFieldsAreEmpty()
+        checkInputFieldsValid()
     }
 }
