@@ -45,6 +45,14 @@ class AddPostFragment :
     OnPlaceSelectedListener {
     private val addPostViewModel: AddPostViewModel by viewModels()
     private val isEditMode by lazy { arguments?.getBoolean("isEditMode") ?: false }
+    private var isTempSave = false
+
+    private var isAgeRegardlessChecked = false
+    private var isAgeTeenagerChecked = false
+    private var isAgeTwentiesChecked = false
+    private var isAgeThirtiesChecked = false
+    private var isAgeFourtiesChecked = false
+    private var isAgeFiftiesChecked = false
 
     override fun onViewCreated(
         view: View,
@@ -202,6 +210,30 @@ class AddPostFragment :
         addPostViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             Log.e("ADD POST ERR", message.toString())
         }
+        addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.e("boardWriteResponse", "$response")
+                if (!isTempSave) { // 게시글 등록일 때
+                    val bundle = Bundle()
+                    bundle.putLong("boardId", response.boardId)
+                    val navOptions =
+                        NavOptions
+                            .Builder()
+                            .setPopUpTo(R.id.addPostFragment, true)
+                            .build()
+                    findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
+                } else { // 임시 저장일 때
+                    Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
+            }
+        }
+        addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("boardEditResponse", response.boardId.toString())
+                findNavController().popBackStack()
+            }
+        }
     }
 
     private fun initFooter() {
@@ -250,7 +282,7 @@ class AddPostFragment :
                         gameRequest,
                         true,
                     )
-                patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                addPostViewModel.patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
                 val boardWriteRequest =
                     PostBoardRequest(
@@ -263,7 +295,8 @@ class AddPostFragment :
                         gameRequest,
                         true,
                     )
-                postBoardWrite(boardWriteRequest)
+                isTempSave = false
+                addPostViewModel.postBoard(boardWriteRequest)
             }
         }
     }
@@ -328,44 +361,8 @@ class AddPostFragment :
                     gameRequest,
                     false,
                 )
-            postBoardWrite(tempBoard)
-        }
-    }
-
-    private fun postBoardWrite(boardWriteRequest: PostBoardRequest) {
-        addPostViewModel.postBoard(
-            boardWriteRequest,
-        )
-        addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.e("boardWriteResponse", response.boardId.toString())
-                if (boardWriteRequest.isCompleted) { // 게시글 등록일 때
-                    val bundle = Bundle()
-                    bundle.putLong("boardId", response.boardId)
-                    val navOptions =
-                        NavOptions
-                            .Builder()
-                            .setPopUpTo(R.id.addPostFragment, true)
-                            .build()
-                    findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
-                } else { // 임시 저장일 때
-                    Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-            }
-        }
-    }
-
-    private fun patchBoard(
-        boardId: Long,
-        patchBoardRequest: PatchBoardRequest,
-    ) {
-        addPostViewModel.patchBoard(boardId, patchBoardRequest)
-        addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.d("boardEditResponse", response.boardId.toString())
-                findNavController().popBackStack()
-            }
+            isTempSave = true
+            addPostViewModel.postBoard(tempBoard)
         }
     }
 
@@ -383,31 +380,67 @@ class AddPostFragment :
 
     private fun initAgeChip() {
         binding.apply {
-            chipgroupAddPostAge.setOnCheckedStateChangeListener { group, checkedIds ->
-                val ageChipIds =
-                    listOf(
-                        chipAddPostAgeTeenager.id,
-                        chipAddPostAgeTwenties.id,
-                        chipAddPostAgeThirties.id,
-                        chipAddPostAgeFourties.id,
-                        chipAddPostAgeFifties.id,
-                    )
-                val ageChips =
-                    listOf(
-                        chipAddPostAgeTeenager,
-                        chipAddPostAgeTwenties,
-                        chipAddPostAgeThirties,
-                        chipAddPostAgeFourties,
-                        chipAddPostAgeFifties,
-                    )
-
-                if (checkedIds.containsAll(ageChipIds)) {
-                    ageChips.forEach { chip ->
-                        chip.isChecked = false
-                    }
-                    chipAddPostAgeRegardless.isChecked = true
+            chipAddPostAgeRegardless.setOnClickListener {
+                if (!isAgeRegardlessChecked) {
+                    isAgeRegardlessChecked = true
+                    isAgeTeenagerChecked = false
+                    isAgeTwentiesChecked = false
+                    isAgeThirtiesChecked = false
+                    isAgeFourtiesChecked = false
+                    isAgeFiftiesChecked = false
+                    chipAddPostAgeRegardless.isChecked = isAgeRegardlessChecked
+                    chipAddPostAgeTeenager.isChecked = isAgeTeenagerChecked
+                    chipAddPostAgeTwenties.isChecked = isAgeTwentiesChecked
+                    chipAddPostAgeThirties.isChecked = isAgeThirtiesChecked
+                    chipAddPostAgeFourties.isChecked = isAgeFourtiesChecked
+                    chipAddPostAgeFifties.isChecked = isAgeFiftiesChecked
                 }
             }
+            chipAddPostAgeTeenager.setOnClickListener {
+                isAgeTeenagerChecked = !isAgeTeenagerChecked
+                chipAddPostAgeTeenager.isChecked = isAgeTeenagerChecked
+                updateAgeChipsState()
+            }
+            chipAddPostAgeTwenties.setOnClickListener {
+                isAgeTwentiesChecked = !isAgeTwentiesChecked
+                chipAddPostAgeTwenties.isChecked = isAgeTwentiesChecked
+                updateAgeChipsState()
+            }
+            chipAddPostAgeThirties.setOnClickListener {
+                isAgeThirtiesChecked = !isAgeThirtiesChecked
+                chipAddPostAgeThirties.isChecked = isAgeThirtiesChecked
+                updateAgeChipsState()
+            }
+            chipAddPostAgeFourties.setOnClickListener {
+                isAgeFourtiesChecked = !isAgeFourtiesChecked
+                chipAddPostAgeFourties.isChecked = isAgeFourtiesChecked
+                updateAgeChipsState()
+            }
+            chipAddPostAgeFifties.setOnClickListener {
+                isAgeFiftiesChecked = !isAgeFiftiesChecked
+                chipAddPostAgeFifties.isChecked = isAgeFiftiesChecked
+                updateAgeChipsState()
+            }
+        }
+    }
+
+    private fun updateAgeChipsState() {
+        if (isAgeTeenagerChecked && isAgeTwentiesChecked && isAgeThirtiesChecked && isAgeFourtiesChecked && isAgeFiftiesChecked) {
+            isAgeRegardlessChecked = true
+            binding.chipAddPostAgeRegardless.isChecked = isAgeRegardlessChecked
+            isAgeTeenagerChecked = false
+            isAgeTwentiesChecked = false
+            isAgeThirtiesChecked = false
+            isAgeFourtiesChecked = false
+            isAgeFiftiesChecked = false
+            binding.chipAddPostAgeTeenager.isChecked = isAgeTeenagerChecked
+            binding.chipAddPostAgeTwenties.isChecked = isAgeTwentiesChecked
+            binding.chipAddPostAgeThirties.isChecked = isAgeThirtiesChecked
+            binding.chipAddPostAgeFourties.isChecked = isAgeFourtiesChecked
+            binding.chipAddPostAgeFifties.isChecked = isAgeFiftiesChecked
+        } else {
+            isAgeRegardlessChecked = false
+            binding.chipAddPostAgeRegardless.isChecked = isAgeRegardlessChecked
         }
     }
 

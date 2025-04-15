@@ -398,6 +398,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/regardless_of_age" />
 
                 <com.google.android.material.chip.Chip
@@ -405,6 +406,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/teenager" />
 
                 <com.google.android.material.chip.Chip
@@ -412,6 +414,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/twenties" />
 
                 <com.google.android.material.chip.Chip
@@ -419,6 +422,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/thirties" />
 
                 <com.google.android.material.chip.Chip
@@ -426,6 +430,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/fourties" />
 
                 <com.google.android.material.chip.Chip
@@ -433,6 +438,7 @@
                     style="@style/CustomPostGenderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/fifties" />
             </com.google.android.material.chip.ChipGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
