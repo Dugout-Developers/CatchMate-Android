@@ -26,7 +26,7 @@ class ChatListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessageInfo: ChatMessageInfo) {
             binding.tvSendChatMessage.text = chatMessageInfo.content
-            binding.tvSendChatTime.text = formatChatSendTime(chatMessageInfo.id.date)
+            binding.tvSendChatTime.text = formatChatSendTime(chatMessageInfo.id?.date!!)
         }
     }
 
@@ -59,7 +59,7 @@ class ChatListAdapter(
                 binding.tvReceivedChatNickname.visibility = View.GONE
             }
             binding.tvReceivedChatMessage.text = chatMessageInfo.content
-            binding.tvReceivedChatTime.text = formatChatSendTime(chatMessageInfo.id.date)
+            binding.tvReceivedChatTime.text = formatChatSendTime(chatMessageInfo.id?.date!!)
         }
     }
 
