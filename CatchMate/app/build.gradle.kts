@@ -18,8 +18,8 @@ android {
 
     defaultConfig {
         applicationId = "com.catchmate.android"
-        versionCode = 20250326
-        versionName = "1.0.2"
+        versionCode = 20250329
+        versionName = "1.1.0"
 
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
         buildConfigField("String", "NAVER_CLIENT_ID", naverClientId)
