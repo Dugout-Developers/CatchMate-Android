@@ -15,7 +15,6 @@ import com.catchmate.domain.exception.GoogleLoginException
 import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
@@ -55,12 +54,12 @@ class GoogleLoginDataSource
             } catch (e: Exception) {
                 when (e) {
                     is GoogleLoginException.NoCredentials,
-                    is NoCredentialException -> {
+                    is NoCredentialException, -> {
                         Log.e("GOOGLE - NOCredentials", "")
                         Result.Error(exception = e)
                     }
                     is GoogleLoginException.Cancelled,
-                    is GetCredentialCancellationException -> {
+                    is GetCredentialCancellationException, -> {
                         Log.e("GOOGLE - Cancelled", "")
                         Result.Error(exception = e)
                     }
@@ -105,9 +104,9 @@ class GoogleLoginDataSource
                                     provider = LoginPlatform.GOOGLE.toString().lowercase(),
                                     picture = profileUri.toString(),
                                     fcmToken =
-                                    runBlocking(Dispatchers.IO) {
-                                        fcmTokenService.getToken()
-                                    },
+                                        runBlocking(Dispatchers.IO) {
+                                            fcmTokenService.getToken()
+                                        },
                                 )
                             Result.Success(loginRequestDTO)
                         } else {

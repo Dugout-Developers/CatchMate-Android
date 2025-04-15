@@ -343,7 +343,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     }
                     layoutSideSheetPostInfo.setOnClickListener {
                         val bundle = Bundle()
-                        bundle.putLong("boardId", chattingRoomViewModel.chattingRoomInfo.value?.boardInfo?.boardId!!)
+                        bundle.putLong(
+                            "boardId",
+                            chattingRoomViewModel.chattingRoomInfo.value?.boardInfo?.boardId!!,
+                        )
                         findNavController().navigate(R.id.action_chattingRoomFragment_to_readPostFragment, bundle)
                         sideSheetDialog.dismiss()
                     }

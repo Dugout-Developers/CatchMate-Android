@@ -105,15 +105,16 @@ class ChattingRoomViewModel
                     )
 
                 stompClient =
-                    Stomp.over(
-                        Stomp.ConnectionProvider.OKHTTP,
-                        BuildConfig.SERVER_SOCKET_URL,
-                        headerMap,
-                        okHttpClient,
-                    ).apply {
-                        withClientHeartbeat(25000)
-                        withServerHeartbeat(35000)
-                    }
+                    Stomp
+                        .over(
+                            Stomp.ConnectionProvider.OKHTTP,
+                            BuildConfig.SERVER_SOCKET_URL,
+                            headerMap,
+                            okHttpClient,
+                        ).apply {
+                            withClientHeartbeat(25000)
+                            withServerHeartbeat(35000)
+                        }
 
                 stompClient?.connect()
 
@@ -145,7 +146,7 @@ class ChattingRoomViewModel
         ) {
             // 채팅방 구독
             topic =
-                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe ({ message ->
+                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe({ message ->
                     Log.d("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")

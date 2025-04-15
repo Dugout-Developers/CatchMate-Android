@@ -75,7 +75,6 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
             switchNotificationSettingChatting.isChecked = isChatChecked
             switchNotificationSettingEnroll.isChecked = isEnrollChecked
             switchNotificationSettingEvent.isChecked = isEventChecked
-            
             // 스위치 클릭 이벤트 설정
             layoutNotificationSettingAllAlarm.setOnClickListener {
                 if (isAllChecked) { // t -> f

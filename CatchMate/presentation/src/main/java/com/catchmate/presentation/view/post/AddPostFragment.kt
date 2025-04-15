@@ -589,13 +589,13 @@ class AddPostFragment :
         val place = binding.tvAddPostPlace.text.toString()
         val additionalInfo = binding.edtAddPostAdditionalInfo.text.toString()
         return title.isEmpty() &&
-                peopleCount.isEmpty() &&
-                dateTime.isNullOrEmpty() &&
-                homeTeam.isNullOrEmpty() &&
-                awayTeam.isNullOrEmpty() &&
-                cheerTeam.isEmpty() &&
-                place.isEmpty() &&
-                additionalInfo.isEmpty()
+            peopleCount.isEmpty() &&
+            dateTime.isNullOrEmpty() &&
+            homeTeam.isNullOrEmpty() &&
+            awayTeam.isNullOrEmpty() &&
+            cheerTeam.isEmpty() &&
+            place.isEmpty() &&
+            additionalInfo.isEmpty()
     }
 
     private fun getCheckedAgeRange(checkedChipIds: List<Int>): MutableList<String> {
