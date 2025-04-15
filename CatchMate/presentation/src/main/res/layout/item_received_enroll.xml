@@ -28,7 +28,7 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginTop="36dp"
-                android:src="@drawable/temporary_profile"
+                android:src="@drawable/vec_all_default_profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

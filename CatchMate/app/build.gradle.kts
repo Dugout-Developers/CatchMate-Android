@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -29,6 +30,12 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/DEPENDENCIES")
+        }
     }
 }
 

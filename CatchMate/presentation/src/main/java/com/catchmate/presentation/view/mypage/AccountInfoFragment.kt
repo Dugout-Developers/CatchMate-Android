@@ -3,16 +3,19 @@ package com.catchmate.presentation.view.mypage
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAccountInfoBinding
+import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.AccountInfoViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -125,7 +128,33 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
 
     private fun initWithdrawBtn() {
         binding.tvAccountInfoDeleteAccount.setOnClickListener {
-            accountInfoViewModel.withdraw()
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            val dialogBinding = LayoutSimpleDialogBinding.inflate(layoutInflater)
+
+            builder.setView(dialogBinding.root)
+
+            val dialog = builder.create()
+
+            dialogBinding.apply {
+                tvSimpleDialogTitle.setText(R.string.mypage_setting_delete_account_dialog_title)
+                tvSimpleDialogNegative.apply {
+                    setText(R.string.dialog_button_cancel)
+                    setOnClickListener {
+                        dialog.dismiss()
+                    }
+                }
+                tvSimpleDialogPositive.apply {
+                    setText(R.string.mypage_setting_delete_account_dialog_pov_btn)
+                    setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.brand500),
+                    )
+                    setOnClickListener {
+                        accountInfoViewModel.withdraw()
+                        dialog.dismiss()
+                    }
+                }
+            }
+            dialog.show()
         }
     }
 }

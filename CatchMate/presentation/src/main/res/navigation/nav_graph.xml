@@ -223,6 +223,9 @@
         <action
             android:id="@+id/action_chattingRoomFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_chattingRoomFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"

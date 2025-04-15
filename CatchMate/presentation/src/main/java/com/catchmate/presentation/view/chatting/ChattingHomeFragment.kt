@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
+import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
 import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
@@ -20,6 +21,7 @@ import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -194,10 +196,37 @@ class ChattingHomeFragment :
         chattingRoomListAdapter.submitList(newList)
     }
 
-    override fun onChattingRoomSelected(chatRoomId: Long) {
+    private fun showChattingSystemAlertDialog() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val dialogBinding = LayoutAlertDialogBinding.inflate(layoutInflater)
+
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+        dialogBinding.apply {
+            tvAlertDialogTitle.setText(R.string.chatting_system_alert_title)
+            tvAlertDialogPositive.apply {
+                setText(R.string.complete)
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
+    }
+
+    override fun onChattingRoomSelected(
+        chatRoomId: Long,
+        isNewChatRoom: Boolean,
+    ) {
         val bundle = Bundle()
         bundle.putLong("chatRoomId", chatRoomId)
         findNavController().navigate(R.id.action_chattingHomeFragment_to_chattingRoomFragment, bundle)
+        if (isNewChatRoom) {
+            showChattingSystemAlertDialog()
+        }
     }
 
     override fun onNotificationItemSwipe(

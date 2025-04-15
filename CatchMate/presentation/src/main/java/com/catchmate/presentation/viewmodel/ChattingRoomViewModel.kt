@@ -13,6 +13,7 @@ import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
@@ -104,12 +105,16 @@ class ChattingRoomViewModel
                     )
 
                 stompClient =
-                    Stomp.over(
-                        Stomp.ConnectionProvider.OKHTTP,
-                        BuildConfig.SERVER_SOCKET_URL,
-                        headerMap,
-                        okHttpClient,
-                    )
+                    Stomp
+                        .over(
+                            Stomp.ConnectionProvider.OKHTTP,
+                            BuildConfig.SERVER_SOCKET_URL,
+                            headerMap,
+                            okHttpClient,
+                        ).apply {
+                            withClientHeartbeat(25000)
+                            withServerHeartbeat(35000)
+                        }
 
                 stompClient?.connect()
 
@@ -139,29 +144,50 @@ class ChattingRoomViewModel
             chatRoomId: Long,
             userId: Long,
         ) {
+            // 채팅방 구독
             topic =
-                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe { message ->
+                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe({ message ->
                     Log.d("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
-                    val chatMessageId = jsonObject.getString("chatMessageId")
-                    val senderId = jsonObject.getString("senderId").toLong()
-                    val content = jsonObject.getString("content")
-                    val roomId = jsonObject.getString("roomId").toLong()
-                    val id = ChatMessageId(date = getCurrentTimeFormatted())
-                    val chatMessageInfo =
-                        ChatMessageInfo(
-                            id = id,
-                            chatMessageId = chatMessageId,
-                            roomId = roomId,
-                            content = content,
-                            senderId = senderId,
-                            messageType = messageType,
-                        )
-                    Log.e("⭐️JSON 확인", "$messageType - $senderId - $content - ${id.date} - $chatMessageId")
+                    val chatMessageInfo: ChatMessageInfo =
+                        when (messageType) {
+                            ChatMessageType.DATE.name -> {
+                                val roomId = jsonObject.getString("chatRoomId").toLong()
+                                val content = jsonObject.getString("content")
+                                val senderId = jsonObject.getString("senderId").toLong()
+                                ChatMessageInfo(
+                                    chatMessageId = "",
+                                    roomId = roomId,
+                                    content = content,
+                                    senderId = senderId,
+                                    messageType = messageType,
+                                )
+                            }
+                            ChatMessageType.TALK.name -> {
+                                val chatMessageId = jsonObject.getString("chatMessageId")
+                                val senderId = jsonObject.getString("senderId").toLong()
+                                val content = jsonObject.getString("content")
+                                val roomId = jsonObject.getString("roomId").toLong()
+                                val id = ChatMessageId(date = getCurrentTimeFormatted())
+                                ChatMessageInfo(
+                                    id = id,
+                                    chatMessageId = chatMessageId,
+                                    roomId = roomId,
+                                    content = content,
+                                    senderId = senderId,
+                                    messageType = messageType,
+                                )
+                            }
+                            else -> { // 채팅방 나가고 들어올때 메시지 처리하기
+                                ChatMessageInfo(chatMessageId = "", roomId = -1L, content = "", senderId = -1L, messageType = "")
+                            }
+                        }
                     addChatMessage(chatMessageInfo)
                     sendIsMsgRead(chatRoomId, userId)
-                }
+                }, { error ->
+                    Log.e("ws opened", "chatroom subscribe error / ${error.printStackTrace()}", error)
+                })
         }
 
         private fun sendIsMsgRead(

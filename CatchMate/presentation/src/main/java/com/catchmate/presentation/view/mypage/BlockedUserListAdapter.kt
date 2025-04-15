@@ -32,7 +32,7 @@ class BlockedUserListAdapter(
                 Glide
                     .with(binding.root)
                     .load(userInfo.profileImageUrl)
-                    .error(R.drawable.temporary_profile)
+                    .error(R.drawable.vec_all_default_profile)
                     .into(ivChattingParticipant)
                 tvChattingParticipantNickname.text = userInfo.nickName
             }

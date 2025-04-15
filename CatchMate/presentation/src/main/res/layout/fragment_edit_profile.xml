@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/temporary_profile" />
+            tools:src="@drawable/vec_all_default_profile" />
 
         <ImageView
             android:id="@+id/iv_edit_profile_circle"

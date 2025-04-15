@@ -155,4 +155,10 @@ object DateUtils {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
         return ZonedDateTime.now().format(formatter)
     }
+
+    fun checkIsFinishedGame(dateTime: String): Boolean {
+        val gameDate = Instant.parse("${dateTime}Z")
+        val now = Instant.now()
+        return gameDate.isBefore(now)
+    }
 }
