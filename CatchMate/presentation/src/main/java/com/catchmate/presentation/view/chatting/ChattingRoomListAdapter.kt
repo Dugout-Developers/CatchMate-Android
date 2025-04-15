@@ -47,7 +47,7 @@ class ChattingRoomListAdapter(
         fun bind(chatRoomInfo: ChatRoomInfo) {
             binding.apply {
                 root.setOnClickListener {
-                    onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo.chatRoomId)
+                    onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo.chatRoomId, chatRoomInfo.isNewChatRoom)
                 }
                 // 채팅방 이미지가 변경된 적 없는 경우 chatRoomImage에 cheerTeamId가 String으로 담겨옴
                 // 해당 변수를 int로 변환할 때 예외 처리를 통해 변경된 적 있을 경우의 imageUrl을 imageView에 표시
@@ -78,16 +78,20 @@ class ChattingRoomListAdapter(
                 }
 
                 tvChattingItemTitle.text = chatRoomInfo.boardInfo.title
-                if (chatRoomInfo.lastMessageAt == null && chatRoomInfo.lastMessageContent == null) {
+                if (chatRoomInfo.isNewChatRoom) {
                     tvChattingItemNew.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.visibility = View.GONE
-                    tvChattingItemLastChat.text = root.context.getString(R.string.chatting_start_message)
-                    tvChattingItemTime.text = "방금"
-                    tvChattingItemUnreadMessageCount.visibility = View.GONE
                 } else {
                     tvChattingItemNew.visibility = View.GONE
                     tvChattingItemPeopleCount.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.text = chatRoomInfo.participantCount.toString()
+                }
+
+                if (chatRoomInfo.lastMessageAt == null && chatRoomInfo.lastMessageContent == null) {
+                    tvChattingItemLastChat.text = root.context.getString(R.string.chatting_start_message)
+                    tvChattingItemTime.text = "방금"
+                    tvChattingItemUnreadMessageCount.visibility = View.GONE
+                } else {
                     tvChattingItemLastChat.text = chatRoomInfo.lastMessageContent
                     tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.lastMessageAt!!)
                     if (chatRoomInfo.unreadMessageCount == 0) {

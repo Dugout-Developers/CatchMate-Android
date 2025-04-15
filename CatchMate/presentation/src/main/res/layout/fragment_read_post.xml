@@ -318,7 +318,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/temporary_profile" />
+                    tools:src="@drawable/vec_all_default_profile" />
 
                 <TextView
                     android:id="@+id/tv_read_post_writer_nickname"

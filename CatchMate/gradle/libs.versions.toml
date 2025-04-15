@@ -45,6 +45,7 @@ naver = "5.8.0"
 googleid = "1.1.1"
 google-services = "4.4.2"
 firebase-bom = "33.1.2"
+google-api-client = "2.2.0"
 
 # Retrofit, Okhttp
 retrofit = "2.11.0"
@@ -104,6 +105,7 @@ naver-user = { group = "com.navercorp.nid", name = "oauth", version.ref = "naver
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+google-api-client = { group = "com.google.api-client", name = "google-api-client", version.ref = "google-api-client" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }

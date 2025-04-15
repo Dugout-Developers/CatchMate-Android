@@ -19,11 +19,21 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBinding>(FragmentNotificationSettingBinding::inflate) {
-    private val allAlarm by lazy { arguments?.getString("allAlarm") ?: "" }
-    private val chatAlarm by lazy { arguments?.getString("chatAlarm") ?: "" }
-    private val enrollAlarm by lazy { arguments?.getString("enrollAlarm") ?: "" }
-    private val eventAlarm by lazy { arguments?.getString("eventAlarm") ?: "" }
     private val notificationSettingViewModel: NotificationSettingViewModel by viewModels()
+    private var isAllChecked = false
+    private var isChatChecked = false
+    private var isEnrollChecked = false
+    private var isEventChecked = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            isAllChecked = it.getString("allAlarm", "") == "Y"
+            isChatChecked = it.getString("chatAlarm", "") == "Y"
+            isEnrollChecked = it.getString("enrollAlarm", "") == "Y"
+            isEventChecked = it.getString("eventAlarm", "") == "Y"
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -60,25 +70,74 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
                     findNavController().popBackStack()
                 }
             }
-            switchNotificationSettingAll.isChecked = allAlarm == "Y"
-            switchNotificationSettingChatting.isChecked = chatAlarm == "Y"
-            switchNotificationSettingJoin.isChecked = enrollAlarm == "Y"
-            switchNotificationSettingEvent.isChecked = eventAlarm == "Y"
-            switchNotificationSettingAll.setOnCheckedChangeListener { buttonView, isChecked ->
-                val isEnabled = if (isChecked) "Y" else "N"
-                notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, isEnabled)
+            // 초기 스위치 상태 설정
+            switchNotificationSettingAll.isChecked = isAllChecked
+            switchNotificationSettingChatting.isChecked = isChatChecked
+            switchNotificationSettingEnroll.isChecked = isEnrollChecked
+            switchNotificationSettingEvent.isChecked = isEventChecked
+            // 스위치 클릭 이벤트 설정
+            layoutNotificationSettingAllAlarm.setOnClickListener {
+                if (isAllChecked) { // t -> f
+                    isAllChecked = false
+                    isChatChecked = false
+                    isEnrollChecked = false
+                    isEventChecked = false
+                    switchNotificationSettingAll.isChecked = false
+                    switchNotificationSettingChatting.isChecked = false
+                    switchNotificationSettingEnroll.isChecked = false
+                    switchNotificationSettingEvent.isChecked = false
+                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, "N")
+                } else { // f -> t
+                    isAllChecked = true
+                    switchNotificationSettingAll.isChecked = true
+                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, "Y")
+                    // false 였던 스위치만 api 호출
+                    if (!isChatChecked) {
+                        isChatChecked = true
+                        switchNotificationSettingChatting.isChecked = true
+                    }
+                    if (!isEnrollChecked) {
+                        isEnrollChecked = true
+                        switchNotificationSettingEnroll.isChecked = true
+                    }
+                    if (!isEventChecked) {
+                        isEventChecked = true
+                        switchNotificationSettingEvent.isChecked = true
+                    }
+                }
             }
-            switchNotificationSettingChatting.setOnCheckedChangeListener { buttonView, isChecked ->
-                val isEnabled = if (isChecked) "Y" else "N"
+            layoutNotificationSettingChatAlarm.setOnClickListener {
+                switchNotificationSettingChatting.isChecked = !switchNotificationSettingChatting.isChecked
+                isChatChecked = switchNotificationSettingChatting.isChecked
+                val isEnabled = if (isChatChecked) "Y" else "N"
                 notificationSettingViewModel.patchUserAlarm(AlarmType.CHAT.name, isEnabled)
+                updateSwitchState()
             }
-            switchNotificationSettingJoin.setOnCheckedChangeListener { buttonView, isChecked ->
-                val isEnabled = if (isChecked) "Y" else "N"
+            layoutNotificationSettingEnrollAlarm.setOnClickListener {
+                switchNotificationSettingEnroll.isChecked = !switchNotificationSettingEnroll.isChecked
+                isEnrollChecked = switchNotificationSettingEnroll.isChecked
+                val isEnabled = if (isEnrollChecked) "Y" else "N"
                 notificationSettingViewModel.patchUserAlarm(AlarmType.ENROLL.name, isEnabled)
+                updateSwitchState()
             }
-            switchNotificationSettingEvent.setOnCheckedChangeListener { buttonView, isChecked ->
-                val isEnabled = if (isChecked) "Y" else "N"
+            layoutNotificationSettingEventAlarm.setOnClickListener {
+                switchNotificationSettingEvent.isChecked = !switchNotificationSettingEvent.isChecked
+                isEventChecked = switchNotificationSettingEvent.isChecked
+                val isEnabled = if (isEventChecked) "Y" else "N"
                 notificationSettingViewModel.patchUserAlarm(AlarmType.EVENT.name, isEnabled)
+                updateSwitchState()
+            }
+        }
+    }
+
+    private fun updateSwitchState() {
+        if (isChatChecked && isEnrollChecked && isEventChecked && !isAllChecked) {
+            isAllChecked = true
+            binding.switchNotificationSettingAll.isChecked = isAllChecked
+        } else {
+            if (isAllChecked) {
+                isAllChecked = false
+                binding.switchNotificationSettingAll.isChecked = isAllChecked
             }
         }
     }

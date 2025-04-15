@@ -81,4 +81,8 @@
     <string name="post_read_user_menu_liked">찜하기</string>
     <string name="post_read_user_menu_share">공유하기</string>
     <string name="post_read_user_menu_report">신고하기</string>
+
+    <string name="post_enroll_success">직관 신청이 완료되었어요</string>
+
+    <string name="post_finished_game_alert_title">이미 시작된 게임이에요\n그래도 신청할까요?</string>
 </resources>

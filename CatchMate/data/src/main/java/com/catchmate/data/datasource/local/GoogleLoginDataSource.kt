@@ -6,6 +6,8 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.BuildConfig
 import com.catchmate.data.datasource.remote.FCMTokenService
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
@@ -15,8 +17,13 @@ import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.Collections
 import javax.inject.Inject
 
 class GoogleLoginDataSource
@@ -46,23 +53,25 @@ class GoogleLoginDataSource
                 Result.Success(result)
             } catch (e: Exception) {
                 when (e) {
-                    is GoogleLoginException.NoCredentials -> {
+                    is GoogleLoginException.NoCredentials,
+                    is NoCredentialException, -> {
                         Log.e("GOOGLE - NOCredentials", "")
                         Result.Error(exception = e)
                     }
-                    is GoogleLoginException.Cancelled -> {
+                    is GoogleLoginException.Cancelled,
+                    is GetCredentialCancellationException, -> {
                         Log.e("GOOGLE - Cancelled", "")
                         Result.Error(exception = e)
                     }
                     else -> {
-                        Log.e("GOOGLE - ELSE", "")
+                        Log.e("GOOGLE - ELSE", e.printStackTrace().toString())
                         Result.Error(exception = e)
                     }
                 }
             }
         }
 
-        fun handleSignIn(result: GetCredentialResponse): Result<PostLoginRequestDTO> {
+        suspend fun handleSignIn(result: GetCredentialResponse): Result<PostLoginRequestDTO> {
             val credential = result.credential
 
             return if (credential is CustomCredential) {
@@ -73,19 +82,37 @@ class GoogleLoginDataSource
                         val email = googleIdTokenCredential.id
                         val profileUri = googleIdTokenCredential.profilePictureUri
 
-                        Log.i("GoogleInfoSuccess", "idToken : $idToken  email : $email profileUri : $profileUri")
-                        val loginRequestDTO =
-                            PostLoginRequestDTO(
-                                email = email,
-                                providerId = idToken,
-                                provider = LoginPlatform.GOOGLE.toString().lowercase(),
-                                picture = profileUri.toString(),
-                                fcmToken =
-                                    runBlocking(Dispatchers.IO) {
-                                        fcmTokenService.getToken()
-                                    },
-                            )
-                        Result.Success(loginRequestDTO)
+                        val verifier =
+                            GoogleIdTokenVerifier
+                                .Builder(NetHttpTransport(), GsonFactory())
+                                .setAudience(Collections.singletonList(BuildConfig.GOOGLE_WEB_CLIENT_ID))
+                                .build()
+                        val verifiedIdToken =
+                            withContext(Dispatchers.IO) {
+                                verifier.verify(idToken)
+                            }
+
+                        if (verifiedIdToken != null) {
+                            val payload = verifiedIdToken.payload
+                            val userId = payload.subject
+
+                            Log.i("GoogleInfoSuccess", "idToken : $userId  email : $email profileUri : $profileUri")
+                            val loginRequestDTO =
+                                PostLoginRequestDTO(
+                                    email = email,
+                                    providerId = userId,
+                                    provider = LoginPlatform.GOOGLE.toString().lowercase(),
+                                    picture = profileUri.toString(),
+                                    fcmToken =
+                                        runBlocking(Dispatchers.IO) {
+                                            fcmTokenService.getToken()
+                                        },
+                                )
+                            Result.Success(loginRequestDTO)
+                        } else {
+                            Log.e("GoogleIdTokenError", "Invalid ID token")
+                            Result.Error(message = "Invalid ID token")
+                        }
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("GoogleInfoError", "Received an invalid google id token response", e)
                         Result.Error(exception = e)

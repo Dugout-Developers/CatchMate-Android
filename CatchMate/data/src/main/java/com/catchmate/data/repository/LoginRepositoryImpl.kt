@@ -1,6 +1,8 @@
 package com.catchmate.data.repository
 
 import android.app.Activity
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
@@ -54,9 +56,11 @@ class LoginRepositoryImpl
                     }
                     is Result.Error -> {
                         when (credentialResult.exception) {
-                            is GoogleLoginException.Cancelled ->
+                            is GoogleLoginException.Cancelled,
+                            is GetCredentialCancellationException, ->
                                 Result.Error(exception = GoogleLoginException.Cancelled)
-                            is GoogleLoginException.NoCredentials ->
+                            is GoogleLoginException.NoCredentials,
+                            is NoCredentialException, ->
                                 Result.Error(exception = GoogleLoginException.NoCredentials)
                             else ->
                                 Result.Error(exception = GoogleLoginException.Unknown(credentialResult.exception!!))
