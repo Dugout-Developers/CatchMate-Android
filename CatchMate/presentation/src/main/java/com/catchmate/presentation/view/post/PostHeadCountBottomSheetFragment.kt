@@ -1,6 +1,7 @@
 package com.catchmate.presentation.view.post
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,17 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentPostHeadCountBottomSheetBinding
 import com.catchmate.presentation.interaction.OnPeopleCountSelectedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 
-class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
+class PostHeadCountBottomSheetFragment(
+    private val maxPerson: Int? = null,
+    private val currentPerson: Int? = null,
+) : BottomSheetDialogFragment() {
     private var _binding: FragmentPostHeadCountBottomSheetBinding? = null
     val binding get() = _binding!!
 
     private var peopleCountSelectedListener: OnPeopleCountSelectedListener? = null
+    private var selectedValueIdx = if (maxPerson == null) 0  else maxPerson - 2
 
     private val headCountArray =
         arrayOf(
@@ -58,7 +64,11 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
             isEnabled = true
             setText(R.string.complete)
             setOnClickListener {
-                peopleCountSelectedListener?.onPeopleCountSelected(binding.npPostHeadCount.value + 2)
+                if (currentPerson != null && maxPerson != null) {
+                    peopleCountSelectedListener?.onPeopleCountSelected(selectedValueIdx + 2)
+                } else {
+                    peopleCountSelectedListener?.onPeopleCountSelected(binding.npPostHeadCount.value + 2)
+                }
                 dismiss()
             }
         }
@@ -70,7 +80,19 @@ class PostHeadCountBottomSheetFragment : BottomSheetDialogFragment() {
             minValue = 0
             maxValue = headCountArray.size - 1
             displayedValues = headCountArray
-            value = 0
+            value = selectedValueIdx
+            if (currentPerson != null && maxPerson != null) {
+                setOnValueChangedListener { picker, oldVal, newVal ->
+                    Log.e("value changed", "$oldVal - $newVal")
+                    if (newVal < currentPerson - 2) {
+                        Snackbar.make(requireView(), R.string.post_edt_number_picker_invalid_value_toast, Snackbar.LENGTH_SHORT).show()
+                        Thread.sleep(400)
+                        picker.value = maxPerson - 2
+                    } else {
+                        selectedValueIdx = newVal
+                    }
+                }
+            }
         }
     }
 }

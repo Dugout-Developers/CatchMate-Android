@@ -64,7 +64,6 @@ class AddPostFragment :
         addPostViewModel.setBoardInfo(getBoardInfo())
         initFooter()
         initAdditionalInfoEdt()
-        initBottomSheets()
         initAgeChip()
         initTitleTextView()
         initKeyboardAction()
@@ -171,6 +170,7 @@ class AddPostFragment :
                 setBoardData(it)
             }
             initHeader()
+            initBottomSheets()
         }
         addPostViewModel.homeTeamName.observe(viewLifecycleOwner) { homeTeamName ->
             if (homeTeamName != null) {
@@ -482,7 +482,17 @@ class AddPostFragment :
     private fun initBottomSheets() {
         binding.apply {
             tvAddPostPeopleCount.setOnClickListener {
-                val peopleCountBottomSheet = PostHeadCountBottomSheetFragment()
+                val peopleCountBottomSheet =
+                    if (isEditMode) { // 수정 시 currentPerson 값 전달해서 현재 참여한 인원보다 적은 수 선택할 수 없게 지정
+                        PostHeadCountBottomSheetFragment(
+                            addPostViewModel.boardInfo.value?.maxPerson,
+                            addPostViewModel.boardInfo.value?.currentPerson,
+                        )
+                    } else { // 임시저장이나 그냥 작성하는 경우
+                        val currentPersonStr = binding.tvAddPostPeopleCount.text.toString()
+                        val currentPerson = if (currentPersonStr.isEmpty()) null else currentPersonStr.toInt()
+                        PostHeadCountBottomSheetFragment(currentPerson)
+                    }
                 peopleCountBottomSheet.setOnPeopleCountSelectedListener(this@AddPostFragment)
                 peopleCountBottomSheet.show(requireActivity().supportFragmentManager, peopleCountBottomSheet.tag)
             }
