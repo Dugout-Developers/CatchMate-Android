@@ -53,6 +53,5 @@
         android:layout_marginEnd="@dimen/small"
         android:layout_marginBottom="@dimen/smedium"
         app:layout_constraintBottom_toBottomOf="@+id/toggle_cheer_style"
-        app:layout_constraintEnd_toEndOf="@+id/toggle_cheer_style"
-        app:srcCompat="@drawable/shape_all_rect_r6" />
+        app:layout_constraintEnd_toEndOf="@+id/toggle_cheer_style" />
 </androidx.constraintlayout.widget.ConstraintLayout>

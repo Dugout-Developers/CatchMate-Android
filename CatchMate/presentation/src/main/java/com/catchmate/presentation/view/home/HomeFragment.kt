@@ -79,8 +79,8 @@ class HomeFragment :
                     backgroundColor = getColor(requireContext(), R.color.system_red) // 알림 색상 지정
                     isVisible = true
                     clearNumber()
-                    horizontalOffset = 30
-                    verticalOffset = 20
+                    horizontalOffset = 40
+                    verticalOffset = 30
                 }
             } else {
                 notificationBadgeDrawable?.isVisible = true

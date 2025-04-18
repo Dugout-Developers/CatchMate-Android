@@ -86,8 +86,8 @@
 
         <ImageButton
             android:id="@+id/imgbtn_received_join_item_move"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@null"
             android:tint="@color/grey500"
             app:layout_constraintBottom_toBottomOf="parent"
