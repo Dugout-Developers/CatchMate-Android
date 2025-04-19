@@ -36,7 +36,6 @@ class ChattingHomeFragment :
     private var currentPage: Int = 0
     private var isLastPage = false
     private var isLoading = false
-    private var isApiCalled = false
     private var isFirstLoad = true
     private var deletedItemPos: Int = -1
     private lateinit var chattingRoomListAdapter: ChattingRoomListAdapter
@@ -76,7 +75,7 @@ class ChattingHomeFragment :
 
             chattingRoomListAdapter.submitList(emptyList())
             // 채팅방 목록 새로 불러오기
-            chattingHomeViewModel.getChattingRoomList(currentPage)
+            getChattingRoomList()
         }
     }
 
@@ -98,30 +97,24 @@ class ChattingHomeFragment :
             chattingHomeViewModel.connectToWebSocket(token)
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            isLoading = false
+            if (response.isFirst && response.totalElements == 0) {
                 binding.layoutChattingHomeNoList.visibility = View.VISIBLE
                 binding.rvChattingHome.visibility = View.GONE
             } else {
                 binding.rvChattingHome.visibility = View.VISIBLE
                 binding.layoutChattingHomeNoList.visibility = View.GONE
-                Log.e("EXIST CHATTING", "EXIST")
-                // 새로고침 상태이거나 currentPage가 0이면 리스트를 새로 설정
-                if (isApiCalled) {
-                    if (currentPage == 0) {
-                        // 새 리스트로 교체
-                        chattingRoomListAdapter.submitList(response.chatRoomInfoList)
-                    } else {
-                        // 페이징 시 기존 리스트에 추가
-                        val currentList = chattingRoomListAdapter.currentList.toMutableList()
-                        currentList.addAll(response.chatRoomInfoList)
-                        chattingRoomListAdapter.submitList(currentList)
-                    }
-                    isApiCalled = false
-                } else {
+                if (currentPage == 0) {
+                    // 새 리스트로 교체
                     chattingRoomListAdapter.submitList(response.chatRoomInfoList)
+                } else {
+                    // 페이징 시 기존 리스트에 추가
+                    val currentList = chattingRoomListAdapter.currentList.toMutableList()
+                    currentList.addAll(response.chatRoomInfoList)
+                    chattingRoomListAdapter.submitList(currentList)
                 }
                 isLastPage = response.isLast
-                isLoading = false
+                Log.d("API 응답", "${response.isFirst}, ${response.isLast}, ${response.totalElements}, $currentPage")
             }
         }
         chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -188,7 +181,6 @@ class ChattingHomeFragment :
         if (isLoading || isLastPage) return
         isLoading = true
         chattingHomeViewModel.getChattingRoomList(currentPage)
-        isApiCalled = true
     }
 
     private fun deleteChatRoom(chatRoomId: Long) {
