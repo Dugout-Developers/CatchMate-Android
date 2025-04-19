@@ -10,7 +10,6 @@ internal fun Project.configureKotest() {
     val libs = extensions.libs
     dependencies {
         "testImplementation"(libs.findLibrary("kotest.runner").get())
-        "testImplementation"(libs.findLibrary("kotest.assertions").get())
     }
 }
 
