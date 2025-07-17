@@ -55,16 +55,16 @@ class GoogleLoginDataSource
                 when (e) {
                     is GoogleLoginException.NoCredentials,
                     is NoCredentialException, -> {
-                        Log.e("GOOGLE - NOCredentials", "")
+                        Log.d("GOOGLE - NOCredentials", "")
                         Result.Error(exception = e)
                     }
                     is GoogleLoginException.Cancelled,
                     is GetCredentialCancellationException, -> {
-                        Log.e("GOOGLE - Cancelled", "")
+                        Log.d("GOOGLE - Cancelled", "")
                         Result.Error(exception = e)
                     }
                     else -> {
-                        Log.e("GOOGLE - ELSE", e.printStackTrace().toString())
+                        Log.d("GOOGLE - ELSE", e.printStackTrace().toString())
                         Result.Error(exception = e)
                     }
                 }
@@ -110,22 +110,22 @@ class GoogleLoginDataSource
                                 )
                             Result.Success(loginRequestDTO)
                         } else {
-                            Log.e("GoogleIdTokenError", "Invalid ID token")
+                            Log.d("GoogleIdTokenError", "Invalid ID token")
                             Result.Error(message = "Invalid ID token")
                         }
                     } catch (e: GoogleIdTokenParsingException) {
-                        Log.e("GoogleInfoError", "Received an invalid google id token response", e)
+                        Log.d("GoogleInfoError", "Received an invalid google id token response", e)
                         Result.Error(exception = e)
                     } catch (e: Exception) {
-                        Log.e("GoogleInfoError", "Unexpected error parsing credentials", e)
+                        Log.d("GoogleInfoError", "Unexpected error parsing credentials", e)
                         Result.Error(exception = e)
                     }
                 } else {
-                    Log.e("GoogleInfoError", "Unexpected type of credential")
+                    Log.d("GoogleInfoError", "Unexpected type of credential")
                     Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
                 }
             } else {
-                Log.e("GoogleInfoError", "Unexpected type of credential")
+                Log.d("GoogleInfoError", "Unexpected type of credential")
                 Result.Error(exception = IllegalArgumentException("Unexpected credential type"))
             }
         }

@@ -10,6 +10,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
@@ -62,7 +63,7 @@ class HomeFragment :
         initTeamFilter()
         initHeadCountFilter()
         initRecyclerView()
-        Log.e("POST SIZE", postList.size.toString())
+        Log.i("POST SIZE", postList.size.toString())
         if (isFirstLoad) {
             getBoardList()
             isFirstLoad = false
@@ -138,7 +139,17 @@ class HomeFragment :
 
         homeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Log.e("Reissue Error", it)
+                if (it == "ListLoadError") {
+                    binding.rvHomePosts.visibility = View.GONE
+                    binding.layoutHomeNoList.visibility = View.VISIBLE
+                    Glide
+                        .with(requireContext())
+                        .load(R.drawable.vec_all_list_error_icon)
+                        .into(binding.ivHomeNoList)
+                    binding.tvHomeNoList.setText(R.string.all_error_page_title)
+                } else {
+                    Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -152,7 +163,7 @@ class HomeFragment :
                 if (isApiCalled) {
                     postList.addAll(response.boardInfoList)
                     postList.forEach {
-                        Log.e("LIST", "${it.boardId}")
+                        Log.i("LIST", "${it.boardId}")
                     }
                 }
                 val adapter = binding.rvHomePosts.adapter as HomePostAdapter
@@ -165,7 +176,7 @@ class HomeFragment :
     }
 
     private fun getBoardList() {
-        Log.e("api 호출", "호출 $isLoading $isLastPage")
+        Log.i("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
         homeViewModel.getBoardList(

@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentFavoriteBinding
@@ -17,6 +18,7 @@ import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.FavoriteViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -91,7 +93,24 @@ class FavoriteFragment :
 
         favoriteViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Log.e("Reissue Error", it)
+                if (it == "ListLoadError") {
+                    binding.rvFavoritePost.visibility = View.GONE
+                    binding.layoutFavoriteNoList.visibility = View.VISIBLE
+                    Glide
+                        .with(requireContext())
+                        .load(R.drawable.vec_all_list_error_icon)
+                        .into(binding.ivFavoriteNoList)
+                    binding.tvFavoriteNoListTitle.setText(R.string.all_error_page_title)
+                    binding.tvFavoriteNoListSub.visibility = View.GONE
+                } else {
+                    Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        favoriteViewModel.deleteBoardLikeResponse.observe(viewLifecycleOwner) { response ->
+            if (!response.state) {
+                Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

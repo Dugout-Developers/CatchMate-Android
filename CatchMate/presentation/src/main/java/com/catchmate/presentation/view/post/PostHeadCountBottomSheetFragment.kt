@@ -83,7 +83,7 @@ class PostHeadCountBottomSheetFragment(
             value = selectedValueIdx
             if (currentPerson != null && maxPerson != null) {
                 setOnValueChangedListener { picker, oldVal, newVal ->
-                    Log.e("value changed", "$oldVal - $newVal")
+                    Log.i("value changed", "$oldVal - $newVal")
                     if (newVal < currentPerson - 2) {
                         Snackbar.make(requireView(), R.string.post_edt_number_picker_invalid_value_toast, Snackbar.LENGTH_SHORT).show()
                         Thread.sleep(400)

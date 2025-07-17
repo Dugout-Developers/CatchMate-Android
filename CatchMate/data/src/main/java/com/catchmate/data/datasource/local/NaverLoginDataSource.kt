@@ -43,7 +43,7 @@ class NaverLoginDataSource
 
                         override fun onSuccess(result: NidProfileResponse) {
                             if (result.profile != null) {
-                                Log.d("NaverInfoSuccess", "providerId : ${result.profile?.id} email : ${result.profile?.email}")
+                                Log.i("NaverInfoSuccess", "providerId : ${result.profile?.id} email : ${result.profile?.email}")
                                 result.profile?.let {
                                     val postLoginRequestDTO =
                                         PostLoginRequestDTO(
@@ -90,6 +90,6 @@ class NaverLoginDataSource
         private fun loginFail() {
             val errorCode = NaverIdLoginSDK.getLastErrorCode().code
             val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-            Log.e("NaverLoginFail", "errorCode:$errorCode errorDescription:$errorDescription")
+            Log.i("NaverLoginFail", "errorCode:$errorCode errorDescription:$errorDescription")
         }
     }

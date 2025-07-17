@@ -155,7 +155,7 @@ class MyPostFragment :
     private fun initViewModel() {
         myPostViewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
             if (!msg.isNullOrEmpty()) {
-                Log.e("MY POST ERR", msg)
+                Log.i("MY POST ERR", msg)
             }
         }
         myPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

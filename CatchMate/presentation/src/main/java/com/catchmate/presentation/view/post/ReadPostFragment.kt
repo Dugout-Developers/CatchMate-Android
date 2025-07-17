@@ -106,7 +106,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
                             liftUpBoard()
-                            Log.e("LIFT UP", "")
+                            Log.d("LIFT UP", "")
                             true
                         }
                         R.id.menuitem_post_update -> {
@@ -116,25 +116,25 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                                     putBoolean("isEditMode", true)
                                 }
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
-                            Log.e("UPDATE", "")
+                            Log.d("UPDATE", "")
                             true
                         }
                         R.id.menuitem_post_delete -> {
                             showBoardDeleteDialog()
-                            Log.e("DELETE", "")
+                            Log.d("DELETE", "")
                             true
                         }
                         R.id.menuitem_post_liked -> {
-                            Log.e("LIKED", "")
+                            Log.d("LIKED", "")
                             binding.layoutReadPostFooter.toggleLikedFooterLiked.isChecked = true
                             true
                         }
                         R.id.menuitem_post_share -> {
-                            Log.e("SHARE", "")
+                            Log.d("SHARE", "")
                             true
                         }
                         R.id.menuitem_post_report -> {
-                            Log.e("REPORT", "")
+                            Log.d("REPORT", "")
                             val userInfo =
                                 readPostViewModel
                                     .getBoardResponse
@@ -267,14 +267,14 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
         readPostViewModel.postEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
+                Log.i("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
                 readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
                 Snackbar.make(requireView(), R.string.post_enroll_success, Snackbar.LENGTH_SHORT).show()
             }
         }
         readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("삭제 성공", "${response.boardId}")
+                Log.i("삭제 성공", "${response.boardId}")
                 findNavController().popBackStack()
             }
         }
@@ -378,7 +378,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 "APPLY" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
                 "APPLIED" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
                 "VIEW CHAT" -> readPostViewModel.setBoardEnrollState(EnrollState.VIEW_CHAT)
-                else -> Log.e("BUTTON STATUS NULL", "BUTTON STATUS NULL")
+                else -> Log.d("BUTTON STATUS NULL", "BUTTON STATUS NULL")
             }
         }
         initFooter()

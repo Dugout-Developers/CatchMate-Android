@@ -61,7 +61,7 @@ class PostDateTimeBottomSheetFragment : BottomSheetDialogFragment() {
     private fun initCalendarView() {
         binding.cvPostDateTime.setOnDateChangeListener { _, year, month, dayOfMonth ->
             selectedDate = "$year-${String.format("%02d", month + 1)}-${String.format("%02d", dayOfMonth)}"
-            Log.d("selectedDate", selectedDate)
+            Log.i("selectedDate", selectedDate)
         }
     }
 

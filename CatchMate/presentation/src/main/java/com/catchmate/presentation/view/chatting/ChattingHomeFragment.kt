@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
@@ -114,7 +115,7 @@ class ChattingHomeFragment :
                     chattingRoomListAdapter.submitList(currentList)
                 }
                 isLastPage = response.isLast
-                Log.d("API 응답", "${response.isFirst}, ${response.isLast}, ${response.totalElements}, $currentPage")
+                Log.i("API 응답", "${response.isFirst}, ${response.isLast}, ${response.totalElements}, $currentPage")
             }
         }
         chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -131,14 +132,25 @@ class ChattingHomeFragment :
         }
         chattingHomeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Log.e("Reissue Error", it)
+                if (it == "ListLoadError") {
+                    binding.rvChattingHome.visibility = View.GONE
+                    binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+                    Glide
+                        .with(requireContext())
+                        .load(R.drawable.vec_all_list_error_icon)
+                        .into(binding.ivChattingHomeNoList)
+                    binding.tvChattingHomeNoList.setText(R.string.all_error_page_title)
+                    binding.tvChattingHomeNoListContent.visibility = View.GONE
+                } else {
+                    Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
         chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
                 chattingRoomListAdapter.removeItem(deletedItemPos)
             } else {
-                Snackbar.make(requireView(), "해당 채팅방을 나갈 수 없습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

@@ -72,7 +72,7 @@ class AddPostFragment :
             addPostViewModel.getTempBoard()
             onBackPressedAction = {
                 val isAllFieldsEmpty = checkInputFieldsEmpty()
-                Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                Log.i("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
                 if (!isTempDialogShown && !isAllFieldsEmpty) {
                     showHandleWritingBoardDialog()
                 } else {
@@ -153,7 +153,7 @@ class AddPostFragment :
                 }
                 imgbtnHeaderTextBack.setOnClickListener {
                     val isAllFieldsEmpty = checkInputFieldsEmpty()
-                    Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                    Log.i("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
                     if (!isTempDialogShown && !isAllFieldsEmpty) {
                         showHandleWritingBoardDialog()
                     } else {
@@ -211,11 +211,11 @@ class AddPostFragment :
         }
 
         addPostViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Log.e("ADD POST ERR", message.toString())
+            Log.i("ADD POST ERR", message.toString())
         }
         addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.e("boardWriteResponse", "$response")
+                Log.i("boardWriteResponse", "$response")
                 if (!isTempSave) { // 게시글 등록일 때
                     val bundle = Bundle()
                     bundle.putLong("boardId", response.boardId)
@@ -233,7 +233,7 @@ class AddPostFragment :
         }
         addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("boardEditResponse", response.boardId.toString())
+                Log.i("boardEditResponse", response.boardId.toString())
                 findNavController().popBackStack()
             }
         }
@@ -242,7 +242,7 @@ class AddPostFragment :
         }
         addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {
-                Log.d("NO TEMP BOARD", message)
+                Log.i("NO TEMP BOARD", message)
             }
         }
     }

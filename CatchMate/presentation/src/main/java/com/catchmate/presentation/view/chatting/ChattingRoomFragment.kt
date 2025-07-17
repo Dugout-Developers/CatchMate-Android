@@ -74,10 +74,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             if (response.isFirst && response.isLast && response.chatMessageInfoList.isEmpty()) {
                 Log.d("빈 채팅방 목록", "empty")
             } else {
-                Log.d("👀observer", "work \n ${response.chatMessageInfoList.size}")
+                Log.i("👀observer", "work \n ${response.chatMessageInfoList.size}")
                 if (isApiCalled) {
                     val currentList = chatListAdapter.currentList.toMutableList()
-                    Log.e("IS API CALLED", "🅾️")
+                    Log.d("IS API CALLED", "🅾️")
                     currentList.addAll(response.chatMessageInfoList)
                     chatListAdapter.submitList(currentList)
                     isApiCalled = false
@@ -111,7 +111,8 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     setFragmentResult("deleteChattingRoomResultKey", bundleOf("chatRoomId" to chatRoomId))
                     findNavController().popBackStack()
                 } else {
-                    Log.e("채팅방 오류", "나가기 실패")
+                    Log.d("채팅방 오류", "나가기 실패")
+                    showAlertSnackbar(R.string.chatting_leave_room_fail)
                 }
             }
         }
@@ -144,18 +145,18 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
             if (isSent) {
                 binding.edtChattingRoomChatBox.setText("")
             } else {
-                showConnectInstabilitySnackbar(R.string.chatting_message_send_fail)
+                showAlertSnackbar(R.string.chatting_message_send_fail)
             }
         }
         chattingRoomViewModel.isInstability.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
-                showConnectInstabilitySnackbar(R.string.chatting_connect_instability)
+                showAlertSnackbar(R.string.chatting_connect_instability)
             }
         }
     }
 
     private fun initRecyclerView(list: List<GetUserProfileResponse>) {
-        Log.e("userID", userId.toString())
+        Log.i("userID", userId.toString())
         chatListAdapter = ChatListAdapter(userId, list)
         binding.rvChattingRoomChatList.apply {
             adapter = chatListAdapter
@@ -193,7 +194,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     }
 
     private fun getChattingHistory() {
-        Log.e("api 호출", "호출 $isLoading $isLastPage")
+        Log.i("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
         chattingRoomViewModel.getChattingHistory(chatRoomId, lastChatMessageId)
@@ -393,7 +394,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         dialog.show()
     }
 
-    private fun showConnectInstabilitySnackbar(str: Int) {
+    private fun showAlertSnackbar(str: Int) {
         val snackbarView = layoutInflater.inflate(R.layout.layout_chatting_custom_snackbar, null)
         val snackbarText = snackbarView.findViewById<TextView>(R.id.tv_chatting_custom_snackbar)
         snackbarText.setText(str)
