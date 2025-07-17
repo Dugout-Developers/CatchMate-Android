@@ -1,13 +1,13 @@
 package com.catchmate.app
 
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.internal.dsl.DefaultConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 internal fun Project.configureKotlinAndroid() {
     // Plugins
@@ -15,11 +15,11 @@ internal fun Project.configureKotlinAndroid() {
 
     // Android Settings
     (androidExtension as BaseExtension).apply {
-        compileSdkVersion(34)
+        compileSdkVersion(35)
 
         defaultConfig {
-            (this as DefaultConfig).minSdk = 31
-            targetSdk = 34
+            minSdk = 31
+            targetSdk = 35
         }
 
         compileOptions {
@@ -56,15 +56,13 @@ internal fun Project.configureKotlinAndroid() {
 }
 
 internal fun Project.configureKotlin() {
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
-            val warningAsErrors: String? by project
-            allWarningsAsErrors = warningAsErrors.toBoolean()
-            freeCompilerArgs = freeCompilerArgs +
-                listOf(
-                    "-opt-in=kotlin.RequiresOptIn",
-                )
+    tasks.withType<KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+            allWarningsAsErrors.set(findProperty("warningAsErrors") == "true")
+            freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
         }
+    }
+    configure<KotlinProjectExtension> {
+        jvmToolchain(17)
     }
 }
