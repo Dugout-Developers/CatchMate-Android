@@ -81,8 +81,8 @@ class UserRepositoryImpl
                     {
                         userApi.postUserAdditionalInfo(
                             UserMapper.toPostUserAdditionalInfoRequestDTO(
-                                postUserAdditionalInfoRequest
-                            )
+                                postUserAdditionalInfoRequest,
+                            ),
                         )
                     },
                 transform = { UserMapper.toPostUserAdditionalInfoResponse(it!!) },

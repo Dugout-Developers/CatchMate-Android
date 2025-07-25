@@ -58,19 +58,20 @@ class LoginRepositoryImpl
                         when (credentialResult.exception) {
                             is GoogleLoginException.Cancelled,
                             is GetCredentialCancellationException,
-                                ->
+                            ->
                                 Result.Error(exception = GoogleLoginException.Cancelled)
 
                             is GoogleLoginException.NoCredentials,
                             is NoCredentialException,
-                                ->
+                            ->
                                 Result.Error(exception = GoogleLoginException.NoCredentials)
 
                             else ->
                                 Result.Error(
-                                    exception = GoogleLoginException.Unknown(
-                                        credentialResult.exception!!
-                                    )
+                                    exception =
+                                        GoogleLoginException.Unknown(
+                                            credentialResult.exception!!,
+                                        ),
                                 )
                         }
                     }

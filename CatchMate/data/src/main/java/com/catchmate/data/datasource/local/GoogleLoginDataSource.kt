@@ -55,14 +55,14 @@ class GoogleLoginDataSource
                 when (e) {
                     is GoogleLoginException.NoCredentials,
                     is NoCredentialException,
-                        -> {
+                    -> {
                         Log.d("GOOGLE - NOCredentials", "")
                         Result.Error(exception = e)
                     }
 
                     is GoogleLoginException.Cancelled,
                     is GetCredentialCancellationException,
-                        -> {
+                    -> {
                         Log.d("GOOGLE - Cancelled", "")
                         Result.Error(exception = e)
                     }
