@@ -76,7 +76,7 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
             }
         }
         accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
-            Log.e("LOGOUT", response.state.toString())
+            Log.i("LOGOUT", response.state.toString())
             // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
             localDataViewModel.logoutAndWithdraw()
             val navOptions =

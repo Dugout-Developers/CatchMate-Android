@@ -113,7 +113,7 @@ class ReceivedJoinFragment :
         }
         receivedJoinViewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
             if (!msg.isNullOrEmpty()) {
-                Log.e("Received Join Err", msg)
+                Log.i("Received Join Err", msg)
             }
         }
         receivedJoinViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

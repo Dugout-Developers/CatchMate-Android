@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
@@ -36,7 +37,6 @@ class ChattingHomeFragment :
     private var currentPage: Int = 0
     private var isLastPage = false
     private var isLoading = false
-    private var isApiCalled = false
     private var isFirstLoad = true
     private var deletedItemPos: Int = -1
     private lateinit var chattingRoomListAdapter: ChattingRoomListAdapter
@@ -76,7 +76,7 @@ class ChattingHomeFragment :
 
             chattingRoomListAdapter.submitList(emptyList())
             // 채팅방 목록 새로 불러오기
-            chattingHomeViewModel.getChattingRoomList(currentPage)
+            getChattingRoomList()
         }
     }
 
@@ -98,30 +98,24 @@ class ChattingHomeFragment :
             chattingHomeViewModel.connectToWebSocket(token)
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            isLoading = false
+            if (response.isFirst && response.totalElements == 0) {
                 binding.layoutChattingHomeNoList.visibility = View.VISIBLE
                 binding.rvChattingHome.visibility = View.GONE
             } else {
                 binding.rvChattingHome.visibility = View.VISIBLE
                 binding.layoutChattingHomeNoList.visibility = View.GONE
-                Log.e("EXIST CHATTING", "EXIST")
-                // 새로고침 상태이거나 currentPage가 0이면 리스트를 새로 설정
-                if (isApiCalled) {
-                    if (currentPage == 0) {
-                        // 새 리스트로 교체
-                        chattingRoomListAdapter.submitList(response.chatRoomInfoList)
-                    } else {
-                        // 페이징 시 기존 리스트에 추가
-                        val currentList = chattingRoomListAdapter.currentList.toMutableList()
-                        currentList.addAll(response.chatRoomInfoList)
-                        chattingRoomListAdapter.submitList(currentList)
-                    }
-                    isApiCalled = false
-                } else {
+                if (currentPage == 0) {
+                    // 새 리스트로 교체
                     chattingRoomListAdapter.submitList(response.chatRoomInfoList)
+                } else {
+                    // 페이징 시 기존 리스트에 추가
+                    val currentList = chattingRoomListAdapter.currentList.toMutableList()
+                    currentList.addAll(response.chatRoomInfoList)
+                    chattingRoomListAdapter.submitList(currentList)
                 }
                 isLastPage = response.isLast
-                isLoading = false
+                Log.i("API 응답", "${response.isFirst}, ${response.isLast}, ${response.totalElements}, $currentPage")
             }
         }
         chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -138,14 +132,25 @@ class ChattingHomeFragment :
         }
         chattingHomeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Log.e("Reissue Error", it)
+                if (it == "ListLoadError") {
+                    binding.rvChattingHome.visibility = View.GONE
+                    binding.layoutChattingHomeNoList.visibility = View.VISIBLE
+                    Glide
+                        .with(requireContext())
+                        .load(R.drawable.vec_all_list_error_icon)
+                        .into(binding.ivChattingHomeNoList)
+                    binding.tvChattingHomeNoList.setText(R.string.all_error_page_title)
+                    binding.tvChattingHomeNoListContent.visibility = View.GONE
+                } else {
+                    Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
         chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
                 chattingRoomListAdapter.removeItem(deletedItemPos)
             } else {
-                Snackbar.make(requireView(), "해당 채팅방을 나갈 수 없습니다. 잠시 후 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -188,7 +193,6 @@ class ChattingHomeFragment :
         if (isLoading || isLastPage) return
         isLoading = true
         chattingHomeViewModel.getChattingRoomList(currentPage)
-        isApiCalled = true
     }
 
     private fun deleteChatRoom(chatRoomId: Long) {

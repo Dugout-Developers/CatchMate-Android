@@ -40,19 +40,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private fun initViewModel() {
         loginViewModel.postLoginRequest.observe(viewLifecycleOwner) { request ->
             if (request != null) {
-                Log.d(
+                Log.i(
                     "LoginFragment",
                     "LoginRequest\n${request.email}\n${request.provider}\n" +
                         "${request.providerId}\n${request.picture}\n${request.fcmToken}",
                 )
                 loginViewModel.postAuthLogin(request)
             } else {
-                Log.e("로그인 취소", "로그인 취소")
+                Log.d("로그인 취소", "로그인 취소")
             }
         }
         loginViewModel.postLoginResponse.observe(viewLifecycleOwner) { loginResponse ->
             if (loginResponse != null) {
-                Log.d(
+                Log.i(
                     "LoginFragment",
                     "LoginResponse\nacc:${loginResponse.accessToken}\n" +
                         "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}",

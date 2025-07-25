@@ -145,10 +145,11 @@
 
             <ImageButton
                 android:id="@+id/imgbtn_signup_delete_input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/small"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
                 android:background="@null"
+                android:padding="8dp"
                 android:src="@drawable/vec_all_close_20dp"
                 android:tint="@color/grey500"
                 android:visibility="invisible"

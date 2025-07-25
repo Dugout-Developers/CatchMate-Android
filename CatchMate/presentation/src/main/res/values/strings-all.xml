@@ -37,4 +37,6 @@
     <string name="all_guest_snackbar">로그인이 필요한 서비스입니다.</string>
     <string name="notification_permission_dialog_title">서비스의 원활한 사용을 위해\n알림 수신 권한이 필요합니다</string>
     <string name="notification_permission_dialog_pov_btn">설정으로 이동</string>
+    <string name="all_error_page_title">문제가 발생했어요\n다시 한번 시도해 주세요</string>
+    <string name="all_component_error_msg">오류가 발생했어요\n다시 시도해 주세요</string>
 </resources>

@@ -132,7 +132,7 @@ class EditProfileFragment :
             }
         }
         editProfileViewModel.patchUserProfileResponse.observe(viewLifecycleOwner) { response ->
-            Log.e("PROFILE PATCH STATE", response.state.toString())
+            Log.i("PROFILE PATCH STATE", response.state.toString())
             if (response.state) {
                 findNavController().popBackStack()
             }

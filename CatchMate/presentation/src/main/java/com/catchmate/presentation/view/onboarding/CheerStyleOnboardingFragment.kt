@@ -33,7 +33,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userInfo = getUserInfo()
-        Log.e("userInfo", "${userInfo.nickName},${userInfo.gender},${userInfo.birthDate},${userInfo.favoriteClubId}")
+        Log.i("userInfo", "${userInfo.nickName},${userInfo.gender},${userInfo.birthDate},${userInfo.favoriteClubId}")
     }
 
     override fun onViewCreated(
@@ -132,7 +132,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
     private fun initViewModel() {
         signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
+                Log.i("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
                 localDataViewModel.saveAccessToken(response.accessToken)
                 localDataViewModel.saveRefreshToken(response.refreshToken)
                 localDataViewModel.saveUserId(response.userId)
@@ -158,10 +158,10 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
             }
         }
         signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Log.e("SIGN UP ERR", message.toString())
+            Log.i("SIGN UP ERR", message.toString())
         }
         signUpViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { response ->
-            Log.d("알림 설정 완료", "${response.alarmType} - ${response.isEnabled}")
+            Log.i("알림 설정 완료", "${response.alarmType} - ${response.isEnabled}")
         }
     }
 }

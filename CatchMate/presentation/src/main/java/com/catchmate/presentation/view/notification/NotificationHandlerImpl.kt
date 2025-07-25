@@ -41,7 +41,7 @@ class NotificationHandlerImpl
                         putBoolean("isPendingIntent", true)
                     }
                 }
-            Log.e("args", "${args.getLong("boardId")} ${args.getString("acceptStatus")} ${args.getLong("chatRoomId")}")
+            Log.i("args", "${args.getLong("boardId")} ${args.getString("acceptStatus")} ${args.getLong("chatRoomId")}")
 
             val destinationId =
                 when {

@@ -64,7 +64,6 @@ class AddPostFragment :
         addPostViewModel.setBoardInfo(getBoardInfo())
         initFooter()
         initAdditionalInfoEdt()
-        initBottomSheets()
         initAgeChip()
         initTitleTextView()
         initKeyboardAction()
@@ -73,7 +72,7 @@ class AddPostFragment :
             addPostViewModel.getTempBoard()
             onBackPressedAction = {
                 val isAllFieldsEmpty = checkInputFieldsEmpty()
-                Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                Log.i("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
                 if (!isTempDialogShown && !isAllFieldsEmpty) {
                     showHandleWritingBoardDialog()
                 } else {
@@ -154,7 +153,7 @@ class AddPostFragment :
                 }
                 imgbtnHeaderTextBack.setOnClickListener {
                     val isAllFieldsEmpty = checkInputFieldsEmpty()
-                    Log.e("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
+                    Log.i("STATE", "$isAllFieldsEmpty - $isTempDialogShown")
                     if (!isTempDialogShown && !isAllFieldsEmpty) {
                         showHandleWritingBoardDialog()
                     } else {
@@ -171,6 +170,7 @@ class AddPostFragment :
                 setBoardData(it)
             }
             initHeader()
+            initBottomSheets()
         }
         addPostViewModel.homeTeamName.observe(viewLifecycleOwner) { homeTeamName ->
             if (homeTeamName != null) {
@@ -211,11 +211,11 @@ class AddPostFragment :
         }
 
         addPostViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Log.e("ADD POST ERR", message.toString())
+            Log.i("ADD POST ERR", message.toString())
         }
         addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.e("boardWriteResponse", "$response")
+                Log.i("boardWriteResponse", "$response")
                 if (!isTempSave) { // 게시글 등록일 때
                     val bundle = Bundle()
                     bundle.putLong("boardId", response.boardId)
@@ -233,7 +233,7 @@ class AddPostFragment :
         }
         addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.d("boardEditResponse", response.boardId.toString())
+                Log.i("boardEditResponse", response.boardId.toString())
                 findNavController().popBackStack()
             }
         }
@@ -242,7 +242,7 @@ class AddPostFragment :
         }
         addPostViewModel.noTempBoardMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {
-                Log.d("NO TEMP BOARD", message)
+                Log.i("NO TEMP BOARD", message)
             }
         }
     }
@@ -482,7 +482,17 @@ class AddPostFragment :
     private fun initBottomSheets() {
         binding.apply {
             tvAddPostPeopleCount.setOnClickListener {
-                val peopleCountBottomSheet = PostHeadCountBottomSheetFragment()
+                val peopleCountBottomSheet =
+                    if (isEditMode) { // 수정 시 currentPerson 값 전달해서 현재 참여한 인원보다 적은 수 선택할 수 없게 지정
+                        PostHeadCountBottomSheetFragment(
+                            addPostViewModel.boardInfo.value?.maxPerson,
+                            addPostViewModel.boardInfo.value?.currentPerson,
+                        )
+                    } else { // 임시저장이나 그냥 작성하는 경우
+                        val currentPersonStr = binding.tvAddPostPeopleCount.text.toString()
+                        val currentPerson = if (currentPersonStr.isEmpty()) null else currentPersonStr.toInt()
+                        PostHeadCountBottomSheetFragment(currentPerson)
+                    }
                 peopleCountBottomSheet.setOnPeopleCountSelectedListener(this@AddPostFragment)
                 peopleCountBottomSheet.show(requireActivity().supportFragmentManager, peopleCountBottomSheet.tag)
             }

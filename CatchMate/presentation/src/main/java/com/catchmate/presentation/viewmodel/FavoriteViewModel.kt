@@ -62,7 +62,7 @@ class FavoriteViewModel
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
                         } else {
-                            _errorMessage.value = exception.message
+                            _errorMessage.value = "ListLoadError"
                         }
                     }
             }

@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         requestStoragePermission()
 
-        Log.e("intent", "${intent.data} / ${intent.extras}")
+        Log.i("intent", "${intent.data} / ${intent.extras}")
 
         initViewModel()
         if (intent.extras == null) {
@@ -100,14 +100,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         mainViewModel.isGuestLogin.observe(this) { isGuest ->
-            Log.e("메인a", "guest mode $isGuest")
+            Log.i("메인a", "guest mode $isGuest")
         }
         localDataViewModel.accessToken.observe(this) { accessToken ->
             if (accessToken.isNullOrEmpty()) {
-                Log.e("splash", "accesstoken null or empty")
+                Log.d("splash", "accesstoken null or empty")
                 binding.fragmentcontainerviewMain.findNavController().navigate(R.id.loginFragment)
             } else {
-                Log.e("splash", "accesstoken not null or empty")
+                Log.d("splash", "accesstoken not null or empty")
                 binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
                 binding.bottomnavigationviewMain.selectedItemId = R.id.menuitem_home
             }
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestStoragePermission() {
-        Log.e("권한", "requestStoragePermission 호출됨")
+        Log.d("권한", "requestStoragePermission 호출됨")
         val storagePermission =
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -262,9 +262,9 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_PERMISSION_CODE_STORAGE -> {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("저장소 권한", "부여됨")
+                    Log.d("저장소 권한", "부여됨")
                 } else {
-                    Log.e("저장소 권한", "거부됨")
+                    Log.d("저장소 권한", "거부됨")
                 }
             }
         }

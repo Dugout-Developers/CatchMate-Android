@@ -26,7 +26,7 @@
 
     <string name="mypage_setting_user_info_delete_account"><u>탈퇴하기</u></string>
     <string name="mypage_setting_user_logout">로그아웃</string>
-    <string name="mypage_setting_delete_account_dialog_title">탈퇴하시겠습니까?</string>
+    <string name="mypage_setting_delete_account_dialog_title">아직 함께할 경기가 많이 남았어요\n정말 떠나시겠어요?</string>
     <string name="mypage_setting_delete_account_dialog_pov_btn">탈퇴</string>
 
     <string name="mypage_setting_notification_setting">알림 설정</string>
