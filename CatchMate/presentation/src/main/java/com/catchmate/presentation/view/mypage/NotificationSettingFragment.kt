@@ -48,11 +48,11 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
             if (mainActivity.checkSelfPermission(permission)
                 == PackageManager.PERMISSION_GRANTED
             ) {
-                Log.e("알림 권한 상태", "허용됨")
+                Log.d("알림 권한 상태", "허용됨")
                 initViewModel()
                 initView()
             } else {
-                Log.e("알림 권한 상태", "거부됨")
+                Log.d("알림 권한 상태", "거부됨")
                 mainActivity.showPermissionRationaleDialog(
                     onCancelled = {
                         findNavController().popBackStack()
@@ -145,7 +145,7 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
     private fun initViewModel() {
         notificationSettingViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { reponse ->
             reponse?.let {
-                Log.e("설정완료", "${reponse.userId} / ${reponse.alarmType} / ${reponse.isEnabled}")
+                Log.i("설정완료", "${reponse.userId} / ${reponse.alarmType} / ${reponse.isEnabled}")
             }
         }
         notificationSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

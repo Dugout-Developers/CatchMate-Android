@@ -25,6 +25,7 @@ import com.catchmate.presentation.util.ImageUtils.convertBitmapToMultipart
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingSettingViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,7 +52,7 @@ class ChattingSettingFragment :
         loginUserId = getLoginUserId()
         writerId = getWriterId()
         chatRoomId = getChatRoomId()
-        Log.e("값 확인", "$chattingRoomImage \n $chattingCrewList \n $loginUserId \n $writerId \n $chatRoomId ")
+        Log.i("값 확인", "$chattingRoomImage \n $chattingCrewList \n $loginUserId \n $writerId \n $chatRoomId ")
     }
 
     override fun onViewCreated(
@@ -95,9 +96,9 @@ class ChattingSettingFragment :
     private fun initViewModel() {
         chattingSettingViewModel.kickOutChattingCrewResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {
-                Log.d("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
+                Log.i("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
                 chattingCrewList = chattingCrewList.filter { it.userId != deletedCrewId }.toMutableList()
-                Log.e("crew list", "$chattingCrewList")
+                Log.i("crew list", "$chattingCrewList")
                 chattingCrewAdapter.submitList(chattingCrewList)
             }
         }
@@ -121,7 +122,7 @@ class ChattingSettingFragment :
         }
         chattingSettingViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Log.e("Reissue Error", it)
+                Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

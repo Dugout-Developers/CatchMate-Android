@@ -128,13 +128,13 @@ class ChattingRoomViewModel
                             Log.d("Web Socket💤", "연결 해제")
                         }
                         LifecycleEvent.Type.ERROR -> {
-                            Log.e("Web Socket", "${event.exception.message}")
+                            Log.i("Web Socket", "${event.exception.message}")
                             _isInstability.postValue(true)
                         }
                         else -> {}
                     }
                 }, { error ->
-                    Log.e("Web Socket", "${error.message}")
+                    Log.i("Web Socket", "${error.message}")
                     _isInstability.postValue(true)
                 })
             }
@@ -147,7 +147,7 @@ class ChattingRoomViewModel
             // 채팅방 구독
             topic =
                 stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe({ message ->
-                    Log.d("✅ Msg", message.payload)
+                    Log.i("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
                     val messageType = jsonObject.getString("messageType")
                     val chatMessageInfo: ChatMessageInfo =
@@ -186,7 +186,7 @@ class ChattingRoomViewModel
                     addChatMessage(chatMessageInfo)
                     sendIsMsgRead(chatRoomId, userId)
                 }, { error ->
-                    Log.e("ws opened", "chatroom subscribe error / ${error.printStackTrace()}", error)
+                    Log.i("ws opened", "chatroom subscribe error / ${error.printStackTrace()}", error)
                 })
         }
 
@@ -215,7 +215,7 @@ class ChattingRoomViewModel
                     Log.d("Web Socket📬", "메시지 전달")
                     _isMessageSent.value = true
                 }, { error ->
-                    Log.e("Web Socket✉️❌", "메시지 전송 실패", error)
+                    Log.d("Web Socket✉️❌", "메시지 전송 실패", error)
                     _isMessageSent.value = false
                 })
             }

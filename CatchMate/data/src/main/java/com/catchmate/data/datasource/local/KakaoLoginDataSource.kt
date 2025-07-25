@@ -42,11 +42,11 @@ class KakaoLoginDataSource
 
                         userApiClient.me { user, error ->
                             if (error != null) {
-                                Log.e("KakaoInfoFail", "사용자 정보 요청 실패")
+                                Log.d("KakaoInfoFail", "사용자 정보 요청 실패")
                                 error.printStackTrace()
                                 continuation.resumeWithException(error)
                             } else if (user != null) {
-                                Log.d("KakaoInfoSuccess", "providerId : ${user.id}")
+                                Log.i("KakaoInfoSuccess", "providerId : ${user.id}")
                                 user.let {
                                     val postLoginRequestDTO =
                                         PostLoginRequestDTO(
@@ -77,7 +77,7 @@ class KakaoLoginDataSource
 
         private fun loginFail(throwable: Throwable) {
             val loginType = if (isKakaoTalkLoginAvailable) KAKAO_TALK else KAKAO_ACCOUNT
-            Log.e("KakaoLoginFail", "${loginType}으로 로그인 실패")
+            Log.i("KakaoLoginFail", "${loginType}으로 로그인 실패")
             throwable.printStackTrace()
         }
 

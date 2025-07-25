@@ -42,7 +42,7 @@ class ReceivedEnrollScrollDialogFragment :
         super.onCreate(savedInstanceState)
         arguments?.let {
             boardId = it.getLong(ARG_ITEM)
-            Log.e(ARG_ITEM, boardId.toString())
+            Log.i(ARG_ITEM, boardId.toString())
         }
     }
 
@@ -93,7 +93,7 @@ class ReceivedEnrollScrollDialogFragment :
         receivedEnrollScrollDialogViewModel.patchEnrollReject(enrollId)
         receivedEnrollScrollDialogViewModel.patchEnrollReject.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.e("STATUS", response.acceptStatus)
+                Log.i("STATUS", response.acceptStatus)
                 dismiss()
             }
         }
@@ -103,7 +103,7 @@ class ReceivedEnrollScrollDialogFragment :
         receivedEnrollScrollDialogViewModel.patchEnrollAccept(enrollId)
         receivedEnrollScrollDialogViewModel.patchEnrollAccept.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.e("STATUS", response.acceptStatus)
+                Log.i("STATUS", response.acceptStatus)
                 dismiss()
             }
         }

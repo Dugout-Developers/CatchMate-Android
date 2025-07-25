@@ -66,7 +66,7 @@ class HomeDateFilterBottomSheetFragment(
     private fun initCalendarView() {
         binding.cvHomeDateFilter.setOnDateChangeListener { view, year, month, dayOfMonth ->
             selectedDate = "$year-${String.format("%02d", month + 1)}-${String.format("%02d", dayOfMonth)}"
-            Log.e("DATE", selectedDate!!)
+            Log.i("DATE", selectedDate!!)
         }
     }
 

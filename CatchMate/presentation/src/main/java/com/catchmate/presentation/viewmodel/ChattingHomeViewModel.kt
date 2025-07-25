@@ -1,6 +1,8 @@
 package com.catchmate.presentation.viewmodel
 
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +13,7 @@ import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.usecase.chatting.GetChattingRoomListUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.presentation.BuildConfig
+import com.catchmate.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
@@ -85,7 +88,7 @@ class ChattingHomeViewModel
                             Log.d("Web Socket💤", "연결 해제")
                         }
                         LifecycleEvent.Type.ERROR -> {
-                            Log.e("Web Socket", "${event.exception}")
+                            Log.i("Web Socket", "${event.exception}")
                         }
                         else -> {}
                     }
@@ -96,7 +99,7 @@ class ChattingHomeViewModel
         private fun handleWebSocketOpened() {
             topic =
                 stompClient?.topic("/topic/chatList")!!.subscribe { msg ->
-                    Log.d("✅ New Msg", msg.payload)
+                    Log.i("✅ New Msg", msg.payload)
                     val jsonObject = JSONObject(msg.payload)
                     val chatRoomId = jsonObject.getString("chatRoomId").toLong()
                     val content = jsonObject.getString("content")
@@ -142,7 +145,7 @@ class ChattingHomeViewModel
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
                         } else {
-                            _errorMessage.value = exception.message
+                            _errorMessage.value = "ListLoadError"
                         }
                     }
             }
@@ -158,7 +161,8 @@ class ChattingHomeViewModel
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
                         } else {
-                            _errorMessage.value = exception.message
+                            Log.d("ChattingHomeVM", exception.message.toString())
+                            _errorMessage.value = "LeaveChattingRoomError"
                         }
                     }
             }

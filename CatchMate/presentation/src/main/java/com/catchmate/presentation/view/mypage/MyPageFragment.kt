@@ -167,7 +167,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 findNavController().navigate(R.id.action_myPageFragment_to_announcementFragment)
             }
             layoutGuestMyPage.setOnClickListener {
-                Log.e("눌림", "눌렸어")
+                Log.d("눌림", "눌렸어")
                 val navOptions =
                     NavOptions
                         .Builder()

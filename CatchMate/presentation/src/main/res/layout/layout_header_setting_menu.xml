@@ -19,11 +19,11 @@
 
     <ImageButton
         android:id="@+id/imgbtn_setting_header_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginRight="@dimen/tiny"
         android:background="@null"
-        android:padding="10dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

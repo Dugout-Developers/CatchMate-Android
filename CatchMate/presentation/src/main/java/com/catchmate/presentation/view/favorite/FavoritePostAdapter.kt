@@ -65,13 +65,13 @@ class FavoritePostAdapter(
         init {
             tbItemPostFavorite.setOnCheckedChangeListener { _, _ ->
                 val pos = absoluteAdapterPosition
-                Log.e("Current Pos", pos.toString())
+                Log.i("Current Pos", pos.toString())
                 onPostItemToggleClickListener.onPostItemToggleClicked(likedList[pos].boardId, pos)
             }
 
             cvItemLayout.setOnClickListener {
                 val pos = absoluteAdapterPosition
-                Log.e("Current Pos", pos.toString())
+                Log.i("Current Pos", pos.toString())
                 onPostItemClickListener.onPostItemClicked(likedList[pos].boardId)
             }
         }

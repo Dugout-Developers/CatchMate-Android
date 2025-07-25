@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.login.LoginFragment" >
+    tools:context=".view.login.LoginFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_login_left"
@@ -26,9 +26,12 @@
         android:id="@+id/iv_login_logo"
         android:layout_width="57dp"
         android:layout_height="71dp"
-        android:layout_marginTop="166dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginBottom="125dp"
         android:src="@drawable/vec_colored_logo"
+        app:layout_constraintBottom_toTopOf="@+id/iv_login_tip"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,9 +39,11 @@
         android:id="@+id/iv_login_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="145dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/vec_login_tip"
+        app:layout_constraintBottom_toTopOf="@+id/cv_login_kakao"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/iv_login_logo" />
 
@@ -46,10 +51,11 @@
         android:id="@+id/cv_login_kakao"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="@dimen/tiny"
+        android:layout_marginBottom="24dp"
         app:cardBackgroundColor="#FDDC3F"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_login_divider_text"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/iv_login_tip">
@@ -93,11 +99,11 @@
         android:id="@+id/tv_login_divider_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base"
         android:gravity="center"
         android:text="@string/login_divider_text"
         android:textAppearance="@style/Typography.Body03.Medium"
         android:textColor="@color/grey500"
+        app:layout_constraintBottom_toTopOf="@+id/divider_login_center"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/cv_login_kakao" />
@@ -116,9 +122,10 @@
 
     <ImageView
         android:id="@+id/iv_login_naver"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginRight="@dimen/base"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginEnd="19dp"
+        android:padding="5dp"
         android:src="@drawable/shape_all_login_logo_circle"
         app:layout_constraintBottom_toBottomOf="@+id/divider_login_center"
         app:layout_constraintEnd_toStartOf="@+id/divider_login_center"
@@ -140,15 +147,18 @@
         android:layout_height="16dp"
         android:layout_marginTop="@dimen/medium"
         android:background="@color/grey100"
+        app:layout_constraintBottom_toTopOf="@+id/tv_login_guest"
         app:layout_constraintEnd_toEndOf="@+id/tv_login_divider_text"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@+id/tv_login_divider_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_login_divider_text" />
 
     <ImageView
         android:id="@+id/iv_login_google"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="@dimen/base"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="19dp"
+        android:padding="5dp"
         android:src="@drawable/shape_all_login_logo_circle"
         app:layout_constraintBottom_toBottomOf="@+id/divider_login_center"
         app:layout_constraintStart_toEndOf="@+id/divider_login_center"
@@ -168,12 +178,15 @@
         android:id="@+id/tv_login_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="78dp"
+        android:layout_marginTop="133dp"
+        android:layout_marginBottom="68dp"
+        android:padding="10dp"
         android:text="@string/login_sneak_peek"
         android:textAppearance="@style/Typography.Body03.Medium"
         android:textColor="@color/grey500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_login_right"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@+id/guideline_login_left"
         app:layout_constraintTop_toBottomOf="@+id/divider_login_center"
         app:layout_constraintVertical_bias="1.0" />

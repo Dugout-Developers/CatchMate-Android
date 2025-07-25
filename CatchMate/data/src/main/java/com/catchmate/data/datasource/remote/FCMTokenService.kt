@@ -25,13 +25,13 @@ class FCMTokenService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("newToken", "$token")
+        Log.i("newToken", "$token")
     }
 
     override fun handleIntent(intent: Intent?) {
         body = intent?.extras?.getString("gcm.notification.body") ?: ""
         title = intent?.extras?.getString("gcm.notification.title") ?: ""
-        Log.e("body title", "$body - $title")
+        Log.i("body title", "$body - $title")
         val new =
             intent?.apply {
                 val temp =
@@ -46,13 +46,13 @@ class FCMTokenService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.e("MESSAGE RECEIVED", "+++++++")
+        Log.d("MESSAGE RECEIVED", "+++++++")
 
         val data = message.data
 
         // 채팅 알림 - data = {chatRoomId}
         // 직관 신청 알림 - data = {boardId, acceptStatus}
-        Log.e("MSG", "$data / $title / $body")
+        Log.i("MSG", "$data / $title / $body")
         if (title.isNotEmpty() && body.isNotEmpty()) {
             showNotification(data, title, body)
         }

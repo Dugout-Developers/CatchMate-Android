@@ -38,7 +38,7 @@ class NotificationAdapter(
     }
 
     fun removeItem(pos: Int) {
-        Log.d("알림 어댑터", "remove Item : $pos")
+        Log.i("알림 어댑터", "remove Item : $pos")
         notificationList.removeAt(pos)
         notifyItemRemoved(pos)
         if (notificationList.size == 0) itemAllRemovedListener.onListItemAllRemoved()

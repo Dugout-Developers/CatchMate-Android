@@ -1,6 +1,6 @@
 [versions]
 # Application
-android-gradle-plugin = "8.1.4"
+android-gradle-plugin = "8.10.1"
 android-desugar-jdk-libs = "1.2.2"
 
 # AndroidX
@@ -17,7 +17,7 @@ androidx-recyclerview = "1.3.2"
 androidx-core-splashscreen = "1.0.1"
 
 # Kotlin
-kotlin = "1.8.20"
+kotlin = "2.0.21"
 
 # Test
 junit = "4.13.2"
@@ -85,7 +85,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 kotest-runner = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
