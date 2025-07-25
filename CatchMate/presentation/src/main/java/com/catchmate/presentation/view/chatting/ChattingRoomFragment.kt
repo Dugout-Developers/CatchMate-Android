@@ -346,7 +346,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         val bundle = Bundle()
                         bundle.putLong(
                             "boardId",
-                            chattingRoomViewModel.chattingRoomInfo.value?.boardInfo?.boardId!!,
+                            chattingRoomViewModel.chattingRoomInfo.value
+                                ?.boardInfo
+                                ?.boardId!!,
                         )
                         findNavController().navigate(R.id.action_chattingRoomFragment_to_readPostFragment, bundle)
                         sideSheetDialog.dismiss()

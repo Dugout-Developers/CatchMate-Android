@@ -54,15 +54,19 @@ class GoogleLoginDataSource
             } catch (e: Exception) {
                 when (e) {
                     is GoogleLoginException.NoCredentials,
-                    is NoCredentialException, -> {
+                    is NoCredentialException,
+                        -> {
                         Log.d("GOOGLE - NOCredentials", "")
                         Result.Error(exception = e)
                     }
+
                     is GoogleLoginException.Cancelled,
-                    is GetCredentialCancellationException, -> {
+                    is GetCredentialCancellationException,
+                        -> {
                         Log.d("GOOGLE - Cancelled", "")
                         Result.Error(exception = e)
                     }
+
                     else -> {
                         Log.d("GOOGLE - ELSE", e.printStackTrace().toString())
                         Result.Error(exception = e)

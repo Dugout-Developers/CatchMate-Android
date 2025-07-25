@@ -77,7 +77,14 @@ class UserRepositoryImpl
         ): Result<PostUserAdditionalInfoResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.postUserAdditionalInfo(UserMapper.toPostUserAdditionalInfoRequestDTO(postUserAdditionalInfoRequest)) },
+                apiFunction =
+                    {
+                        userApi.postUserAdditionalInfo(
+                            UserMapper.toPostUserAdditionalInfoRequestDTO(
+                                postUserAdditionalInfoRequest
+                            )
+                        )
+                    },
                 transform = { UserMapper.toPostUserAdditionalInfoResponse(it!!) },
             )
 

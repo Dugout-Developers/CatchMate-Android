@@ -19,7 +19,7 @@ class PostHeadCountBottomSheetFragment(
     val binding get() = _binding!!
 
     private var peopleCountSelectedListener: OnPeopleCountSelectedListener? = null
-    private var selectedValueIdx = if (maxPerson == null) 0  else maxPerson - 2
+    private var selectedValueIdx = if (maxPerson == null) 0 else maxPerson - 2
 
     private val headCountArray =
         arrayOf(
