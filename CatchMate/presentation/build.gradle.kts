@@ -18,6 +18,16 @@ android {
         buildConfigField("String", "SERVER_SOCKET_URL", serverSocketUrl)
     }
 
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules-release.pro"
+            )
+        }
+    }
+
     buildFeatures {
         dataBinding = true
         viewBinding = true
