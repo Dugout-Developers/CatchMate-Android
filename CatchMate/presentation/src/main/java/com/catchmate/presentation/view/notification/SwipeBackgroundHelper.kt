@@ -44,15 +44,10 @@ class SwipeBackgroundHelper {
             val width = viewItem.width.toFloat()
             return when {
                 abs(dX) < width / 6 -> ContextCompat.getColor(context, R.color.brand100)
-
                 abs(dX) < width / 3 -> ContextCompat.getColor(context, R.color.brand200)
-
                 abs(dX) < width / 2 -> ContextCompat.getColor(context, R.color.brand300)
-
                 abs(dX) < width * 2 / 3 -> ContextCompat.getColor(context, R.color.brand400)
-
                 abs(dX) < width * 5 / 6 -> ContextCompat.getColor(context, R.color.brand500)
-
                 else -> ContextCompat.getColor(context, color)
             }
             // 순서대로 1, 2, 3, 4, 5, 6 단계
