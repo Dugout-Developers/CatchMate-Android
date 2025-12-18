@@ -135,6 +135,7 @@ class MyPostFragment :
                             showUserBlockDialog()
                             true
                         }
+
                         R.id.menuItem_my_post_report -> { // 신고
                             val bundle =
                                 Bundle().apply {
@@ -144,7 +145,10 @@ class MyPostFragment :
                             findNavController().navigate(R.id.action_myPostFragment_to_reportFragment, bundle)
                             true
                         }
-                        else -> false
+
+                        else -> {
+                            false
+                        }
                     }
                 }
                 popup.show()

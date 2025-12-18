@@ -80,6 +80,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         loginViewModel.initPostLoginRequest()
                         loginViewModel.initPostLoginResponse()
                     }
+
                     false -> {
                         localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
                         localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)

@@ -193,7 +193,9 @@ class ReadPostViewModel
                         when (exception) {
                             is ReissueFailureException -> {
                                 _navigateToLogin.value = true
-                            } else -> {
+                            }
+
+                            else -> {
                                 _errorMessage.value = exception.message
                             }
                         }
@@ -211,7 +213,9 @@ class ReadPostViewModel
                         when (exception) {
                             is ReissueFailureException -> {
                                 _navigateToLogin.value = true
-                            } else -> {
+                            }
+
+                            else -> {
                                 _errorMessage.value = exception.message
                             }
                         }
@@ -229,7 +233,9 @@ class ReadPostViewModel
                         when (exception) {
                             is ReissueFailureException -> {
                                 _navigateToLogin.value = true
-                            } else -> {
+                            }
+
+                            else -> {
                                 _errorMessage.value = exception.message
                             }
                         }

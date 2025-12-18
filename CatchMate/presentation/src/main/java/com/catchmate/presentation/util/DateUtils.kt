@@ -126,10 +126,22 @@ object DateUtils {
         val days = duration.toDays()
 
         return when {
-            minutes < 1 -> "방금"
-            minutes < 60 -> "${minutes}분 전"
-            hours < 24 -> "${hours}시간 전"
-            days < 7 -> "${days}일 전"
+            minutes < 1 -> {
+                "방금"
+            }
+
+            minutes < 60 -> {
+                "${minutes}분 전"
+            }
+
+            hours < 24 -> {
+                "${hours}시간 전"
+            }
+
+            days < 7 -> {
+                "${days}일 전"
+            }
+
             else -> {
                 val dateTime = LocalDateTime.ofInstant(parsedTime, ZoneId.of("Asia/Seoul"))
                 val formatter = DateTimeFormatter.ofPattern("M월 d일")

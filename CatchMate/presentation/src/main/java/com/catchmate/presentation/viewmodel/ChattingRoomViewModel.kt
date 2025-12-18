@@ -124,13 +124,16 @@ class ChattingRoomViewModel
                             Log.d("Web Socket✅", "연결 성공")
                             handleWebSocketOpened(chatRoomId, userId)
                         }
+
                         LifecycleEvent.Type.CLOSED -> {
                             Log.d("Web Socket💤", "연결 해제")
                         }
+
                         LifecycleEvent.Type.ERROR -> {
                             Log.i("Web Socket", "${event.exception.message}")
                             _isInstability.postValue(true)
                         }
+
                         else -> {}
                     }
                 }, { error ->
@@ -164,6 +167,7 @@ class ChattingRoomViewModel
                                     messageType = messageType,
                                 )
                             }
+
                             ChatMessageType.TALK.name -> {
                                 val chatMessageId = jsonObject.getString("chatMessageId")
                                 val senderId = jsonObject.getString("senderId").toLong()
@@ -179,6 +183,7 @@ class ChattingRoomViewModel
                                     messageType = messageType,
                                 )
                             }
+
                             else -> { // 채팅방 나가고 들어올때 메시지 처리하기
                                 ChatMessageInfo(chatMessageId = "", roomId = -1L, content = "", senderId = -1L, messageType = "")
                             }

@@ -46,6 +46,7 @@ class LoginRepositoryImpl
                                     toGooglePostLoginRequest(loginDTO),
                                 )
                             }
+
                             is Result.Error -> {
                                 when (signInResult.exception) {
                                     is GoogleLoginException.TokenParsing -> Result.Error(exception = GoogleLoginException.TokenParsing)
@@ -54,25 +55,29 @@ class LoginRepositoryImpl
                             }
                         }
                     }
+
                     is Result.Error -> {
                         when (credentialResult.exception) {
                             is GoogleLoginException.Cancelled,
                             is GetCredentialCancellationException,
-                            ->
+                            -> {
                                 Result.Error(exception = GoogleLoginException.Cancelled)
+                            }
 
                             is GoogleLoginException.NoCredentials,
                             is NoCredentialException,
-                            ->
+                            -> {
                                 Result.Error(exception = GoogleLoginException.NoCredentials)
+                            }
 
-                            else ->
+                            else -> {
                                 Result.Error(
                                     exception =
                                         GoogleLoginException.Unknown(
                                             credentialResult.exception!!,
                                         ),
                                 )
+                            }
                         }
                     }
                 }

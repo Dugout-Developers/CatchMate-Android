@@ -59,10 +59,12 @@ class PostPlaceBottomSheetFragment(
                 binding.tvPostPlaceFirst.text = getString(R.string.post_place_lotte_first)
                 binding.tvPostPlaceSecond.text = getString(R.string.post_place_lotte_second)
             }
+
             "이글스" -> {
                 binding.tvPostPlaceFirst.text = getString(R.string.post_place_hanwha_first)
                 binding.tvPostPlaceSecond.text = getString(R.string.post_place_hanwha_second)
             }
+
             "라이온즈" -> {
                 binding.tvPostPlaceFirst.text = getString(R.string.post_place_samsung_first)
                 binding.tvPostPlaceSecond.text = getString(R.string.post_place_samsung_second)
