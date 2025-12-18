@@ -95,7 +95,7 @@ class ChatListAdapter(
         viewType: Int,
     ): RecyclerView.ViewHolder =
         when (viewType) {
-            MY_CHAT ->
+            MY_CHAT -> {
                 SendChatViewHolder(
                     ItemSendChatBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -103,8 +103,9 @@ class ChatListAdapter(
                         false,
                     ),
                 )
+            }
 
-            OTHER_CHAT ->
+            OTHER_CHAT -> {
                 ReceivedChatViewHolder(
                     ItemReceivedChatBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -112,8 +113,9 @@ class ChatListAdapter(
                         false,
                     ),
                 )
+            }
 
-            DATE ->
+            DATE -> {
                 ChattingDateViewHolder(
                     ViewChattingDateBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -121,8 +123,9 @@ class ChatListAdapter(
                         false,
                     ),
                 )
+            }
 
-            else ->
+            else -> {
                 ChattingParticipantViewHolder(
                     ViewChattingParticipantAlertBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -130,6 +133,7 @@ class ChatListAdapter(
                         false,
                     ),
                 )
+            }
         }
 
     override fun onBindViewHolder(
@@ -153,9 +157,18 @@ class ChatListAdapter(
                     OTHER_CHAT
                 }
             }
-            ChatMessageType.DATE.name -> DATE
-            ChatMessageType.ENTER.name -> ENTER
-            else -> LEAVE
+
+            ChatMessageType.DATE.name -> {
+                DATE
+            }
+
+            ChatMessageType.ENTER.name -> {
+                ENTER
+            }
+
+            else -> {
+                LEAVE
+            }
         }
 
     companion object {

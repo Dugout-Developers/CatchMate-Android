@@ -84,12 +84,15 @@ class ChattingHomeViewModel
                             Log.d("Web Socket✅", "연결 성공")
                             handleWebSocketOpened()
                         }
+
                         LifecycleEvent.Type.CLOSED -> {
                             Log.d("Web Socket💤", "연결 해제")
                         }
+
                         LifecycleEvent.Type.ERROR -> {
                             Log.i("Web Socket", "${event.exception}")
                         }
+
                         else -> {}
                     }
                 }

@@ -109,6 +109,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                             Log.d("LIFT UP", "")
                             true
                         }
+
                         R.id.menuitem_post_update -> {
                             val bundle =
                                 Bundle().apply {
@@ -119,20 +120,24 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                             Log.d("UPDATE", "")
                             true
                         }
+
                         R.id.menuitem_post_delete -> {
                             showBoardDeleteDialog()
                             Log.d("DELETE", "")
                             true
                         }
+
                         R.id.menuitem_post_liked -> {
                             Log.d("LIKED", "")
                             binding.layoutReadPostFooter.toggleLikedFooterLiked.isChecked = true
                             true
                         }
+
                         R.id.menuitem_post_share -> {
                             Log.d("SHARE", "")
                             true
                         }
+
                         R.id.menuitem_post_report -> {
                             Log.d("REPORT", "")
                             val userInfo =
@@ -148,7 +153,10 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                             findNavController().navigate(R.id.action_readPostFragment_to_reportFragment, bundle)
                             true
                         }
-                        else -> false
+
+                        else -> {
+                            false
+                        }
                     }
                 }
                 popup.show()
@@ -201,15 +209,18 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                             showEnrollDialog()
                         }
                     }
+
                     EnrollState.APPLIED -> {
                         // 신청 확인 버튼 클릭 시 내가 보낸 신청 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
                         readPostViewModel.getRequestedEnroll(boardId)
                     }
+
                     EnrollState.VIEW_CHAT -> {
                         val bundle = Bundle()
                         bundle.putLong("chatRoomId", readPostViewModel.getBoardResponse.value?.chatRoomId!!)
                         findNavController().navigate(R.id.action_readPostFragment_to_chattingRoomFragment, bundle)
                     }
+
                     null -> {}
                 }
             }
@@ -252,11 +263,13 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         setBackgroundResource(R.drawable.shape_all_submit_button)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.grey0))
                     }
+
                     EnrollState.APPLIED -> {
                         setText(R.string.post_check_register)
                         setBackgroundResource(R.drawable.shape_all_team_toggle_selected_bg)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.brand500))
                     }
+
                     EnrollState.VIEW_CHAT -> {
                         setText(R.string.post_writer)
                         setBackgroundResource(R.drawable.shape_all_submit_button)

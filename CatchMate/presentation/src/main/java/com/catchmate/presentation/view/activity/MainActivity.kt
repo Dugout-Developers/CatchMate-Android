@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         updateBottomNavigationSelection(destination.id)
                     }
+
                     else -> {
                         bottomnavigationviewMain.visibility = View.GONE
                     }
@@ -171,6 +172,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.menuitem_home -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.homeFragment)
                     }
+
                     R.id.menuitem_favorite,
                     R.id.menuitem_post,
                     R.id.menuitem_chatting,
@@ -191,6 +193,7 @@ class MainActivity : AppCompatActivity() {
                             binding.fragmentcontainerviewMain.findNavController().navigate(destinationId)
                         }
                     }
+
                     else -> {
                         binding.fragmentcontainerviewMain.findNavController().navigate(R.id.myPageFragment)
                     }
