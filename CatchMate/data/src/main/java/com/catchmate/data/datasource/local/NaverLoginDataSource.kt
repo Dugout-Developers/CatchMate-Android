@@ -3,7 +3,7 @@ package com.catchmate.data.datasource.local
 import android.app.Activity
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.auth.PostLoginRequestDTO
+import com.catchmate.data.dto.auth.UserDataDTO
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -21,7 +21,7 @@ class NaverLoginDataSource
     constructor(
         private val fcmTokenService: FCMTokenService,
     ) {
-        suspend fun loginWithNaver(activity: Activity): PostLoginRequestDTO =
+        suspend fun loginWithNaver(activity: Activity): UserDataDTO =
             suspendCancellableCoroutine { continuation ->
                 val nidProfileCallback =
                     object : NidProfileCallback<NidProfileResponse> {
@@ -45,18 +45,18 @@ class NaverLoginDataSource
                             if (result.profile != null) {
                                 Log.i("NaverInfoSuccess", "providerId : ${result.profile?.id} email : ${result.profile?.email}")
                                 result.profile?.let {
-                                    val postLoginRequestDTO =
-                                        PostLoginRequestDTO(
+                                    val userDataDTO =
+                                        UserDataDTO(
                                             email = it.email!!,
                                             providerId = it.id!!,
-                                            provider = LoginPlatform.NAVER.toString().lowercase(),
-                                            picture = it.profileImage!!,
+                                            provider = LoginPlatform.NAVER.toString(),
+                                            profileImageUrl = it.profileImage!!,
                                             fcmToken =
                                                 runBlocking {
                                                     fcmTokenService.getToken()
                                                 },
                                         )
-                                    continuation.resume(postLoginRequestDTO)
+                                    continuation.resume(userDataDTO)
                                 } ?: continuation.resumeWithException(Exception("Profile is null"))
                             }
                         }

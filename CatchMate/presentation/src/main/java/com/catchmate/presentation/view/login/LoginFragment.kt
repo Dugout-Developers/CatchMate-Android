@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentLoginBinding
@@ -38,14 +39,20 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun initViewModel() {
-        loginViewModel.postLoginRequest.observe(viewLifecycleOwner) { request ->
-            if (request != null) {
+        loginViewModel.userData.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
                 Log.i(
                     "LoginFragment",
-                    "LoginRequest\n${request.email}\n${request.provider}\n" +
-                        "${request.providerId}\n${request.picture}\n${request.fcmToken}",
+                    "LoginRequest\n${data.email}\n${data.provider}\n" +
+                        "${data.providerId}\n${data.profileImageUrl}\n${data.fcmToken}",
                 )
-                loginViewModel.postAuthLogin(request)
+                val loginRequest =
+                    PostLoginRequest(
+                        provider = data.provider,
+                        providerId = data.providerId,
+                        fcmToken = data.fcmToken,
+                    )
+                loginViewModel.postAuthLogin(loginRequest)
             } else {
                 Log.d("로그인 취소", "로그인 취소")
             }
@@ -55,19 +62,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 Log.i(
                     "LoginFragment",
                     "LoginResponse\nacc:${loginResponse.accessToken}\n" +
-                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.isFirstLogin}",
+                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.signupRequired}",
                 )
 
-                when (loginResponse.isFirstLogin) {
+                when (loginResponse.signupRequired) {
                     true -> {
-                        val postLoginRequest = loginViewModel.postLoginRequest.value!!
+                        val userData = loginViewModel.userData.value!!
                         val userInfo =
                             PostUserAdditionalInfoRequest(
-                                postLoginRequest.email,
-                                postLoginRequest.providerId,
-                                postLoginRequest.provider,
-                                postLoginRequest.picture,
-                                postLoginRequest.fcmToken,
+                                userData.email,
+                                userData.providerId,
+                                userData.provider,
+                                userData.profileImageUrl,
+                                userData.fcmToken,
                                 "",
                                 "",
                                 "",

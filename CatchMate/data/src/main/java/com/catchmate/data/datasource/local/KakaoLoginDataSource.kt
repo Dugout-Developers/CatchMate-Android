@@ -3,7 +3,7 @@ package com.catchmate.data.datasource.local
 import android.content.Context
 import android.util.Log
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.auth.PostLoginRequestDTO
+import com.catchmate.data.dto.auth.UserDataDTO
 import com.catchmate.domain.model.enumclass.LoginPlatform
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -26,7 +26,7 @@ class KakaoLoginDataSource
         private val isKakaoTalkLoginAvailable: Boolean
             get() = userApiClient.isKakaoTalkLoginAvailable(context)
 
-        suspend fun loginWithKakao(): PostLoginRequestDTO? =
+        suspend fun loginWithKakao(): UserDataDTO? =
             suspendCancellableCoroutine { continuation ->
                 val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                     if (error != null) {
@@ -48,18 +48,18 @@ class KakaoLoginDataSource
                             } else if (user != null) {
                                 Log.i("KakaoInfoSuccess", "providerId : ${user.id}")
                                 user.let {
-                                    val postLoginRequestDTO =
-                                        PostLoginRequestDTO(
+                                    val userDataDTO =
+                                        UserDataDTO(
                                             email = it.kakaoAccount?.email!!,
                                             providerId = it.id.toString(),
-                                            provider = LoginPlatform.KAKAO.toString().lowercase(),
-                                            picture = user.kakaoAccount?.profile?.profileImageUrl!!,
+                                            provider = LoginPlatform.KAKAO.toString(),
+                                            profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl!!,
                                             fcmToken =
                                                 runBlocking {
                                                     fcmTokenService.getToken()
                                                 },
                                         )
-                                    continuation.resume(postLoginRequestDTO)
+                                    continuation.resume(userDataDTO)
                                 }
                             } else {
                                 continuation.resumeWithException(Exception("Profile is null"))
