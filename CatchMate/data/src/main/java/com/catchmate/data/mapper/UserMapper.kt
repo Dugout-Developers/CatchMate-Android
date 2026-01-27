@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
+import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
@@ -15,6 +16,7 @@ import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -70,10 +72,14 @@ object UserMapper {
 
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
         PatchUserAlarmResponse(
-            userId = responseDTO.userId,
             alarmType = responseDTO.alarmType,
-            isEnabled = responseDTO.isEnabled,
-            createdAt = responseDTO.createdAt,
+            enabled = responseDTO.enabled,
+        )
+
+    fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
+        GetCheckNicknameResponse(
+            nickName = getCheckNicknameResponseDTO.nickName,
+            available = getCheckNicknameResponseDTO.available,
         )
 
     fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =

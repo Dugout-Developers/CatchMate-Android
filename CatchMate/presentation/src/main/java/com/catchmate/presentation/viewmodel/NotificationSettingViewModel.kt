@@ -31,7 +31,7 @@ class NotificationSettingViewModel
 
         fun patchUserAlarm(
             alarmType: String,
-            isEnabled: String,
+            isEnabled: Boolean,
         ) {
             viewModelScope.launch {
                 val result = patchUserAlarmUseCase.patchUserAlarm(alarmType, isEnabled)

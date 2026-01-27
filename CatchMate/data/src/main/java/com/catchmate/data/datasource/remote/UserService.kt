@@ -3,6 +3,7 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
+import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
@@ -25,6 +26,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserService {
+    @GET("api/users/check-nickname")
+    suspend fun getCheckNickname(
+        @Query("nickName") nickName: String,
+    ): Response<GetCheckNicknameResponseDTO?>
+
     @GET("users/profile")
     suspend fun getUserProfile(): Response<GetUserProfileResponseDTO?>
 
@@ -46,7 +52,7 @@ interface UserService {
         @Path("blockedUserId") blockedUserId: Long,
     ): Response<PostUserBlockResponseDTO?>
 
-    @POST("users/additional-info")
+    @POST("api/users/additional-info")
     suspend fun postUserAdditionalInfo(
         @Body postUserAdditionalInfoRequestDTO: PostUserAdditionalInfoRequestDTO,
     ): Response<PostUserAdditionalInfoResponseDTO?>
@@ -58,11 +64,10 @@ interface UserService {
         @Part profileImage: MultipartBody.Part,
     ): Response<PatchUserProfileResponseDTO?>
 
-    // isEnabled : Y/N
-    @PATCH("users/alarm")
+    @PATCH("api/users/alarm")
     suspend fun patchUserAlarm(
         @Query("alarmType") alarmType: String,
-        @Query("isEnabled") isEnabled: String,
+        @Query("isEnabled") isEnabled: Boolean,
     ): Response<PatchUserAlarmResponseDTO?>
 
     @DELETE("users/block/{blockedUserId}")

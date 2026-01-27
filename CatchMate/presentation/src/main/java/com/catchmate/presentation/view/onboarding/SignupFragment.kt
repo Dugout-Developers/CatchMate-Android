@@ -187,7 +187,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>(FragmentSignupBinding
     }
 
     private fun checkNicknameAvailability(nickName: String) {
-        signUpViewModel.getAuthCheckNickname(nickName)
+        signUpViewModel.getCheckNickname(nickName)
         signUpViewModel.getCheckNicknameResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 binding.tvSignupNicknameAlert.apply {

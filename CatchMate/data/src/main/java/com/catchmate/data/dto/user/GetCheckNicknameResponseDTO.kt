@@ -1,5 +1,6 @@
-package com.catchmate.data.dto.auth
+package com.catchmate.data.dto.user
 
 data class GetCheckNicknameResponseDTO(
+    val nickName: String,
     val available: Boolean,
 )

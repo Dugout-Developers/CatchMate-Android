@@ -86,11 +86,11 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
                     switchNotificationSettingChatting.isChecked = false
                     switchNotificationSettingEnroll.isChecked = false
                     switchNotificationSettingEvent.isChecked = false
-                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, "N")
+                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, false)
                 } else { // f -> t
                     isAllChecked = true
                     switchNotificationSettingAll.isChecked = true
-                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, "Y")
+                    notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, true)
                     // false 였던 스위치만 api 호출
                     if (!isChatChecked) {
                         isChatChecked = true
@@ -109,22 +109,19 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
             layoutNotificationSettingChatAlarm.setOnClickListener {
                 switchNotificationSettingChatting.isChecked = !switchNotificationSettingChatting.isChecked
                 isChatChecked = switchNotificationSettingChatting.isChecked
-                val isEnabled = if (isChatChecked) "Y" else "N"
-                notificationSettingViewModel.patchUserAlarm(AlarmType.CHAT.name, isEnabled)
+                notificationSettingViewModel.patchUserAlarm(AlarmType.CHAT.name, isChatChecked)
                 updateSwitchState()
             }
             layoutNotificationSettingEnrollAlarm.setOnClickListener {
                 switchNotificationSettingEnroll.isChecked = !switchNotificationSettingEnroll.isChecked
                 isEnrollChecked = switchNotificationSettingEnroll.isChecked
-                val isEnabled = if (isEnrollChecked) "Y" else "N"
-                notificationSettingViewModel.patchUserAlarm(AlarmType.ENROLL.name, isEnabled)
+                notificationSettingViewModel.patchUserAlarm(AlarmType.ENROLL.name, isEnrollChecked)
                 updateSwitchState()
             }
             layoutNotificationSettingEventAlarm.setOnClickListener {
                 switchNotificationSettingEvent.isChecked = !switchNotificationSettingEvent.isChecked
                 isEventChecked = switchNotificationSettingEvent.isChecked
-                val isEnabled = if (isEventChecked) "Y" else "N"
-                notificationSettingViewModel.patchUserAlarm(AlarmType.EVENT.name, isEnabled)
+                notificationSettingViewModel.patchUserAlarm(AlarmType.EVENT.name, isEventChecked)
                 updateSwitchState()
             }
         }
@@ -145,7 +142,7 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
     private fun initViewModel() {
         notificationSettingViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { reponse ->
             reponse?.let {
-                Log.i("설정완료", "${reponse.userId} / ${reponse.alarmType} / ${reponse.isEnabled}")
+                Log.i("설정완료", "${reponse.alarmType} / ${reponse.enabled}")
             }
         }
         notificationSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

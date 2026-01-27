@@ -138,8 +138,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                 localDataViewModel.saveUserId(response.userId)
                 localDataViewModel.saveProvider(userInfo.provider)
                 mainViewModel.setGuestLogin(false)
-                val isEnabled = if (pushNotificationAgree) "Y" else "N"
-                signUpViewModel.patchUserAlarm(AlarmType.ALL.name, isEnabled)
+                signUpViewModel.patchUserAlarm(AlarmType.ALL.name, pushNotificationAgree)
                 findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
             }
         }
@@ -161,7 +160,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
             Log.i("SIGN UP ERR", message.toString())
         }
         signUpViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { response ->
-            Log.i("알림 설정 완료", "${response.alarmType} - ${response.isEnabled}")
+            Log.i("알림 설정 완료", "${response.alarmType} - ${response.enabled}")
         }
     }
 }

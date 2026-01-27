@@ -6,7 +6,6 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.auth.DeleteLogoutResponse
-import com.catchmate.domain.model.auth.GetCheckNicknameResponse
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.repository.AuthRepository
@@ -34,13 +33,6 @@ class AuthRepositoryImpl
                 e.printStackTrace()
                 null
             }
-
-        override suspend fun getAuthCheckNickname(nickName: String): Result<GetCheckNicknameResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { authApi.getAuthCheckNickname(nickName) },
-                transform = { AuthMapper.toGetCheckNicknameResponse(it!!) },
-            )
 
         override suspend fun deleteAuthLogout(refreshToken: String): Result<DeleteLogoutResponse> =
             apiCall(

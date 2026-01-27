@@ -286,7 +286,7 @@ class EditProfileFragment :
     }
 
     private fun checkNickNameAvailability(nickName: String) {
-        editProfileViewModel.getAuthCheckNickname(nickName)
+        editProfileViewModel.getCheckNickname(nickName)
         editProfileViewModel.getCheckNicknameResponse.observe(viewLifecycleOwner) { response ->
             binding.tvSignupNicknameAlert.apply {
                 if (response.available) {

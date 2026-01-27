@@ -1,12 +1,10 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.auth.DeleteLogoutResponseDTO
-import com.catchmate.data.dto.auth.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.auth.PostLoginRequestDTO
 import com.catchmate.data.dto.auth.PostLoginResponseDTO
 import com.catchmate.data.dto.auth.UserDataDTO
 import com.catchmate.domain.model.auth.DeleteLogoutResponse
-import com.catchmate.domain.model.auth.GetCheckNicknameResponse
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.model.auth.UserData
@@ -57,11 +55,6 @@ object AuthMapper {
             accessToken = postLoginResponseDTO.accessToken,
             refreshToken = postLoginResponseDTO.refreshToken,
             signupRequired = postLoginResponseDTO.signupRequired,
-        )
-
-    fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
-        GetCheckNicknameResponse(
-            available = getCheckNicknameResponseDTO.available,
         )
 
     fun toDeleteLogoutResponse(responseDTO: DeleteLogoutResponseDTO): DeleteLogoutResponse =

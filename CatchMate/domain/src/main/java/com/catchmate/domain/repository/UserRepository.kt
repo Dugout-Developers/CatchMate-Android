@@ -3,6 +3,7 @@ package com.catchmate.domain.repository
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -15,6 +16,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 interface UserRepository {
+    suspend fun getCheckNickname(nickName: String): Result<GetCheckNicknameResponse>
+
     suspend fun getUserProfile(): Result<GetUserProfileResponse>
 
     suspend fun getUserProfileById(profileUserId: Long): Result<GetUserProfileByIdResponse>
@@ -34,7 +37,7 @@ interface UserRepository {
 
     suspend fun patchUserAlarm(
         alarmType: String,
-        isEnabled: String,
+        isEnabled: Boolean,
     ): Result<PatchUserAlarmResponse>
 
     suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse>
