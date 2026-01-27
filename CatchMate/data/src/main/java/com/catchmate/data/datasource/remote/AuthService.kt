@@ -16,7 +16,7 @@ interface AuthService {
         @Body loginRequestDTO: PostLoginRequestDTO,
     ): Response<PostLoginResponseDTO?>
 
-    @POST("auth/reissue")
+    @POST("api/auth/reissue")
     suspend fun postAuthReissue(
         @Header("RefreshToken") refreshToken: String,
     ): Response<PostReissueResponseDTO?>
