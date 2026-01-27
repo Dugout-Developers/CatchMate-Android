@@ -12,5 +12,5 @@ data class PostUserAdditionalInfoRequest(
     val nickName: String,
     val birthDate: String,
     val favoriteClubId: Int,
-    val watchStyle: String,
+    val watchStyle: String?,
 ) : Serializable
