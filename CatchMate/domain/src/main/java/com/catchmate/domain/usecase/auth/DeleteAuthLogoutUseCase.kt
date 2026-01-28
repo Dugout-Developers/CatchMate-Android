@@ -9,5 +9,5 @@ class DeleteAuthLogoutUseCase
     constructor(
         private val authRepository: AuthRepository,
     ) {
-        suspend fun deleteAuthLogout(refreshToken: String): Result<DeleteLogoutResponse> = authRepository.deleteAuthLogout(refreshToken)
+        suspend fun deleteAuthLogout(refreshToken: String): Result<Int> = authRepository.deleteAuthLogout(refreshToken)
     }

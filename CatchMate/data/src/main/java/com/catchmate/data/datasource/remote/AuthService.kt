@@ -21,8 +21,8 @@ interface AuthService {
         @Header("RefreshToken") refreshToken: String,
     ): Response<PostReissueResponseDTO?>
 
-    @DELETE("auth/logout")
+    @POST("api/auth/logout")
     suspend fun deleteAuthLogout(
         @Header("RefreshToken") refreshToken: String,
-    ): Response<DeleteLogoutResponseDTO?>
+    ): Response<Int>
 }

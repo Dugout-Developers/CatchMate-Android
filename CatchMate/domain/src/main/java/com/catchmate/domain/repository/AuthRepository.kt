@@ -7,5 +7,5 @@ import com.catchmate.domain.model.auth.PostLoginResponse
 interface AuthRepository {
     suspend fun postAuthLogin(postLoginRequest: PostLoginRequest): PostLoginResponse?
 
-    suspend fun deleteAuthLogout(refreshToken: String): Result<DeleteLogoutResponse>
+    suspend fun deleteAuthLogout(refreshToken: String): Result<Int>
 }
