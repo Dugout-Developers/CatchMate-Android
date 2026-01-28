@@ -28,11 +28,6 @@ class LoginViewModel
         val userData: LiveData<UserData?>
             get() = _userData
 
-    // 나중에 사용하는 곳 없으면 지우기
-        private val _postLoginRequest = MutableLiveData<PostLoginRequest?>()
-        val postLoginRequest: LiveData<PostLoginRequest?>
-            get() = _postLoginRequest
-
         private val _postLoginResponse = MutableLiveData<PostLoginResponse?>()
         val postLoginResponse: LiveData<PostLoginResponse?>
             get() = _postLoginResponse
@@ -41,8 +36,8 @@ class LoginViewModel
         val noCredentialException: LiveData<String>
             get() = _noCredentialException
 
-        fun initPostLoginRequest() {
-            _postLoginRequest.value = null
+        fun initUserData() {
+            _userData.value = null
         }
 
         fun initPostLoginResponse() {

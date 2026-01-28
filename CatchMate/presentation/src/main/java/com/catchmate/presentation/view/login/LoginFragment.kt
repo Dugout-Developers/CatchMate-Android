@@ -84,14 +84,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         val bundle = Bundle()
                         bundle.putSerializable("userInfo", userInfo)
                         findNavController().navigate(R.id.action_loginFragment_to_termsAndConditionFragment, bundle)
-                        loginViewModel.initPostLoginRequest()
+                        loginViewModel.initUserData()
                         loginViewModel.initPostLoginResponse()
                     }
 
                     false -> {
                         localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
                         localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)
-                        localDataViewModel.saveProvider(loginViewModel.postLoginRequest.value?.provider!!)
+                        localDataViewModel.saveProvider(loginViewModel.userData.value?.provider!!)
                         mainViewModel.setGuestLogin(false)
                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     }
