@@ -62,11 +62,14 @@ class AuthAuthenticator
                     throw ReissueFailureException("Reissue Error - Reissue Failure")
                 }
             }
-
         }
 
-        private fun sendNewRequest(request: Request, accessToken: String): Request =
-            request.newBuilder()
+        private fun sendNewRequest(
+            request: Request,
+            accessToken: String,
+        ): Request =
+            request
+                .newBuilder()
                 .header("Authorization", accessToken)
                 .build()
     }
