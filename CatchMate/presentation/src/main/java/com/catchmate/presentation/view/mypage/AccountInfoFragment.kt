@@ -75,16 +75,19 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
                 initWithdrawBtn()
             }
         }
-        accountInfoViewModel.logoutResponse.observe(viewLifecycleOwner) { response ->
-            Log.i("LOGOUT", response.state.toString())
-            // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
-            localDataViewModel.logoutAndWithdraw()
-            val navOptions =
-                NavOptions
-                    .Builder()
-                    .setPopUpTo(R.id.accountInfoFragment, true)
-                    .build()
-            findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+        accountInfoViewModel.logoutResponseCode.observe(viewLifecycleOwner) { code ->
+            Log.i("LOGOUT", code.toString())
+            if (code == 200) {
+                // 로그아웃 시 로컬 데이터 삭제 및 화면 이동
+                localDataViewModel.logoutAndWithdraw()
+                val navOptions =
+                    NavOptions
+                        .Builder()
+                        .setPopUpTo(R.id.accountInfoFragment, true)
+                        .build()
+                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment, null, navOptions)
+            }
+            // else 문 ux
         }
         accountInfoViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {

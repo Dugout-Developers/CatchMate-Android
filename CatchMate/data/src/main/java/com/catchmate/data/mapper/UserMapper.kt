@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
+import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
 import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
@@ -11,10 +12,11 @@ import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.data.dto.user.PostUserBlockResponseDTO
-import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
+import com.catchmate.data.mapper.BoardMapper.toClub
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -28,17 +30,13 @@ object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
         GetUserProfileResponse(
             userId = getUserProfileResponseDTO.userId,
+            nickName = getUserProfileResponseDTO.nickName,
             email = getUserProfileResponseDTO.email,
             profileImageUrl = getUserProfileResponseDTO.profileImageUrl,
             gender = getUserProfileResponseDTO.gender,
-            allAlarm = getUserProfileResponseDTO.allAlarm,
-            chatAlarm = getUserProfileResponseDTO.chatAlarm,
-            enrollAlarm = getUserProfileResponseDTO.enrollAlarm,
-            eventAlarm = getUserProfileResponseDTO.eventAlarm,
-            nickName = getUserProfileResponseDTO.nickName,
-            favoriteClub = toFavoriteClub(getUserProfileResponseDTO.favoriteClub),
             birthDate = getUserProfileResponseDTO.birthDate,
             watchStyle = getUserProfileResponseDTO.watchStyle,
+            club = toClub(getUserProfileResponseDTO.club),
         )
 
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =
@@ -70,10 +68,14 @@ object UserMapper {
 
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
         PatchUserAlarmResponse(
-            userId = responseDTO.userId,
             alarmType = responseDTO.alarmType,
-            isEnabled = responseDTO.isEnabled,
-            createdAt = responseDTO.createdAt,
+            enabled = responseDTO.enabled,
+        )
+
+    fun toGetCheckNicknameResponse(getCheckNicknameResponseDTO: GetCheckNicknameResponseDTO): GetCheckNicknameResponse =
+        GetCheckNicknameResponse(
+            nickName = getCheckNicknameResponseDTO.nickName,
+            available = getCheckNicknameResponseDTO.available,
         )
 
     fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =
@@ -87,7 +89,7 @@ object UserMapper {
             enrollAlarm = responseDTO.enrollAlarm,
             eventAlarm = responseDTO.eventAlarm,
             nickName = responseDTO.nickName,
-            favoriteClub = toFavoriteClub(responseDTO.favoriteClub),
+            favoriteClub = toClub(responseDTO.favoriteClub),
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
         )

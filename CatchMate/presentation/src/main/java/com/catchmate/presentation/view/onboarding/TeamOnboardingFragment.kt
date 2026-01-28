@@ -120,17 +120,17 @@ class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(Fragm
 
     private fun getSelectedTeamId(teamName: String): Int =
         when (teamName) {
-            getString(R.string.team_kia_tigers) -> Club.KIA.id
-            getString(R.string.team_samsung_lions) -> Club.SAMSUNG.id
-            getString(R.string.team_lg_twins) -> Club.LG.id
-            getString(R.string.team_doosan_bears) -> Club.DOOSAN.id
-            getString(R.string.team_kt_wiz) -> Club.KT.id
-            getString(R.string.team_ssg_landers) -> Club.SSG.id
-            getString(R.string.team_lotte_giants) -> Club.LOTTE.id
-            getString(R.string.team_hanwha_eagles) -> Club.HANWHA.id
-            getString(R.string.team_nc_dinos) -> Club.NC.id
-            getString(R.string.team_kiwoom_heroes) -> Club.KIWOOM.id
-            getString(R.string.pacifist) -> Club.PACIFIST.id
+            Club.KIA.teamName -> Club.KIA.id
+            Club.SAMSUNG.teamName -> Club.SAMSUNG.id
+            Club.LG.teamName -> Club.LG.id
+            Club.DOOSAN.teamName -> Club.DOOSAN.id
+            Club.KT.teamName -> Club.KT.id
+            Club.SSG.teamName -> Club.SSG.id
+            Club.LOTTE.teamName -> Club.LOTTE.id
+            Club.HANWHA.teamName -> Club.HANWHA.id
+            Club.NC.teamName -> Club.NC.id
+            Club.KIWOOM.teamName -> Club.KIWOOM.id
+            Club.PACIFIST.teamName -> Club.PACIFIST.id
             else -> Club.BEGINNER.id
         }
 }

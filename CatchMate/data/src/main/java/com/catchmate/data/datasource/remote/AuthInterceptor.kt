@@ -21,7 +21,7 @@ class AuthInterceptor
                 chain
                     .request()
                     .newBuilder()
-                    .header("AccessToken", accessToken)
+                    .header("Authorization", accessToken)
                     .build()
 
             return chain.proceed(request)

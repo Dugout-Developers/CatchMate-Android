@@ -121,7 +121,7 @@ class EditProfileFragment :
                 .error(R.drawable.vec_all_default_profile)
                 .into(binding.ivEditProfileThumbnail)
         }
-        editProfileViewModel.setCheerClub(userInfo?.favoriteClub?.id!!)
+        editProfileViewModel.setCheerClub(userInfo?.club?.clubId!!)
         editProfileViewModel.cheerClub.observe(viewLifecycleOwner) { id ->
             binding.tvEditProfileCheerClub.text = convertClubIdToName(id)
         }
@@ -286,7 +286,7 @@ class EditProfileFragment :
     }
 
     private fun checkNickNameAvailability(nickName: String) {
-        editProfileViewModel.getAuthCheckNickname(nickName)
+        editProfileViewModel.getCheckNickname(nickName)
         editProfileViewModel.getCheckNicknameResponse.observe(viewLifecycleOwner) { response ->
             binding.tvSignupNicknameAlert.apply {
                 if (response.available) {

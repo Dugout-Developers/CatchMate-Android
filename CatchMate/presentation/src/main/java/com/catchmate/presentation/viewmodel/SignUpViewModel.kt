@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.auth.GetCheckNicknameResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.model.user.PostUserAdditionalInfoResponse
-import com.catchmate.domain.usecase.auth.GetAuthCheckNicknameUseCase
+import com.catchmate.domain.usecase.user.GetCheckNicknameUseCase
 import com.catchmate.domain.usecase.user.PatchUserAlarmUseCase
 import com.catchmate.domain.usecase.user.PostUserAdditionalInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class SignUpViewModel
     @Inject
     constructor(
-        private val getAuthCheckNicknameUseCase: GetAuthCheckNicknameUseCase,
+        private val getCheckNicknameUseCase: GetCheckNicknameUseCase,
         private val postUserAdditionalInfoUseCase: PostUserAdditionalInfoUseCase,
         private val patchUserAlarmUseCase: PatchUserAlarmUseCase,
     ) : ViewModel() {
@@ -44,12 +44,12 @@ class SignUpViewModel
         val userAdditionalInfoResponse
             get() = _userAdditionalInfoResponse
 
-        fun getAuthCheckNickname(nickName: String) {
+        fun getCheckNickname(nickName: String) {
             viewModelScope.launch {
-                val result = getAuthCheckNicknameUseCase.getAuthCheckNickname(nickName)
+                val result = getCheckNicknameUseCase(nickName)
                 result
-                    .onSuccess { availability ->
-                        _getCheckNicknameResponse.value = availability
+                    .onSuccess { response ->
+                        _getCheckNicknameResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
@@ -78,7 +78,7 @@ class SignUpViewModel
 
         fun patchUserAlarm(
             alarmType: String,
-            isEnabled: String,
+            isEnabled: Boolean,
         ) {
             viewModelScope.launch {
                 val result = patchUserAlarmUseCase.patchUserAlarm(alarmType, isEnabled)

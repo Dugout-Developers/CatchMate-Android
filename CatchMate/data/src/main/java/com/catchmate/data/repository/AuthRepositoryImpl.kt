@@ -4,9 +4,6 @@ import android.util.Log
 import com.catchmate.data.datasource.remote.AuthService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
-import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
-import com.catchmate.domain.model.auth.DeleteLogoutResponse
-import com.catchmate.domain.model.auth.GetCheckNicknameResponse
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.model.auth.PostLoginResponse
 import com.catchmate.domain.repository.AuthRepository
@@ -35,17 +32,18 @@ class AuthRepositoryImpl
                 null
             }
 
-        override suspend fun getAuthCheckNickname(nickName: String): Result<GetCheckNicknameResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { authApi.getAuthCheckNickname(nickName) },
-                transform = { AuthMapper.toGetCheckNicknameResponse(it!!) },
-            )
-
-        override suspend fun deleteAuthLogout(refreshToken: String): Result<DeleteLogoutResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { authApi.deleteAuthLogout(refreshToken) },
-                transform = { AuthMapper.toDeleteLogoutResponse(it!!) },
-            )
+        override suspend fun deleteAuthLogout(refreshToken: String): Result<Int> =
+            try {
+                val response = authApi.deleteAuthLogout(refreshToken)
+                if (response.isSuccessful) {
+                    Log.d("AuthRepository", "통신 성공 : ${response.code()}")
+                    Result.success(response.code())
+                } else {
+                    Log.d("AuthRepository", "통신 실패 : ${response.code()}")
+                    Result.failure(Exception(response.errorBody()?.toString()))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Result.failure(e)
+            }
     }

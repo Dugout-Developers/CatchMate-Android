@@ -16,7 +16,7 @@ import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
-import com.catchmate.data.dto.user.FavoriteClubDTO
+import com.catchmate.data.dto.user.ClubDTO
 import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
@@ -33,7 +33,7 @@ import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
-import com.catchmate.domain.model.user.FavoriteClub
+import com.catchmate.domain.model.user.Club
 
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =
@@ -90,14 +90,14 @@ object BoardMapper {
             enrollAlarm = dto.enrollAlarm,
             eventAlarm = dto.eventAlarm,
             nickName = dto.nickName,
-            favoriteClub = toFavoriteClub(dto.favoriteClub),
+            favoriteClub = toClub(dto.favoriteClub),
             birthDate = dto.birthDate,
             watchStyle = dto.watchStyle,
         )
 
-    fun toFavoriteClub(dto: FavoriteClubDTO): FavoriteClub =
-        FavoriteClub(
-            id = dto.id,
+    fun toClub(dto: ClubDTO): Club =
+        Club(
+            clubId = dto.clubId,
             name = dto.name,
             homeStadium = dto.homeStadium,
             region = dto.region,

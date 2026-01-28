@@ -11,6 +11,6 @@ class PatchUserAlarmUseCase
     ) {
         suspend fun patchUserAlarm(
             alarmType: String,
-            isEnabled: String,
+            isEnabled: Boolean,
         ): Result<PatchUserAlarmResponse> = userRepository.patchUserAlarm(alarmType, isEnabled)
     }

@@ -6,11 +6,11 @@ import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.datasource.local.GoogleLoginDataSource
 import com.catchmate.data.datasource.local.KakaoLoginDataSource
 import com.catchmate.data.datasource.local.NaverLoginDataSource
-import com.catchmate.data.mapper.AuthMapper.toGooglePostLoginRequest
-import com.catchmate.data.mapper.AuthMapper.toPostLoginRequest
+import com.catchmate.data.mapper.AuthMapper.toGoogleUserData
+import com.catchmate.data.mapper.AuthMapper.toUserData
 import com.catchmate.domain.exception.GoogleLoginException
 import com.catchmate.domain.exception.Result
-import com.catchmate.domain.model.auth.PostLoginRequest
+import com.catchmate.domain.model.auth.UserData
 import com.catchmate.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -21,17 +21,17 @@ class LoginRepositoryImpl
         private val naverLoginDataSource: NaverLoginDataSource,
         private val googleLoginDataSource: GoogleLoginDataSource,
     ) : LoginRepository {
-        override suspend fun loginWithKakao(): PostLoginRequest? {
-            val postLoginRequestDTO = kakaoLoginDataSource.loginWithKakao()
-            return toPostLoginRequest(postLoginRequestDTO)
+        override suspend fun loginWithKakao(): UserData? {
+            val userDataDTO = kakaoLoginDataSource.loginWithKakao()
+            return toUserData(userDataDTO)
         }
 
-        override suspend fun loginWithNaver(activity: Activity): PostLoginRequest? {
-            val postLoginRequestDTO = naverLoginDataSource.loginWithNaver(activity)
-            return toPostLoginRequest(postLoginRequestDTO)
+        override suspend fun loginWithNaver(activity: Activity): UserData? {
+            val userDataDTO = naverLoginDataSource.loginWithNaver(activity)
+            return toUserData(userDataDTO)
         }
 
-        override suspend fun loginWithGoogle(activity: Activity): Result<PostLoginRequest> =
+        override suspend fun loginWithGoogle(activity: Activity): Result<UserData> =
             try {
                 val credentialResult = googleLoginDataSource.getCredential(activity)
 
@@ -41,9 +41,9 @@ class LoginRepositoryImpl
 
                         when (signInResult) {
                             is Result.Success -> {
-                                val loginDTO = signInResult.data
+                                val userDataDTO = signInResult.data
                                 Result.Success(
-                                    toGooglePostLoginRequest(loginDTO),
+                                    toGoogleUserData(userDataDTO),
                                 )
                             }
 

@@ -3,11 +3,13 @@ package com.catchmate.data.repository
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
+import com.catchmate.data.mapper.UserMapper.toGetCheckNicknameResponse
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.UserBlockFailureException
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -28,6 +30,13 @@ class UserRepositoryImpl
     ) : UserRepository {
         private val userApi = retrofitClient.createApi<UserService>()
         private val tag = "UserRepo"
+
+        override suspend fun getCheckNickname(nickName: String): Result<GetCheckNicknameResponse> =
+            apiCall(
+                tag = this.tag,
+                apiFunction = { userApi.getCheckNickname(nickName) },
+                transform = { toGetCheckNicknameResponse(it!!) },
+            )
 
         override suspend fun getUserProfile(): Result<GetUserProfileResponse> =
             apiCall(
@@ -100,7 +109,7 @@ class UserRepositoryImpl
 
         override suspend fun patchUserAlarm(
             alarmType: String,
-            isEnabled: String,
+            isEnabled: Boolean,
         ): Result<PatchUserAlarmResponse> =
             apiCall(
                 tag = this.tag,

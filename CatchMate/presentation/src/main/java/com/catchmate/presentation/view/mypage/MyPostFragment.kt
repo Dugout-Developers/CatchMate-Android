@@ -93,13 +93,13 @@ class MyPostFragment :
                 .into(ivMyPageUserProfile)
 
             tvMyPageUserProfileNickname.text = userInfo?.nickName
-            tvMyPageUserProfileTeamBadge.text = ClubUtils.convertClubIdToName(userInfo?.favoriteClub?.id!!)
+            tvMyPageUserProfileTeamBadge.text = ClubUtils.convertClubIdToName(userInfo?.club?.clubId!!)
             DrawableCompat
                 .setTint(
                     tvMyPageUserProfileTeamBadge.background,
                     convertTeamColor(
                         requireContext(),
-                        userInfo?.favoriteClub?.id!!,
+                        userInfo?.club?.clubId!!,
                         true,
                         "mypost",
                     ),

@@ -10,7 +10,7 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
 import com.catchmate.data.BuildConfig
 import com.catchmate.data.datasource.remote.FCMTokenService
-import com.catchmate.data.dto.auth.PostLoginRequestDTO
+import com.catchmate.data.dto.auth.UserDataDTO
 import com.catchmate.domain.exception.GoogleLoginException
 import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.enumclass.LoginPlatform
@@ -75,7 +75,7 @@ class GoogleLoginDataSource
             }
         }
 
-        suspend fun handleSignIn(result: GetCredentialResponse): Result<PostLoginRequestDTO> {
+        suspend fun handleSignIn(result: GetCredentialResponse): Result<UserDataDTO> {
             val credential = result.credential
 
             return if (credential is CustomCredential) {
@@ -101,18 +101,18 @@ class GoogleLoginDataSource
                             val userId = payload.subject
 
                             Log.i("GoogleInfoSuccess", "idToken : $userId  email : $email profileUri : $profileUri")
-                            val loginRequestDTO =
-                                PostLoginRequestDTO(
+                            val userDataDTO =
+                                UserDataDTO(
                                     email = email,
+                                    profileImageUrl = profileUri.toString(),
                                     providerId = userId,
-                                    provider = LoginPlatform.GOOGLE.toString().lowercase(),
-                                    picture = profileUri.toString(),
+                                    provider = LoginPlatform.GOOGLE.toString(),
                                     fcmToken =
                                         runBlocking(Dispatchers.IO) {
                                             fcmTokenService.getToken()
                                         },
                                 )
-                            Result.Success(loginRequestDTO)
+                            Result.Success(userDataDTO)
                         } else {
                             Log.d("GoogleIdTokenError", "Invalid ID token")
                             Result.Error(message = "Invalid ID token")

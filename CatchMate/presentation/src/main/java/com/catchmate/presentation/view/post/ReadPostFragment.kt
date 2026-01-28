@@ -170,17 +170,13 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             val userProfile =
                 GetUserProfileResponse(
                     userInfo?.userId!!,
+                    userInfo.nickName,
                     userInfo.email,
                     userInfo.profileImageUrl,
                     userInfo.gender,
-                    userInfo.allAlarm,
-                    userInfo.chatAlarm,
-                    userInfo.enrollAlarm,
-                    userInfo.eventAlarm,
-                    userInfo.nickName,
-                    userInfo.favoriteClub,
                     userInfo.birthDate,
                     userInfo.watchStyle,
+                    userInfo.favoriteClub,
                 )
             val bundle = Bundle()
             bundle.putParcelable("userInfo", userProfile)
@@ -350,12 +346,12 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.favoriteClub.id,
+                        post.userInfo.favoriteClub.clubId,
                         true,
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.id)
+            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.clubId)
             if (post.userInfo.watchStyle.isNullOrEmpty()) {
                 tvReadPostWriterCheerStyle.visibility = View.GONE
             } else {

@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.auth.GetCheckNicknameResponse
+import com.catchmate.domain.model.user.GetCheckNicknameResponse
 import com.catchmate.domain.model.user.PatchUserProfileResponse
-import com.catchmate.domain.usecase.auth.GetAuthCheckNicknameUseCase
+import com.catchmate.domain.usecase.user.GetCheckNicknameUseCase
 import com.catchmate.domain.usecase.user.PatchUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class EditProfileViewModel
     @Inject
     constructor(
-        private val getAuthCheckNicknameUseCase: GetAuthCheckNicknameUseCase,
+        private val getCheckNicknameUseCase: GetCheckNicknameUseCase,
         private val patchUserProfileUseCase: PatchUserProfileUseCase,
     ) : ViewModel() {
         private val _profileImage = MutableLiveData<Bitmap>()
@@ -71,9 +71,9 @@ class EditProfileViewModel
             _watchStyle.value = str
         }
 
-        fun getAuthCheckNickname(nickName: String) {
+        fun getCheckNickname(nickName: String) {
             viewModelScope.launch {
-                val result = getAuthCheckNicknameUseCase.getAuthCheckNickname(nickName)
+                val result = getCheckNicknameUseCase(nickName)
                 result
                     .onSuccess { availability ->
                         _getCheckNicknameResponse.value = availability

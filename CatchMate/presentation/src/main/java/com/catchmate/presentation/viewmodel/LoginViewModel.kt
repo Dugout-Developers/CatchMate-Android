@@ -10,6 +10,7 @@ import com.catchmate.domain.exception.GoogleLoginException
 import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.auth.PostLoginRequest
 import com.catchmate.domain.model.auth.PostLoginResponse
+import com.catchmate.domain.model.auth.UserData
 import com.catchmate.domain.usecase.auth.PostAuthLoginUseCase
 import com.catchmate.domain.usecase.auth.SocialLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +24,9 @@ class LoginViewModel
         private val socialLoginUseCase: SocialLoginUseCase,
         private val postAuthLoginUseCase: PostAuthLoginUseCase,
     ) : ViewModel() {
-        private val _postLoginRequest = MutableLiveData<PostLoginRequest?>()
-        val postLoginRequest: LiveData<PostLoginRequest?>
-            get() = _postLoginRequest
+        private val _userData = MutableLiveData<UserData?>()
+        val userData: LiveData<UserData?>
+            get() = _userData
 
         private val _postLoginResponse = MutableLiveData<PostLoginResponse?>()
         val postLoginResponse: LiveData<PostLoginResponse?>
@@ -35,8 +36,8 @@ class LoginViewModel
         val noCredentialException: LiveData<String>
             get() = _noCredentialException
 
-        fun initPostLoginRequest() {
-            _postLoginRequest.value = null
+        fun initUserData() {
+            _userData.value = null
         }
 
         fun initPostLoginResponse() {
@@ -45,13 +46,13 @@ class LoginViewModel
 
         fun kakaoLogin() {
             viewModelScope.launch {
-                _postLoginRequest.value = socialLoginUseCase.loginWithKakao()
+                _userData.value = socialLoginUseCase.loginWithKakao()
             }
         }
 
         fun naverLogin(activity: Activity) {
             viewModelScope.launch {
-                _postLoginRequest.value = socialLoginUseCase.loginWithNaver(activity)
+                _userData.value = socialLoginUseCase.loginWithNaver(activity)
             }
         }
 
@@ -60,7 +61,7 @@ class LoginViewModel
                 val result = socialLoginUseCase.loginWithGoogle(activity)
                 when (result) {
                     is Result.Success -> {
-                        _postLoginRequest.value = result.data
+                        _userData.value = result.data
                     }
 
                     is Result.Error -> {

@@ -1,6 +1,6 @@
 package com.catchmate.data.dto.enroll
 
-import com.catchmate.data.dto.user.FavoriteClubDTO
+import com.catchmate.data.dto.user.ClubDTO
 
 data class UserInfoDTO(
     val userId: Long,
@@ -12,7 +12,7 @@ data class UserInfoDTO(
     val enrollAlarm: String,
     val eventAlarm: String,
     val nickName: String,
-    val favoriteClub: FavoriteClubDTO,
+    val favoriteClub: ClubDTO,
     val birthDate: String,
     val watchStyle: String? = null,
 )

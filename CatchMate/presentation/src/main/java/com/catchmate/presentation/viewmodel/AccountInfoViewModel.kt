@@ -20,9 +20,9 @@ class AccountInfoViewModel
         private val deleteAuthLogoutUseCase: DeleteAuthLogoutUseCase,
         private val deleteUserAccountUseCase: DeleteUserAccountUseCase,
     ) : ViewModel() {
-        private val _logoutResponse = MutableLiveData<DeleteLogoutResponse>()
-        val logoutResponse: LiveData<DeleteLogoutResponse>
-            get() = _logoutResponse
+        private val _logoutResponseCode = MutableLiveData<Int>()
+        val logoutResponseCode: LiveData<Int>
+            get() = _logoutResponseCode
 
         private val _withdrawResponse = MutableLiveData<DeleteUserAccountResponse>()
         val withdrawResponse: LiveData<DeleteUserAccountResponse>
@@ -41,7 +41,7 @@ class AccountInfoViewModel
                 val result = deleteAuthLogoutUseCase.deleteAuthLogout(refreshToken)
                 result
                     .onSuccess { response ->
-                        _logoutResponse.value = response
+                        _logoutResponseCode.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

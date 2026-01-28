@@ -1,12 +1,12 @@
 package com.catchmate.domain.model.support
 
-import com.catchmate.domain.model.user.FavoriteClub
+import com.catchmate.domain.model.user.Club
 
 data class AdminUserInfo(
     val userId: Long,
     val profileImageUrl: String,
     val nickName: String,
-    val clubInfo: FavoriteClub,
+    val clubInfo: Club,
     val gender: String,
     val email: String,
     val socialType: String,
