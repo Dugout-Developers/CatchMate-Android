@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class FavoriteClub(
-    val id: Int,
+data class Club(
+    val clubId: Int,
     val name: String,
     val homeStadium: String,
     val region: String,

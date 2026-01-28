@@ -31,7 +31,7 @@ interface UserService {
         @Query("nickName") nickName: String,
     ): Response<GetCheckNicknameResponseDTO?>
 
-    @GET("users/profile")
+    @GET("api/users/profile")
     suspend fun getUserProfile(): Response<GetUserProfileResponseDTO?>
 
     @GET("users/profile/{profileUserId}")

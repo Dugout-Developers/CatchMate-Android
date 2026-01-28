@@ -8,7 +8,7 @@ import com.catchmate.data.dto.support.PostInquiryRequestDTO
 import com.catchmate.data.dto.support.PostInquiryResponseDTO
 import com.catchmate.data.dto.support.PostUserReportRequestDTO
 import com.catchmate.data.dto.support.PostUserReportResponseDTO
-import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
+import com.catchmate.data.mapper.BoardMapper.toClub
 import com.catchmate.domain.model.support.AdminUserInfo
 import com.catchmate.domain.model.support.GetInquiryResponse
 import com.catchmate.domain.model.support.GetNoticeListResponse
@@ -76,7 +76,7 @@ object SupportMapper {
             userId = dto.userId,
             profileImageUrl = dto.profileImageUrl,
             nickName = dto.nickName,
-            clubInfo = toFavoriteClub(dto.clubInfo),
+            clubInfo = toClub(dto.clubInfo),
             gender = dto.gender,
             email = dto.email,
             socialType = dto.socialType,

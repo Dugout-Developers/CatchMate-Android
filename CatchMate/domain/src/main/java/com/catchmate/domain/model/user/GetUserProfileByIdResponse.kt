@@ -10,7 +10,7 @@ data class GetUserProfileByIdResponse(
     val enrollAlarm: String,
     val eventAlarm: String,
     val nickName: String,
-    val favoriteClub: FavoriteClub,
+    val favoriteClub: Club,
     val birthDate: String,
     val watchStyle: String,
 )

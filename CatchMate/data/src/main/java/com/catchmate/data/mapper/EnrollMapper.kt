@@ -17,7 +17,7 @@ import com.catchmate.data.dto.enroll.PostEnrollResponseDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoResponseDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
-import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
+import com.catchmate.data.mapper.BoardMapper.toClub
 import com.catchmate.domain.model.enroll.AllReceivedEnrollInfoResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollBoardInfo
@@ -96,7 +96,7 @@ object EnrollMapper {
             enrollAlarm = dto.enrollAlarm,
             eventAlarm = dto.eventAlarm,
             nickName = dto.nickName,
-            favoriteClub = toFavoriteClub(dto.favoriteClub),
+            favoriteClub = toClub(dto.favoriteClub),
             birthDate = dto.birthDate,
             watchStyle = dto.watchStyle,
         )

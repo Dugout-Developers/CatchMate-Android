@@ -46,10 +46,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     Bundle().apply {
                         putString("email", myPageViewModel.userProfile.value?.email)
                         putString("nickname", myPageViewModel.userProfile.value?.nickName)
-                        putString("allAlarm", myPageViewModel.userProfile.value?.allAlarm)
-                        putString("chatAlarm", myPageViewModel.userProfile.value?.chatAlarm)
-                        putString("enrollAlarm", myPageViewModel.userProfile.value?.enrollAlarm)
-                        putString("eventAlarm", myPageViewModel.userProfile.value?.eventAlarm)
+//                        putString("allAlarm", myPageViewModel.userProfile.value?.allAlarm)
+//                        putString("chatAlarm", myPageViewModel.userProfile.value?.chatAlarm)
+//                        putString("enrollAlarm", myPageViewModel.userProfile.value?.enrollAlarm)
+//                        putString("eventAlarm", myPageViewModel.userProfile.value?.eventAlarm)
                     }
                 findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }
@@ -63,14 +63,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 .load(userInfo.profileImageUrl)
                 .into(ivMyPageUserProfile)
             tvMyPageUserProfileNickname.text = userInfo.nickName
-            tvMyPageUserProfileTeamBadge.text = ClubUtils.convertClubIdToName(userInfo.favoriteClub.id)
+            tvMyPageUserProfileTeamBadge.text = ClubUtils.convertClubIdToName(userInfo.club.clubId)
 
             DrawableCompat
                 .setTint(
                     tvMyPageUserProfileTeamBadge.background,
                     convertTeamColor(
                         requireContext(),
-                        userInfo.favoriteClub.id,
+                        userInfo.club.clubId,
                         true,
                         "mypage",
                     ),
@@ -90,16 +90,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         myPageViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             initProfile(response)
         }
-        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
-            if (response.newEnrollCount == 0) {
-                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
-            } else {
-                binding.tvMyPageReceivedJoinUnreadCount.apply {
-                    visibility = View.VISIBLE
-                    text = response.newEnrollCount.toString()
-                }
-            }
-        }
+//        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
+//            if (response.newEnrollCount == 0) {
+//                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
+//            } else {
+//                binding.tvMyPageReceivedJoinUnreadCount.apply {
+//                    visibility = View.VISIBLE
+//                    text = response.newEnrollCount.toString()
+//                }
+//            }
+//        }
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
             if (token.isNullOrEmpty()) {
                 binding.apply {
@@ -110,7 +110,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 }
             } else {
                 myPageViewModel.getUserProfile()
-                myPageViewModel.getEnrollNewCount()
+//                myPageViewModel.getEnrollNewCount()
             }
         }
         myPageViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

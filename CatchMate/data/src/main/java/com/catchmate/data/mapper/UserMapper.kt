@@ -12,7 +12,7 @@ import com.catchmate.data.dto.user.PatchUserProfileResponseDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.data.dto.user.PostUserBlockResponseDTO
-import com.catchmate.data.mapper.BoardMapper.toFavoriteClub
+import com.catchmate.data.mapper.BoardMapper.toClub
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
@@ -30,17 +30,13 @@ object UserMapper {
     fun toGetUserProfileResponse(getUserProfileResponseDTO: GetUserProfileResponseDTO): GetUserProfileResponse =
         GetUserProfileResponse(
             userId = getUserProfileResponseDTO.userId,
+            nickName = getUserProfileResponseDTO.nickName,
             email = getUserProfileResponseDTO.email,
             profileImageUrl = getUserProfileResponseDTO.profileImageUrl,
             gender = getUserProfileResponseDTO.gender,
-            allAlarm = getUserProfileResponseDTO.allAlarm,
-            chatAlarm = getUserProfileResponseDTO.chatAlarm,
-            enrollAlarm = getUserProfileResponseDTO.enrollAlarm,
-            eventAlarm = getUserProfileResponseDTO.eventAlarm,
-            nickName = getUserProfileResponseDTO.nickName,
-            favoriteClub = toFavoriteClub(getUserProfileResponseDTO.favoriteClub),
             birthDate = getUserProfileResponseDTO.birthDate,
             watchStyle = getUserProfileResponseDTO.watchStyle,
+            club = toClub(getUserProfileResponseDTO.club),
         )
 
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =
@@ -93,7 +89,7 @@ object UserMapper {
             enrollAlarm = responseDTO.enrollAlarm,
             eventAlarm = responseDTO.eventAlarm,
             nickName = responseDTO.nickName,
-            favoriteClub = toFavoriteClub(responseDTO.favoriteClub),
+            favoriteClub = toClub(responseDTO.favoriteClub),
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
         )
