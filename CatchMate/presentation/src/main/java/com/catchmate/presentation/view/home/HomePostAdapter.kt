@@ -91,16 +91,16 @@ class HomePostAdapter(
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameResponse.gameStartDate!!)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
-            tvItemPlace.text = homeBoard.gameInfo.location
+            tvItemPlace.text = homeBoard.gameResponse.location
             tvItemTitle.text = homeBoard.title
 
-            val isCheerTeam = homeBoard.gameInfo.homeClubId == homeBoard.cheerClubId
+            val isCheerTeam = homeBoard.gameResponse.homeClub.clubId == homeBoard.cheerClub.clubId
 
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameInfo.homeClubId,
+                homeBoard.gameResponse.homeClub.clubId,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -108,7 +108,7 @@ class HomePostAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameInfo.awayClubId,
+                homeBoard.gameResponse.awayClub.clubId,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,

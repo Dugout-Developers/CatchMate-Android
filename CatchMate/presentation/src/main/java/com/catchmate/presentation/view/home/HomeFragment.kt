@@ -40,7 +40,7 @@ class HomeFragment :
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
@@ -154,21 +154,21 @@ class HomeFragment :
         }
 
         homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvHomePosts.visibility = View.GONE
                 binding.layoutHomeNoList.visibility = View.VISIBLE
             } else {
                 binding.rvHomePosts.visibility = View.VISIBLE
                 binding.layoutHomeNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    postList.addAll(response.boardInfoList)
+                    postList.addAll(response.content)
                     postList.forEach {
                         Log.i("LIST", "${it.boardId}")
                     }
                 }
                 val adapter = binding.rvHomePosts.adapter as HomePostAdapter
                 adapter.updatePostList(postList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -176,8 +176,8 @@ class HomeFragment :
     }
 
     private fun getBoardList() {
-        Log.i("api 호출", "호출 $isLoading $isLastPage")
-        if (isLoading || isLastPage) return
+        Log.i("api 호출", "호출 $isLoading $hasNext")
+        if (isLoading || !hasNext) return
         isLoading = true
         homeViewModel.getBoardList(
             gameStartDate,
@@ -241,7 +241,7 @@ class HomeFragment :
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) { // 새로운 목록 불러와야함
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) { // 새로운 목록 불러와야함
                             currentPage += 1
                             getBoardList()
                         }
@@ -273,7 +273,7 @@ class HomeFragment :
     override fun onDateSelected(date: String?) {
         gameStartDate = date
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()
@@ -284,7 +284,7 @@ class HomeFragment :
     override fun onClubFilterSelected(clubIdList: Array<Int>?) {
         preferredTeamIdList = clubIdList
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()
@@ -295,7 +295,7 @@ class HomeFragment :
     override fun onPersonFilterSelected(count: Int?) {
         maxPerson = count
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()

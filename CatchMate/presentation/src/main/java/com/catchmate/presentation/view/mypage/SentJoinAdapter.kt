@@ -92,10 +92,10 @@ class SentJoinAdapter(
             tvItemPlace.text = enrollInfo.boardInfo.gameInfo.location
             tvItemTitle.text = enrollInfo.boardInfo.title
 
-            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClubId == enrollInfo.boardInfo.cheerClubId
+            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClub.clubId == enrollInfo.boardInfo.cheerClubId
 
             ResourceUtil.setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.homeClubId,
+                enrollInfo.boardInfo.gameInfo.homeClub.clubId,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -103,7 +103,7 @@ class SentJoinAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.awayClubId,
+                enrollInfo.boardInfo.gameInfo.awayClub.clubId,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,

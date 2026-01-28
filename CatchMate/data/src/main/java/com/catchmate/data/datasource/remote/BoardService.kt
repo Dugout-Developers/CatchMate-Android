@@ -45,12 +45,13 @@ interface BoardService {
     ): Response<PatchBoardLiftUpResponseDTO?>
 
     // 필터 미지정 시 모든 쿼리 값 안넣고 호출
-    @GET("boards/list")
+    @GET("api/boards")
     suspend fun getBoardList(
-        @Query("gameStartDate") gameStartDate: String? = null,
+        @Query("gameDate") gameDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
         @Query("preferredTeamIdList") preferredTeamIdList: Array<Int>? = null,
         @Query("page") page: Int? = null,
+        @Query("size") size: Int? = null,
     ): Response<GetBoardListResponseDTO?>
 
     @GET("boards/list/{userId}")

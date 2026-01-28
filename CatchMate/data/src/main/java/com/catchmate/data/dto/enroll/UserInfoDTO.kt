@@ -4,15 +4,11 @@ import com.catchmate.data.dto.user.ClubDTO
 
 data class UserInfoDTO(
     val userId: Long,
+    val nickName: String,
     val email: String,
     val profileImageUrl: String,
     val gender: String,
-    val allAlarm: String,
-    val chatAlarm: String,
-    val enrollAlarm: String,
-    val eventAlarm: String,
-    val nickName: String,
-    val favoriteClub: ClubDTO,
     val birthDate: String,
     val watchStyle: String? = null,
+    val club: ClubDTO,
 )

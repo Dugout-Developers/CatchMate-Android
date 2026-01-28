@@ -27,10 +27,11 @@ interface BoardRepository {
     suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse>
 
     suspend fun getBoardList(
-        gameStartDate: String?,
+        gameDate: String?,
         maxPerson: Int?,
         preferredTeamIdList: Array<Int>?,
         page: Int?,
+        size: Int?,
     ): Result<GetBoardListResponse>
 
     suspend fun getUserBoardList(

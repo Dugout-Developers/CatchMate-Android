@@ -1,8 +1,11 @@
 package com.catchmate.data.dto.enroll
 
+import com.catchmate.data.dto.user.ClubDTO
+
 data class GameInfoDTO(
-    val homeClubId: Int,
-    val awayClubId: Int,
-    val gameStartDate: String?,
+    val gameId: Int,
+    val gameStartDate: String,
     val location: String,
+    val homeClub: ClubDTO,
+    val awayClub: ClubDTO,
 )

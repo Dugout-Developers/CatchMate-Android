@@ -85,14 +85,14 @@ class ReceivedJoinProfileAdapter(
                 .error(R.drawable.vec_all_default_profile)
                 .into(ivProfileImage)
             tvProfileNickname.text = info.userInfo.nickName
-            tvProfileTeam.text = ClubUtils.convertClubIdToName(info.userInfo.favoriteClub.clubId)
+            tvProfileTeam.text = ClubUtils.convertClubIdToName(info.userInfo.club.clubId)
 
             DrawableCompat
                 .setTint(
                     tvProfileTeam.background,
                     convertTeamColor(
                         context,
-                        info.userInfo.favoriteClub.clubId,
+                        info.userInfo.club.clubId,
                         true,
                         "receivedJoinProfileAdapter",
                     ),

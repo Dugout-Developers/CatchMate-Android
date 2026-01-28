@@ -95,11 +95,11 @@ class AddPostFragment :
             response.gameInfo.gameStartDate?.let {
                 addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(it))
             }
-            if (response.gameInfo.homeClubId != 0) {
-                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
+            if (response.gameInfo.homeClub.clubId != 0) {
+                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClub.clubId))
             }
-            if (response.gameInfo.awayClubId != 0) {
-                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
+            if (response.gameInfo.awayClub.clubId != 0) {
+                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClub.clubId))
             }
             if (response.cheerClubId != 0) {
                 tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)

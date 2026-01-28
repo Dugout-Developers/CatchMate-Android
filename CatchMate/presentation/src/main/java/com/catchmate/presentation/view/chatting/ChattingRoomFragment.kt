@@ -203,19 +203,19 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initChatRoomInfo(info: ChatRoomInfo) {
         binding.cgivChattingRoom.apply {
-            val isCheerTeam = info.boardInfo.gameInfo.homeClubId == info.boardInfo.cheerClubId
+            val isCheerTeam = info.boardInfo.gameResponse.homeClub.clubId == info.boardInfo.cheerClub.clubId
             setHomeTeamImageView(
-                info.boardInfo.gameInfo.homeClubId,
+                info.boardInfo.gameResponse.homeClub.clubId,
                 isCheerTeam,
             )
             setAwayTeamImageView(
-                info.boardInfo.gameInfo.awayClubId,
+                info.boardInfo.gameResponse.awayClub.clubId,
                 !isCheerTeam,
             )
-            val (date, time) = formatISODateTime(info.boardInfo.gameInfo.gameStartDate!!)
+            val (date, time) = formatISODateTime(info.boardInfo.gameResponse.gameStartDate!!)
             setGameDateTextView(date)
             setGameTimeTextView(time)
-            setGamePlaceTextView(info.boardInfo.gameInfo.location)
+            setGamePlaceTextView(info.boardInfo.gameResponse.location)
         }
     }
 
@@ -281,15 +281,15 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
                 sideSheetBinding.apply {
                     // 게시글 정보
-                    val dateTimePair = formatISODateTime(info.boardInfo.gameInfo.gameStartDate!!)
+                    val dateTimePair = formatISODateTime(info.boardInfo.gameResponse.gameStartDate!!)
                     tvSideSheetDate.text = dateTimePair.first
                     tvSideSheetTime.text = dateTimePair.second
-                    tvSideSheetPlace.text = info.boardInfo.gameInfo.location
+                    tvSideSheetPlace.text = info.boardInfo.gameResponse.location
                     tvSideSheetCountBadge.text = "${info.participantCount}/${info.boardInfo.maxPerson}"
                     tvSideSheetTitle.text = info.boardInfo.title
-                    val isCheerTeam = info.boardInfo.cheerClubId == info.boardInfo.gameInfo.homeClubId
+                    val isCheerTeam = info.boardInfo.cheerClub.clubId == info.boardInfo.gameResponse.homeClub.clubId
                     setTeamViewResources(
-                        info.boardInfo.gameInfo.homeClubId,
+                        info.boardInfo.gameResponse.homeClub.clubId,
                         isCheerTeam,
                         ivSideSheetHomeTeam,
                         ivSideSheetHomeLogo,
@@ -297,7 +297,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         requireContext(),
                     )
                     setTeamViewResources(
-                        info.boardInfo.gameInfo.awayClubId,
+                        info.boardInfo.gameResponse.awayClub.clubId,
                         !isCheerTeam,
                         ivSideSheetAwayTeam,
                         ivSideSheetAwayLogo,
@@ -306,7 +306,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     )
 
                     // 참여자 정보
-                    var crewAdapter = ChattingCrewListAdapter(userId, info.boardInfo.userInfo.userId, "chattingRoom")
+                    var crewAdapter = ChattingCrewListAdapter(userId, info.boardInfo.userResponse.userId, "chattingRoom")
                     rvSideSheetParticipantList.apply {
                         adapter = crewAdapter
                         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -318,7 +318,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         sideSheetDialog.dismiss()
                         showChattingRoomLeaveDialog()
                     }
-                    if (userId == info.boardInfo.userInfo.userId) {
+                    if (userId == info.boardInfo.userResponse.userId) {
                         ivSideSheetSettings.visibility = View.VISIBLE
                         ivSideSheetSettings.setOnClickListener {
                             // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id, 채팅방 id 넘김
@@ -327,7 +327,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                                     putString("chattingRoomImage", info.chatRoomImage)
                                     putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
                                     putLong("loginUserId", userId)
-                                    putLong("writerId", info.boardInfo.userInfo.userId)
+                                    putLong("writerId", info.boardInfo.userResponse.userId)
                                     putLong("chatRoomId", chatRoomId)
                                 }
                             findNavController().navigate(R.id.action_chattingRoomFragment_to_chattingSettingFragment, bundle)

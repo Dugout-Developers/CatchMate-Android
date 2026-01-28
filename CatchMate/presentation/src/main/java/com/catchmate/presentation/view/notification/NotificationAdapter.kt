@@ -130,10 +130,10 @@ class NotificationAdapter(
                 .with(context)
                 .load(info.senderProfileImageUrl)
                 .into(holder.ivNotificationItemProfile)
-            val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo!!.gameInfo.gameStartDate!!)
+            val dateTime: Pair<String, String> = DateUtils.formatISODateTimeToDateTime(info.boardInfo!!.gameResponse.gameStartDate!!)
             holder.tvNotificationItemDate.text = dateTime.first + " | "
             holder.tvNotificationItemTime.text = dateTime.second + " | "
-            holder.tvNotificationItemPlace.text = info.boardInfo!!.gameInfo.location
+            holder.tvNotificationItemPlace.text = info.boardInfo!!.gameResponse.location
         }
         holder.tvNotificationItemTitle.text = info.body
         if (info.read) {

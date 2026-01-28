@@ -176,7 +176,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     userInfo.gender,
                     userInfo.birthDate,
                     userInfo.watchStyle,
-                    userInfo.favoriteClub,
+                    userInfo.club,
                 )
             val bundle = Bundle()
             bundle.putParcelable("userInfo", userProfile)
@@ -323,9 +323,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             isFinishedGame = checkIsFinishedGame(post.gameInfo.gameStartDate!!)
             tvReadPostPlace.text = post.gameInfo.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
-            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
+            val isCheerTeam = post.gameInfo.homeClub.clubId == post.cheerClubId
             setTeamViewResources(
-                post.gameInfo.homeClubId,
+                post.gameInfo.homeClub.clubId,
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -333,7 +333,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                post.gameInfo.awayClubId,
+                post.gameInfo.awayClub.clubId,
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
@@ -346,12 +346,12 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.favoriteClub.clubId,
+                        post.userInfo.club.clubId,
                         true,
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.favoriteClub.clubId)
+            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.club.clubId)
             if (post.userInfo.watchStyle.isNullOrEmpty()) {
                 tvReadPostWriterCheerStyle.visibility = View.GONE
             } else {
@@ -501,9 +501,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = post.gameInfo.location
 
-            val isCheerTeam = post.gameInfo.homeClubId == post.cheerClubId
+            val isCheerTeam = post.gameInfo.homeClub.clubId == post.cheerClubId
             setTeamViewResources(
-                post.gameInfo.homeClubId,
+                post.gameInfo.homeClub.clubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -511,7 +511,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                post.gameInfo.awayClubId,
+                post.gameInfo.awayClub.clubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
@@ -575,9 +575,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = boardInfo.gameInfo.location
 
-            val isCheerTeam = boardInfo.gameInfo.homeClubId == boardInfo.cheerClubId
+            val isCheerTeam = boardInfo.gameInfo.homeClub.clubId == boardInfo.cheerClubId
             setTeamViewResources(
-                boardInfo.gameInfo.homeClubId,
+                boardInfo.gameInfo.homeClub.clubId,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -585,7 +585,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                boardInfo.gameInfo.awayClubId,
+                boardInfo.gameInfo.awayClub.clubId,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,

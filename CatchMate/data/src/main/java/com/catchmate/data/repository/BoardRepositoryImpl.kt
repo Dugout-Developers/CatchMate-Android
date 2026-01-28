@@ -71,14 +71,15 @@ class BoardRepositoryImpl
             )
 
         override suspend fun getBoardList(
-            gameStartDate: String?,
+            gameDate: String?,
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
             page: Int?,
+            size: Int?
         ): Result<GetBoardListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamIdList, page) },
+                apiFunction = { boardApi.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size) },
                 transform = { BoardMapper.toGetBoardListResponse(it!!) },
             )
 
