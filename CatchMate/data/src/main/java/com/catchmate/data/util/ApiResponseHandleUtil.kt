@@ -6,13 +6,12 @@ import retrofit2.Response
 
 object ApiResponseHandleUtil {
     private fun <T, R> Response<T>.handleApiResponse(
-        transform: (T) -> R,
+        transform: (T?) -> R,
         errorHandler: (Response<T>, JSONObject) -> Exception,
     ): Result<R> =
         try {
             if (isSuccessful) {
-                val body = body()?.let { transform(it) } ?: throw NullPointerException("Null Response")
-                Result.success(body)
+                Result.success(transform(body()))
             } else {
                 val errorJson = JSONObject(errorBody()?.string() ?: "")
                 Result.failure(errorHandler(this, errorJson))
@@ -26,7 +25,7 @@ object ApiResponseHandleUtil {
     suspend fun <T, R> apiCall(
         tag: String,
         apiFunction: suspend () -> Response<T>,
-        transform: (T) -> R,
+        transform: (T?) -> R,
         errorHandler: (Response<T>, JSONObject) -> Exception =
             { response, json ->
                 Exception("$tag 통신 실패: ${response.code()} - $json")

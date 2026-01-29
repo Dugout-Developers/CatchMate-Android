@@ -55,6 +55,10 @@ class AddPostViewModel
         val patchBoardResponse: LiveData<PatchBoardResponse>
             get() = _patchBoardResponse
 
+        private var _isTempMode = MutableLiveData<Boolean>()
+        val isTempMode: LiveData<Boolean>
+            get() = _isTempMode
+
         private var _getTempBoardResponse = MutableLiveData<GetTempBoardResponse>()
         val getTempBoardResponse: LiveData<GetTempBoardResponse>
             get() = _getTempBoardResponse
@@ -123,7 +127,12 @@ class AddPostViewModel
                 val result = getTempBoardUseCase.getTempBoard()
                 result
                     .onSuccess { response ->
-                        _getTempBoardResponse.value = response
+                        response?.let { data ->
+                            _isTempMode.value = true
+                            _getTempBoardResponse.value = data
+                        } ?: run {
+                            _isTempMode.value = false
+                        }
                     }.onFailure { exception ->
                         when (exception) {
                             is ReissueFailureException -> _navigateToLogin.value = true

@@ -70,7 +70,7 @@ interface BoardService {
         @Query("page") page: Int,
     ): Response<GetLikedBoardResponseDTO?>
 
-    @GET("boards/temp")
+    @GET("api/boards/temp")
     suspend fun getTempBoard(): Response<GetTempBoardResponseDTO?>
 
     @DELETE("boards/{boardId}")

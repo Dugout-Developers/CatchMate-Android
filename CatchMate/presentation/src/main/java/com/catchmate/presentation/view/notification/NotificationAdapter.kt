@@ -81,18 +81,18 @@ class NotificationAdapter(
                         currentNotice.inquiryInfo?.inquiryId,
                     )
                 } else {
-                    val chatRoomId = currentNotice.boardInfo?.chatRoomId
-                    itemClickListener.onNotificationItemClick(
-                        currentNotice.notificationId,
-                        pos,
-                        currentNotice.acceptStatus,
-                        if (chatRoomId == -1L) {
-                            null
-                        } else {
-                            chatRoomId
-                        },
-                        null,
-                    )
+//                    val chatRoomId = currentNotice.boardInfo?.chatRoomId
+//                    itemClickListener.onNotificationItemClick(
+//                        currentNotice.notificationId,
+//                        pos,
+//                        currentNotice.acceptStatus,
+//                        if (chatRoomId == -1L) {
+//                            null
+//                        } else {
+//                            chatRoomId
+//                        },
+//                        null,
+//                    )
                 }
             }
         }

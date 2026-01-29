@@ -115,16 +115,15 @@ class BoardRepositoryImpl
                 transform = { BoardMapper.toGetLikedBoardResponse(it!!) },
             )
 
-        override suspend fun getTempBoard(): Result<GetTempBoardResponse> =
+        override suspend fun getTempBoard(): Result<GetTempBoardResponse?> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.getTempBoard() },
-                transform = { BoardMapper.toGetTempBoardResponse(it!!) },
-                errorHandler = { response, jsonObject ->
-                    if (response.code() == 404) {
-                        NonExistentTempBoardException("$jsonObject")
+                transform = { responseBody ->
+                    if (responseBody != null) {
+                        BoardMapper.toGetTempBoardResponse(responseBody)
                     } else {
-                        Exception("$jsonObject")
+                        null
                     }
                 },
             )

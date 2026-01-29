@@ -94,7 +94,7 @@ object EnrollMapper {
             gender = dto.gender,
             birthDate = dto.birthDate,
             watchStyle = dto.watchStyle,
-            club = toClub(dto.club),
+            club = toClub(dto.club)!!,
         )
 
     private fun toEnrollBoardInfo(dto: EnrollBoardInfoDTO): EnrollBoardInfo =

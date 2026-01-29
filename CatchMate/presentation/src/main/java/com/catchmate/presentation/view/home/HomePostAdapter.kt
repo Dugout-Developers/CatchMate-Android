@@ -97,10 +97,10 @@ class HomePostAdapter(
             tvItemPlace.text = homeBoard.gameResponse.location
             tvItemTitle.text = homeBoard.title
 
-            val isCheerTeam = homeBoard.gameResponse.homeClub.clubId == homeBoard.cheerClub.clubId
+            val isCheerTeam = homeBoard.gameResponse.homeClub?.clubId == homeBoard.cheerClub.clubId
 
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameResponse.homeClub.clubId,
+                homeBoard.gameResponse.homeClub?.clubId ?: 0,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -108,7 +108,7 @@ class HomePostAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameResponse.awayClub.clubId,
+                homeBoard.gameResponse.awayClub?.clubId ?: 0,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,

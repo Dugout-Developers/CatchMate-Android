@@ -92,10 +92,10 @@ class MyPostAdapter(
             tvItemPlace.text = board.gameResponse.location
             tvItemTitle.text = board.title
 
-            val isCheerTeam = board.gameResponse.homeClub.clubId == board.cheerClub.clubId
+            val isCheerTeam = board.gameResponse.homeClub?.clubId == board.cheerClub.clubId
 
             ResourceUtil.setTeamViewResources(
-                board.gameResponse.homeClub.clubId,
+                board.gameResponse.homeClub?.clubId ?: 0,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -103,7 +103,7 @@ class MyPostAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                board.gameResponse.awayClub.clubId,
+                board.gameResponse.awayClub?.clubId ?: 0,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,

@@ -43,7 +43,7 @@ interface BoardRepository {
 
     suspend fun getLikedBoard(page: Int): Result<GetLikedBoardResponse>
 
-    suspend fun getTempBoard(): Result<GetTempBoardResponse>
+    suspend fun getTempBoard(): Result<GetTempBoardResponse?>
 
     suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse>
 

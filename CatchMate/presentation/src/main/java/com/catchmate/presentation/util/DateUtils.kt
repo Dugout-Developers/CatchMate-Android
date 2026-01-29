@@ -35,7 +35,7 @@ object DateUtils {
     fun formatGameDateTimeEditBoard(dateTime: String): String {
         val (date, time) = dateTime.split("T")
         val newTime = time.substringBefore(".")
-        return "$date $newTime"
+        return "${date}T${newTime}"
     }
 
     // 날짜+시간 값 한 번에 표시되도록 포맷(readPost, addPost)

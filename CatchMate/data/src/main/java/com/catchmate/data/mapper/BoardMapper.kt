@@ -51,13 +51,17 @@ object BoardMapper {
             gameRequest = toGameRequestDto(request.gameRequest),
         )
 
-    private fun toGameRequestDto(request: GameRequest): GameRequestDto =
-        GameRequestDto(
-            homeClubId = request.homeClubId,
-            awayClubId = request.awayClubId,
-            gameStartDate = request.gameStartDate,
-            location = request.location,
-        )
+    private fun toGameRequestDto(request: GameRequest?): GameRequestDto? =
+        if (request == null) {
+            null
+        } else {
+            GameRequestDto(
+                homeClubId = request.homeClubId,
+                awayClubId = request.awayClubId,
+                gameStartDate = request.gameStartDate,
+                location = request.location,
+            )
+        }
 
     private fun toGameInfoDTO(game: GameInfo): GameInfoDTO =
         GameInfoDTO(
@@ -76,19 +80,23 @@ object BoardMapper {
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
             bookMarked = dto.bookMarked,
-            cheerClub = toClub(dto.cheerClub),
-            gameResponse = toGameInfo(dto.gameResponse),
+            cheerClub = toClub(dto.cheerClub)!!,
+            gameResponse = toGameInfo(dto.gameResponse)!!,
             userResponse = toUserInfo(dto.userResponse),
         )
 
-    private fun toGameInfo(dto: GameInfoDTO): GameInfo =
-        GameInfo(
-            gameId = dto.gameId,
-            gameStartDate = dto.gameStartDate,
-            location = dto.location,
-            homeClub = toClub(dto.homeClub),
-            awayClub = toClub(dto.awayClub),
-        )
+    private fun toGameInfo(dto: GameInfoDTO?): GameInfo? =
+        dto?.let {
+            GameInfo(
+                gameId = dto.gameId,
+                gameStartDate = dto.gameStartDate,
+                location = dto.location,
+                homeClub = toClub(dto.homeClub),
+                awayClub = toClub(dto.awayClub),
+            )
+        } ?: run {
+            null
+        }
 
     private fun toUserInfo(dto: UserInfoDTO): UserInfo =
         UserInfo(
@@ -99,24 +107,33 @@ object BoardMapper {
             gender = dto.gender,
             birthDate = dto.birthDate,
             watchStyle = dto.watchStyle,
-            club = toClub(dto.club),
+            club = toClub(dto.club)!!,
         )
 
-    fun toClub(dto: ClubDTO): Club =
-        Club(
-            clubId = dto.clubId,
-            name = dto.name,
-            homeStadium = dto.homeStadium,
-            region = dto.region,
-        )
+    fun toClub(dto: ClubDTO?): Club? =
+        dto?.let {
+            Club(
+                clubId = dto.clubId,
+                name = dto.name,
+                homeStadium = dto.homeStadium,
+                region = dto.region,
+            )
+        } ?: run {
+            null
+        }
 
-    fun toClubDto(club: Club): ClubDTO =
-        ClubDTO(
-            clubId = club.clubId,
-            name = club.name,
-            homeStadium = club.homeStadium,
-            region = club.region,
-        )
+    fun toClubDto(club: Club?): ClubDTO? =
+        club?.let {
+            ClubDTO(
+                clubId = club.clubId,
+                name = club.name,
+                homeStadium = club.homeStadium,
+                region = club.region,
+            )
+        } ?: run {
+            null
+        }
+
 
     fun toPatchBoardRequestDTO(request: PatchBoardRequest): PatchBoardRequestDTO =
         PatchBoardRequestDTO(
@@ -140,7 +157,7 @@ object BoardMapper {
             maxPerson = responseDTO.maxPerson,
             preferredGender = responseDTO.preferredGender,
             preferredAgeRange = responseDTO.preferredAgeRange,
-            gameInfo = toGameInfo(responseDTO.gameInfo),
+            gameInfo = toGameInfo(responseDTO.gameInfo)!!,
             liftUpDate = responseDTO.liftUpDate,
             userInfo = toUserInfo(responseDTO.userInfo),
             buttonStatus = responseDTO.buttonStatus,
@@ -170,8 +187,8 @@ object BoardMapper {
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
             bookMarked = dto.bookMarked,
-            cheerClub = toClub(dto.cheerClub),
-            gameResponse = toGameInfo(dto.gameResponse),
+            cheerClub = toClub(dto.cheerClub)!!,
+            gameResponse = toGameInfo(dto.gameResponse)!!,
             userResponse = toUserInfo(dto.userResponse),
         )
 
@@ -195,7 +212,7 @@ object BoardMapper {
             preferredGender = responseDTO.preferredGender,
             preferredAgeRange = responseDTO.preferredAgeRange,
             liftUpDate = responseDTO.liftUpDate,
-            gameInfo = toGameInfo(responseDTO.gameInfo),
+            gameInfo = toGameInfo(responseDTO.gameInfo)!!,
             userInfo = toUserInfo(responseDTO.userInfo),
             buttonStatus = responseDTO.buttonStatus,
             chatRoomId = responseDTO.chatRoomId,
@@ -207,14 +224,12 @@ object BoardMapper {
             boardId = dto.boardId,
             title = dto.title,
             content = dto.content,
-            cheerClubId = dto.cheerClubId,
-            currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
             preferredGender = dto.preferredGender,
             preferredAgeRange = dto.preferredAgeRange,
-            gameInfo = toGameInfo(dto.gameInfo),
-            liftUpDate = dto.liftUpDate,
-            userInfo = toUserInfo(dto.userInfo),
+            cheerClub = toClub(dto.cheerClub),
+            game = toGameInfo(dto.game),
+            user = toUserInfo(dto.user),
         )
 
     fun toDeleteBoardResponse(dto: DeleteBoardResponseDTO): DeleteBoardResponse =
