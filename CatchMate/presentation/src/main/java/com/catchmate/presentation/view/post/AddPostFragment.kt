@@ -10,6 +10,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PostBoardRequest
@@ -61,6 +62,7 @@ class AddPostFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        // getBoardInfo()로 받아온 board Data가 존재하고, isEditMode == true일 때 게시글 수정 모드이므로 viewmodel에 의해 보드 데이터 셋팅됨
         addPostViewModel.setBoardInfo(getBoardInfo())
         initFooter()
         initAdditionalInfoEdt()
@@ -279,35 +281,44 @@ class AddPostFragment :
             val awayClubId = ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
             val gameStartDate = addPostViewModel.gameDateTime.value.toString()
             val location = binding.tvAddPostPlace.text.toString()
-            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+            val gameRequest =
+                GameRequest(
+                    homeClubId,
+                    awayClubId,
+                    gameStartDate,
+                    location,
+                )
 
             if (isEditMode) {
-                val boardEditRequest =
-                    PatchBoardRequest(
-                        title,
-                        content,
-                        maxPerson,
-                        cheerClubId,
-                        preferredGender,
-                        preferredAgeRange,
-                        gameRequest,
-                        true,
-                    )
-                addPostViewModel.patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                // 업데이트 모드
+//                val boardEditRequest =
+//                    PatchBoardRequest(
+//                        title,
+//                        content,
+//                        maxPerson,
+//                        cheerClubId,
+//                        preferredGender,
+//                        preferredAgeRange,
+//                        gameRequest,
+//                        true,
+//                    )
+//                addPostViewModel.patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
-                val boardWriteRequest =
-                    PostBoardRequest(
-                        title,
-                        content,
-                        maxPerson,
-                        cheerClubId,
-                        preferredGender,
-                        preferredAgeRange,
-                        gameRequest,
-                        true,
-                    )
-                isTempSave = false
-                addPostViewModel.postBoard(boardWriteRequest)
+                if (addPostViewModel.isTempMode.value == false) {
+                    isTempSave = false
+                    val boardWriteRequest =
+                        PostBoardRequest(
+                            title = title,
+                            content = content,
+                            maxPerson = maxPerson,
+                            cheerClubId = cheerClubId,
+                            preferredGender = preferredGender,
+                            preferredAgeRange = preferredAgeRange,
+                            completed = true,
+                            gameRequest = gameRequest,
+                        )
+                    addPostViewModel.postBoard(boardWriteRequest)
+                }
             }
         }
     }

@@ -29,7 +29,7 @@ object DateUtils {
     fun formatGameDateTime(
         date: String,
         time: String,
-    ): String = "$date $time:00"
+    ): String = "${date}T${time}:00"
 
     // 게시글 수정 시 받아온 날짜+시간 값 화면에 표시되는 형식으로 포맷
     fun formatGameDateTimeEditBoard(dateTime: String): String {

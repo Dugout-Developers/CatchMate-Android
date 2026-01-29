@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.board.BoardDTO
 import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
 import com.catchmate.data.dto.board.DeleteBoardResponseDTO
+import com.catchmate.data.dto.board.GameRequestDto
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
@@ -20,6 +21,7 @@ import com.catchmate.data.dto.user.ClubDTO
 import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
+import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
@@ -38,14 +40,23 @@ import com.catchmate.domain.model.user.Club
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =
         PostBoardRequestDTO(
+            boardId = request.boardId,
             title = request.title,
             content = request.content,
             maxPerson = request.maxPerson,
             cheerClubId = request.cheerClubId,
             preferredGender = request.preferredGender,
             preferredAgeRange = request.preferredAgeRange,
-            gameRequest = toGameInfoDTO(request.gameRequest),
-            isCompleted = request.isCompleted,
+            completed = request.completed,
+            gameRequest = toGameRequestDto(request.gameRequest),
+        )
+
+    private fun toGameRequestDto(request: GameRequest): GameRequestDto =
+        GameRequestDto(
+            homeClubId = request.homeClubId,
+            awayClubId = request.awayClubId,
+            gameStartDate = request.gameStartDate,
+            location = request.location,
         )
 
     private fun toGameInfoDTO(game: GameInfo): GameInfoDTO =
@@ -62,14 +73,12 @@ object BoardMapper {
             boardId = dto.boardId,
             title = dto.title,
             content = dto.content,
-            cheerClubId = dto.cheerClubId,
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
-            preferredGender = dto.preferredGender,
-            preferredAgeRange = dto.preferredAgeRange,
-            gameInfo = toGameInfo(dto.gameInfo),
-            liftUpDate = dto.liftUpDate,
-            userInfo = toUserInfo(dto.userInfo),
+            bookMarked = dto.bookMarked,
+            cheerClub = toClub(dto.cheerClub),
+            gameResponse = toGameInfo(dto.gameResponse),
+            userResponse = toUserInfo(dto.userResponse),
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =
