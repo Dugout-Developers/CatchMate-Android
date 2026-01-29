@@ -10,14 +10,13 @@ import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>
 
-    suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse>
+    suspend fun postBoardLike(boardId: Long): Result<Unit>
 
     suspend fun patchBoard(
         boardId: Long,

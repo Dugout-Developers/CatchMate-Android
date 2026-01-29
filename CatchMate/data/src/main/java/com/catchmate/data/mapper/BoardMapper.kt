@@ -12,7 +12,6 @@ import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
-import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
@@ -30,7 +29,6 @@ import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.enroll.GameInfo
@@ -246,8 +244,6 @@ object BoardMapper {
             isFirst = responseDTO.isFirst,
             isLast = responseDTO.isLast,
         )
-
-    fun toPostBoardLikeResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse = PostBoardLikeResponse(dto.state)
 
     fun toDeleteBoardLikeResponse(dto: DeleteBoardLikeResponseDTO): DeleteBoardLikeResponse = DeleteBoardLikeResponse(dto.state)
 }

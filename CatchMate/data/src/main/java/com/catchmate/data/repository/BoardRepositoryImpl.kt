@@ -6,7 +6,6 @@ import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
-import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
@@ -17,7 +16,6 @@ import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PatchBoardResponse
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.repository.BoardRepository
@@ -38,11 +36,11 @@ class BoardRepositoryImpl
                 transform = { BoardMapper.toPostBoardResponse(it!!) },
             )
 
-        override suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse> =
+        override suspend fun postBoardLike(boardId: Long): Result<Unit> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.postBoardLike(boardId) },
-                transform = { BoardMapper.toPostBoardLikeResponse(it!!) },
+                transform = { it },
                 errorHandler = { response, jsonObject ->
                     if (response.code() == 400) {
                         val message = jsonObject.getString("message")

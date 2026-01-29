@@ -11,7 +11,6 @@ import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -46,8 +45,8 @@ class ReadPostViewModel
         val getBoardResponse: LiveData<GetBoardResponse>
             get() = _getBoardResponse
 
-        private val _postBoardLikeResponse = MutableLiveData<PostBoardLikeResponse>()
-        val postBoardLikeResponse: LiveData<PostBoardLikeResponse>
+        private val _postBoardLikeResponse = MutableLiveData<Unit>()
+        val postBoardLikeResponse: LiveData<Unit>
             get() = _postBoardLikeResponse
 
         private val _deleteBoardLikeResponse = MutableLiveData<DeleteBoardLikeResponse>()

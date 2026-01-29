@@ -10,7 +10,6 @@ import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
 import com.catchmate.data.dto.board.PatchBoardRequestDTO
 import com.catchmate.data.dto.board.PatchBoardResponseDTO
-import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import retrofit2.Response
@@ -28,10 +27,10 @@ interface BoardService {
         @Body postBoardRequestDTO: PostBoardRequestDTO,
     ): Response<PostBoardResponseDTO?>
 
-    @POST("boards/bookmark/{boardId}")
+    @POST("api/bookmarks/{boardId}")
     suspend fun postBoardLike(
         @Path("boardId") boardId: Long,
-    ): Response<PostBoardLikeResponseDTO?>
+    ): Response<Unit>
 
     @PATCH("boards/{boardId}")
     suspend fun patchBoard(

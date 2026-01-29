@@ -241,10 +241,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 findNavController().popBackStack()
             }
         }
-        readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { code ->
-            if (code.state) {
-                Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
-            }
+        readPostViewModel.postBoardLikeResponse.observe(viewLifecycleOwner) { unit ->
+            Snackbar.make(requireView(), R.string.post_read_toast_msg, Snackbar.LENGTH_SHORT).show()
         }
         readPostViewModel.bookmarkFailureMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {

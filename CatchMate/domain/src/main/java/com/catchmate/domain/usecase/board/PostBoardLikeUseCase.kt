@@ -1,6 +1,5 @@
 package com.catchmate.domain.usecase.board
 
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 
@@ -9,5 +8,5 @@ class PostBoardLikeUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse> = boardRepository.postBoardLike(boardId)
+        suspend fun postBoardLike(boardId: Long): Result<Unit> = boardRepository.postBoardLike(boardId)
     }
