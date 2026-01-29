@@ -60,7 +60,7 @@ interface BoardService {
         @Query("page") page: Int,
     ): Response<GetUserBoardListResponseDTO?>
 
-    @GET("boards/{boardId}")
+    @GET("api/boards/{boardId}")
     suspend fun getBoard(
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>

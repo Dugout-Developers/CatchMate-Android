@@ -206,17 +206,17 @@ object BoardMapper {
             boardId = responseDTO.boardId,
             title = responseDTO.title,
             content = responseDTO.content,
-            cheerClubId = responseDTO.cheerClubId,
             currentPerson = responseDTO.currentPerson,
             maxPerson = responseDTO.maxPerson,
             preferredGender = responseDTO.preferredGender,
             preferredAgeRange = responseDTO.preferredAgeRange,
             liftUpDate = responseDTO.liftUpDate,
-            gameInfo = toGameInfo(responseDTO.gameInfo)!!,
-            userInfo = toUserInfo(responseDTO.userInfo),
+            bookMarked = responseDTO.bookMarked,
             buttonStatus = responseDTO.buttonStatus,
             chatRoomId = responseDTO.chatRoomId,
-            bookMarked = responseDTO.bookMarked,
+            cheerClub = toClub(responseDTO.cheerClub)!!,
+            game = toGameInfo(responseDTO.game)!!,
+            user = toUserInfo(responseDTO.user),
         )
 
     fun toGetTempBoardResponse(dto: GetTempBoardResponseDTO): GetTempBoardResponse =

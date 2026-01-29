@@ -183,8 +183,8 @@ class AddPostFragment :
                     info.maxPerson,
                     info.preferredGender,
                     info.preferredAgeRange,
-                    info.cheerClubId,
-                    info.gameInfo,
+                    info.cheerClub.clubId,
+                    info.game,
                 )
             }
             initHeader()

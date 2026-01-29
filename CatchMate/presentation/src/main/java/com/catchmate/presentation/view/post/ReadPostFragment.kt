@@ -144,7 +144,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                                 readPostViewModel
                                     .getBoardResponse
                                     .value
-                                    ?.userInfo!!
+                                    ?.user!!
                             val bundle =
                                 Bundle().apply {
                                     putString("nickname", userInfo.nickName)
@@ -166,7 +166,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
 
     private fun initWriterInfoLayout() {
         binding.layoutReadPostWriterInfo.setOnClickListener {
-            val userInfo = readPostViewModel.getBoardResponse.value?.userInfo
+            val userInfo = readPostViewModel.getBoardResponse.value?.user
             val userProfile =
                 GetUserProfileResponse(
                     userInfo?.userId!!,
@@ -227,7 +227,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         readPostViewModel.getBoard(boardId)
         readPostViewModel.getBoardResponse.observe(viewLifecycleOwner) { response ->
             setPostData(response)
-            isWriter = response.userInfo.userId == userId
+            isWriter = response.user.userId == userId
             if (response.maxPerson == response.currentPerson) {
                 binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
                     text = getString(R.string.post_register_closed)
@@ -319,13 +319,13 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
     private fun setPostData(post: GetBoardResponse) {
         binding.apply {
             tvReadPostTitle.text = post.title
-            tvReadPostDate.text = DateUtils.formatPlayDate(post.gameInfo.gameStartDate!!)
-            isFinishedGame = checkIsFinishedGame(post.gameInfo.gameStartDate!!)
-            tvReadPostPlace.text = post.gameInfo.location
+            tvReadPostDate.text = DateUtils.formatPlayDate(post.game.gameStartDate!!)
+            isFinishedGame = checkIsFinishedGame(post.game.gameStartDate!!)
+            tvReadPostPlace.text = post.game.location
             tvReadPostPeopleCount.text = post.maxPerson.toString() + "명"
-            val isCheerTeam = post.gameInfo.homeClub?.clubId == post.cheerClubId
+            val isCheerTeam = post.game.homeClub?.clubId == post.cheerClub.clubId
             setTeamViewResources(
-                post.gameInfo.homeClub?.clubId ?: 0,
+                post.game.homeClub?.clubId!!,
                 isCheerTeam,
                 ivReadPostHomeTeamBg,
                 ivReadPostHomeTeamLogo,
@@ -333,37 +333,37 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                post.gameInfo.awayClub?.clubId ?: 0,
+                post.game.awayClub?.clubId!!,
                 !isCheerTeam,
                 ivReadPostAwayTeamBg,
                 ivReadPostAwayTeamLogo,
                 "read",
                 requireContext(),
             )
-            tvReadPostWriterNickname.text = post.userInfo.nickName
+            tvReadPostWriterNickname.text = post.user.nickName
             DrawableCompat
                 .setTint(
                     tvReadPostWriterTeam.background,
                     convertTeamColor(
                         requireContext(),
-                        post.userInfo.club.clubId,
+                        post.user.club.clubId,
                         true,
                         "read",
                     ),
                 )
-            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.userInfo.club.clubId)
-            if (post.userInfo.watchStyle.isNullOrEmpty()) {
+            tvReadPostWriterTeam.text = ClubUtils.convertClubIdToName(post.user.club.clubId)
+            if (post.user.watchStyle.isNullOrEmpty()) {
                 tvReadPostWriterCheerStyle.visibility = View.GONE
             } else {
-                tvReadPostWriterCheerStyle.text = post.userInfo.watchStyle
+                tvReadPostWriterCheerStyle.text = post.user.watchStyle
             }
 
-            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.userInfo.gender)
-            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.userInfo.birthDate)
+            tvReadPostWriterGender.text = GenderUtils.convertBoardGender(requireContext(), post.user.gender)
+            tvReadPostWriterAge.text = AgeUtils.convertBirthDateToAge(post.user.birthDate)
             tvReadPostAdditionalInfo.text = post.content
             Glide
                 .with(this@ReadPostFragment)
-                .load(post.userInfo.profileImageUrl)
+                .load(post.user.profileImageUrl)
                 .into(ivReadPostWriterProfile)
 
             setGenderTextViewVisibility(
@@ -384,9 +384,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             layoutReadPostFooter.toggleLikedFooterLiked.isChecked = post.bookMarked
 
             when (post.buttonStatus) {
-                "APPLY" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
-                "APPLIED" -> readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
-                "VIEW CHAT" -> readPostViewModel.setBoardEnrollState(EnrollState.VIEW_CHAT)
+                EnrollState.APPLY.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
+                EnrollState.APPLIED.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
+                EnrollState.VIEW_CHAT.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.VIEW_CHAT)
                 else -> Log.d("BUTTON STATUS NULL", "BUTTON STATUS NULL")
             }
         }
@@ -496,14 +496,14 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         dialogBinding.apply {
             val post = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(post.game.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = post.gameInfo.location
+            tvApplicationDetailDialogPlace.text = post.game.location
 
-            val isCheerTeam = post.gameInfo.homeClub?.clubId == post.cheerClubId
+            val isCheerTeam = post.game.homeClub?.clubId == post.cheerClub.clubId
             setTeamViewResources(
-                post.gameInfo.homeClub?.clubId ?: 0,
+                post.game.homeClub?.clubId!!,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -511,7 +511,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                post.gameInfo.awayClub?.clubId ?: 0,
+                post.game.awayClub?.clubId!!,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
@@ -570,14 +570,14 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             val enrollInfo = readPostViewModel.getRequestedEnroll.value!!
             val boardInfo = readPostViewModel.getBoardResponse.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(boardInfo.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(boardInfo.game.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = boardInfo.gameInfo.location
+            tvApplicationDetailDialogPlace.text = boardInfo.game.location
 
-            val isCheerTeam = boardInfo.gameInfo.homeClub?.clubId == boardInfo.cheerClubId
+            val isCheerTeam = boardInfo.game.homeClub?.clubId == boardInfo.cheerClub.clubId
             setTeamViewResources(
-                boardInfo.gameInfo.homeClub?.clubId ?: 0,
+                boardInfo.game.homeClub?.clubId ?: 0,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -585,7 +585,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                boardInfo.gameInfo.awayClub?.clubId ?: 0,
+                boardInfo.game.awayClub?.clubId ?: 0,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
