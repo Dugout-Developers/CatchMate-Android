@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -16,8 +17,8 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
+import com.catchmate.presentation.interaction.OnHomePostItemClickListener
 import com.catchmate.presentation.interaction.OnPersonFilterSelectedListener
-import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
@@ -32,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment :
     BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
-    OnPostItemClickListener,
+    OnHomePostItemClickListener,
     OnDateFilterSelectedListener,
     OnClubFilterSelectedListener,
     OnPersonFilterSelectedListener {
@@ -57,6 +58,12 @@ class HomeFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
+
+        setFragmentResultListener("deleteBoardResultKey") { _, bundle ->
+            val deletedBoardPosition = bundle.getInt("position")
+            deleteBoard(deletedBoardPosition)
+        }
+
         initViewModel()
         localDataViewModel.getAccessToken()
         initDateFilter()
@@ -260,12 +267,17 @@ class HomeFragment :
         }
     }
 
-    override fun onPostItemClicked(boardId: Long) {
+    private fun deleteBoard(position: Int) {
+        binding.rvHomePosts.adapter?.notifyItemRemoved(position)
+    }
+
+    override fun onPostItemClicked(boardId: Long, position: Int) {
         if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
             Snackbar.make(requireView(), R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
         } else {
             val bundle = Bundle()
             bundle.putLong("boardId", boardId)
+            bundle.putInt("position", position)
             findNavController().navigate(R.id.action_homeFragment_to_readPostFragment, bundle)
         }
     }

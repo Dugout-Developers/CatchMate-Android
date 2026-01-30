@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
-import com.catchmate.presentation.interaction.OnPostItemClickListener
+import com.catchmate.presentation.interaction.OnHomePostItemClickListener
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
 
 class HomePostAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
-    private val onPostItemClickListener: OnPostItemClickListener,
+    private val onPostItemClickListener: OnHomePostItemClickListener,
 ) : RecyclerView.Adapter<HomePostAdapter.HomePostViewHolder>() {
     private var postList: MutableList<Board> = mutableListOf()
 
@@ -117,7 +117,7 @@ class HomePostAdapter(
             )
 
             cvItemLayout.setOnClickListener {
-                onPostItemClickListener.onPostItemClicked(homeBoard.boardId)
+                onPostItemClickListener.onPostItemClicked(homeBoard.boardId, absoluteAdapterPosition)
             }
         }
     }

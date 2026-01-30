@@ -10,7 +10,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -45,6 +47,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var isWriter = false
     private val boardId by lazy { arguments?.getLong("boardId") ?: -1L }
+    private val position by lazy { arguments?.getInt("position") ?: -1 }
     private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
     private var isFinishedGame = false
 
@@ -280,10 +283,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             }
         }
         readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.i("삭제 성공", "${response.boardId}")
-                findNavController().popBackStack()
-            }
+            Log.i("삭제 성공", "$response")
+            setFragmentResult("deleteBoardResultKey", bundleOf("position" to position))
+            findNavController().popBackStack()
         }
         readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { response ->
             if (response != null) {

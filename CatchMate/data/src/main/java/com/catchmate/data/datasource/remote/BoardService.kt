@@ -73,11 +73,12 @@ interface BoardService {
     @GET("api/boards/temp")
     suspend fun getTempBoard(): Response<GetTempBoardResponseDTO?>
 
-    @DELETE("boards/{boardId}")
+    @DELETE("api/boards/{boardId}")
     suspend fun deleteBoard(
         @Path("boardId") boardId: Long,
-    ): Response<DeleteBoardResponseDTO?>
+    ): Response<Unit>
 
+    // 안쓰는 api 제거
     @DELETE("boards/bookmark/{boardId}")
     suspend fun deleteBoardLike(
         @Path("boardId") boardId: Long,

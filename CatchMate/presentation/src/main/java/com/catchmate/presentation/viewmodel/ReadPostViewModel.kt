@@ -8,7 +8,6 @@ import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
-import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
@@ -61,8 +60,8 @@ class ReadPostViewModel
         val postEnrollResponse: LiveData<PostEnrollResponse>
             get() = _postEnrollResponse
 
-        private val _deleteBoardResponse = MutableLiveData<DeleteBoardResponse>()
-        val deleteBoardResponse: LiveData<DeleteBoardResponse>
+        private val _deleteBoardResponse = MutableLiveData<Unit>()
+        val deleteBoardResponse: LiveData<Unit>
             get() = _deleteBoardResponse
 
         private val _patchBoardLiftUpResponse = MutableLiveData<PatchBoardLiftUpResponse>()

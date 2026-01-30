@@ -226,12 +226,6 @@ object BoardMapper {
             user = toUserInfo(dto.user),
         )
 
-    fun toDeleteBoardResponse(dto: DeleteBoardResponseDTO): DeleteBoardResponse =
-        DeleteBoardResponse(
-            boardId = dto.boardId,
-            deletedAt = dto.deletedAt,
-        )
-
     fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
         GetLikedBoardResponse(
             boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
