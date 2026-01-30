@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
         }
         initNavController()
         initBottomNavigationView()
-        observeChatNotifications()
+        // 채팅 및 알림 뱃지 표시 중단
+//        observeChatNotifications()
     }
 
     private fun observeChatNotifications() {

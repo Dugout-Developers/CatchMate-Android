@@ -75,7 +75,7 @@ class HomeFragment :
             getBoardList()
             isFirstLoad = false
         }
-        (requireActivity() as MainActivity).refreshNotificationStatus()
+//        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     @OptIn(ExperimentalBadgeUtils::class)
@@ -107,7 +107,7 @@ class HomeFragment :
         localDataViewModel.getUserId()
         localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (userId == -1L) {
-                getUserProfile()
+                homeViewModel.getUserProfile()
             }
         }
     }
@@ -179,6 +179,11 @@ class HomeFragment :
                 isLoading = false
             }
             isApiCalled = false
+        }
+        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                localDataViewModel.saveUserId(response.userId)
+            }
         }
     }
 
@@ -255,15 +260,6 @@ class HomeFragment :
                     }
                 },
             )
-        }
-    }
-
-    private fun getUserProfile() {
-        homeViewModel.getUserProfile()
-        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                localDataViewModel.saveUserId(response.userId)
-            }
         }
     }
 
