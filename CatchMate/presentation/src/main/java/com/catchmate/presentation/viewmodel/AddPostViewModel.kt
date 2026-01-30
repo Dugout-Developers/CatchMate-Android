@@ -8,16 +8,16 @@ import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.usecase.board.GetTempBoardUseCase
-import com.catchmate.domain.usecase.board.PutBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardUseCase
+import com.catchmate.domain.usecase.board.PutBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AddPostViewModel

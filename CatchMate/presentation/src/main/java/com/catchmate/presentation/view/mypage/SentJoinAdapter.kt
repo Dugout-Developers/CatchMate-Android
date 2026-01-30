@@ -92,8 +92,9 @@ class SentJoinAdapter(
             tvItemPlace.text = enrollInfo.boardInfo.gameInfo.location
             tvItemTitle.text = enrollInfo.boardInfo.title
 
-            val isCheerTeam = enrollInfo.boardInfo.gameInfo.homeClub
-                ?.clubId == enrollInfo.boardInfo.cheerClubId
+            val isCheerTeam =
+                enrollInfo.boardInfo.gameInfo.homeClub
+                    ?.clubId == enrollInfo.boardInfo.cheerClubId
 
             ResourceUtil.setTeamViewResources(
                 enrollInfo.boardInfo.gameInfo.homeClub

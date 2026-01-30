@@ -203,8 +203,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initChatRoomInfo(info: ChatRoomInfo) {
         binding.cgivChattingRoom.apply {
-            val isCheerTeam = info.boardInfo.gameResponse.homeClub
-                ?.clubId == info.boardInfo.cheerClub.clubId
+            val isCheerTeam =
+                info.boardInfo.gameResponse.homeClub
+                    ?.clubId == info.boardInfo.cheerClub.clubId
             setHomeTeamImageView(
                 info.boardInfo.gameResponse.homeClub
                     ?.clubId ?: 0,
@@ -290,8 +291,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     tvSideSheetPlace.text = info.boardInfo.gameResponse.location
                     tvSideSheetCountBadge.text = "${info.participantCount}/${info.boardInfo.maxPerson}"
                     tvSideSheetTitle.text = info.boardInfo.title
-                    val isCheerTeam = info.boardInfo.cheerClub.clubId == info.boardInfo.gameResponse.homeClub
-                        ?.clubId
+                    val isCheerTeam =
+                        info.boardInfo.cheerClub.clubId ==
+                                info.boardInfo.gameResponse.homeClub
+                                    ?.clubId
                     setTeamViewResources(
                         info.boardInfo.gameResponse.homeClub
                             ?.clubId ?: 0,
