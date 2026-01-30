@@ -8,8 +8,8 @@ import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
-import com.catchmate.data.dto.board.PatchBoardRequestDTO
-import com.catchmate.data.dto.board.PatchBoardResponseDTO
+import com.catchmate.data.dto.board.PutBoardRequestDTO
+import com.catchmate.data.dto.board.PutBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import retrofit2.Response
@@ -18,6 +18,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -32,11 +33,11 @@ interface BoardService {
         @Path("boardId") boardId: Long,
     ): Response<Unit>
 
-    @PATCH("boards/{boardId}")
-    suspend fun patchBoard(
+    @PUT("api/boards/{boardId}")
+    suspend fun putBoard(
         @Path("boardId") boardId: Long,
-        @Body patchBoardRequestDTO: PatchBoardRequestDTO,
-    ): Response<PatchBoardResponseDTO?>
+        @Body putBoardRequestDTO: PutBoardRequestDTO,
+    ): Response<PutBoardResponseDTO?>
 
     @PATCH("boards/{boardId}/lift-up")
     suspend fun patchBoardLiftUp(

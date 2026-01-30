@@ -12,7 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
+import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
@@ -249,7 +249,7 @@ class AddPostFragment :
                 }
             }
         }
-        addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
+        addPostViewModel.putBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.i("boardEditResponse", response.boardId.toString())
                 findNavController().popBackStack()
@@ -307,18 +307,18 @@ class AddPostFragment :
 
             if (isEditMode) {
                 // 업데이트 모드
-//                val boardEditRequest =
-//                    PatchBoardRequest(
-//                        title,
-//                        content,
-//                        maxPerson,
-//                        cheerClubId,
-//                        preferredGender,
-//                        preferredAgeRange,
-//                        gameRequest,
-//                        true,
-//                    )
-//                addPostViewModel.patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                val boardEditRequest =
+                    PutBoardRequest(
+                        title,
+                        content,
+                        maxPerson,
+                        cheerClubId,
+                        preferredGender,
+                        preferredAgeRange,
+                        true,
+                        gameRequest,
+                    )
+                addPostViewModel.putBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
                 isTempSave = false
                 val boardWriteRequest =

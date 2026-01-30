@@ -14,8 +14,8 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
-import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.repository.BoardRepository
@@ -51,14 +51,14 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun patchBoard(
+        override suspend fun putBoard(
             boardId: Long,
-            patchBoardRequest: PatchBoardRequest,
-        ): Result<PatchBoardResponse> =
+            putBoardRequest: PutBoardRequest,
+        ): Result<PutBoardResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.patchBoard(boardId, BoardMapper.toPatchBoardRequestDTO(patchBoardRequest)) },
-                transform = { BoardMapper.toPatchBoardResponse(it!!) },
+                apiFunction = { boardApi.putBoard(boardId, BoardMapper.toPutBoardRequestDTO(putBoardRequest)) },
+                transform = { BoardMapper.toPutBoardResponse(it!!) },
             )
 
         override suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse> =

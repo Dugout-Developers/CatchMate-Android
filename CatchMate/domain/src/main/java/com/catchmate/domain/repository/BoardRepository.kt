@@ -8,8 +8,8 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
-import com.catchmate.domain.model.board.PatchBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 
@@ -18,10 +18,10 @@ interface BoardRepository {
 
     suspend fun postBoardLike(boardId: Long): Result<Unit>
 
-    suspend fun patchBoard(
+    suspend fun putBoard(
         boardId: Long,
-        patchBoardRequest: PatchBoardRequest,
-    ): Result<PatchBoardResponse>
+        putBoardRequest: PutBoardRequest,
+    ): Result<PutBoardResponse>
 
     suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse>
 
