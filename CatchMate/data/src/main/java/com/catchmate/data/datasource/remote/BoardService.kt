@@ -1,17 +1,16 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
-import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
-import com.catchmate.data.dto.board.PutBoardRequestDTO
-import com.catchmate.data.dto.board.PutBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
+import com.catchmate.data.dto.board.PutBoardRequestDTO
+import com.catchmate.data.dto.board.PutBoardResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

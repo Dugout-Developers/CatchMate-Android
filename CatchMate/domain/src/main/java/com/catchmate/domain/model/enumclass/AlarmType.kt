@@ -5,4 +5,5 @@ enum class AlarmType {
     CHAT,
     ENROLL,
     EVENT,
+    INQUIRY_ANSWER,
 }

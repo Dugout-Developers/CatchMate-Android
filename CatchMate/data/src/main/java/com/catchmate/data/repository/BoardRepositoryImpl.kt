@@ -7,17 +7,16 @@ import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
-import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 
@@ -126,11 +125,11 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse> =
+        override suspend fun deleteBoard(boardId: Long): Result<Unit> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.deleteBoard(boardId) },
-                transform = { BoardMapper.toDeleteBoardResponse(it!!) },
+                transform = { it },
             )
 
         override suspend fun deleteBoardLike(boardId: Long): Result<DeleteBoardLikeResponse> =

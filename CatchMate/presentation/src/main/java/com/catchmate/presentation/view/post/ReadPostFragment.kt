@@ -395,10 +395,10 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
 
     private fun setGenderTextViewVisibility(
         textView: TextView,
-        genderInfo: String,
+        genderInfo: String?,
     ) {
         val gender = GenderUtils.convertBoardGender(requireContext(), genderInfo)
-        if (gender == "") {
+        if (gender == null) {
             textView.visibility = View.GONE
         } else {
             textView.visibility = View.VISIBLE

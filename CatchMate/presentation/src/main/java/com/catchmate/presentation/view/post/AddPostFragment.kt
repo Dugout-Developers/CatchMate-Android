@@ -285,13 +285,13 @@ class AddPostFragment :
                             .toString(),
                     )
                 } else {
-                    ""
+                    null
                 }
             val preferredAgeRange =
                 if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
                     getCheckedAgeRange(binding.chipgroupAddPostAge.checkedChipIds).toList()
                 } else {
-                    emptyList()
+                    null
                 }
             val homeClubId = ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
             val awayClubId = ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())

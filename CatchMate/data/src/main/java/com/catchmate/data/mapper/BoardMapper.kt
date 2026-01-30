@@ -2,7 +2,6 @@ package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.board.BoardDTO
 import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
-import com.catchmate.data.dto.board.DeleteBoardResponseDTO
 import com.catchmate.data.dto.board.GameRequestDto
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
@@ -10,16 +9,15 @@ import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
-import com.catchmate.data.dto.board.PutBoardRequestDTO
-import com.catchmate.data.dto.board.PutBoardResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
+import com.catchmate.data.dto.board.PutBoardRequestDTO
+import com.catchmate.data.dto.board.PutBoardResponseDTO
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.ClubDTO
 import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.board.DeleteBoardLikeResponse
-import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
@@ -27,10 +25,10 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PutBoardRequest
-import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
 import com.catchmate.domain.model.user.Club
