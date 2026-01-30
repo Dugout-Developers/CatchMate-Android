@@ -1,9 +1,9 @@
 package com.catchmate.domain.model.board
 
 data class GetBoardListResponse(
-    val boardInfoList: List<Board>,
+    val content: List<Board>,
+    val pageNumber: Int,
     val totalPages: Int,
     val totalElements: Int,
-    val isFirst: Boolean,
-    val isLast: Boolean,
+    val hasNext: Boolean,
 )

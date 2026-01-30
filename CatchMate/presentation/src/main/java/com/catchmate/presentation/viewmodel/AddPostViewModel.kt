@@ -8,13 +8,13 @@ import com.catchmate.domain.exception.NonExistentTempBoardException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
-import com.catchmate.domain.model.board.PatchBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.usecase.board.GetTempBoardUseCase
-import com.catchmate.domain.usecase.board.PatchBoardUseCase
 import com.catchmate.domain.usecase.board.PostBoardUseCase
+import com.catchmate.domain.usecase.board.PutBoardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class AddPostViewModel
     @Inject
     constructor(
         private val postBoardUseCase: PostBoardUseCase,
-        private val patchBoardUseCase: PatchBoardUseCase,
+        private val putBoardUseCase: PutBoardUseCase,
         private val getTempBoardUseCase: GetTempBoardUseCase,
     ) : ViewModel() {
         private var _homeTeamName = MutableLiveData<String>()
@@ -51,9 +51,13 @@ class AddPostViewModel
         val postBoardResponse: LiveData<PostBoardResponse>
             get() = _postBoardResponse
 
-        private var _patchBoardResponse = MutableLiveData<PatchBoardResponse>()
-        val patchBoardResponse: LiveData<PatchBoardResponse>
-            get() = _patchBoardResponse
+        private var _putBoardResponse = MutableLiveData<PutBoardResponse>()
+        val putBoardResponse: LiveData<PutBoardResponse>
+            get() = _putBoardResponse
+
+        private var _isTempMode = MutableLiveData<Boolean>()
+        val isTempMode: LiveData<Boolean>
+            get() = _isTempMode
 
         private var _getTempBoardResponse = MutableLiveData<GetTempBoardResponse>()
         val getTempBoardResponse: LiveData<GetTempBoardResponse>
@@ -99,15 +103,15 @@ class AddPostViewModel
             }
         }
 
-        fun patchBoard(
+        fun putBoard(
             boardId: Long,
-            patchBoardRequest: PatchBoardRequest,
+            putBoardRequest: PutBoardRequest,
         ) {
             viewModelScope.launch {
-                val result = patchBoardUseCase.patchBoard(boardId, patchBoardRequest)
+                val result = putBoardUseCase.putBoard(boardId, putBoardRequest)
                 result
                     .onSuccess { response ->
-                        _patchBoardResponse.value = response
+                        _putBoardResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
@@ -123,7 +127,12 @@ class AddPostViewModel
                 val result = getTempBoardUseCase.getTempBoard()
                 result
                     .onSuccess { response ->
-                        _getTempBoardResponse.value = response
+                        response?.let { data ->
+                            _isTempMode.value = true
+                            _getTempBoardResponse.value = data
+                        } ?: run {
+                            _isTempMode.value = false
+                        }
                     }.onFailure { exception ->
                         when (exception) {
                             is ReissueFailureException -> _navigateToLogin.value = true

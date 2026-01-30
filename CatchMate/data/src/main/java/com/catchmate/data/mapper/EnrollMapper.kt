@@ -88,17 +88,13 @@ object EnrollMapper {
     private fun toEnrollUserInfo(dto: UserInfoDTO): UserInfo =
         UserInfo(
             userId = dto.userId,
+            nickName = dto.nickName,
             email = dto.email,
             profileImageUrl = dto.profileImageUrl,
             gender = dto.gender,
-            allAlarm = dto.allAlarm,
-            chatAlarm = dto.chatAlarm,
-            enrollAlarm = dto.enrollAlarm,
-            eventAlarm = dto.eventAlarm,
-            nickName = dto.nickName,
-            favoriteClub = toClub(dto.favoriteClub),
             birthDate = dto.birthDate,
             watchStyle = dto.watchStyle,
+            club = toClub(dto.club)!!,
         )
 
     private fun toEnrollBoardInfo(dto: EnrollBoardInfoDTO): EnrollBoardInfo =
@@ -121,10 +117,11 @@ object EnrollMapper {
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =
         GameInfo(
-            homeClubId = dto.homeClubId,
-            awayClubId = dto.awayClubId,
+            gameId = dto.gameId,
             gameStartDate = dto.gameStartDate,
             location = dto.location,
+            homeClub = toClub(dto.homeClub),
+            awayClub = toClub(dto.awayClub),
         )
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =

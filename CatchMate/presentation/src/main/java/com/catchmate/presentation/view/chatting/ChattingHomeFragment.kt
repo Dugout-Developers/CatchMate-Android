@@ -61,7 +61,7 @@ class ChattingHomeFragment :
             getChattingRoomList()
             isFirstLoad = false
         }
-        (requireActivity() as MainActivity).refreshNotificationStatus()
+//        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     override fun onResume() {

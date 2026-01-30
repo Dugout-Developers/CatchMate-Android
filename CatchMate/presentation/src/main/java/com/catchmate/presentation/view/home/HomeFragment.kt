@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -16,8 +17,8 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentHomeBinding
 import com.catchmate.presentation.interaction.OnClubFilterSelectedListener
 import com.catchmate.presentation.interaction.OnDateFilterSelectedListener
+import com.catchmate.presentation.interaction.OnHomePostItemClickListener
 import com.catchmate.presentation.interaction.OnPersonFilterSelectedListener
-import com.catchmate.presentation.interaction.OnPostItemClickListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
@@ -32,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment :
     BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
-    OnPostItemClickListener,
+    OnHomePostItemClickListener,
     OnDateFilterSelectedListener,
     OnClubFilterSelectedListener,
     OnPersonFilterSelectedListener {
@@ -40,7 +41,7 @@ class HomeFragment :
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
@@ -57,6 +58,12 @@ class HomeFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
+
+        setFragmentResultListener("deleteBoardResultKey") { _, bundle ->
+            val deletedBoardPosition = bundle.getInt("position")
+            deleteBoard(deletedBoardPosition)
+        }
+
         initViewModel()
         localDataViewModel.getAccessToken()
         initDateFilter()
@@ -68,7 +75,7 @@ class HomeFragment :
             getBoardList()
             isFirstLoad = false
         }
-        (requireActivity() as MainActivity).refreshNotificationStatus()
+//        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     @OptIn(ExperimentalBadgeUtils::class)
@@ -100,7 +107,7 @@ class HomeFragment :
         localDataViewModel.getUserId()
         localDataViewModel.userId.observe(viewLifecycleOwner) { userId ->
             if (userId == -1L) {
-                getUserProfile()
+                homeViewModel.getUserProfile()
             }
         }
     }
@@ -154,30 +161,35 @@ class HomeFragment :
         }
 
         homeViewModel.getBoardListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvHomePosts.visibility = View.GONE
                 binding.layoutHomeNoList.visibility = View.VISIBLE
             } else {
                 binding.rvHomePosts.visibility = View.VISIBLE
                 binding.layoutHomeNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    postList.addAll(response.boardInfoList)
+                    postList.addAll(response.content)
                     postList.forEach {
                         Log.i("LIST", "${it.boardId}")
                     }
                 }
                 val adapter = binding.rvHomePosts.adapter as HomePostAdapter
                 adapter.updatePostList(postList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
         }
+        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                localDataViewModel.saveUserId(response.userId)
+            }
+        }
     }
 
     private fun getBoardList() {
-        Log.i("api 호출", "호출 $isLoading $isLastPage")
-        if (isLoading || isLastPage) return
+        Log.i("api 호출", "호출 $isLoading $hasNext")
+        if (isLoading || !hasNext) return
         isLoading = true
         homeViewModel.getBoardList(
             gameStartDate,
@@ -241,7 +253,7 @@ class HomeFragment :
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
 
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) { // 새로운 목록 불러와야함
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) { // 새로운 목록 불러와야함
                             currentPage += 1
                             getBoardList()
                         }
@@ -251,21 +263,20 @@ class HomeFragment :
         }
     }
 
-    private fun getUserProfile() {
-        homeViewModel.getUserProfile()
-        homeViewModel.userProfile.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                localDataViewModel.saveUserId(response.userId)
-            }
-        }
+    private fun deleteBoard(position: Int) {
+        binding.rvHomePosts.adapter?.notifyItemRemoved(position)
     }
 
-    override fun onPostItemClicked(boardId: Long) {
+    override fun onPostItemClicked(
+        boardId: Long,
+        position: Int,
+    ) {
         if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
             Snackbar.make(requireView(), R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
         } else {
             val bundle = Bundle()
             bundle.putLong("boardId", boardId)
+            bundle.putInt("position", position)
             findNavController().navigate(R.id.action_homeFragment_to_readPostFragment, bundle)
         }
     }
@@ -273,7 +284,7 @@ class HomeFragment :
     override fun onDateSelected(date: String?) {
         gameStartDate = date
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()
@@ -284,7 +295,7 @@ class HomeFragment :
     override fun onClubFilterSelected(clubIdList: Array<Int>?) {
         preferredTeamIdList = clubIdList
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()
@@ -295,7 +306,7 @@ class HomeFragment :
     override fun onPersonFilterSelected(count: Int?) {
         maxPerson = count
         currentPage = 0
-        isLastPage = false
+        hasNext = true
         isLoading = false
         postList.clear()
         getBoardList()

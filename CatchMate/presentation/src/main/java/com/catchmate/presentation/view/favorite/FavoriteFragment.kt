@@ -1,7 +1,6 @@
 package com.catchmate.presentation.view.favorite
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
@@ -30,7 +29,7 @@ class FavoriteFragment :
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
@@ -61,18 +60,18 @@ class FavoriteFragment :
 
     private fun initViewModel() {
         favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.layoutFavoriteNoList.visibility = View.VISIBLE
                 binding.rvFavoritePost.visibility = View.GONE
             } else {
                 binding.layoutFavoriteNoList.visibility = View.GONE
                 binding.rvFavoritePost.visibility = View.VISIBLE
                 if (isApiCalled) {
-                    likedList.addAll(response.boardInfoList)
+                    likedList.addAll(response.content)
                 }
                 val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
                 adapter.updateLikedList(likedList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -107,16 +106,10 @@ class FavoriteFragment :
                 }
             }
         }
-
-        favoriteViewModel.deleteBoardLikeResponse.observe(viewLifecycleOwner) { response ->
-            if (!response.state) {
-                Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun getLikedBoard() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         favoriteViewModel.getLikedBoard(currentPage)
         isApiCalled = true
@@ -145,7 +138,7 @@ class FavoriteFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getLikedBoard()
                         }
@@ -165,7 +158,7 @@ class FavoriteFragment :
         boardId: Long,
         position: Int,
     ) {
-        favoriteViewModel.deleteBoardLike(boardId)
+        favoriteViewModel.postBoardLike(boardId)
         likedList.removeAt(position)
         val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
         adapter.removeUnlikedPost(position)

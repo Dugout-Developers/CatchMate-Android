@@ -10,9 +10,10 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
 import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -61,6 +62,7 @@ class AddPostFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        // getBoardInfo()로 받아온 board Data가 존재하고, isEditMode == true일 때 게시글 수정 모드이므로 viewmodel에 의해 보드 데이터 셋팅됨
         addPostViewModel.setBoardInfo(getBoardInfo())
         initFooter()
         initAdditionalInfoEdt()
@@ -87,35 +89,43 @@ class AddPostFragment :
         hideKeyboardAction(binding.edtAddPostAdditionalInfo)
     }
 
-    private fun setBoardData(response: GetBoardResponse) {
+    private fun setBoardData(
+        title: String?,
+        content: String?,
+        maxPerson: Int,
+        preferredGender: String?,
+        preferredAgeRange: String,
+        cheerClubId: Int?,
+        game: GameInfo?,
+    ) {
         binding.apply {
-            edtAddPostTitle.setText(response.title)
-            tvAddPostTitleLetterCount.text = response.title.length.toString()
-            tvAddPostPeopleCount.text = if (response.maxPerson != 0) response.maxPerson.toString() else ""
-            response.gameInfo.gameStartDate?.let {
+            edtAddPostTitle.setText(title ?: "")
+            tvAddPostTitleLetterCount.text = title?.length?.let { toString() } ?: "0"
+            tvAddPostPeopleCount.text = if (maxPerson != 0) maxPerson.toString() else ""
+            game?.gameStartDate?.let {
                 addPostViewModel.setGameDate(DateUtils.formatGameDateTimeEditBoard(it))
             }
-            if (response.gameInfo.homeClubId != 0) {
-                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(response.gameInfo.homeClubId))
+            if (game?.homeClub?.clubId != null) {
+                addPostViewModel.setHomeTeamName(ClubUtils.convertClubIdToName(game.homeClub?.clubId ?: 0))
             }
-            if (response.gameInfo.awayClubId != 0) {
-                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(response.gameInfo.awayClubId))
+            if (game?.awayClub?.clubId != null) {
+                addPostViewModel.setAwayTeamName(ClubUtils.convertClubIdToName(game.awayClub?.clubId ?: 0))
             }
-            if (response.cheerClubId != 0) {
-                tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(response.cheerClubId)
+            if (cheerClubId != null) {
+                tvAddPostCheerTeam.text = ClubUtils.convertClubIdToName(cheerClubId)
             }
-            tvAddPostPlace.text = response.gameInfo.location
-            edtAddPostAdditionalInfo.setText(response.content)
-            tvAddPostAdditionalInfoLetterCount.text = response.content.length.toString()
+            tvAddPostPlace.text = game?.location ?: ""
+            edtAddPostAdditionalInfo.setText(content ?: "")
+            tvAddPostAdditionalInfoLetterCount.text = content?.length?.let { toString() } ?: "0"
             layoutAddPostFooter.btnFooterOne.isEnabled = true
 
-            when (response.preferredGender) {
+            when (preferredGender) {
                 "F" -> chipAddPostGenderFemale.isChecked = true
                 "M" -> chipAddPostGenderMale.isChecked = true
                 "N" -> chipAddPostGenderRegardless.isChecked = true
             }
 
-            val ages = AgeUtils.convertAgeStringToList(response.preferredAgeRange)
+            val ages = AgeUtils.convertAgeStringToList(preferredAgeRange)
             ages.forEach { age ->
                 when (age) {
                     "0" -> chipAddPostAgeRegardless.isChecked = true
@@ -167,7 +177,15 @@ class AddPostFragment :
     private fun initViewModel() {
         addPostViewModel.boardInfo.observe(viewLifecycleOwner) { info ->
             info?.let {
-                setBoardData(it)
+                setBoardData(
+                    info.title,
+                    info.content,
+                    info.maxPerson,
+                    info.preferredGender,
+                    info.preferredAgeRange,
+                    info.cheerClub.clubId,
+                    info.game,
+                )
             }
             initHeader()
             initBottomSheets()
@@ -231,7 +249,7 @@ class AddPostFragment :
                 }
             }
         }
-        addPostViewModel.patchBoardResponse.observe(viewLifecycleOwner) { response ->
+        addPostViewModel.putBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.i("boardEditResponse", response.boardId.toString())
                 findNavController().popBackStack()
@@ -267,46 +285,59 @@ class AddPostFragment :
                             .toString(),
                     )
                 } else {
-                    ""
+                    null
                 }
             val preferredAgeRange =
                 if (binding.chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
                     getCheckedAgeRange(binding.chipgroupAddPostAge.checkedChipIds).toList()
                 } else {
-                    emptyList()
+                    null
                 }
             val homeClubId = ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
             val awayClubId = ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
             val gameStartDate = addPostViewModel.gameDateTime.value.toString()
             val location = binding.tvAddPostPlace.text.toString()
-            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+            val gameRequest =
+                GameRequest(
+                    homeClubId,
+                    awayClubId,
+                    gameStartDate,
+                    location,
+                )
 
             if (isEditMode) {
+                // 업데이트 모드
                 val boardEditRequest =
-                    PatchBoardRequest(
+                    PutBoardRequest(
                         title,
                         content,
                         maxPerson,
                         cheerClubId,
                         preferredGender,
                         preferredAgeRange,
-                        gameRequest,
                         true,
+                        gameRequest,
                     )
-                addPostViewModel.patchBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                addPostViewModel.putBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
             } else {
+                isTempSave = false
                 val boardWriteRequest =
                     PostBoardRequest(
-                        title,
-                        content,
-                        maxPerson,
-                        cheerClubId,
-                        preferredGender,
-                        preferredAgeRange,
-                        gameRequest,
-                        true,
+                        boardId =
+                            if (addPostViewModel.isTempMode.value == true) { // 임시 저장 게시물을 정식 게시글로 등록
+                                addPostViewModel.getTempBoardResponse.value?.boardId
+                            } else { // 새 게시글을 등록
+                                null
+                            },
+                        title = title,
+                        content = content,
+                        maxPerson = maxPerson,
+                        cheerClubId = cheerClubId,
+                        preferredGender = preferredGender,
+                        preferredAgeRange = preferredAgeRange,
+                        completed = true,
+                        gameRequest = gameRequest,
                     )
-                isTempSave = false
                 addPostViewModel.postBoard(boardWriteRequest)
             }
         }
@@ -314,12 +345,22 @@ class AddPostFragment :
 
     private fun saveTempBoard() {
         binding.apply {
-            val title = edtAddPostTitle.text.toString()
-            val content = edtAddPostAdditionalInfo.text.toString()
-            val maxPerson = if (tvAddPostPeopleCount.text.isNullOrEmpty()) 0 else tvAddPostPeopleCount.text.toString().toInt()
+            val title =
+                if (edtAddPostTitle.text.toString().isEmpty()) {
+                    null
+                } else {
+                    edtAddPostTitle.text.toString()
+                }
+            val content =
+                if (edtAddPostAdditionalInfo.text.toString().isEmpty()) {
+                    null
+                } else {
+                    edtAddPostAdditionalInfo.text.toString()
+                }
+            val maxPerson = if (tvAddPostPeopleCount.text.isNullOrEmpty()) null else tvAddPostPeopleCount.text.toString().toInt()
             val cheerClubId =
                 if (tvAddPostCheerTeam.text.isNullOrEmpty()) {
-                    0
+                    null
                 } else {
                     ClubUtils.convertClubNameToId(tvAddPostCheerTeam.text.toString())
                 }
@@ -333,23 +374,23 @@ class AddPostFragment :
                             .toString(),
                     )
                 } else {
-                    ""
+                    null
                 }
             val preferredAgeRange =
                 if (chipgroupAddPostAge.checkedChipIds.isNotEmpty()) {
                     getCheckedAgeRange(chipgroupAddPostAge.checkedChipIds).toList()
                 } else {
-                    emptyList()
+                    null
                 }
             val homeClubId =
                 if (addPostViewModel.homeTeamName.value.isNullOrEmpty()) {
-                    0
+                    null
                 } else {
                     ClubUtils.convertClubNameToId(addPostViewModel.homeTeamName.value.toString())
                 }
             val awayClubId =
                 if (addPostViewModel.awayTeamName.value.isNullOrEmpty()) {
-                    0
+                    null
                 } else {
                     ClubUtils.convertClubNameToId(addPostViewModel.awayTeamName.value.toString())
                 }
@@ -359,18 +400,41 @@ class AddPostFragment :
                 } else {
                     addPostViewModel.gameDateTime.value.toString()
                 }
-            val location = tvAddPostPlace.text.toString()
-            val gameRequest = GameInfo(homeClubId, awayClubId, gameStartDate, location)
+            val location =
+                if (tvAddPostPlace.text.toString().isEmpty()) {
+                    null
+                } else {
+                    tvAddPostPlace.text.toString()
+                }
+            val gameRequest =
+                if (homeClubId == null && awayClubId == null && gameStartDate == null && location == null) {
+                    null
+                } else {
+                    GameRequest(
+                        homeClubId,
+                        awayClubId,
+                        gameStartDate,
+                        location,
+                    )
+                }
+
+            // addPostViewModel.isTempMode.value == true이면 임시저장boarddata의 boardId, false이면 null
             val tempBoard =
                 PostBoardRequest(
-                    title,
-                    content,
-                    maxPerson,
-                    cheerClubId,
-                    preferredGender,
-                    preferredAgeRange,
-                    gameRequest,
-                    false,
+                    boardId =
+                        if (addPostViewModel.isTempMode.value == true) { // 임시 저장했던 글을 덮어쓰기
+                            addPostViewModel.getTempBoardResponse.value?.boardId
+                        } else { // 새로운 글을 임시저장
+                            null
+                        },
+                    title = title,
+                    content = content,
+                    maxPerson = maxPerson,
+                    cheerClubId = cheerClubId,
+                    preferredGender = preferredGender,
+                    preferredAgeRange = preferredAgeRange,
+                    completed = false,
+                    gameRequest = gameRequest,
                 )
             isTempSave = true
             addPostViewModel.postBoard(tempBoard)
@@ -648,24 +712,15 @@ class AddPostFragment :
                 setOnClickListener {
                     isTempDialogShown = true
                     val tempBoard = addPostViewModel.getTempBoardResponse.value!!
-                    val board =
-                        GetBoardResponse(
-                            tempBoard.boardId,
-                            tempBoard.title,
-                            tempBoard.content,
-                            tempBoard.cheerClubId,
-                            tempBoard.currentPerson,
-                            tempBoard.maxPerson,
-                            tempBoard.preferredGender,
-                            tempBoard.preferredAgeRange,
-                            tempBoard.liftUpDate,
-                            tempBoard.gameInfo,
-                            tempBoard.userInfo,
-                            "",
-                            -1L,
-                            false,
-                        )
-                    addPostViewModel.setBoardInfo(board)
+                    setBoardData(
+                        tempBoard.title,
+                        tempBoard.content,
+                        tempBoard.maxPerson,
+                        tempBoard.preferredGender,
+                        tempBoard.preferredAgeRange,
+                        tempBoard.cheerClub?.clubId,
+                        tempBoard.game,
+                    )
                     dialog.dismiss()
                 }
             }

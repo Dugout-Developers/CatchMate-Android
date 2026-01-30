@@ -2,17 +2,16 @@ package com.catchmate.domain.model.board
 
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.UserInfo
+import com.catchmate.domain.model.user.Club
 
 data class GetTempBoardResponse(
     val boardId: Long,
-    val title: String,
-    val content: String,
-    val cheerClubId: Int,
-    val currentPerson: Int,
+    val title: String?,
+    val content: String?,
     val maxPerson: Int,
-    val preferredGender: String,
+    val preferredGender: String?,
     val preferredAgeRange: String,
-    val gameInfo: GameInfo,
-    val liftUpDate: String,
-    val userInfo: UserInfo,
+    val cheerClub: Club?,
+    val game: GameInfo?,
+    val user: UserInfo,
 )

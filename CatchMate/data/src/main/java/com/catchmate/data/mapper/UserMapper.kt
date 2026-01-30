@@ -36,7 +36,7 @@ object UserMapper {
             gender = getUserProfileResponseDTO.gender,
             birthDate = getUserProfileResponseDTO.birthDate,
             watchStyle = getUserProfileResponseDTO.watchStyle,
-            club = toClub(getUserProfileResponseDTO.club),
+            club = toClub(getUserProfileResponseDTO.club)!!,
         )
 
     fun toPostUserAdditionalInfoRequestDTO(request: PostUserAdditionalInfoRequest): PostUserAdditionalInfoRequestDTO =
@@ -89,7 +89,7 @@ object UserMapper {
             enrollAlarm = responseDTO.enrollAlarm,
             eventAlarm = responseDTO.eventAlarm,
             nickName = responseDTO.nickName,
-            favoriteClub = toClub(responseDTO.favoriteClub),
+            favoriteClub = toClub(responseDTO.favoriteClub)!!,
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
         )

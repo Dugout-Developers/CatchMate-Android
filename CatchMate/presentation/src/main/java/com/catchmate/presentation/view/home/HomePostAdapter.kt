@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemHomePostBinding
-import com.catchmate.presentation.interaction.OnPostItemClickListener
+import com.catchmate.presentation.interaction.OnHomePostItemClickListener
 import com.catchmate.presentation.util.DateUtils
 import com.catchmate.presentation.util.ResourceUtil
 
 class HomePostAdapter(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
-    private val onPostItemClickListener: OnPostItemClickListener,
+    private val onPostItemClickListener: OnHomePostItemClickListener,
 ) : RecyclerView.Adapter<HomePostAdapter.HomePostViewHolder>() {
     private var postList: MutableList<Board> = mutableListOf()
 
@@ -91,16 +91,16 @@ class HomePostAdapter(
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTime(homeBoard.gameResponse.gameStartDate!!)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
-            tvItemPlace.text = homeBoard.gameInfo.location
+            tvItemPlace.text = homeBoard.gameResponse.location
             tvItemTitle.text = homeBoard.title
 
-            val isCheerTeam = homeBoard.gameInfo.homeClubId == homeBoard.cheerClubId
+            val isCheerTeam = homeBoard.gameResponse.homeClub?.clubId == homeBoard.cheerClub.clubId
 
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameInfo.homeClubId,
+                homeBoard.gameResponse.homeClub?.clubId ?: 0,
                 isCheerTeam,
                 ivItemHomeTeamBg,
                 ivItemHomeTeamLogo,
@@ -108,7 +108,7 @@ class HomePostAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                homeBoard.gameInfo.awayClubId,
+                homeBoard.gameResponse.awayClub?.clubId ?: 0,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
                 ivItemAwayTeamLogo,
@@ -117,7 +117,7 @@ class HomePostAdapter(
             )
 
             cvItemLayout.setOnClickListener {
-                onPostItemClickListener.onPostItemClicked(homeBoard.boardId)
+                onPostItemClickListener.onPostItemClicked(homeBoard.boardId, absoluteAdapterPosition)
             }
         }
     }

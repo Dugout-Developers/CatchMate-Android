@@ -75,14 +75,14 @@ class ReceivedEnrollAdapter(
                 .into(ivEnrollUserProfile)
 
             tvEnrollUserNickname.text = info.userInfo.nickName
-            tvEnrollUserCheerTeam.text = convertClubIdToName(info.userInfo.favoriteClub.clubId)
+            tvEnrollUserCheerTeam.text = convertClubIdToName(info.userInfo.club.clubId)
 
             DrawableCompat
                 .setTint(
                     tvEnrollUserCheerTeam.background,
                     convertTeamColor(
                         context,
-                        info.userInfo.favoriteClub.clubId,
+                        info.userInfo.club.clubId,
                         true,
                         "receivedEnrollAdapter",
                     ),

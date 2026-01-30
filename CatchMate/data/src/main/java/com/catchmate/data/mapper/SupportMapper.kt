@@ -76,7 +76,7 @@ object SupportMapper {
             userId = dto.userId,
             profileImageUrl = dto.profileImageUrl,
             nickName = dto.nickName,
-            clubInfo = toClub(dto.clubInfo),
+            clubInfo = toClub(dto.clubInfo)!!,
             gender = dto.gender,
             email = dto.email,
             socialType = dto.socialType,

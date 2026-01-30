@@ -6,20 +6,16 @@ import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
-import com.catchmate.domain.exception.NonExistentTempBoardException
-import com.catchmate.domain.model.board.DeleteBoardLikeResponse
-import com.catchmate.domain.model.board.DeleteBoardResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
-import com.catchmate.domain.model.board.PatchBoardRequest
-import com.catchmate.domain.model.board.PatchBoardResponse
-import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
+import com.catchmate.domain.model.board.PutBoardRequest
+import com.catchmate.domain.model.board.PutBoardResponse
 import com.catchmate.domain.repository.BoardRepository
 import javax.inject.Inject
 
@@ -38,11 +34,11 @@ class BoardRepositoryImpl
                 transform = { BoardMapper.toPostBoardResponse(it!!) },
             )
 
-        override suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse> =
+        override suspend fun postBoardLike(boardId: Long): Result<Unit> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.postBoardLike(boardId) },
-                transform = { BoardMapper.toPostBoardLikeResponse(it!!) },
+                transform = { it },
                 errorHandler = { response, jsonObject ->
                     if (response.code() == 400) {
                         val message = jsonObject.getString("message")
@@ -53,14 +49,14 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun patchBoard(
+        override suspend fun putBoard(
             boardId: Long,
-            patchBoardRequest: PatchBoardRequest,
-        ): Result<PatchBoardResponse> =
+            putBoardRequest: PutBoardRequest,
+        ): Result<PutBoardResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.patchBoard(boardId, BoardMapper.toPatchBoardRequestDTO(patchBoardRequest)) },
-                transform = { BoardMapper.toPatchBoardResponse(it!!) },
+                apiFunction = { boardApi.putBoard(boardId, BoardMapper.toPutBoardRequestDTO(putBoardRequest)) },
+                transform = { BoardMapper.toPutBoardResponse(it!!) },
             )
 
         override suspend fun patchBoardLiftUp(boardId: Long): Result<PatchBoardLiftUpResponse> =
@@ -71,14 +67,15 @@ class BoardRepositoryImpl
             )
 
         override suspend fun getBoardList(
-            gameStartDate: String?,
+            gameDate: String?,
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
             page: Int?,
+            size: Int?,
         ): Result<GetBoardListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.getBoardList(gameStartDate, maxPerson, preferredTeamIdList, page) },
+                apiFunction = { boardApi.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size) },
                 transform = { BoardMapper.toGetBoardListResponse(it!!) },
             )
 
@@ -107,38 +104,33 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun getLikedBoard(page: Int): Result<GetLikedBoardResponse> =
+        override suspend fun getLikedBoard(
+            page: Int,
+            size: Int,
+        ): Result<GetLikedBoardResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.getLikedBoard(page) },
+                apiFunction = { boardApi.getLikedBoard(page, size) },
                 transform = { BoardMapper.toGetLikedBoardResponse(it!!) },
             )
 
-        override suspend fun getTempBoard(): Result<GetTempBoardResponse> =
+        override suspend fun getTempBoard(): Result<GetTempBoardResponse?> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.getTempBoard() },
-                transform = { BoardMapper.toGetTempBoardResponse(it!!) },
-                errorHandler = { response, jsonObject ->
-                    if (response.code() == 404) {
-                        NonExistentTempBoardException("$jsonObject")
+                transform = { responseBody ->
+                    if (responseBody != null) {
+                        BoardMapper.toGetTempBoardResponse(responseBody)
                     } else {
-                        Exception("$jsonObject")
+                        null
                     }
                 },
             )
 
-        override suspend fun deleteBoard(boardId: Long): Result<DeleteBoardResponse> =
+        override suspend fun deleteBoard(boardId: Long): Result<Unit> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.deleteBoard(boardId) },
-                transform = { BoardMapper.toDeleteBoardResponse(it!!) },
-            )
-
-        override suspend fun deleteBoardLike(boardId: Long): Result<DeleteBoardLikeResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { boardApi.deleteBoardLike(boardId) },
-                transform = { BoardMapper.toDeleteBoardLikeResponse(it!!) },
+                transform = { it },
             )
     }

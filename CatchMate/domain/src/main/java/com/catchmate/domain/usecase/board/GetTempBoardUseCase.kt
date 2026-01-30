@@ -9,5 +9,5 @@ class GetTempBoardUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun getTempBoard(): Result<GetTempBoardResponse> = boardRepository.getTempBoard()
+        suspend fun getTempBoard(): Result<GetTempBoardResponse?> = boardRepository.getTempBoard()
     }
