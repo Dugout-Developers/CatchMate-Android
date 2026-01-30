@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
@@ -15,7 +14,6 @@ import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enumclass.EnrollState
-import com.catchmate.domain.usecase.board.DeleteBoardLikeUseCase
 import com.catchmate.domain.usecase.board.DeleteBoardUseCase
 import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PatchBoardLiftUpUseCase
@@ -34,7 +32,6 @@ class ReadPostViewModel
         private val getBoardUseCase: GetBoardUseCase,
         private val deleteBoardUseCase: DeleteBoardUseCase,
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
-        private val deleteBoardLikeUseCase: DeleteBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
         private val patchBoardLiftUpUseCase: PatchBoardLiftUpUseCase,
         private val getRequestedEnrollUseCase: GetRequestedEnrollUseCase,
@@ -47,10 +44,6 @@ class ReadPostViewModel
         private val _postBoardLikeResponse = MutableLiveData<Unit>()
         val postBoardLikeResponse: LiveData<Unit>
             get() = _postBoardLikeResponse
-
-        private val _deleteBoardLikeResponse = MutableLiveData<DeleteBoardLikeResponse>()
-        val deleteBoardLikeResponse: LiveData<DeleteBoardLikeResponse>
-            get() = _deleteBoardLikeResponse
 
         private val _boardEnrollState = MutableLiveData<EnrollState>()
         val boardEnrollState: LiveData<EnrollState>
@@ -121,22 +114,6 @@ class ReadPostViewModel
                             is ReissueFailureException -> _navigateToLogin.value = true
                             is BookmarkFailureException -> _bookmarkFailureMessage.value = exception.message
                             else -> _errorMessage.value = exception.message
-                        }
-                    }
-            }
-        }
-
-        fun deleteBoardLike(boardId: Long) {
-            viewModelScope.launch {
-                val result = deleteBoardLikeUseCase.deleteBoardLike(boardId)
-                result
-                    .onSuccess { response ->
-                        _deleteBoardLikeResponse.value = response
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            _errorMessage.value = exception.message
                         }
                     }
             }

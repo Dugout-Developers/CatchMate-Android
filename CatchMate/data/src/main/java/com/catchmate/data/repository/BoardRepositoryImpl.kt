@@ -6,7 +6,6 @@ import com.catchmate.data.mapper.BoardMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.BlockedUserBoardException
 import com.catchmate.domain.exception.BookmarkFailureException
-import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.GetLikedBoardResponse
@@ -105,10 +104,10 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun getLikedBoard(page: Int): Result<GetLikedBoardResponse> =
+        override suspend fun getLikedBoard(page: Int, size: Int): Result<GetLikedBoardResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.getLikedBoard(page) },
+                apiFunction = { boardApi.getLikedBoard(page, size) },
                 transform = { BoardMapper.toGetLikedBoardResponse(it!!) },
             )
 
@@ -130,12 +129,5 @@ class BoardRepositoryImpl
                 tag = this.tag,
                 apiFunction = { boardApi.deleteBoard(boardId) },
                 transform = { it },
-            )
-
-        override suspend fun deleteBoardLike(boardId: Long): Result<DeleteBoardLikeResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { boardApi.deleteBoardLike(boardId) },
-                transform = { BoardMapper.toDeleteBoardLikeResponse(it!!) },
             )
     }

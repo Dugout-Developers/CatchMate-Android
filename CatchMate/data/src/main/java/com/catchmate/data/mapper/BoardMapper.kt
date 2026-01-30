@@ -1,7 +1,6 @@
 package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.board.BoardDTO
-import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
 import com.catchmate.data.dto.board.GameRequestDto
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
@@ -17,7 +16,6 @@ import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.dto.user.ClubDTO
 import com.catchmate.domain.model.board.Board
-import com.catchmate.domain.model.board.DeleteBoardLikeResponse
 import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardListResponse
 import com.catchmate.domain.model.board.GetBoardResponse
@@ -226,12 +224,10 @@ object BoardMapper {
 
     fun toGetLikedBoardResponse(responseDTO: GetLikedBoardResponseDTO): GetLikedBoardResponse =
         GetLikedBoardResponse(
-            boardInfoList = responseDTO.boardInfoList.map { toBoard(it) },
+            content = responseDTO.content.map { toBoard(it) },
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
+            pageNumber = responseDTO.pageNumber,
         )
-
-    fun toDeleteBoardLikeResponse(dto: DeleteBoardLikeResponseDTO): DeleteBoardLikeResponse = DeleteBoardLikeResponse(dto.state)
 }

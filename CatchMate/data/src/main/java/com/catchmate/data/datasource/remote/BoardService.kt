@@ -1,6 +1,5 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.board.DeleteBoardLikeResponseDTO
 import com.catchmate.data.dto.board.GetBoardListResponseDTO
 import com.catchmate.data.dto.board.GetBoardResponseDTO
 import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
@@ -64,9 +63,10 @@ interface BoardService {
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
 
-    @GET("boards/bookmark")
+    @GET("api/bookmarks/me")
     suspend fun getLikedBoard(
         @Query("page") page: Int,
+        @Query("size") size: Int = 10,
     ): Response<GetLikedBoardResponseDTO?>
 
     @GET("api/boards/temp")
@@ -76,10 +76,4 @@ interface BoardService {
     suspend fun deleteBoard(
         @Path("boardId") boardId: Long,
     ): Response<Unit>
-
-    // 안쓰는 api 제거
-    @DELETE("boards/bookmark/{boardId}")
-    suspend fun deleteBoardLike(
-        @Path("boardId") boardId: Long,
-    ): Response<DeleteBoardLikeResponseDTO?>
 }

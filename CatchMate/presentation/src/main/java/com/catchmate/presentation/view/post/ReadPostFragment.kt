@@ -192,12 +192,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             cvLikedFooter.setOnClickListener {
                 toggleLikedFooterLiked.isChecked = !toggleLikedFooterLiked.isChecked
             }
-            toggleLikedFooterLiked.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    readPostViewModel.postBoardLike(boardId)
-                } else {
-                    readPostViewModel.deleteBoardLike(boardId)
-                }
+            toggleLikedFooterLiked.setOnClickListener {
+                readPostViewModel.postBoardLike(boardId)
             }
             btnLikedFooterRegister.setOnClickListener {
                 when (readPostViewModel.boardEnrollState.value) {
