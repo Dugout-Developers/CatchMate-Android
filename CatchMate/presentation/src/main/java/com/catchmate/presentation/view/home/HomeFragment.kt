@@ -267,7 +267,10 @@ class HomeFragment :
         binding.rvHomePosts.adapter?.notifyItemRemoved(position)
     }
 
-    override fun onPostItemClicked(boardId: Long, position: Int) {
+    override fun onPostItemClicked(
+        boardId: Long,
+        position: Int,
+    ) {
         if (localDataViewModel.accessToken.value.isNullOrEmpty()) {
             Snackbar.make(requireView(), R.string.all_guest_snackbar, Snackbar.LENGTH_SHORT).show()
         } else {

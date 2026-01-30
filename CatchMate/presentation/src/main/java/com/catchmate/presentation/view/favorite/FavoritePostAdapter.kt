@@ -121,7 +121,7 @@ class FavoritePostAdapter(
 
             ResourceUtil
                 .setTeamViewResources(
-                    board.gameResponse.homeClub?.clubId ?:0,
+                    board.gameResponse.homeClub?.clubId ?: 0,
                     isCheerTeam,
                     ivItemHomeTeamBg,
                     ivItemHomeTeamLogo,

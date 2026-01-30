@@ -9,5 +9,8 @@ class GetLikedBoardUseCase
     constructor(
         private val boardRepository: BoardRepository,
     ) {
-        suspend fun getLikedBoard(page: Int, size: Int): Result<GetLikedBoardResponse> = boardRepository.getLikedBoard(page, size)
+        suspend fun getLikedBoard(
+            page: Int,
+            size: Int,
+        ): Result<GetLikedBoardResponse> = boardRepository.getLikedBoard(page, size)
     }

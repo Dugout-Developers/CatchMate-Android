@@ -128,7 +128,6 @@ object BoardMapper {
             null
         }
 
-
     fun toPutBoardRequestDTO(request: PutBoardRequest): PutBoardRequestDTO =
         PutBoardRequestDTO(
             title = request.title,

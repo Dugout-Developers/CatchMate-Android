@@ -51,7 +51,10 @@ class FavoriteViewModel
             }
         }
 
-        fun getLikedBoard(page: Int, size: Int = 10) {
+        fun getLikedBoard(
+            page: Int,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
                 val result = getLikedBoardUseCase.getLikedBoard(page, size)
                 result

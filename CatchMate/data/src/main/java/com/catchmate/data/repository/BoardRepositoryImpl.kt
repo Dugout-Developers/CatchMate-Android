@@ -71,7 +71,7 @@ class BoardRepositoryImpl
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
             page: Int?,
-            size: Int?
+            size: Int?,
         ): Result<GetBoardListResponse> =
             apiCall(
                 tag = this.tag,
@@ -104,7 +104,10 @@ class BoardRepositoryImpl
                 },
             )
 
-        override suspend fun getLikedBoard(page: Int, size: Int): Result<GetLikedBoardResponse> =
+        override suspend fun getLikedBoard(
+            page: Int,
+            size: Int,
+        ): Result<GetLikedBoardResponse> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.getLikedBoard(page, size) },

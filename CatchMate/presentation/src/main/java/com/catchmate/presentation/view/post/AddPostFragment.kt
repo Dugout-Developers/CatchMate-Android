@@ -12,8 +12,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.board.GameRequest
 import com.catchmate.domain.model.board.GetBoardResponse
-import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.board.PostBoardRequest
+import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAddPostBinding
@@ -324,9 +324,9 @@ class AddPostFragment :
                 val boardWriteRequest =
                     PostBoardRequest(
                         boardId =
-                            if (addPostViewModel.isTempMode.value == true) {    // 임시 저장 게시물을 정식 게시글로 등록
+                            if (addPostViewModel.isTempMode.value == true) { // 임시 저장 게시물을 정식 게시글로 등록
                                 addPostViewModel.getTempBoardResponse.value?.boardId
-                            } else {    // 새 게시글을 등록
+                            } else { // 새 게시글을 등록
                                 null
                             },
                         title = title,
