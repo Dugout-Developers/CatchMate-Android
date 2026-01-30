@@ -293,8 +293,8 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     tvSideSheetTitle.text = info.boardInfo.title
                     val isCheerTeam =
                         info.boardInfo.cheerClub.clubId ==
-                                info.boardInfo.gameResponse.homeClub
-                                    ?.clubId
+                            info.boardInfo.gameResponse.homeClub
+                                ?.clubId
                     setTeamViewResources(
                         info.boardInfo.gameResponse.homeClub
                             ?.clubId ?: 0,
