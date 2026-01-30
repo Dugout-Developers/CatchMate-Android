@@ -108,7 +108,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 popup.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.menuitem_post_up -> {
-                            liftUpBoard()
+                            readPostViewModel.patchBoardLiftUp(boardId)
                             Log.d("LIFT UP", "")
                             true
                         }
@@ -297,6 +297,18 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
             }
         }
+        readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val message =
+                    if (response.state) {
+                        getString(R.string.post_read_writer_menu_up_complete)
+                    } else {
+                        val failureMessage = getString(R.string.post_read_writer_menu_up_failure)
+                        failureMessage.format(response.remainTime)
+                    }
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+            }
+        }
         readPostViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
                 val navOptions =
@@ -432,22 +444,6 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     "40" -> tvFourties.visibility = View.VISIBLE
                     "50" -> tvFifties.visibility = View.VISIBLE
                 }
-            }
-        }
-    }
-
-    private fun liftUpBoard() {
-        readPostViewModel.patchBoardLiftUp(boardId)
-        readPostViewModel.patchBoardLiftUpResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                val message =
-                    if (response.state) {
-                        getString(R.string.post_read_writer_menu_up_complete)
-                    } else {
-                        val failureMessage = getString(R.string.post_read_writer_menu_up_failure)
-                        failureMessage.format(response.remainTime)
-                    }
-                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

@@ -38,7 +38,7 @@ interface BoardService {
         @Body putBoardRequestDTO: PutBoardRequestDTO,
     ): Response<PutBoardResponseDTO?>
 
-    @PATCH("boards/{boardId}/lift-up")
+    @PATCH("api/boards/{boardId}/lift-up")
     suspend fun patchBoardLiftUp(
         @Path("boardId") boardId: Long,
     ): Response<PatchBoardLiftUpResponseDTO?>
