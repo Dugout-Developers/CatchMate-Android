@@ -5,6 +5,7 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.NotificationMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
+import com.catchmate.domain.model.notification.GetHasUnreadNotificationResponse
 import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
@@ -26,6 +27,13 @@ class NotificationRepositoryImpl
                 tag = this.tag,
                 apiFunction = { notificationApi.getNotificationList(page, size) },
                 transform = { NotificationMapper.toGetReceivedNotificationListResponse(it!!) },
+            )
+
+        override suspend fun getHasUnreadNotification(): Result<GetHasUnreadNotificationResponse> =
+            apiCall(
+                tag = this.tag,
+                apiFunction = { notificationApi.getHasUnreadNotification() },
+                transform = { NotificationMapper.toGetHasUnreadNotificationResponse(it!!) }
             )
 
         override suspend fun getReceivedNotification(notificationId: Long): Result<GetReceivedNotificationResponse> =

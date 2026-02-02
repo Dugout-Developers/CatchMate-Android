@@ -10,7 +10,6 @@ import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
-import com.catchmate.domain.model.user.GetUnreadInfoResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -57,13 +56,6 @@ class UserRepositoryImpl
                 tag = this.tag,
                 apiFunction = { userApi.getBlockedUserList(page) },
                 transform = { UserMapper.toGetBlockedUserListResponse(it!!) },
-            )
-
-        override suspend fun getUnreadInfo(): Result<GetUnreadInfoResponse> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { userApi.getUnreadInfo() },
-                transform = { UserMapper.toGetUnreadInfoResponse(it!!) },
             )
 
         override suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse> =

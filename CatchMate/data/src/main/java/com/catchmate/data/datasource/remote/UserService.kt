@@ -4,7 +4,6 @@ import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
-import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -43,9 +42,6 @@ interface UserService {
     suspend fun getBlockedUserList(
         @Query("page") page: Int,
     ): Response<GetBlockedUserListResponseDTO?>
-
-    @GET("users/has-unread")
-    suspend fun getUnreadInfo(): Response<GetUnreadInfoResponseDTO?>
 
     @POST("users/block/{blockedUserId}")
     suspend fun postUserBlock(

@@ -1,6 +1,7 @@
 package com.catchmate.data.datasource.remote
 
 import com.catchmate.data.dto.notification.DeleteReceivedNotificationResponseDTO
+import com.catchmate.data.dto.notification.GetHasUnreadNotificationResponseDto
 import com.catchmate.data.dto.notification.GetNotificationListResponseDTO
 import com.catchmate.data.dto.notification.GetReceivedNotificationResponseDTO
 import retrofit2.Response
@@ -15,6 +16,9 @@ interface NotificationService {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): Response<GetNotificationListResponseDTO?>
+
+    @GET("api/notifications/unread")
+    suspend fun getHasUnreadNotification(): Response<GetHasUnreadNotificationResponseDto>
 
     @GET("notifications/receive/{notificationId}")
     suspend fun getReceivedNotification(
