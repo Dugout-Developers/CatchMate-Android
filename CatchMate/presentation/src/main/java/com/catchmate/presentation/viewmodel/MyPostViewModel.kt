@@ -43,8 +43,8 @@ class MyPostViewModel
 
         fun getUserBoardList(
             userId: Long,
-            page: Int? = null,
-            size: Int? = null,
+            page: Int = 0,
+            size: Int = 10,
         ) {
             viewModelScope.launch {
                 val result = getUserBoardListUseCase.getUserBoardList(userId, page, size)

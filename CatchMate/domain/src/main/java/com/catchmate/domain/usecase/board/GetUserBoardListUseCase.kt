@@ -11,7 +11,7 @@ class GetUserBoardListUseCase
     ) {
         suspend fun getUserBoardList(
             userId: Long,
-            page: Int?,
-            size: Int?,
+            page: Int,
+            size: Int,
         ): Result<GetUserBoardListResponse> = boardRepository.getUserBoardList(userId, page, size)
     }

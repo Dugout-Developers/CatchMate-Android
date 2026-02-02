@@ -81,12 +81,12 @@ class BoardRepositoryImpl
 
         override suspend fun getUserBoardList(
             userId: Long,
-            page: Int?,
-            size: Int?,
+            page: Int,
+            size: Int,
         ): Result<GetUserBoardListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { boardApi.getUserBoardList(userId, page) },
+                apiFunction = { boardApi.getUserBoardList(userId, page, size) },
                 transform = { BoardMapper.toGetUserBoardListResponse(it!!) },
             )
 
