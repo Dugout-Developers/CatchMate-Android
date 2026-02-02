@@ -31,9 +31,10 @@ interface SupportService {
         @Body postUserReportRequestDTO: PostUserReportRequestDTO,
     ): Response<PostUserReportResponseDTO?>
 
-    @GET("notices/list")
+    @GET("api/notices")
     suspend fun getNoticeList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetNoticeListResponseDTO?>
 
     @GET("notices/{noticeId}")

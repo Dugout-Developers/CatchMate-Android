@@ -46,10 +46,13 @@ class SupportRepositoryImpl
                 transform = { SupportMapper.toPostUserReportResponse(it!!) },
             )
 
-        override suspend fun getNoticeList(page: Int): Result<GetNoticeListResponse> =
+        override suspend fun getNoticeList(
+            page: Int,
+            size: Int,
+        ): Result<GetNoticeListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { supportApi.getNoticeList(page) },
+                apiFunction = { supportApi.getNoticeList(page, size) },
                 transform = { SupportMapper.toGetNoticeListResponse(it!!) },
             )
 

@@ -1,9 +1,9 @@
 package com.catchmate.domain.model.support
 
 data class GetNoticeListResponse(
-    val noticeInfoList: List<NoticeInfo>,
+    val content: List<NoticeInfo>,
+    val pageNumber: Int,
     val totalPages: Int,
     val totalElements: Int,
-    val isFirst: Boolean,
-    val isLast: Boolean,
+    val hasNext: Boolean,
 )

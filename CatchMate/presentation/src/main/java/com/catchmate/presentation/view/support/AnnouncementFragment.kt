@@ -25,7 +25,7 @@ class AnnouncementFragment :
     private var announcementListAdapter: AnnouncementListAdapter? = null
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var announcementList: MutableList<NoticeInfo> = mutableListOf()
@@ -64,7 +64,7 @@ class AnnouncementFragment :
                                 (recyclerView.layoutManager as LinearLayoutManager)
                                     .findLastCompletelyVisibleItemPosition()
                             val itemTotalCount = recyclerView.adapter!!.itemCount
-                            if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                                 currentPage += 1
                                 getNoticeList()
                             }
@@ -77,17 +77,17 @@ class AnnouncementFragment :
 
     private fun initViewModel() {
         announcementViewModel.getNoticeListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvAnnouncement.visibility = View.GONE
                 binding.layoutAnnouncementNoList.visibility = View.VISIBLE
             } else {
                 binding.rvAnnouncement.visibility = View.VISIBLE
                 binding.layoutAnnouncementNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    announcementList.addAll(response.noticeInfoList)
+                    announcementList.addAll(response.content)
                 }
-                announcementListAdapter?.submitList(response.noticeInfoList)
-                isLastPage = response.isLast
+                announcementListAdapter?.submitList(response.content)
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -112,7 +112,7 @@ class AnnouncementFragment :
     }
 
     private fun getNoticeList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         announcementViewModel.getNoticeList(currentPage)
         isApiCalled = true

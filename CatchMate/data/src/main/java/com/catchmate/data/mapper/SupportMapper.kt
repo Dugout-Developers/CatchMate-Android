@@ -1,6 +1,5 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.support.AdminUserInfoDTO
 import com.catchmate.data.dto.support.GetInquiryResponseDTO
 import com.catchmate.data.dto.support.GetNoticeListResponseDTO
 import com.catchmate.data.dto.support.NoticeInfoDTO
@@ -9,7 +8,6 @@ import com.catchmate.data.dto.support.PostInquiryResponseDTO
 import com.catchmate.data.dto.support.PostUserReportRequestDTO
 import com.catchmate.data.dto.support.PostUserReportResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toClub
-import com.catchmate.domain.model.support.AdminUserInfo
 import com.catchmate.domain.model.support.GetInquiryResponse
 import com.catchmate.domain.model.support.GetNoticeListResponse
 import com.catchmate.domain.model.support.NoticeInfo
@@ -54,32 +52,18 @@ object SupportMapper {
 
     fun toGetNoticeListResponse(dto: GetNoticeListResponseDTO): GetNoticeListResponse =
         GetNoticeListResponse(
-            noticeInfoList = dto.noticeInfoList.map { toNoticeInfo(it) },
+            content = dto.content.map { toNoticeInfo(it) },
+            pageNumber = dto.pageNumber,
             totalPages = dto.totalPages,
             totalElements = dto.totalElements,
-            isFirst = dto.isFirst,
-            isLast = dto.isLast,
+            hasNext = dto.hasNext,
         )
 
     fun toNoticeInfo(dto: NoticeInfoDTO): NoticeInfo =
         NoticeInfo(
             noticeId = dto.noticeId,
             title = dto.title,
-            content = dto.content,
-            userInfo = toAdminUserInfo(dto.userInfo),
+            writerNickname = dto.writerNickname,
             createdAt = dto.createdAt,
-            updatedAt = dto.updatedAt,
-        )
-
-    fun toAdminUserInfo(dto: AdminUserInfoDTO): AdminUserInfo =
-        AdminUserInfo(
-            userId = dto.userId,
-            profileImageUrl = dto.profileImageUrl,
-            nickName = dto.nickName,
-            clubInfo = toClub(dto.clubInfo)!!,
-            gender = dto.gender,
-            email = dto.email,
-            socialType = dto.socialType,
-            joinedAt = dto.joinedAt,
         )
 }
