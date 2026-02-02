@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
-import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.usecase.notification.DeleteReceivedNotificationUseCase
-import com.catchmate.domain.usecase.notification.GetReceivedNotificationListUseCase
+import com.catchmate.domain.usecase.notification.GetNotificationListUseCase
 import com.catchmate.domain.usecase.notification.GetReceivedNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,12 +19,12 @@ import javax.inject.Inject
 class NotificationViewModel
     @Inject
     constructor(
-        private val getReceivedNotificationListUseCase: GetReceivedNotificationListUseCase,
+        private val getNotificationListUseCase: GetNotificationListUseCase,
         private val getReceivedNotificationUseCase: GetReceivedNotificationUseCase,
         private val deleteReceivedNotificationUseCase: DeleteReceivedNotificationUseCase,
     ) : ViewModel() {
-        private val _receivedNotificationList = MutableLiveData<GetReceivedNotificationListResponse>()
-        val receivedNotificationList: LiveData<GetReceivedNotificationListResponse>
+        private val _receivedNotificationList = MutableLiveData<GetNotificationListResponse>()
+        val receivedNotificationList: LiveData<GetNotificationListResponse>
             get() = _receivedNotificationList
 
         private val _receivedNotification = MutableLiveData<GetReceivedNotificationResponse>()
@@ -43,9 +43,12 @@ class NotificationViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getReceivedNotificationList(page: Int) {
+        fun getNotificationList(
+            page: Int = 0,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
-                val result = getReceivedNotificationListUseCase.getReceivedNotificationList(page)
+                val result = getNotificationListUseCase(page, size)
                 result
                     .onSuccess { response ->
                         _receivedNotificationList.value = response

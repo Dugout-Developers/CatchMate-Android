@@ -31,7 +31,7 @@ class NotificationFragment :
     private val notificationViewModel: NotificationViewModel by viewModels()
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
@@ -65,26 +65,26 @@ class NotificationFragment :
     }
 
     private fun getNotificationList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
-        notificationViewModel.getReceivedNotificationList(currentPage)
+        notificationViewModel.getNotificationList(currentPage)
         isApiCalled = true
     }
 
     private fun initViewModel() {
         notificationViewModel.receivedNotificationList.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvNotificationList.visibility = View.GONE
                 binding.layoutNotificationNoList.visibility = View.VISIBLE
             } else {
                 binding.rvNotificationList.visibility = View.VISIBLE
                 binding.layoutNotificationNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    notificationList.addAll(response.notificationInfoList)
+                    notificationList.addAll(response.content)
                 }
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.updateNotificationList(notificationList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -145,7 +145,7 @@ class NotificationFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getNotificationList()
                         }

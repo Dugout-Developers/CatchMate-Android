@@ -5,7 +5,7 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.NotificationMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
-import com.catchmate.domain.model.notification.GetReceivedNotificationListResponse
+import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
 import com.catchmate.domain.repository.NotificationRepository
 import javax.inject.Inject
@@ -18,10 +18,13 @@ class NotificationRepositoryImpl
         private val notificationApi = retrofitClient.createApi<NotificationService>()
         private val tag = "NotificationRepo"
 
-        override suspend fun getReceivedNotificationList(page: Int): Result<GetReceivedNotificationListResponse> =
+        override suspend fun getNotificationList(
+            page: Int,
+            size: Int,
+        ): Result<GetNotificationListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { notificationApi.getReceivedNotificationList(page) },
+                apiFunction = { notificationApi.getNotificationList(page, size) },
                 transform = { NotificationMapper.toGetReceivedNotificationListResponse(it!!) },
             )
 
