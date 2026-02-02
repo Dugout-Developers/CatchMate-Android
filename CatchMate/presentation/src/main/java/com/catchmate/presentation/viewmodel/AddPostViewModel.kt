@@ -55,10 +55,6 @@ class AddPostViewModel
         val putBoardResponse: LiveData<PutBoardResponse>
             get() = _putBoardResponse
 
-        private var _isTempMode = MutableLiveData<Boolean>()
-        val isTempMode: LiveData<Boolean>
-            get() = _isTempMode
-
         private var _getTempBoardResponse = MutableLiveData<GetTempBoardResponse>()
         val getTempBoardResponse: LiveData<GetTempBoardResponse>
             get() = _getTempBoardResponse
@@ -128,10 +124,7 @@ class AddPostViewModel
                 result
                     .onSuccess { response ->
                         response?.let { data ->
-                            _isTempMode.value = true
                             _getTempBoardResponse.value = data
-                        } ?: run {
-                            _isTempMode.value = false
                         }
                     }.onFailure { exception ->
                         when (exception) {

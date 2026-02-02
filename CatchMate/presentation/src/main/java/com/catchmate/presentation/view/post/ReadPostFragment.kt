@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.board.BoardMode
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enumclass.EnrollState
@@ -116,8 +117,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         R.id.menuitem_post_update -> {
                             val bundle =
                                 Bundle().apply {
-                                    putParcelable("boardInfo", readPostViewModel.getBoardResponse.value)
-                                    putBoolean("isEditMode", true)
+                                    putParcelable("boardMode", BoardMode.Edit(readPostViewModel.getBoardResponse.value!!))
                                 }
                             findNavController().navigate(R.id.action_readPostFragment_to_addPostFragment, bundle)
                             Log.d("UPDATE", "")

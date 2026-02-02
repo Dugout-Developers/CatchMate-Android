@@ -10,8 +10,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.catchmate.domain.model.board.BoardMode
 import com.catchmate.domain.model.board.GameRequest
-import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PutBoardRequest
 import com.catchmate.domain.model.enroll.GameInfo
@@ -45,8 +45,7 @@ class AddPostFragment :
     OnCheerTeamSelectedListener,
     OnPlaceSelectedListener {
     private val addPostViewModel: AddPostViewModel by viewModels()
-    private val isEditMode by lazy { arguments?.getBoolean("isEditMode") ?: false }
-    private var isTempSave = false
+    private var currentMode: BoardMode = BoardMode.New
     private var isTempDialogShown = false
 
     private var isAgeRegardlessChecked = false
@@ -62,15 +61,29 @@ class AddPostFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+
+        currentMode =
+            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable("boardMode", BoardMode::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                arguments?.getParcelable("boardMode") as? BoardMode
+            }) ?: BoardMode.New
+
         // getBoardInfo()로 받아온 board Data가 존재하고, isEditMode == true일 때 게시글 수정 모드이므로 viewmodel에 의해 보드 데이터 셋팅됨
-        addPostViewModel.setBoardInfo(getBoardInfo())
+        if (currentMode is BoardMode.Edit) {
+            addPostViewModel.setBoardInfo((currentMode as BoardMode.Edit).boardInfo)
+        }
+
+        initHeader()
+        initBottomSheets()
         initFooter()
         initAdditionalInfoEdt()
         initAgeChip()
         initTitleTextView()
         initKeyboardAction()
 
-        if (!isEditMode) {
+        if (currentMode is BoardMode.New) {
             addPostViewModel.getTempBoard()
             onBackPressedAction = {
                 val isAllFieldsEmpty = checkInputFieldsEmpty()
@@ -139,17 +152,10 @@ class AddPostFragment :
         }
     }
 
-    private fun getBoardInfo(): GetBoardResponse? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("boardInfo", GetBoardResponse::class.java)
-        } else {
-            arguments?.getParcelable("boardInfo") as GetBoardResponse?
-        }
-
     private fun initHeader() {
         binding.layoutAddPostHeader.run {
             tvHeaderTextTitle.visibility = View.GONE
-            if (isEditMode) {
+            if (currentMode is BoardMode.Edit) {
                 tvHeaderTextSub.visibility = View.GONE
                 imgbtnHeaderTextBack.setOnClickListener {
                     findNavController().popBackStack()
@@ -187,8 +193,6 @@ class AddPostFragment :
                     info.game,
                 )
             }
-            initHeader()
-            initBottomSheets()
         }
         addPostViewModel.homeTeamName.observe(viewLifecycleOwner) { homeTeamName ->
             if (homeTeamName != null) {
@@ -234,7 +238,7 @@ class AddPostFragment :
         addPostViewModel.postBoardResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.i("boardWriteResponse", "$response")
-                if (!isTempSave) { // 게시글 등록일 때
+                if (currentMode is BoardMode.New) { // 게시글 등록일 때
                     val bundle = Bundle()
                     bundle.putLong("boardId", response.boardId)
                     val navOptions =
@@ -243,7 +247,7 @@ class AddPostFragment :
                             .setPopUpTo(R.id.addPostFragment, true)
                             .build()
                     findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
-                } else { // 임시 저장일 때
+                } else if (currentMode is BoardMode.Temp){ // 임시 저장일 때
                     Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
@@ -305,40 +309,36 @@ class AddPostFragment :
                     location,
                 )
 
-            if (isEditMode) {
-                // 업데이트 모드
-                val boardEditRequest =
-                    PutBoardRequest(
-                        title,
-                        content,
-                        maxPerson,
-                        cheerClubId,
-                        preferredGender,
-                        preferredAgeRange,
-                        true,
-                        gameRequest,
-                    )
-                addPostViewModel.putBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
-            } else {
-                isTempSave = false
-                val boardWriteRequest =
-                    PostBoardRequest(
-                        boardId =
-                            if (addPostViewModel.isTempMode.value == true) { // 임시 저장 게시물을 정식 게시글로 등록
-                                addPostViewModel.getTempBoardResponse.value?.boardId
-                            } else { // 새 게시글을 등록
-                                null
-                            },
-                        title = title,
-                        content = content,
-                        maxPerson = maxPerson,
-                        cheerClubId = cheerClubId,
-                        preferredGender = preferredGender,
-                        preferredAgeRange = preferredAgeRange,
-                        completed = true,
-                        gameRequest = gameRequest,
-                    )
-                addPostViewModel.postBoard(boardWriteRequest)
+            when (currentMode) {
+                BoardMode.New -> { // 새 게시글을 등록하는 경우
+                    val boardWriteRequest =
+                        PostBoardRequest(
+                            title = title,
+                            content = content,
+                            maxPerson = maxPerson,
+                            cheerClubId = cheerClubId,
+                            preferredGender = preferredGender,
+                            preferredAgeRange = preferredAgeRange,
+                            completed = true,
+                            gameCreateRequest = gameRequest,
+                        )
+                    addPostViewModel.postBoard(boardWriteRequest)
+                }
+                is BoardMode.Edit,
+                is BoardMode.Temp -> { // 기존 게시글을 수정하거나, 임시저장된 게시글을 등록하는 경우
+                    val boardEditRequest =
+                        PutBoardRequest(
+                            title,
+                            content,
+                            maxPerson,
+                            cheerClubId,
+                            preferredGender,
+                            preferredAgeRange,
+                            true,
+                            gameRequest,
+                        )
+                    addPostViewModel.putBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                }
             }
         }
     }
@@ -418,15 +418,8 @@ class AddPostFragment :
                     )
                 }
 
-            // addPostViewModel.isTempMode.value == true이면 임시저장boarddata의 boardId, false이면 null
             val tempBoard =
                 PostBoardRequest(
-                    boardId =
-                        if (addPostViewModel.isTempMode.value == true) { // 임시 저장했던 글을 덮어쓰기
-                            addPostViewModel.getTempBoardResponse.value?.boardId
-                        } else { // 새로운 글을 임시저장
-                            null
-                        },
                     title = title,
                     content = content,
                     maxPerson = maxPerson,
@@ -434,9 +427,8 @@ class AddPostFragment :
                     preferredGender = preferredGender,
                     preferredAgeRange = preferredAgeRange,
                     completed = false,
-                    gameRequest = gameRequest,
+                    gameCreateRequest = gameRequest,
                 )
-            isTempSave = true
             addPostViewModel.postBoard(tempBoard)
         }
     }
@@ -547,7 +539,7 @@ class AddPostFragment :
         binding.apply {
             tvAddPostPeopleCount.setOnClickListener {
                 val peopleCountBottomSheet =
-                    if (isEditMode) { // 수정 시 currentPerson 값 전달해서 현재 참여한 인원보다 적은 수 선택할 수 없게 지정
+                    if (currentMode is BoardMode.Edit) { // 수정 시 currentPerson 값 전달해서 현재 참여한 인원보다 적은 수 선택할 수 없게 지정
                         PostHeadCountBottomSheetFragment(
                             addPostViewModel.boardInfo.value?.maxPerson,
                             addPostViewModel.boardInfo.value?.currentPerson,
@@ -721,6 +713,7 @@ class AddPostFragment :
                         tempBoard.cheerClub?.clubId,
                         tempBoard.game,
                     )
+                    currentMode = BoardMode.Temp(tempBoard.boardId)
                     dialog.dismiss()
                 }
             }

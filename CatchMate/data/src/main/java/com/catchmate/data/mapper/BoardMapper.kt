@@ -34,7 +34,6 @@ import com.catchmate.domain.model.user.Club
 object BoardMapper {
     fun toPostBoardRequestDTO(request: PostBoardRequest): PostBoardRequestDTO =
         PostBoardRequestDTO(
-            boardId = request.boardId,
             title = request.title,
             content = request.content,
             maxPerson = request.maxPerson,
@@ -42,7 +41,7 @@ object BoardMapper {
             preferredGender = request.preferredGender,
             preferredAgeRange = request.preferredAgeRange,
             completed = request.completed,
-            gameRequest = toGameRequestDto(request.gameRequest),
+            gameCreateRequest = toGameRequestDto(request.gameCreateRequest),
         )
 
     private fun toGameRequestDto(request: GameRequest?): GameRequestDto? =
@@ -69,14 +68,7 @@ object BoardMapper {
     fun toPostBoardResponse(dto: PostBoardResponseDTO): PostBoardResponse =
         PostBoardResponse(
             boardId = dto.boardId,
-            title = dto.title,
-            content = dto.content,
-            currentPerson = dto.currentPerson,
-            maxPerson = dto.maxPerson,
-            bookMarked = dto.bookMarked,
-            cheerClub = toClub(dto.cheerClub)!!,
-            gameResponse = toGameInfo(dto.gameResponse)!!,
-            userResponse = toUserInfo(dto.userResponse),
+            createdAt = dto.createdAt,
         )
 
     private fun toGameInfo(dto: GameInfoDTO?): GameInfo? =
@@ -137,20 +129,13 @@ object BoardMapper {
             preferredGender = request.preferredGender,
             preferredAgeRange = request.preferredAgeRange,
             completed = request.completed,
-            gameRequest = toGameRequestDto(request.gameRequest)!!,
+            gameUpdateRequest = toGameRequestDto(request.gameUpdateRequest)!!,
         )
 
     fun toPutBoardResponse(responseDTO: PutBoardResponseDTO): PutBoardResponse =
         PutBoardResponse(
             boardId = responseDTO.boardId,
-            title = responseDTO.title,
-            content = responseDTO.content,
-            currentPerson = responseDTO.currentPerson,
-            maxPerson = responseDTO.maxPerson,
-            bookMarked = responseDTO.bookMarked,
-            cheerClub = toClub(responseDTO.cheerClub)!!,
-            gameResponse = toGameInfo(responseDTO.gameResponse)!!,
-            userResponse = toUserInfo(responseDTO.userResponse),
+            createdAt = responseDTO.createdAt,
         )
 
     fun toPatchBoardLiftUpResponse(dto: PatchBoardLiftUpResponseDTO): PatchBoardLiftUpResponse =

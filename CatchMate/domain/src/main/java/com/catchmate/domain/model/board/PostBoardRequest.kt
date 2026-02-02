@@ -1,7 +1,6 @@
 package com.catchmate.domain.model.board
 
 data class PostBoardRequest(
-    val boardId: Long? = null,
     val title: String?,
     val content: String?,
     val maxPerson: Int?,
@@ -9,5 +8,5 @@ data class PostBoardRequest(
     val preferredGender: String?,
     val preferredAgeRange: List<String>?,
     val completed: Boolean,
-    val gameRequest: GameRequest?,
+    val gameCreateRequest: GameRequest?,
 )
