@@ -43,7 +43,7 @@ class MyPostFragment :
 
     private var userInfo: GetUserProfileResponse? = null
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var myPostList: MutableList<Board> = mutableListOf()
@@ -175,18 +175,18 @@ class MyPostFragment :
             }
         }
         myPostViewModel.getUserBoardListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvMyPost.visibility = View.GONE
                 binding.layoutMyPostNoList.visibility = View.VISIBLE
             } else {
                 binding.rvMyPost.visibility = View.VISIBLE
                 binding.layoutMyPostNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    myPostList.addAll(response.boardInfoList)
+                    myPostList.addAll(response.content)
                 }
                 val adapter = binding.rvMyPost.adapter as MyPostAdapter
                 adapter.updatePostList(myPostList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -221,7 +221,7 @@ class MyPostFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getMyPostList()
                         }
@@ -232,7 +232,7 @@ class MyPostFragment :
     }
 
     private fun getMyPostList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         myPostViewModel.getUserBoardList(userInfo?.userId!!, currentPage)
         isApiCalled = true

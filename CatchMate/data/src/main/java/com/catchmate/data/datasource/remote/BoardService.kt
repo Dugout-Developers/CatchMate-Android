@@ -52,10 +52,11 @@ interface BoardService {
         @Query("size") size: Int? = null,
     ): Response<GetBoardListResponseDTO?>
 
-    @GET("boards/list/{userId}")
+    @GET("api/boards/users/{userId}")
     suspend fun getUserBoardList(
         @Path("userId") userId: Long,
-        @Query("page") page: Int,
+        @Query("page") page: Int? = 0,
+        @Query("size") size: Int? = 10,
     ): Response<GetUserBoardListResponseDTO?>
 
     @GET("api/boards/{boardId}")
