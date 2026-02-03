@@ -324,8 +324,7 @@ class AddPostFragment :
                         )
                     addPostViewModel.postBoard(boardWriteRequest)
                 }
-                is BoardMode.Edit,
-                is BoardMode.Temp -> { // 기존 게시글을 수정하거나, 임시저장된 게시글을 등록하는 경우
+                is BoardMode.Edit -> { // 기존 게시글 수정
                     val boardEditRequest =
                         PutBoardRequest(
                             title,
@@ -337,11 +336,27 @@ class AddPostFragment :
                             true,
                             gameRequest,
                         )
-                    addPostViewModel.putBoard(addPostViewModel.boardInfo.value?.boardId!!, boardEditRequest)
+                    addPostViewModel.putBoard((currentMode as BoardMode.Edit).boardInfo.boardId, boardEditRequest)
+                }
+                is BoardMode.Temp -> { // 임시저장 게시글 등록
+                    val boardRequest =
+                        PutBoardRequest(
+                            title,
+                            content,
+                            maxPerson,
+                            cheerClubId,
+                            preferredGender,
+                            preferredAgeRange,
+                            true,
+                            gameRequest,
+                        )
+                    addPostViewModel.putBoard((currentMode as BoardMode.Temp).boardId, boardRequest)
                 }
             }
         }
     }
+
+
 
     private fun saveTempBoard() {
         binding.apply {
@@ -429,6 +444,7 @@ class AddPostFragment :
                     completed = false,
                     gameCreateRequest = gameRequest,
                 )
+            currentMode = BoardMode.Temp(addPostViewModel.getTempBoardResponse.value?.boardId!!)
             addPostViewModel.postBoard(tempBoard)
         }
     }
