@@ -40,6 +40,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
 
         initViewModel()
         localDataViewModel.getAccessToken()
+        initHeader(null, null)
 
         setFragmentResultListener("patchedUserInfo") { _, bundle ->
             val userInfo = bundle.getSerializable("userInfo", PatchUserProfileResponse::class.java)
@@ -66,11 +67,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         email: String?,
         nickName: String?,
     ) {
-        val currentEmail = email ?: myPageViewModel.userProfile.value?.email
-        val currentNickName = nickName ?: myPageViewModel.userProfile.value?.nickName
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
             imgbtnSettingHeaderSetting.setOnClickListener {
+                val currentEmail = email ?: myPageViewModel.userProfile.value?.email
+                val currentNickName = nickName ?: myPageViewModel.userProfile.value?.nickName
                 val bundle =
                     Bundle().apply {
                         putString("email", currentEmail)
@@ -119,6 +120,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
         myPageViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             initProfile(response)
             initViews()
+            initHeader(response.email, response.nickName)
         }
 //        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
 //            if (response.newEnrollCount == 0) {
