@@ -19,13 +19,14 @@ import com.catchmate.domain.model.support.PostUserReportResponse
 object SupportMapper {
     fun toPostInquiryRequestDTO(request: PostInquiryRequest): PostInquiryRequestDTO =
         PostInquiryRequestDTO(
-            inquiryType = request.inquiryType,
+            type = request.type,
             content = request.content,
         )
 
     fun toPostInquiryResponse(dto: PostInquiryResponseDTO): PostInquiryResponse =
         PostInquiryResponse(
-            state = dto.state,
+            inquiryId = dto.inquiryId,
+            createdAt = dto.createdAt,
         )
 
     fun toPostUserReportRequestDTO(request: PostUserReportRequest): PostUserReportRequestDTO =

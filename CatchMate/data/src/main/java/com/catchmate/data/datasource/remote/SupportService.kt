@@ -20,7 +20,7 @@ interface SupportService {
         @Path("inquiryId") inquiryId: Long,
     ): Response<GetInquiryResponseDTO?>
 
-    @POST("inquiries")
+    @POST("api/inquiries")
     suspend fun postInquiry(
         @Body postInquiryRequestDTO: PostInquiryRequestDTO,
     ): Response<PostInquiryResponseDTO?>
