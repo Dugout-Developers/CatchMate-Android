@@ -18,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -132,8 +134,9 @@ class EditProfileFragment :
             }
         }
         editProfileViewModel.patchUserProfileResponse.observe(viewLifecycleOwner) { response ->
-            Log.i("PROFILE PATCH STATE", response.state.toString())
-            if (response.state) {
+            Log.i("PROFILE PATCH STATE", "successed ${response.nickName}")
+            response?.let {
+                setFragmentResult("patchedUserInfo", bundleOf("userInfo" to response))
                 findNavController().popBackStack()
             }
         }

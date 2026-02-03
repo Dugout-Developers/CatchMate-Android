@@ -61,7 +61,18 @@ object UserMapper {
 
     fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =
         PatchUserProfileResponse(
-            state = responseDTO.state,
+            userId = responseDTO.userId,
+            email = responseDTO.email,
+            profileImageUrl = responseDTO.profileImageUrl,
+            gender = responseDTO.gender,
+            allAlarm = responseDTO.allAlarm,
+            chatAlarm = responseDTO.chatAlarm,
+            enrollAlarm = responseDTO.enrollAlarm,
+            eventAlarm = responseDTO.eventAlarm,
+            nickName = responseDTO.nickName,
+            club = toClub(responseDTO.club)!!,
+            birthDate = responseDTO.birthDate,
+            watchStyle = responseDTO.watchStyle,
         )
 
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =

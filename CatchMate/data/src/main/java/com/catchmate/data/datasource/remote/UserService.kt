@@ -54,7 +54,7 @@ interface UserService {
     ): Response<PostUserAdditionalInfoResponseDTO?>
 
     @Multipart
-    @PATCH("users/profile")
+    @PATCH("api/users/profile")
     suspend fun patchUserProfile(
         @Part("request") request: RequestBody,
         @Part profileImage: MultipartBody.Part,
