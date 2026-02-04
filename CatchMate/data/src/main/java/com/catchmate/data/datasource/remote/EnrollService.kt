@@ -57,7 +57,7 @@ interface EnrollService {
         @Query("page") page: Int,
     ): Response<GetAllReceivedEnrollResponseDTO?>
 
-    @GET("enrolls/new-count")
+    @GET("api/enrolls/count")
     suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
 
     @DELETE("api/enrolls/{enrollId}")

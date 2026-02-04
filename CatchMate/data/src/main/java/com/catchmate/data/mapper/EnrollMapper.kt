@@ -179,7 +179,7 @@ object EnrollMapper {
 
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =
         GetEnrollNewCountResponse(
-            newEnrollCount = responseDTO.newEnrollCount,
+            count = responseDTO.count,
         )
 
     fun toDeleteEnrollResponse(responseDTO: DeleteEnrollResponseDTO): DeleteEnrollResponse =

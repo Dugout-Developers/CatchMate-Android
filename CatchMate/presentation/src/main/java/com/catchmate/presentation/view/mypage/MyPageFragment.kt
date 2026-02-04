@@ -122,16 +122,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             initViews()
             initHeader(response.email, response.nickName)
         }
-//        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
-//            if (response.newEnrollCount == 0) {
-//                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
-//            } else {
-//                binding.tvMyPageReceivedJoinUnreadCount.apply {
-//                    visibility = View.VISIBLE
-//                    text = response.newEnrollCount.toString()
-//                }
-//            }
-//        }
+        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
+            if (response.count == 0) {
+                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
+            } else {
+                binding.tvMyPageReceivedJoinUnreadCount.apply {
+                    visibility = View.VISIBLE
+                    text = response.count.toString()
+                }
+            }
+        }
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
             if (token.isNullOrEmpty()) {
                 binding.apply {
@@ -142,7 +142,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 }
             } else {
                 myPageViewModel.getUserProfile()
-//                myPageViewModel.getEnrollNewCount()
+                myPageViewModel.getEnrollNewCount()
             }
         }
         myPageViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -181,7 +181,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             }
             layoutMyPageReceivedJoin.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putInt("newCount", myPageViewModel.newCount.value?.newEnrollCount ?: 0)
+                bundle.putInt("newCount", myPageViewModel.newCount.value?.count ?: 0)
                 findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment, bundle)
             }
             tvMyPageInformation.setOnClickListener {
