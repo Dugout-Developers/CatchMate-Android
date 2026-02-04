@@ -43,9 +43,9 @@ interface UserService {
         @Query("page") page: Int,
     ): Response<GetBlockedUserListResponseDTO?>
 
-    @POST("users/block/{blockedUserId}")
+    @POST("api/users/blocks/{targetUserId}")
     suspend fun postUserBlock(
-        @Path("blockedUserId") blockedUserId: Long,
+        @Path("targetUserId") targetUserId: Long,
     ): Response<PostUserBlockResponseDTO?>
 
     @POST("api/users/additional-info")

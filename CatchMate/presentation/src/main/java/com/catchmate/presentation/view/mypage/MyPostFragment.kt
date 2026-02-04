@@ -192,7 +192,7 @@ class MyPostFragment :
             isApiCalled = false
         }
         myPostViewModel.postUserBlockResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
+            if (response != null) {
                 binding.rvMyPost.visibility = View.GONE
                 binding.layoutMyPostBlockedUser.visibility = View.VISIBLE
                 Snackbar.make(requireView(), R.string.mypage_mypost_user_block_toast, Snackbar.LENGTH_SHORT).show()

@@ -23,7 +23,7 @@ interface UserRepository {
 
     suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse>
 
-    suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse>
+    suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse>
 
     suspend fun postUserAdditionalInfo(postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest): Result<PostUserAdditionalInfoResponse>
 

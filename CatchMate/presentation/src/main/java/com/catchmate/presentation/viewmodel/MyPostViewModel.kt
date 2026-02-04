@@ -61,9 +61,9 @@ class MyPostViewModel
             }
         }
 
-        fun postUserBlock(blockedUserId: Long) {
+        fun postUserBlock(targetUserId: Long) {
             viewModelScope.launch {
-                val result = postUserBlockUseCase(blockedUserId)
+                val result = postUserBlockUseCase(targetUserId)
                 result
                     .onSuccess { response ->
                         _postUserBlockResponse.value = response

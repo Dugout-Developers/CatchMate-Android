@@ -58,10 +58,10 @@ class UserRepositoryImpl
                 transform = { UserMapper.toGetBlockedUserListResponse(it!!) },
             )
 
-        override suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse> =
+        override suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.postUserBlock(blockedUserId) },
+                apiFunction = { userApi.postUserBlock(targetUserId) },
                 transform = { UserMapper.toPostUserBlockResponse(it!!) },
                 errorHandler = { response, jsonObject ->
                     if (response.code() == 400) {

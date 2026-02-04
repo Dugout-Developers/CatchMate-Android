@@ -115,7 +115,8 @@ object UserMapper {
 
     fun toPostUserBlockResponse(dto: PostUserBlockResponseDTO): PostUserBlockResponse =
         PostUserBlockResponse(
-            state = dto.state,
+            targetUserId = dto.targetUserId,
+            message = dto.message,
         )
 
     fun toDeleteUserAccountResponse(dto: DeleteUserAccountResponseDTO): DeleteUserAccountResponse =
