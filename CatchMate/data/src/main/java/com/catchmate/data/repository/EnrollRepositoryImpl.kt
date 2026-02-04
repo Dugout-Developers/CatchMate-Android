@@ -9,7 +9,7 @@ import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
+import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -49,11 +49,11 @@ class EnrollRepositoryImpl
                 transform = { EnrollMapper.toPatchEnrollAcceptResponse(it!!) },
             )
 
-        override suspend fun getRequestedEnroll(boardId: Long): Result<GetRequestedEnrollResponse> =
+        override suspend fun getEnroll(enrollId: Long): Result<GetEnrollResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getRequestedEnroll(boardId) },
-                transform = { EnrollMapper.toGetRequestedEnrollResponse(it!!) },
+                apiFunction = { enrollApi.getEnroll(enrollId) },
+                transform = { EnrollMapper.toGetEnrollResponse(it!!) },
             )
 
         override suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> =

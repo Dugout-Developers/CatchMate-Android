@@ -5,7 +5,7 @@ import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
 import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
-import com.catchmate.data.dto.enroll.GetRequestedEnrollResponseDTO
+import com.catchmate.data.dto.enroll.GetEnrollResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
@@ -20,26 +20,26 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EnrollService {
-    @POST("enrolls/{boardId}")
+    @POST("api/boards/{boardId}/enrolls")
     suspend fun postEnroll(
         @Path("boardId") boardId: Long,
         @Body postEnrollRequestDTO: PostEnrollRequestDTO,
     ): Response<PostEnrollResponseDTO?>
 
-    @PATCH("enrolls/{enrollId}/reject")
+    @PATCH("api/enrolls/{enrollId}/reject")
     suspend fun patchEnrollReject(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollRejectResponseDTO?>
 
-    @PATCH("enrolls/{enrollId}/accept")
+    @PATCH("api/enrolls/{enrollId}/accept")
     suspend fun patchEnrollAccept(
         @Path("enrollId") enrollId: Long,
     ): Response<PatchEnrollAcceptResponseDTO?>
 
-    @GET("enrolls/{boardId}/description")
-    suspend fun getRequestedEnroll(
-        @Path("boardId") boardId: Long,
-    ): Response<GetRequestedEnrollResponseDTO?>
+    @GET("api/enrolls/{enrollId}")
+    suspend fun getEnroll(
+        @Path("enrollId") enrollId: Long,
+    ): Response<GetEnrollResponseDTO?>
 
     @GET("enrolls/request")
     suspend fun getRequestedEnrollList(
@@ -59,7 +59,7 @@ interface EnrollService {
     @GET("enrolls/new-count")
     suspend fun getEnrollNewCount(): Response<GetEnrollNewCountResponseDTO?>
 
-    @DELETE("enrolls/cancel/{enrollId}")
+    @DELETE("api/enrolls/{enrollId}")
     suspend fun deleteEnroll(
         @Path("enrollId") enrollId: Long,
     ): Response<DeleteEnrollResponseDTO?>

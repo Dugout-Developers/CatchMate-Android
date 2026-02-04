@@ -93,7 +93,7 @@ class ReceivedEnrollScrollDialogFragment :
         receivedEnrollScrollDialogViewModel.patchEnrollReject(enrollId)
         receivedEnrollScrollDialogViewModel.patchEnrollReject.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.i("STATUS", response.acceptStatus)
+                Log.i("STATUS", response.message)
                 dismiss()
             }
         }
@@ -103,7 +103,7 @@ class ReceivedEnrollScrollDialogFragment :
         receivedEnrollScrollDialogViewModel.patchEnrollAccept(enrollId)
         receivedEnrollScrollDialogViewModel.patchEnrollAccept.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Log.i("STATUS", response.acceptStatus)
+                Log.i("STATUS", response.message)
                 dismiss()
             }
         }

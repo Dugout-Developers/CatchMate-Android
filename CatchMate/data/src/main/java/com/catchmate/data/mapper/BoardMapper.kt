@@ -187,6 +187,7 @@ object BoardMapper {
             liftUpDate = responseDTO.liftUpDate,
             bookMarked = responseDTO.bookMarked,
             buttonStatus = responseDTO.buttonStatus,
+            myEnrollId = responseDTO.myEnrollId,
             chatRoomId = responseDTO.chatRoomId,
             cheerClub = toClub(responseDTO.cheerClub)!!,
             game = toGameInfo(responseDTO.game)!!,

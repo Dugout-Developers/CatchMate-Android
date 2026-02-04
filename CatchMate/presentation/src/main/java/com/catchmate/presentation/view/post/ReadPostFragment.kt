@@ -197,7 +197,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             }
             btnLikedFooterRegister.setOnClickListener {
                 when (readPostViewModel.boardEnrollState.value) {
-                    EnrollState.APPLY -> {
+                    EnrollState.APPLY,
+                    EnrollState.REJECTED, -> {
                         if (isFinishedGame) {
                             showFinishedGameAlertDialog()
                         } else {
@@ -205,9 +206,15 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                         }
                     }
 
-                    EnrollState.APPLIED -> {
-                        // 신청 확인 버튼 클릭 시 내가 보낸 신청 불러오는 api 호출 후 옵저버에서 신청 정보 다이얼로그 표시 처리
-                        readPostViewModel.getRequestedEnroll(boardId)
+                    EnrollState.CANCEL -> {
+                        // 신청 확인 버튼 클릭 시
+                        // 현재 페이지에서 신청 이루어진 경우라면 직관 신청 등록 response의 enrollId로,
+                        // 이전에 신청한 적 있는 게시글인 경우라면 게시글 불러오기 response의 myEnrollId
+                        if (readPostViewModel.getBoardResponse.value?.myEnrollId == null) {
+                            readPostViewModel.getEnroll(readPostViewModel.postEnrollResponse.value?.enrollId!!)
+                        } else {
+                            readPostViewModel.getEnroll(readPostViewModel.getBoardResponse.value?.myEnrollId!!)
+                        }
                     }
 
                     EnrollState.VIEW_CHAT -> {
@@ -251,13 +258,14 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         readPostViewModel.boardEnrollState.observe(viewLifecycleOwner) { state ->
             binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
                 when (state) {
-                    EnrollState.APPLY -> {
+                    EnrollState.APPLY,
+                    EnrollState.REJECTED, -> {
                         setText(R.string.post_register)
                         setBackgroundResource(R.drawable.shape_all_submit_button)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.grey0))
                     }
 
-                    EnrollState.APPLIED -> {
+                    EnrollState.CANCEL -> {
                         setText(R.string.post_check_register)
                         setBackgroundResource(R.drawable.shape_all_team_toggle_selected_bg)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.brand500))
@@ -274,7 +282,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         readPostViewModel.postEnrollResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.i("직관 신청 성공", "${response.enrollId} / ${response.requestAt}")
-                readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
+                readPostViewModel.setBoardEnrollState(EnrollState.CANCEL)
                 Snackbar.make(requireView(), R.string.post_enroll_success, Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -283,7 +291,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             setFragmentResult("deleteBoardResultKey", bundleOf("position" to position))
             findNavController().popBackStack()
         }
-        readPostViewModel.getRequestedEnroll.observe(viewLifecycleOwner) { response ->
+        readPostViewModel.getEnroll.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 showEnrollRequestDialog()
             }
@@ -393,8 +401,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
 
             when (post.buttonStatus) {
                 EnrollState.APPLY.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.APPLY)
-                EnrollState.APPLIED.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.APPLIED)
+                EnrollState.CANCEL.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.CANCEL)
                 EnrollState.VIEW_CHAT.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.VIEW_CHAT)
+                EnrollState.REJECTED.toString() -> readPostViewModel.setBoardEnrollState(EnrollState.REJECTED)
                 else -> Log.d("BUTTON STATUS NULL", "BUTTON STATUS NULL")
             }
         }
@@ -559,17 +568,16 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         val dialog = builder.create()
 
         dialogBinding.apply {
-            val enrollInfo = readPostViewModel.getRequestedEnroll.value!!
-            val boardInfo = readPostViewModel.getBoardResponse.value!!
+            val enrollInfo = readPostViewModel.getEnroll.value!!
 
-            val dateTimePair = DateUtils.formatISODateTimeToDateTime(boardInfo.game.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTimeToDateTime(enrollInfo.boardResponse.gameResponse.gameStartDate!!)
             tvApplicationDetailDialogDate.text = dateTimePair.first
             tvApplicationDetailDialogTime.text = dateTimePair.second
-            tvApplicationDetailDialogPlace.text = boardInfo.game.location
+            tvApplicationDetailDialogPlace.text = enrollInfo.boardResponse.gameResponse.location
 
-            val isCheerTeam = boardInfo.game.homeClub?.clubId == boardInfo.cheerClub.clubId
+            val isCheerTeam = enrollInfo.boardResponse.gameResponse.homeClub?.clubId == enrollInfo.boardResponse.cheerClub.clubId
             setTeamViewResources(
-                boardInfo.game.homeClub?.clubId ?: 0,
+                enrollInfo.boardResponse.gameResponse.homeClub?.clubId ?: 0,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -577,7 +585,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                boardInfo.game.awayClub?.clubId ?: 0,
+                enrollInfo.boardResponse.gameResponse.awayClub?.clubId ?: 0,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
