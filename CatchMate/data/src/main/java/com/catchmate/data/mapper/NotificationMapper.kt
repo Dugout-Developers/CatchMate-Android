@@ -26,15 +26,13 @@ object NotificationMapper {
 
     private fun toNotificationInfo(dto: NotificationInfoDTO): NotificationInfo =
         NotificationInfo(
-            notificationId = dto.notificationId,
-            boardInfo = dto.boardInfo?.let { toBoard(it) },
-            inquiryInfo = dto.inquiryInfo?.let { toInquiry(it) },
-            senderProfileImageUrl = dto.senderProfileImageUrl,
+            id = dto.id,
             title = dto.title,
-            body = dto.body,
-            createdAt = dto.createdAt,
-            acceptStatus = dto.acceptStatus,
+            alarmType = dto.alarmType,
             read = dto.read,
+            createdAt = dto.createdAt,
+            senderProfileImageUrl = dto.senderProfileImageUrl,
+            gameInfo = dto.gameInfo,
         )
 
     private fun toInquiry(dto: InquiryDTO): Inquiry =

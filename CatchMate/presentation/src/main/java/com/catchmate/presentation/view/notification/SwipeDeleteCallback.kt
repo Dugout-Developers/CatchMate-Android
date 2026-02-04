@@ -30,7 +30,7 @@ class SwipeDeleteCallback(
     ) {
         // swipe 발생시킨 아이템 position
         val deletedPos = viewHolder.absoluteAdapterPosition
-        val deletedItemId = data[deletedPos].notificationId
+        val deletedItemId = data[deletedPos].id
 
         if (direction == ItemTouchHelper.LEFT) {
             // adapter에서 아이템 제거
