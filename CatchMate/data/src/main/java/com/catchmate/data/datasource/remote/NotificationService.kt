@@ -25,8 +25,8 @@ interface NotificationService {
         @Path("notificationId") notificationId: Long,
     ): Response<GetReceivedNotificationResponseDTO?>
 
-    @DELETE("notifications/receive/{notificationId}")
-    suspend fun deleteReceivedNotification(
+    @DELETE("api/notifications/{notificationId}")
+    suspend fun deleteNotification(
         @Path("notificationId") notificationId: Long,
-    ): Response<DeleteReceivedNotificationResponseDTO?>
+    ): Response<Unit>
 }

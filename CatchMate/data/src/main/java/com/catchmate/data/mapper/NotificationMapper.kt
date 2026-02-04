@@ -1,13 +1,11 @@
 package com.catchmate.data.mapper
 
-import com.catchmate.data.dto.notification.DeleteReceivedNotificationResponseDTO
 import com.catchmate.data.dto.notification.GetHasUnreadNotificationResponseDto
 import com.catchmate.data.dto.notification.GetNotificationListResponseDTO
 import com.catchmate.data.dto.notification.GetReceivedNotificationResponseDTO
 import com.catchmate.data.dto.notification.InquiryDTO
 import com.catchmate.data.dto.notification.NotificationInfoDTO
 import com.catchmate.data.mapper.BoardMapper.toBoard
-import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
 import com.catchmate.domain.model.notification.GetHasUnreadNotificationResponse
 import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
@@ -56,11 +54,6 @@ object NotificationMapper {
             createdAt = dto.createdAt,
             acceptStatus = dto.acceptStatus,
             read = dto.read,
-        )
-
-    fun toDeleteReceivedNotificationResponse(responseDTO: DeleteReceivedNotificationResponseDTO): DeleteReceivedNotificationResponse =
-        DeleteReceivedNotificationResponse(
-            state = responseDTO.state,
         )
 
     fun toGetHasUnreadNotificationResponse(dto: GetHasUnreadNotificationResponseDto): GetHasUnreadNotificationResponse =

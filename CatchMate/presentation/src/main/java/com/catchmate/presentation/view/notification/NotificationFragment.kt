@@ -90,7 +90,7 @@ class NotificationFragment :
             isApiCalled = false
         }
         notificationViewModel.deletedNotificationResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
+            if (response == 200) {
                 val adapter = binding.rvNotificationList.adapter as NotificationAdapter
                 adapter.removeItem(deletedItemPos)
             } else {

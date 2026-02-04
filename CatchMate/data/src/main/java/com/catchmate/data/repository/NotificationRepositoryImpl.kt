@@ -4,7 +4,7 @@ import com.catchmate.data.datasource.remote.NotificationService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.NotificationMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
-import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
+import com.catchmate.data.util.ApiResponseHandleUtil.apiCallWithFullResponse
 import com.catchmate.domain.model.notification.GetHasUnreadNotificationResponse
 import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
@@ -43,10 +43,10 @@ class NotificationRepositoryImpl
                 transform = { NotificationMapper.toGetReceivedNotificationResponse(it!!) },
             )
 
-        override suspend fun deleteReceivedNotification(notificationId: Long): Result<DeleteReceivedNotificationResponse> =
-            apiCall(
+        override suspend fun deleteNotification(notificationId: Long): Result<Int> =
+            apiCallWithFullResponse(
                 tag = this.tag,
-                apiFunction = { notificationApi.deleteReceivedNotification(notificationId) },
-                transform = { NotificationMapper.toDeleteReceivedNotificationResponse(it!!) },
+                apiFunction = { notificationApi.deleteNotification(notificationId) },
+                transform = { it.code() },
             )
     }

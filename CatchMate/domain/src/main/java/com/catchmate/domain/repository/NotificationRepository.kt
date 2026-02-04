@@ -1,6 +1,5 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
 import com.catchmate.domain.model.notification.GetHasUnreadNotificationResponse
 import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
@@ -17,5 +16,5 @@ interface NotificationRepository {
     // 알림 상세 get
     suspend fun getReceivedNotification(notificationId: Long): Result<GetReceivedNotificationResponse>
 
-    suspend fun deleteReceivedNotification(notificationId: Long): Result<DeleteReceivedNotificationResponse>
+    suspend fun deleteNotification(notificationId: Long): Result<Int>
 }

@@ -36,4 +36,36 @@ object ApiResponseHandleUtil {
         } catch (e: Exception) {
             Result.failure(e)
         }
+
+    private fun <T, R> Response<T>.handleApiFullResponse(
+        transform: (Response<T>) -> R,
+        errorHandler: (Response<T>, JSONObject) -> Exception,
+    ): Result<R> =
+        try {
+            if (isSuccessful) {
+                Result.success(transform(this))
+            } else {
+                val errorJson = JSONObject(errorBody()?.string() ?: "")
+                Result.failure(errorHandler(this, errorJson))
+            }
+        } catch (e: ReissueFailureException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+
+    suspend fun <T, R> apiCallWithFullResponse(
+        tag: String,
+        apiFunction: suspend () -> Response<T>,
+        transform: (Response<T>) -> R,
+        errorHandler: (Response<T>, JSONObject) -> Exception =
+            { response, json ->
+                Exception("$tag 통신 실패: ${response.code()} - $json")
+            },
+    ): Result<R> =
+        try {
+            apiFunction().handleApiFullResponse(transform, errorHandler)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
 }

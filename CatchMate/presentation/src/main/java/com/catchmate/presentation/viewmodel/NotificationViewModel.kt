@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.notification.DeleteReceivedNotificationResponse
 import com.catchmate.domain.model.notification.GetNotificationListResponse
 import com.catchmate.domain.model.notification.GetReceivedNotificationResponse
-import com.catchmate.domain.usecase.notification.DeleteReceivedNotificationUseCase
+import com.catchmate.domain.usecase.notification.DeleteNotificationUseCase
 import com.catchmate.domain.usecase.notification.GetNotificationListUseCase
 import com.catchmate.domain.usecase.notification.GetReceivedNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,7 @@ class NotificationViewModel
     constructor(
         private val getNotificationListUseCase: GetNotificationListUseCase,
         private val getReceivedNotificationUseCase: GetReceivedNotificationUseCase,
-        private val deleteReceivedNotificationUseCase: DeleteReceivedNotificationUseCase,
+        private val deleteNotificationUseCase: DeleteNotificationUseCase,
     ) : ViewModel() {
         private val _receivedNotificationList = MutableLiveData<GetNotificationListResponse>()
         val receivedNotificationList: LiveData<GetNotificationListResponse>
@@ -31,8 +30,8 @@ class NotificationViewModel
         val receivedNotification: LiveData<GetReceivedNotificationResponse>
             get() = _receivedNotification
 
-        private val _deletedNotificationResponse = MutableLiveData<DeleteReceivedNotificationResponse>()
-        val deletedNotificationResponse: LiveData<DeleteReceivedNotificationResponse>
+        private val _deletedNotificationResponse = MutableLiveData<Int>()
+        val deletedNotificationResponse: LiveData<Int>
             get() = _deletedNotificationResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -80,7 +79,7 @@ class NotificationViewModel
 
         fun deleteNotification(notificationId: Long) {
             viewModelScope.launch {
-                val result = deleteReceivedNotificationUseCase.deleteReceivedNotification(notificationId)
+                val result = deleteNotificationUseCase(notificationId)
                 result
                     .onSuccess { response ->
                         _deletedNotificationResponse.value = response
