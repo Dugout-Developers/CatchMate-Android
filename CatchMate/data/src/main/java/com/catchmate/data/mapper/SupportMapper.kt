@@ -31,13 +31,15 @@ object SupportMapper {
 
     fun toPostUserReportRequestDTO(request: PostUserReportRequest): PostUserReportRequestDTO =
         PostUserReportRequestDTO(
-            reportType = request.reportType,
-            content = request.content,
+            reportedUserId = request.reportedUserId,
+            reason = request.reason,
+            description = request.description,
         )
 
     fun toPostUserReportResponse(dto: PostUserReportResponseDTO): PostUserReportResponse =
         PostUserReportResponse(
-            state = dto.state,
+            reportId = dto.reportId,
+            createdAt = dto.createdAt,
         )
 
     fun toGetInquiryResponse(dto: GetInquiryResponseDTO): GetInquiryResponse =
