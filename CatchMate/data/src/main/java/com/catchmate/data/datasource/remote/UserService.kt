@@ -33,7 +33,7 @@ interface UserService {
     @GET("api/users/profile")
     suspend fun getUserProfile(): Response<GetUserProfileResponseDTO?>
 
-    @GET("users/profile/{profileUserId}")
+    @GET("api/users/profile/{profileUserId}")
     suspend fun getUserProfileById(
         @Path("profileUserId") profileUserId: Long,
     ): Response<GetUserProfileByIdResponseDTO?>

@@ -90,17 +90,13 @@ object UserMapper {
     fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =
         GetUserProfileByIdResponse(
             userId = responseDTO.userId,
+            nickName = responseDTO.nickName,
             email = responseDTO.email,
             profileImageUrl = responseDTO.profileImageUrl,
             gender = responseDTO.gender,
-            allAlarm = responseDTO.allAlarm,
-            chatAlarm = responseDTO.chatAlarm,
-            enrollAlarm = responseDTO.enrollAlarm,
-            eventAlarm = responseDTO.eventAlarm,
-            nickName = responseDTO.nickName,
-            favoriteClub = toClub(responseDTO.favoriteClub)!!,
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
+            club = toClub(responseDTO.club)!!,
         )
 
     fun toGetBlockedUserListResponse(dto: GetBlockedUserListResponseDTO): GetBlockedUserListResponse =
