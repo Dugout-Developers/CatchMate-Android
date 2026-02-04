@@ -56,10 +56,13 @@ class EnrollRepositoryImpl
                 transform = { EnrollMapper.toGetEnrollResponse(it!!) },
             )
 
-        override suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> =
+        override suspend fun getRequestedEnrollList(
+            page: Int,
+            size: Int,
+        ): Result<GetRequestedEnrollListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getRequestedEnrollList(page) },
+                apiFunction = { enrollApi.getRequestedEnrollList(page, size) },
                 transform = { EnrollMapper.toGetRequestedEnrollListResponse(it!!) },
             )
 

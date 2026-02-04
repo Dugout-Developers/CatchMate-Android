@@ -1,5 +1,6 @@
 package com.catchmate.data.mapper
 
+import android.R
 import com.catchmate.data.dto.board.BoardDTO
 import com.catchmate.data.dto.enroll.AllReceivedEnrollInfoResponseDTO
 import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
@@ -87,11 +88,11 @@ object EnrollMapper {
 
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =
         GetRequestedEnrollListResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toEnrollInfo(it) },
+            content = responseDTO.content.map { toEnrollInfo(it) },
+            pageNumber = responseDTO.pageNumber,
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
         )
 
     private fun toEnrollInfo(dto: EnrollInfoDTO): EnrollInfo =
@@ -100,8 +101,7 @@ object EnrollMapper {
             acceptStatus = dto.acceptStatus,
             description = dto.description,
             requestDate = dto.requestDate,
-            userInfo = toEnrollUserInfo(dto.userInfo),
-            boardInfo = toEnrollBoardInfo(dto.boardInfo),
+            boardResponse = toEnrollBoardInfo(dto.boardResponse),
         )
 
     private fun toEnrollUserInfo(dto: UserInfoDTO): UserInfo =
@@ -121,17 +121,12 @@ object EnrollMapper {
             boardId = dto.boardId,
             title = dto.title,
             content = dto.content,
-            cheerClubId = dto.cheerClubId,
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
-            preferredGender = dto.preferredGender,
-            preferredAgeRange = dto.preferredAgeRange,
-            gameInfo = toGameInfo(dto.gameInfo),
-            liftUpDate = dto.liftUpDate,
-            userInfo = toEnrollUserInfo(dto.userInfo),
-            buttonStatus = dto.buttonStatus,
-            chatRoomId = dto.chatRoomId,
             bookMarked = dto.bookMarked,
+            cheerClub = toClub(dto.cheerClub)!!,
+            gameResponse = toGameInfo(dto.gameResponse),
+            userResponse = toEnrollUserInfo(dto.userResponse),
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =

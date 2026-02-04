@@ -29,9 +29,12 @@ class SentJoinViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getRequestedEnrollList(page: Int) {
+        fun getRequestedEnrollList(
+            page: Int = 0,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
-                val result = getRequestedEnrollListUseCase.getRequestedEnrollList(page)
+                val result = getRequestedEnrollListUseCase.getRequestedEnrollList(page, size)
                 result
                     .onSuccess { response ->
                         _requestedEnrollList.value = response

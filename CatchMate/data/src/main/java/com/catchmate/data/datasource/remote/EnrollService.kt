@@ -41,9 +41,10 @@ interface EnrollService {
         @Path("enrollId") enrollId: Long,
     ): Response<GetEnrollResponseDTO?>
 
-    @GET("enrolls/request")
+    @GET("api/enrolls/request")
     suspend fun getRequestedEnrollList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetRequestedEnrollListResponseDTO?>
 
     @GET("enrolls/receive")

@@ -73,10 +73,10 @@ class ReceivedJoinAdapter(
         val enrollReceivedInfoList = list[position].enrollReceiveInfoList
 
         holder.apply {
-            val dateTime = DateUtils.formatISODateTime(boardInfo.gameInfo.gameStartDate!!)
+            val dateTime = DateUtils.formatISODateTime(boardInfo.gameResponse.gameStartDate!!)
             tvGameDate.text = dateTime.first
             tvGameTime.text = dateTime.second
-            tvGamePlace.text = boardInfo.gameInfo.location
+            tvGamePlace.text = boardInfo.gameResponse.location
             tvBoardTitle.text = boardInfo.title
 
             val adapter = rvProfile.adapter as ReceivedJoinProfileAdapter

@@ -76,28 +76,28 @@ class SentJoinAdapter(
     ) {
         val enrollInfo = enrollInfoList[position]
         holder.apply {
-            if (enrollInfo.boardInfo.currentPerson == enrollInfo.boardInfo.maxPerson) {
-                tvItemCount.text = "${enrollInfo.boardInfo.currentPerson}/${enrollInfo.boardInfo.maxPerson} 마감"
+            if (enrollInfo.boardResponse.currentPerson == enrollInfo.boardResponse.maxPerson) {
+                tvItemCount.text = "${enrollInfo.boardResponse.currentPerson}/${enrollInfo.boardResponse.maxPerson} 마감"
                 tvItemCount.setBackgroundResource(R.drawable.shape_all_rect_r12_grey100)
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.grey500))
             } else {
-                tvItemCount.text = "${enrollInfo.boardInfo.currentPerson}/${enrollInfo.boardInfo.maxPerson}"
+                tvItemCount.text = "${enrollInfo.boardResponse.currentPerson}/${enrollInfo.boardResponse.maxPerson}"
                 tvItemCount.setBackgroundResource(R.drawable.shape_all_rect_r12_brand50)
                 tvItemCount.setTextColor(ContextCompat.getColor(context, R.color.brand500))
             }
 
-            val dateTimePair = DateUtils.formatISODateTime(enrollInfo.boardInfo.gameInfo.gameStartDate!!)
+            val dateTimePair = DateUtils.formatISODateTime(enrollInfo.boardResponse.gameResponse.gameStartDate!!)
             tvItemDate.text = dateTimePair.first
             tvItemTime.text = dateTimePair.second
-            tvItemPlace.text = enrollInfo.boardInfo.gameInfo.location
-            tvItemTitle.text = enrollInfo.boardInfo.title
+            tvItemPlace.text = enrollInfo.boardResponse.gameResponse.location
+            tvItemTitle.text = enrollInfo.boardResponse.title
 
             val isCheerTeam =
-                enrollInfo.boardInfo.gameInfo.homeClub
-                    ?.clubId == enrollInfo.boardInfo.cheerClubId
+                enrollInfo.boardResponse.gameResponse.homeClub
+                    ?.clubId == enrollInfo.boardResponse.cheerClub.clubId
 
             ResourceUtil.setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.homeClub
+                enrollInfo.boardResponse.gameResponse.homeClub
                     ?.clubId ?: 0,
                 isCheerTeam,
                 ivItemHomeTeamBg,
@@ -106,7 +106,7 @@ class SentJoinAdapter(
                 context,
             )
             ResourceUtil.setTeamViewResources(
-                enrollInfo.boardInfo.gameInfo.awayClub
+                enrollInfo.boardResponse.gameResponse.awayClub
                     ?.clubId ?: 0,
                 !isCheerTeam,
                 ivItemAwayTeamBg,
@@ -116,7 +116,7 @@ class SentJoinAdapter(
             )
 
             cvItemLayout.setOnClickListener {
-                onPostItemClickListener.onPostItemClicked(enrollInfo.boardInfo.boardId)
+                onPostItemClickListener.onPostItemClicked(enrollInfo.boardResponse.boardId)
             }
         }
     }

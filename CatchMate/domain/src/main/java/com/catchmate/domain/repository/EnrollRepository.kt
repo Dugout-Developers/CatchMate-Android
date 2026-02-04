@@ -23,7 +23,10 @@ interface EnrollRepository {
 
     suspend fun getEnroll(enrollId: Long): Result<GetEnrollResponse>
 
-    suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse>
+    suspend fun getRequestedEnrollList(
+        page: Int,
+        size: Int,
+    ): Result<GetRequestedEnrollListResponse>
 
     suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse>
 
