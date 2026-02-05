@@ -13,7 +13,7 @@ import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemProfileBinding
 import com.catchmate.presentation.util.AgeUtils
-import com.catchmate.presentation.util.ClubUtils
+import com.catchmate.presentation.util.ClubUtils.convertClubNameToId
 import com.catchmate.presentation.util.GenderUtils
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
 import de.hdodenhof.circleimageview.CircleImageView
@@ -74,38 +74,38 @@ class ReceivedJoinProfileAdapter(
     ) {
         val info = enrollInfoList[position]
         holder.apply {
-            if (info.new) {
+            if (info.newEnroll) {
                 tvProfileNewBadge.visibility = View.VISIBLE
             } else {
                 tvProfileNewBadge.visibility = View.INVISIBLE
             }
             Glide
                 .with(context)
-                .load(info.userInfo.profileImageUrl)
+                .load(info.applicant.profileImageUrl)
                 .error(R.drawable.vec_all_default_profile)
                 .into(ivProfileImage)
-            tvProfileNickname.text = info.userInfo.nickName
-            tvProfileTeam.text = ClubUtils.convertClubIdToName(info.userInfo.club.clubId)
+            tvProfileNickname.text = info.applicant.nickname
+            tvProfileTeam.text = info.applicant.favoriteClub
 
             DrawableCompat
                 .setTint(
                     tvProfileTeam.background,
                     convertTeamColor(
                         context,
-                        info.userInfo.club.clubId,
+                        convertClubNameToId(info.applicant.favoriteClub),
                         true,
                         "receivedJoinProfileAdapter",
                     ),
                 )
 
-            if (info.userInfo.watchStyle != null) {
+            if (info.applicant.watchStyle != null) {
                 tvProfileCheerStyle.visibility = View.VISIBLE
-                tvProfileCheerStyle.text = info.userInfo.watchStyle
+                tvProfileCheerStyle.text = info.applicant.watchStyle
             } else {
                 tvProfileCheerStyle.visibility = View.GONE
             }
-            tvProfileGender.text = GenderUtils.convertBoardGender(context, info.userInfo.gender)
-            tvProfileAge.text = AgeUtils.convertBirthDateToAge(info.userInfo.birthDate)
+            tvProfileGender.text = GenderUtils.convertBoardGender(context, info.applicant.gender)
+            tvProfileAge.text = AgeUtils.convertBirthDateToAge(info.applicant.ageRange)
         }
     }
 }

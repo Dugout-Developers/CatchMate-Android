@@ -52,9 +52,10 @@ interface EnrollService {
         @Query("boardId") boardId: Long,
     ): Response<GetReceivedEnrollResponseDTO?>
 
-    @GET("enrolls/receive/all")
+    @GET("api/enrolls/receive/all")
     suspend fun getAllReceivedEnroll(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetAllReceivedEnrollResponseDTO?>
 
     @GET("api/enrolls/count")
