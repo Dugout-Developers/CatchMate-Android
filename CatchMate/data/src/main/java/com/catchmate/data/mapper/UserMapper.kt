@@ -5,6 +5,7 @@ import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
+import com.catchmate.data.dto.user.GetUserAlarmResponseDto
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -18,6 +19,7 @@ import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -99,6 +101,14 @@ object UserMapper {
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
             club = toClub(responseDTO.club)!!,
+        )
+
+    fun toGetUserAlarmStateResponse(dto: GetUserAlarmResponseDto): GetUserAlarmResponse =
+        GetUserAlarmResponse(
+            allAlarm = dto.allAlarm,
+            chatAlarm = dto.chatAlarm,
+            enrollAlarm = dto.enrollAlarm,
+            eventAlarm = dto.eventAlarm,
         )
 
     fun toGetBlockedUserListResponse(dto: GetBlockedUserListResponseDTO): GetBlockedUserListResponse =

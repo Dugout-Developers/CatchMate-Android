@@ -4,6 +4,7 @@ import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
+import com.catchmate.data.dto.user.GetUserAlarmResponseDto
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -43,6 +44,9 @@ interface UserService {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): Response<GetBlockedUserListResponseDTO?>
+
+    @GET("api/users/alarm")
+    suspend fun getUserAlarmState(): Response<GetUserAlarmResponseDto?>
 
     @POST("api/users/blocks/{targetUserId}")
     suspend fun postUserBlock(

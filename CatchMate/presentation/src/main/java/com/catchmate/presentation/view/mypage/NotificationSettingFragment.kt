@@ -25,16 +25,6 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
     private var isEnrollChecked = false
     private var isEventChecked = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            isAllChecked = it.getString("allAlarm", "") == "Y"
-            isChatChecked = it.getString("chatAlarm", "") == "Y"
-            isEnrollChecked = it.getString("enrollAlarm", "") == "Y"
-            isEventChecked = it.getString("eventAlarm", "") == "Y"
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         checkNotificationPermission()
@@ -50,7 +40,7 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
             ) {
                 Log.d("알림 권한 상태", "허용됨")
                 initViewModel()
-                initView()
+                notificationSettingViewModel.getUserAlarm()
             } else {
                 Log.d("알림 권한 상태", "거부됨")
                 mainActivity.showPermissionRationaleDialog(
@@ -131,18 +121,30 @@ class NotificationSettingFragment : BaseFragment<FragmentNotificationSettingBind
         if (isChatChecked && isEnrollChecked && isEventChecked && !isAllChecked) {
             isAllChecked = true
             binding.switchNotificationSettingAll.isChecked = isAllChecked
-        } else {
-            if (isAllChecked) {
-                isAllChecked = false
-                binding.switchNotificationSettingAll.isChecked = isAllChecked
-            }
+            notificationSettingViewModel.patchUserAlarm(AlarmType.ALL.name, true)
         }
+        // 서버 로직 확인 후 적용
+//        else {
+//            if (isAllChecked) {
+//                isAllChecked = false
+//                binding.switchNotificationSettingAll.isChecked = isAllChecked
+//            }
+//        }
     }
 
     private fun initViewModel() {
-        notificationSettingViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { reponse ->
-            reponse?.let {
-                Log.i("설정완료", "${reponse.alarmType} / ${reponse.enabled}")
+        notificationSettingViewModel.getUserAlarmResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                isAllChecked = response.allAlarm
+                isChatChecked = response.chatAlarm
+                isEnrollChecked = response.enrollAlarm
+                isEventChecked = response.eventAlarm
+                initView()
+            }
+        }
+        notificationSettingViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                Log.i("설정완료", "${response.alarmType} / ${response.enabled}")
             }
         }
         notificationSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->

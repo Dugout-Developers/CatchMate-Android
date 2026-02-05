@@ -76,10 +76,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                     Bundle().apply {
                         putString("email", currentEmail)
                         putString("nickname", currentNickName)
-//                        putString("allAlarm", myPageViewModel.userProfile.value?.allAlarm)
-//                        putString("chatAlarm", myPageViewModel.userProfile.value?.chatAlarm)
-//                        putString("enrollAlarm", myPageViewModel.userProfile.value?.enrollAlarm)
-//                        putString("eventAlarm", myPageViewModel.userProfile.value?.eventAlarm)
                     }
                 findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }

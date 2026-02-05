@@ -4,12 +4,14 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
 import com.catchmate.data.mapper.UserMapper.toGetCheckNicknameResponse
+import com.catchmate.data.mapper.UserMapper.toGetUserAlarmStateResponse
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.UserBlockFailureException
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -59,6 +61,13 @@ class UserRepositoryImpl
                 tag = this.tag,
                 apiFunction = { userApi.getBlockedUserList(page, size) },
                 transform = { UserMapper.toGetBlockedUserListResponse(it!!) },
+            )
+
+        override suspend fun getUserAlarmState(): Result<GetUserAlarmResponse> =
+            apiCall(
+                tag = this.tag,
+                apiFunction = { userApi.getUserAlarmState() },
+                transform = { toGetUserAlarmStateResponse(it!!) }
             )
 
         override suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse> =
