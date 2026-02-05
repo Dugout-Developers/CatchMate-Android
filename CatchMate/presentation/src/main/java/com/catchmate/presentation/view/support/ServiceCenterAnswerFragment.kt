@@ -43,7 +43,7 @@ class ServiceCenterAnswerFragment : BaseFragment<FragmentServiceCenterAnswerBind
             response?.let {
                 binding.apply {
                     val title = getString(R.string.service_center_answer_title)
-                    tvTitleServiceCenterAnswer.text = title.format("닉네임") // api response body 수정 시 반영
+                    tvTitleServiceCenterAnswer.text = title.format(response.nickname)
                     tvDateServiceCenterAnswer.text = formatInquiryAnsweredDate(response.createdAt)
                     tvInquiryContentServiceCenterAnswer.text = response.content
                     tvAnswerContentServiceCenterAnswer.text = response.answer

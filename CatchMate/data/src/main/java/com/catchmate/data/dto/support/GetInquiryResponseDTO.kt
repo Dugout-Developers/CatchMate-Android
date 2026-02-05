@@ -2,6 +2,7 @@ package com.catchmate.data.dto.support
 
 data class GetInquiryResponseDTO(
     val inquiryId: Long,
+    val nickname: String,
     val type: String,
     val content: String,
     val answer: String,
