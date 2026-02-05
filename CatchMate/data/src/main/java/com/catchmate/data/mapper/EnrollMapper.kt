@@ -152,16 +152,20 @@ object EnrollMapper {
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
         GetReceivedEnrollResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toReceivedEnrollInfoResponse(it) },
+            content = responseDTO.content.map { toReceivedEnrollInfoResponse(it) },
+            pageNumber = responseDTO.pageNumber,
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
         )
 
     private fun toReceivedEnrollInfoResponse(dto: ReceivedEnrollInfoResponseDTO): ReceivedEnrollInfoResponse =
         ReceivedEnrollInfoResponse(
-            enrollReceiveInfoList = dto.enrollReceiveInfoList.map { toReceivedEnrollInfo(it) },
+            enrollId = dto.enrollId,
+            description = dto.description,
+            requestDate = dto.requestDate,
+            newEnroll = dto.newEnroll,
+            applicantResponse = toEnrollUserInfo(dto.applicantResponse)
         )
 
     private fun toReceivedEnrollInfo(dto: ReceivedEnrollInfoDTO): ReceivedEnrollInfo =

@@ -1,9 +1,9 @@
 package com.catchmate.data.dto.enroll
 
 data class GetReceivedEnrollResponseDTO(
-    val enrollInfoList: List<ReceivedEnrollInfoResponseDTO>,
+    val content: List<ReceivedEnrollInfoResponseDTO>,
+    val pageNumber: Int,
     val totalPages: Int,
     val totalElements: Int,
-    val isFirst: Boolean,
-    val isLast: Boolean,
+    val hasNext: Boolean,
 )

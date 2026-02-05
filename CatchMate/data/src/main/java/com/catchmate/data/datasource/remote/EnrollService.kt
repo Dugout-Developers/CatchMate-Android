@@ -3,9 +3,9 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
+import com.catchmate.data.dto.enroll.GetEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
-import com.catchmate.data.dto.enroll.GetEnrollResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
@@ -47,9 +47,11 @@ interface EnrollService {
         @Query("size") size: Int,
     ): Response<GetRequestedEnrollListResponseDTO?>
 
-    @GET("enrolls/receive")
+    @GET("api/enrolls/receive")
     suspend fun getReceivedEnroll(
         @Query("boardId") boardId: Long,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetReceivedEnrollResponseDTO?>
 
     @GET("api/enrolls/receive/all")

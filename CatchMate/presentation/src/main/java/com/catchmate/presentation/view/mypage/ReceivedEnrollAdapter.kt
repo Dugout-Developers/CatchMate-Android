@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.enroll.ReceivedEnrollInfo
+import com.catchmate.domain.model.enroll.ReceivedEnrollInfoResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemReceivedEnrollBinding
 import com.catchmate.presentation.interaction.OnReceivedEnrollResultSelectedListener
-import com.catchmate.presentation.util.AgeUtils.convertBirthDateToAge
-import com.catchmate.presentation.util.ClubUtils.convertClubIdToName
+import com.catchmate.presentation.util.AgeUtils
+import com.catchmate.presentation.util.ClubUtils.convertClubNameToId
 import com.catchmate.presentation.util.DateUtils.formatDateTimeToEnrollDateTime
 import com.catchmate.presentation.util.GenderUtils.convertBoardGender
 import com.catchmate.presentation.util.ResourceUtil.convertTeamColor
@@ -25,9 +25,9 @@ class ReceivedEnrollAdapter(
     private val layoutInflater: LayoutInflater,
     private val onReceivedEnrollResultSelectedListener: OnReceivedEnrollResultSelectedListener,
 ) : RecyclerView.Adapter<ReceivedEnrollAdapter.ReceivedEnrollViewHolder>() {
-    private var enrollList: MutableList<ReceivedEnrollInfo> = mutableListOf()
+    private var enrollList: MutableList<ReceivedEnrollInfoResponse> = mutableListOf()
 
-    fun updateEnrollList(newList: List<ReceivedEnrollInfo>) {
+    fun updateEnrollList(newList: List<ReceivedEnrollInfoResponse>) {
         enrollList = newList.toMutableList()
         notifyDataSetChanged()
     }
@@ -70,33 +70,33 @@ class ReceivedEnrollAdapter(
         holder.apply {
             Glide
                 .with(context)
-                .load(info.userInfo.profileImageUrl)
+                .load(info.applicantResponse.profileImageUrl)
                 .error(R.drawable.vec_all_default_profile)
                 .into(ivEnrollUserProfile)
 
-            tvEnrollUserNickname.text = info.userInfo.nickName
-            tvEnrollUserCheerTeam.text = convertClubIdToName(info.userInfo.club.clubId)
+            tvEnrollUserNickname.text = info.applicantResponse.nickname
+            tvEnrollUserCheerTeam.text = info.applicantResponse.favoriteClub
 
             DrawableCompat
                 .setTint(
                     tvEnrollUserCheerTeam.background,
                     convertTeamColor(
                         context,
-                        info.userInfo.club.clubId,
+                        convertClubNameToId(info.applicantResponse.favoriteClub),
                         true,
                         "receivedEnrollAdapter",
                     ),
                 )
 
-            if (info.userInfo.watchStyle != null) {
+            if (info.applicantResponse.watchStyle != null) {
                 tvEnrollUserWatchStyle.visibility = View.VISIBLE
-                tvEnrollUserWatchStyle.text = info.userInfo.watchStyle
+                tvEnrollUserWatchStyle.text = info.applicantResponse.watchStyle
             } else {
                 tvEnrollUserWatchStyle.visibility = View.GONE
             }
 
-            tvEnrollUserGender.text = convertBoardGender(context, info.userInfo.gender)
-            tvEnrollUserAge.text = convertBirthDateToAge(info.userInfo.birthDate)
+            tvEnrollUserGender.text = convertBoardGender(context, info.applicantResponse.gender)
+            tvEnrollUserAge.text = AgeUtils.convertBirthDateToAge(info.applicantResponse.ageRange)
             tvEnrollSavedDateTime.text = formatDateTimeToEnrollDateTime(info.requestDate)
             edtEnrollDescription.setText(info.description)
 

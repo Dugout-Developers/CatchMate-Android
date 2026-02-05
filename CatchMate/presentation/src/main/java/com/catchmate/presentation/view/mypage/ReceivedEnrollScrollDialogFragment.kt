@@ -84,7 +84,7 @@ class ReceivedEnrollScrollDialogFragment :
         receivedEnrollScrollDialogViewModel.getReceivedEnrollResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
                 val adapter = binding.rvReceivedEnrollScrollDialog.adapter as ReceivedEnrollAdapter
-                adapter.updateEnrollList(response.enrollInfoList.first().enrollReceiveInfoList)
+                adapter.updateEnrollList(response.content)
             }
         }
     }

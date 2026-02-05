@@ -43,9 +43,13 @@ class ReceivedEnrollScrollDialogViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getReceivedEnroll(boardId: Long) {
+        fun getReceivedEnroll(
+            boardId: Long,
+            page: Int = 0,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
-                val result = getReceivedEnrollUseCase.getReceivedEnroll(boardId)
+                val result = getReceivedEnrollUseCase.getReceivedEnroll(boardId, page, size)
                 result
                     .onSuccess { response ->
                         _getReceivedEnrollResponse.value = response

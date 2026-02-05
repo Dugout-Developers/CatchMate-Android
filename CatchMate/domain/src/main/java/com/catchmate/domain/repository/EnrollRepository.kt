@@ -3,9 +3,9 @@ package com.catchmate.domain.repository
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -28,7 +28,11 @@ interface EnrollRepository {
         size: Int,
     ): Result<GetRequestedEnrollListResponse>
 
-    suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse>
+    suspend fun getReceivedEnroll(
+        boardId: Long,
+        page: Int,
+        size: Int,
+    ): Result<GetReceivedEnrollResponse>
 
     suspend fun getAllReceivedEnroll(
         page: Int,
