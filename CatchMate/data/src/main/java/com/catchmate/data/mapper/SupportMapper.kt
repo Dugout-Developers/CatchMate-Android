@@ -45,11 +45,10 @@ object SupportMapper {
     fun toGetInquiryResponse(dto: GetInquiryResponseDTO): GetInquiryResponse =
         GetInquiryResponse(
             inquiryId = dto.inquiryId,
-            inquiryType = dto.inquiryType,
+            type = dto.type,
             content = dto.content,
-            nickName = dto.nickName,
             answer = dto.answer,
-            isCompleted = dto.isCompleted,
+            status = dto.status,
             createdAt = dto.createdAt,
         )
 

@@ -15,7 +15,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SupportService {
-    @GET("inquiries/{inquiryId}")
+    @GET("api/inquiries/{inquiryId}")
     suspend fun getInquiry(
         @Path("inquiryId") inquiryId: Long,
     ): Response<GetInquiryResponseDTO?>
