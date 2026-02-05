@@ -3,6 +3,7 @@ package com.catchmate.data.mapper
 import com.catchmate.data.dto.support.GetInquiryResponseDTO
 import com.catchmate.data.dto.support.GetNoticeListResponseDTO
 import com.catchmate.data.dto.support.NoticeInfoDTO
+import com.catchmate.data.dto.support.NoticeListInfoDto
 import com.catchmate.data.dto.support.PostInquiryRequestDTO
 import com.catchmate.data.dto.support.PostInquiryResponseDTO
 import com.catchmate.data.dto.support.PostUserReportRequestDTO
@@ -11,6 +12,7 @@ import com.catchmate.data.mapper.BoardMapper.toClub
 import com.catchmate.domain.model.support.GetInquiryResponse
 import com.catchmate.domain.model.support.GetNoticeListResponse
 import com.catchmate.domain.model.support.NoticeInfo
+import com.catchmate.domain.model.support.NoticeListInfo
 import com.catchmate.domain.model.support.PostInquiryRequest
 import com.catchmate.domain.model.support.PostInquiryResponse
 import com.catchmate.domain.model.support.PostUserReportRequest
@@ -54,17 +56,26 @@ object SupportMapper {
 
     fun toGetNoticeListResponse(dto: GetNoticeListResponseDTO): GetNoticeListResponse =
         GetNoticeListResponse(
-            content = dto.content.map { toNoticeInfo(it) },
+            content = dto.content.map { toNoticeListInfo(it) },
             pageNumber = dto.pageNumber,
             totalPages = dto.totalPages,
             totalElements = dto.totalElements,
             hasNext = dto.hasNext,
         )
 
+    private fun toNoticeListInfo(dto: NoticeListInfoDto): NoticeListInfo =
+        NoticeListInfo(
+            noticeId = dto.noticeId,
+            title = dto.title,
+            writerNickname = dto.writerNickname,
+            createdAt = dto.createdAt,
+        )
+
     fun toNoticeInfo(dto: NoticeInfoDTO): NoticeInfo =
         NoticeInfo(
             noticeId = dto.noticeId,
             title = dto.title,
+            content = dto.content,
             writerNickname = dto.writerNickname,
             createdAt = dto.createdAt,
         )

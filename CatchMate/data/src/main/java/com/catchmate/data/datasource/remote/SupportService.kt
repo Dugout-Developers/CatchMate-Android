@@ -36,7 +36,7 @@ interface SupportService {
         @Query("size") size: Int,
     ): Response<GetNoticeListResponseDTO?>
 
-    @GET("notices/{noticeId}")
+    @GET("api/notices/{noticeId}")
     suspend fun getNoticeDetail(
         @Path("noticeId") noticeId: Long,
     ): Response<NoticeInfoDTO?>

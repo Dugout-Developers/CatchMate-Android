@@ -1,9 +1,8 @@
-package com.catchmate.domain.model.support
+package com.catchmate.data.dto.support
 
-data class NoticeInfo(
+data class NoticeListInfoDto(
     val noticeId: Long,
     val title: String,
-    val content: String,
     val writerNickname: String,
     val createdAt: String,
 )

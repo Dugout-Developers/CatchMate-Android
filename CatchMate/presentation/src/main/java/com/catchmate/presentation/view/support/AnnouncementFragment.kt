@@ -8,7 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.support.NoticeInfo
+import com.catchmate.domain.model.support.NoticeListInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentAnnouncementBinding
 import com.catchmate.presentation.interaction.OnAnnouncementItemClickListener
@@ -28,7 +28,7 @@ class AnnouncementFragment :
     private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
-    private var announcementList: MutableList<NoticeInfo> = mutableListOf()
+    private var announcementList: MutableList<NoticeListInfo> = mutableListOf()
 
     override fun onViewCreated(
         view: View,

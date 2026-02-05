@@ -5,20 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.support.NoticeInfo
+import com.catchmate.domain.model.support.NoticeListInfo
 import com.catchmate.presentation.databinding.ItemAnnouncementBinding
 import com.catchmate.presentation.interaction.OnAnnouncementItemClickListener
 import com.catchmate.presentation.util.DateUtils.formatInquiryAnsweredDate
 
 class AnnouncementListAdapter(
     private val onAnnouncementItemClickListener: OnAnnouncementItemClickListener,
-) : ListAdapter<NoticeInfo, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
+) : ListAdapter<NoticeListInfo, AnnouncementListAdapter.AnnouncementViewHolder>(diffUtil) {
     inner class AnnouncementViewHolder(
         private val binding: ItemAnnouncementBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: NoticeInfo) {
+        fun bind(data: NoticeListInfo) {
             binding.tvTitleItemAnnouncement.text = data.title
-            binding.tvTeamAndDateInfoAnnouncement.text = "${data.userInfo.nickName} | ${formatInquiryAnsweredDate(data.updatedAt)}"
+            binding.tvTeamAndDateInfoAnnouncement.text = "${data.writerNickname} | ${formatInquiryAnsweredDate(data.createdAt)}"
             binding.cvItemAnnouncement.setOnClickListener {
                 onAnnouncementItemClickListener.onAnnouncementItemClick(data.noticeId)
             }
@@ -46,15 +46,15 @@ class AnnouncementListAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<NoticeInfo>() {
+            object : DiffUtil.ItemCallback<NoticeListInfo>() {
                 override fun areItemsTheSame(
-                    oldItem: NoticeInfo,
-                    newItem: NoticeInfo,
+                    oldItem: NoticeListInfo,
+                    newItem: NoticeListInfo,
                 ): Boolean = oldItem == newItem
 
                 override fun areContentsTheSame(
-                    oldItem: NoticeInfo,
-                    newItem: NoticeInfo,
+                    oldItem: NoticeListInfo,
+                    newItem: NoticeListInfo,
                 ): Boolean = oldItem == newItem
             }
     }
