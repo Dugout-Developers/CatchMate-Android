@@ -1,9 +1,9 @@
 package com.catchmate.domain.model.chatting
 
 data class GetChattingRoomListResponse(
-    val chatRoomInfoList: List<ChatRoomInfo>,
+    val content: List<ChatRoomInfo>,
+    val pageNumber: Int,
     val totalPages: Int,
     val totalElements: Int,
-    val isFirst: Boolean,
-    val isLast: Boolean,
+    val hasNext: Boolean,
 )

@@ -24,10 +24,13 @@ class ChattingRepositoryImpl
         private val chattingApi = retrofitClient.createApi<ChattingService>()
         private val tag = "ChattingRepo"
 
-        override suspend fun getChattingRoomList(page: Int): Result<GetChattingRoomListResponse> =
+        override suspend fun getChattingRoomList(
+            page: Int,
+            size: Int,
+        ): Result<GetChattingRoomListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.getChattingRoomList(page) },
+                apiFunction = { chattingApi.getChattingRoomList(page, size) },
                 transform = { ChattingMapper.toGetChattingRoomListResponse(it!!) },
             )
 

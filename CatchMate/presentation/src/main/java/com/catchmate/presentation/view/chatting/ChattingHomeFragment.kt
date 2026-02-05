@@ -18,7 +18,6 @@ import com.catchmate.presentation.interaction.OnChattingRoomSelectedListener
 import com.catchmate.presentation.interaction.OnItemSwipeListener
 import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
-import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
@@ -35,7 +34,7 @@ class ChattingHomeFragment :
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isFirstLoad = true
     private var deletedItemPos: Int = -1
@@ -71,7 +70,7 @@ class ChattingHomeFragment :
             Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
             // 페이지 초기화
             currentPage = 0
-            isLastPage = false
+            hasNext = true
             isLoading = false
 
             chattingRoomListAdapter.submitList(emptyList())
@@ -95,11 +94,11 @@ class ChattingHomeFragment :
 
     private fun initViewModel() {
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-            chattingHomeViewModel.connectToWebSocket(token)
+//            chattingHomeViewModel.connectToWebSocket(token)
         }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             isLoading = false
-            if (response.isFirst && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.layoutChattingHomeNoList.visibility = View.VISIBLE
                 binding.rvChattingHome.visibility = View.GONE
             } else {
@@ -107,15 +106,15 @@ class ChattingHomeFragment :
                 binding.layoutChattingHomeNoList.visibility = View.GONE
                 if (currentPage == 0) {
                     // 새 리스트로 교체
-                    chattingRoomListAdapter.submitList(response.chatRoomInfoList)
+                    chattingRoomListAdapter.submitList(response.content)
                 } else {
                     // 페이징 시 기존 리스트에 추가
                     val currentList = chattingRoomListAdapter.currentList.toMutableList()
-                    currentList.addAll(response.chatRoomInfoList)
+                    currentList.addAll(response.content)
                     chattingRoomListAdapter.submitList(currentList)
                 }
-                isLastPage = response.isLast
-                Log.i("API 응답", "${response.isFirst}, ${response.isLast}, ${response.totalElements}, $currentPage")
+                hasNext = response.hasNext
+                Log.i("API 응답", "${response.hasNext}, ${response.totalElements}, $currentPage")
             }
         }
         chattingHomeViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -172,7 +171,7 @@ class ChattingHomeFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getChattingRoomList()
                         }
@@ -190,7 +189,7 @@ class ChattingHomeFragment :
     }
 
     private fun getChattingRoomList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         chattingHomeViewModel.getChattingRoomList(currentPage)
     }

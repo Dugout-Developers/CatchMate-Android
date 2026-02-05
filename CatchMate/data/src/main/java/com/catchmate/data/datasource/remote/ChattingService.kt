@@ -20,9 +20,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ChattingService {
-    @GET("chat-rooms/list")
+    @GET("api/chat/rooms")
     suspend fun getChattingRoomList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetChattingRoomListResponseDTO?>
 
     @GET("chat-rooms/{chatRoomId}/user-list")
