@@ -5,5 +5,5 @@ data class BlockedUserInfoDto(
     val userId: Long,
     val nickName: String,
     val profileImageUrl: String,
-    val blockedAt: String,
+    val blockedAt: String?,
 )
