@@ -38,9 +38,10 @@ interface UserService {
         @Path("profileUserId") profileUserId: Long,
     ): Response<GetUserProfileByIdResponseDTO?>
 
-    @GET("users/block")
+    @GET("api/users/blocks")
     suspend fun getBlockedUserList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetBlockedUserListResponseDTO?>
 
     @POST("api/users/blocks/{targetUserId}")
@@ -66,9 +67,9 @@ interface UserService {
         @Query("isEnabled") isEnabled: Boolean,
     ): Response<PatchUserAlarmResponseDTO?>
 
-    @DELETE("users/block/{blockedUserId}")
+    @DELETE("api/users/blocks/{targetUserId}")
     suspend fun deleteBlockedUser(
-        @Path("blockedUserId") blockedUserId: Long,
+        @Path("targetUserId") targetUserId: Long,
     ): Response<DeleteBlockedUserResponseDTO?>
 
     @DELETE("users/withdraw")

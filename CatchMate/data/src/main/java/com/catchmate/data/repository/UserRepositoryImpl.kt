@@ -51,10 +51,13 @@ class UserRepositoryImpl
                 transform = { UserMapper.toGetUserProfileByIdResponse(it!!) },
             )
 
-        override suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse> =
+        override suspend fun getBlockedUserList(
+            page: Int,
+            size: Int,
+        ): Result<GetBlockedUserListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.getBlockedUserList(page) },
+                apiFunction = { userApi.getBlockedUserList(page, size) },
                 transform = { UserMapper.toGetBlockedUserListResponse(it!!) },
             )
 
@@ -109,10 +112,10 @@ class UserRepositoryImpl
                 transform = { UserMapper.toPatchUserAlarmResponse(it!!) },
             )
 
-        override suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse> =
+        override suspend fun deleteBlockedUser(targetUserId: Long): Result<DeleteBlockedUserResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.deleteBlockedUser(blockedUserId) },
+                apiFunction = { userApi.deleteBlockedUser(targetUserId) },
                 transform = { UserMapper.toDeleteBlockedUserResponse(it!!) },
             )
 

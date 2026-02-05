@@ -37,26 +37,29 @@ class BlockedSettingViewModel
             get() = _navigateToLogin
 
         fun deleteUserFromList(userId: Long) {
-            val userList = _getBlockedUserListResponse.value?.userInfoList!!
+            val userList = _getBlockedUserListResponse.value?.content!!
             val newUserList = userList.filter { it.userId != userId }.toMutableList()
 
             val updatedResponse =
                 _getBlockedUserListResponse.value?.copy(
-                    userInfoList = newUserList,
+                    content = newUserList,
                 ) ?: GetBlockedUserListResponse(
-                    userInfoList = newUserList,
+                    content = newUserList,
+                    pageNumber = 1,
                     totalPages = 1,
-                    totalElements = 1,
-                    isFirst = true,
-                    isLast = true,
+                    totalElements = newUserList.size,
+                    hasNext = false,
                 )
 
             _getBlockedUserListResponse.postValue(updatedResponse)
         }
 
-        fun getBlockedUserList(page: Int) {
+        fun getBlockedUserList(
+            page: Int = 0,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
-                val result = getBlockedUserListUseCase(page)
+                val result = getBlockedUserListUseCase(page, size)
                 result
                     .onSuccess { response ->
                         _getBlockedUserListResponse.value = response
@@ -70,9 +73,9 @@ class BlockedSettingViewModel
             }
         }
 
-        fun deleteBlockedUser(blockedUserId: Long) {
+        fun deleteBlockedUser(targetUserId: Long) {
             viewModelScope.launch {
-                val result = deleteBlockedUserUseCase(blockedUserId)
+                val result = deleteBlockedUserUseCase(targetUserId)
                 result
                     .onSuccess { response ->
                         _deleteBlockedUserResponse.value = response

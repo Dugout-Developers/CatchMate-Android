@@ -7,18 +7,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.BlockedUserInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemChattingParticipantBinding
 import com.catchmate.presentation.interaction.OnBlockedUserSelectedListener
 
 class BlockedUserListAdapter(
     private val onBlockedUserSelectedListener: OnBlockedUserSelectedListener,
-) : ListAdapter<GetUserProfileResponse, BlockedUserListAdapter.BlockedUserViewHolder>(diffUtil) {
+) : ListAdapter<BlockedUserInfo, BlockedUserListAdapter.BlockedUserViewHolder>(diffUtil) {
     inner class BlockedUserViewHolder(
         private val binding: ItemChattingParticipantBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(userInfo: GetUserProfileResponse) {
+        fun bind(userInfo: BlockedUserInfo) {
             binding.apply {
                 tvChattingParticipantKickOut.visibility = View.VISIBLE
                 tvChattingParticipantKickOut.text = binding.root.context.getString(R.string.mypage_setting_unblock)
@@ -60,15 +60,15 @@ class BlockedUserListAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<GetUserProfileResponse>() {
+            object : DiffUtil.ItemCallback<BlockedUserInfo>() {
                 override fun areItemsTheSame(
-                    oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse,
+                    oldItem: BlockedUserInfo,
+                    newItem: BlockedUserInfo,
                 ): Boolean = oldItem.userId == newItem.userId
 
                 override fun areContentsTheSame(
-                    oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse,
+                    oldItem: BlockedUserInfo,
+                    newItem: BlockedUserInfo,
                 ): Boolean = oldItem.userId == newItem.userId
             }
     }
