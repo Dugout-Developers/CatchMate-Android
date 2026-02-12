@@ -199,7 +199,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 when (readPostViewModel.boardEnrollState.value) {
                     EnrollState.APPLY,
                     EnrollState.REJECTED,
-                     -> {
+                    -> {
                         if (isFinishedGame) {
                             showFinishedGameAlertDialog()
                         } else {
@@ -577,8 +577,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = enrollInfo.boardResponse.gameResponse.location
 
-            val isCheerTeam = enrollInfo.boardResponse.gameResponse.homeClub
-                ?.clubId == enrollInfo.boardResponse.cheerClub.clubId
+            val isCheerTeam =
+                enrollInfo.boardResponse.gameResponse.homeClub
+                    ?.clubId == enrollInfo.boardResponse.cheerClub.clubId
             setTeamViewResources(
                 enrollInfo.boardResponse.gameResponse.homeClub
                     ?.clubId ?: 0,

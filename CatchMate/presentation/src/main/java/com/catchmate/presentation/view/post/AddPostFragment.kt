@@ -70,7 +70,7 @@ class AddPostFragment :
                     @Suppress("DEPRECATION")
                     arguments?.getParcelable("boardMode") as? BoardMode
                 }
-                    ) ?: BoardMode.New
+            ) ?: BoardMode.New
 
         // getBoardInfo()로 받아온 board Data가 존재하고, isEditMode == true일 때 게시글 수정 모드이므로 viewmodel에 의해 보드 데이터 셋팅됨
         if (currentMode is BoardMode.Edit) {
