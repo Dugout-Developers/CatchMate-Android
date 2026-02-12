@@ -119,8 +119,10 @@ fun LoginButtonGroup(
     onKakaoLoginClick: () -> Unit,
     onNaverLoginClick: () -> Unit,
     onGoogleLoginClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(

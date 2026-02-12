@@ -1,27 +1,31 @@
 package com.catchmate.presentation.view.login
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.auth.PostLoginRequest
-import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
-import com.catchmate.presentation.databinding.FragmentLoginBinding
 import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
-import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.view.base.BaseComposeFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
-import com.catchmate.presentation.viewmodel.LoginViewModel
 import com.catchmate.presentation.viewmodel.MainViewModel
+import com.catchmate.presentation.viewmodel.login.LoginEvent
+import com.catchmate.presentation.viewmodel.login.LoginViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
+class LoginFragment : BaseComposeFragment() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -33,91 +37,34 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
-        initViewModel()
-        initView()
+        observeEvent()
         if (navigateCode == NAVIGATE_CODE_REISSUE) showAlertDialog()
     }
 
-    private fun initViewModel() {
-        loginViewModel.userData.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                Log.i(
-                    "LoginFragment",
-                    "LoginRequest\n${data.email}\n${data.provider}\n" +
-                        "${data.providerId}\n${data.profileImageUrl}\n${data.fcmToken}",
-                )
-                val loginRequest =
-                    PostLoginRequest(
-                        provider = data.provider,
-                        providerId = data.providerId,
-                        fcmToken = data.fcmToken,
-                    )
-                loginViewModel.postAuthLogin(loginRequest)
-            } else {
-                Log.d("로그인 취소", "로그인 취소")
-            }
-        }
-        loginViewModel.postLoginResponse.observe(viewLifecycleOwner) { loginResponse ->
-            if (loginResponse != null) {
-                Log.i(
-                    "LoginFragment",
-                    "LoginResponse\nacc:${loginResponse.accessToken}\n" +
-                        "ref:${loginResponse.refreshToken}\n bool:${loginResponse.signupRequired}",
-                )
+    private fun observeEvent() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                loginViewModel.event.collect { event ->
+                    when (event) {
+                        is LoginEvent.NavigateToSignUp -> {
+                            val bundle =
+                                Bundle()
+                                    .apply {
+                                        putSerializable("userInfo", event.userInfo)
+                                    }
+                            findNavController().navigate(R.id.action_loginFragment_to_termsAndConditionFragment, bundle)
+                        }
 
-                when (loginResponse.signupRequired) {
-                    true -> {
-                        val userData = loginViewModel.userData.value!!
-                        val userInfo =
-                            PostUserAdditionalInfoRequest(
-                                userData.email,
-                                userData.providerId,
-                                userData.provider,
-                                userData.profileImageUrl,
-                                userData.fcmToken,
-                                "",
-                                "",
-                                "",
-                                -1,
-                                "",
-                            )
-                        val bundle = Bundle()
-                        bundle.putSerializable("userInfo", userInfo)
-                        findNavController().navigate(R.id.action_loginFragment_to_termsAndConditionFragment, bundle)
-                        loginViewModel.initUserData()
-                        loginViewModel.initPostLoginResponse()
-                    }
+                        is LoginEvent.NavigateToHome -> {
+                            mainViewModel.setGuestLogin(false)
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        }
 
-                    false -> {
-                        localDataViewModel.saveAccessToken(loginResponse.accessToken!!)
-                        localDataViewModel.saveRefreshToken(loginResponse.refreshToken!!)
-                        localDataViewModel.saveProvider(loginViewModel.userData.value?.provider!!)
-                        mainViewModel.setGuestLogin(false)
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        is LoginEvent.ShowSnackBar -> {
+                            Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
-        }
-        loginViewModel.noCredentialException.observe(viewLifecycleOwner) { exception ->
-            Snackbar.make(requireView(), exception, Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun initView() {
-        binding.apply {
-            cvLoginKakao.setOnClickListener {
-                loginViewModel.kakaoLogin()
-            }
-            ivLoginNaver.setOnClickListener {
-                loginViewModel.naverLogin(requireActivity())
-            }
-            ivLoginGoogle.setOnClickListener {
-                loginViewModel.googleLogin(requireActivity())
-            }
-            tvLoginGuest.setOnClickListener {
-                mainViewModel.setGuestLogin(true)
-                localDataViewModel.saveAccessToken("")
-                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
         }
     }
@@ -141,5 +88,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             }
         }
         dialog.show()
+    }
+
+    @Composable
+    override fun ComposeContent() {
+        val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
+
+        LoginScreen(
+            isLoading = uiState.isLoading, // indicator 표시를 위한 boolean 속성
+            onKakaoLoginClick = { loginViewModel.kakaoLogin() },
+            onNaverLoginClick = { loginViewModel.naverLogin(requireActivity()) },
+            onGoogleLoginClick = { loginViewModel.googleLogin(requireActivity()) },
+            onGuestLoginClick = {
+                mainViewModel.setGuestLogin(true)
+                localDataViewModel.saveAccessToken("")
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            },
+        )
     }
 }

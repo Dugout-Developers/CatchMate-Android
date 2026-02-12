@@ -19,6 +19,7 @@ import com.catchmate.presentation.view.theme.Grey0
 
 @Composable
 fun LoginScreen(
+    isLoading: Boolean,
     onKakaoLoginClick: () -> Unit,
     onNaverLoginClick: () -> Unit,
     onGoogleLoginClick: () -> Unit,
@@ -35,7 +36,7 @@ fun LoginScreen(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(140.dp))
             Image(
                 painter = painterResource(R.drawable.vec_colored_logo),
                 contentDescription = null,
@@ -53,5 +54,5 @@ fun LoginScreen(
 @Composable
 @Preview
 fun PreviewLoginScreen() {
-    LoginScreen({}, {}, {}, {})
+    LoginScreen(true, {}, {}, {}, {})
 }
