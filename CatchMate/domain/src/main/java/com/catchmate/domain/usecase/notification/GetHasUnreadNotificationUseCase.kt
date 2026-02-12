@@ -5,10 +5,9 @@ import com.catchmate.domain.repository.NotificationRepository
 import javax.inject.Inject
 
 class GetHasUnreadNotificationUseCase
-@Inject
-constructor(
-    private val notificationRepository: NotificationRepository
+    @Inject
+    constructor(
+        private val notificationRepository: NotificationRepository
     ) {
-        suspend operator fun invoke(): Result<GetHasUnreadNotificationResponse> =
-            notificationRepository.getHasUnreadNotification()
+        suspend operator fun invoke(): Result<GetHasUnreadNotificationResponse> = notificationRepository.getHasUnreadNotification()
     }

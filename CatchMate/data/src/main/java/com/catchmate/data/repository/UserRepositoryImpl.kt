@@ -67,7 +67,7 @@ class UserRepositoryImpl
             apiCall(
                 tag = this.tag,
                 apiFunction = { userApi.getUserAlarmState() },
-                transform = { toGetUserAlarmStateResponse(it!!) }
+                transform = { toGetUserAlarmStateResponse(it!!) },
             )
 
         override suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse> =

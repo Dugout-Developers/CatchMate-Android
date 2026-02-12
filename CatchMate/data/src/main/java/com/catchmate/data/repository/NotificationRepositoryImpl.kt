@@ -33,7 +33,7 @@ class NotificationRepositoryImpl
             apiCall(
                 tag = this.tag,
                 apiFunction = { notificationApi.getHasUnreadNotification() },
-                transform = { NotificationMapper.toGetHasUnreadNotificationResponse(it!!) }
+                transform = { NotificationMapper.toGetHasUnreadNotificationResponse(it!!) },
             )
 
         override suspend fun getReceivedNotification(notificationId: Long): Result<GetReceivedNotificationResponse> =

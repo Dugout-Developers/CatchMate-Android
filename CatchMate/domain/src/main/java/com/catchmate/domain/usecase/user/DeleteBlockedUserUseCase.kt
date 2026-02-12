@@ -9,6 +9,5 @@ class DeleteBlockedUserUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend operator fun invoke(targetUserId: Long): Result<DeleteBlockedUserResponse> =
-            userRepository.deleteBlockedUser(targetUserId)
+        suspend operator fun invoke(targetUserId: Long): Result<DeleteBlockedUserResponse> = userRepository.deleteBlockedUser(targetUserId)
     }

@@ -12,6 +12,5 @@ class GetRequestedEnrollListUseCase
         suspend fun getRequestedEnrollList(
             page: Int,
             size: Int,
-        ): Result<GetRequestedEnrollListResponse> =
-            enrollRepository.getRequestedEnrollList(page, size)
+        ): Result<GetRequestedEnrollListResponse> = enrollRepository.getRequestedEnrollList(page, size)
     }

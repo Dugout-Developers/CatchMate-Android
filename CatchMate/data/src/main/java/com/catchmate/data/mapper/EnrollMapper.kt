@@ -165,7 +165,7 @@ object EnrollMapper {
             description = dto.description,
             requestDate = dto.requestDate,
             newEnroll = dto.newEnroll,
-            applicantResponse = toEnrollUserInfo(dto.applicantResponse)
+            applicantResponse = toEnrollUserInfo(dto.applicantResponse),
         )
 
     private fun toReceivedEnrollInfo(dto: ReceivedEnrollInfoDTO): ReceivedEnrollInfo =

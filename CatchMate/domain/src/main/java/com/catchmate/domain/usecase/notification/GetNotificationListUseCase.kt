@@ -12,6 +12,5 @@ class GetNotificationListUseCase
         suspend operator fun invoke(
             page: Int,
             size: Int,
-        ): Result<GetNotificationListResponse> =
-            notificationRepository.getNotificationList(page, size)
+        ): Result<GetNotificationListResponse> = notificationRepository.getNotificationList(page, size)
     }

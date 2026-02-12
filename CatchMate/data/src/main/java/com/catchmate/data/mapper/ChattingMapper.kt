@@ -57,7 +57,6 @@ object ChattingMapper {
             )
         }
 
-
     fun toGetChattingHistoryResponse(dto: GetChattingHistoryResponseDTO): GetChattingHistoryResponse =
         GetChattingHistoryResponse(
             chatMessageInfoList = dto.chatMessageInfoList.map { toChatMessageInfo(it) },

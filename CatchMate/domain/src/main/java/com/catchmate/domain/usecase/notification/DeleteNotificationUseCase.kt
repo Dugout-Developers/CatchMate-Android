@@ -8,6 +8,5 @@ class DeleteNotificationUseCase
     constructor(
         private val notificationRepository: NotificationRepository,
     ) {
-        suspend operator fun invoke(notificationId: Long): Result<Int> =
-            notificationRepository.deleteNotification(notificationId)
+        suspend operator fun invoke(notificationId: Long): Result<Int> = notificationRepository.deleteNotification(notificationId)
     }

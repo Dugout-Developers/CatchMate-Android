@@ -63,12 +63,14 @@ class AddPostFragment :
         initViewModel()
 
         currentMode =
-            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable("boardMode", BoardMode::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                arguments?.getParcelable("boardMode") as? BoardMode
-            }) ?: BoardMode.New
+            (
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    arguments?.getParcelable("boardMode", BoardMode::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    arguments?.getParcelable("boardMode") as? BoardMode
+                }
+                    ) ?: BoardMode.New
 
         // getBoardInfo()로 받아온 board Data가 존재하고, isEditMode == true일 때 게시글 수정 모드이므로 viewmodel에 의해 보드 데이터 셋팅됨
         if (currentMode is BoardMode.Edit) {
@@ -247,7 +249,7 @@ class AddPostFragment :
                             .setPopUpTo(R.id.addPostFragment, true)
                             .build()
                     findNavController().navigate(R.id.action_addPostFragment_to_readPostFragment, bundle, navOptions)
-                } else if (currentMode is BoardMode.Temp){ // 임시 저장일 때
+                } else if (currentMode is BoardMode.Temp) { // 임시 저장일 때
                     Snackbar.make(requireView(), R.string.temporary_storage_sucess_toast_msg, Snackbar.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
@@ -324,6 +326,7 @@ class AddPostFragment :
                         )
                     addPostViewModel.postBoard(boardWriteRequest)
                 }
+
                 is BoardMode.Edit -> { // 기존 게시글 수정
                     val boardEditRequest =
                         PutBoardRequest(
@@ -338,6 +341,7 @@ class AddPostFragment :
                         )
                     addPostViewModel.putBoard((currentMode as BoardMode.Edit).boardInfo.boardId, boardEditRequest)
                 }
+
                 is BoardMode.Temp -> { // 임시저장 게시글 등록
                     val boardRequest =
                         PutBoardRequest(
@@ -355,8 +359,6 @@ class AddPostFragment :
             }
         }
     }
-
-
 
     private fun saveTempBoard() {
         binding.apply {

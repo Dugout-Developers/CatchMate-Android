@@ -198,7 +198,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             btnLikedFooterRegister.setOnClickListener {
                 when (readPostViewModel.boardEnrollState.value) {
                     EnrollState.APPLY,
-                    EnrollState.REJECTED, -> {
+                    EnrollState.REJECTED,
+                     -> {
                         if (isFinishedGame) {
                             showFinishedGameAlertDialog()
                         } else {
@@ -259,7 +260,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             binding.layoutReadPostFooter.btnLikedFooterRegister.apply {
                 when (state) {
                     EnrollState.APPLY,
-                    EnrollState.REJECTED, -> {
+                    EnrollState.REJECTED,
+                    -> {
                         setText(R.string.post_register)
                         setBackgroundResource(R.drawable.shape_all_submit_button)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.grey0))
@@ -575,9 +577,11 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
             tvApplicationDetailDialogTime.text = dateTimePair.second
             tvApplicationDetailDialogPlace.text = enrollInfo.boardResponse.gameResponse.location
 
-            val isCheerTeam = enrollInfo.boardResponse.gameResponse.homeClub?.clubId == enrollInfo.boardResponse.cheerClub.clubId
+            val isCheerTeam = enrollInfo.boardResponse.gameResponse.homeClub
+                ?.clubId == enrollInfo.boardResponse.cheerClub.clubId
             setTeamViewResources(
-                enrollInfo.boardResponse.gameResponse.homeClub?.clubId ?: 0,
+                enrollInfo.boardResponse.gameResponse.homeClub
+                    ?.clubId ?: 0,
                 isCheerTeam,
                 ivApplicationDetailDialogHomeTeamBg,
                 ivApplicationDetailDialogHomeTeamLogo,
@@ -585,7 +589,8 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                 requireContext(),
             )
             setTeamViewResources(
-                enrollInfo.boardResponse.gameResponse.awayClub?.clubId ?: 0,
+                enrollInfo.boardResponse.gameResponse.awayClub
+                    ?.clubId ?: 0,
                 !isCheerTeam,
                 ivApplicationDetailDialogAwayTeamBg,
                 ivApplicationDetailDialogAwayTeamLogo,
