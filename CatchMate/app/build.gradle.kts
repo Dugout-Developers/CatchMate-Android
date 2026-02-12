@@ -6,6 +6,7 @@ plugins {
     id("catchmate.android.application")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 val properties = Properties()
@@ -31,6 +32,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     packaging {
