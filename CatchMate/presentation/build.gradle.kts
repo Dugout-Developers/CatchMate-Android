@@ -3,7 +3,8 @@ import java.util.Properties
 
 plugins {
     id("catchmate.android.library")
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 val properties = Properties()
@@ -19,6 +20,7 @@ android {
     }
 
     buildFeatures {
+        compose = true
         dataBinding = true
         viewBinding = true
         buildConfig = true
@@ -55,4 +57,18 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.stomp)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.material3)
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    testImplementation(libs.junit)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

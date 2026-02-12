@@ -64,4 +64,5 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics.ndk)
+    implementation(libs.androidx.material3)
 }
