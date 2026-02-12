@@ -75,31 +75,25 @@ class HomeFragment :
             getBoardList()
             isFirstLoad = false
         }
-//        (requireActivity() as MainActivity).refreshNotificationStatus()
+        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     @OptIn(ExperimentalBadgeUtils::class)
     fun updateNotificationBadge(hasUnreadNotification: Boolean) {
+        notificationBadgeDrawable?.isVisible = hasUnreadNotification
         if (hasUnreadNotification) {
             if (notificationBadgeDrawable == null) {
                 notificationBadgeDrawable = BadgeDrawable.create(requireContext())
                 notificationBadgeDrawable?.apply {
                     backgroundColor = getColor(requireContext(), R.color.system_red) // 알림 색상 지정
-                    isVisible = true
                     clearNumber()
                     horizontalOffset = 40
                     verticalOffset = 30
                 }
-            } else {
-                notificationBadgeDrawable?.isVisible = true
             }
-
             notificationBadgeDrawable?.let { badge ->
                 BadgeUtils.attachBadgeDrawable(badge, binding.layoutHeaderHome.imgbtnHeaderHomeNotification)
             }
-        } else {
-            // 뱃지 숨기기
-            notificationBadgeDrawable?.isVisible = false
         }
     }
 

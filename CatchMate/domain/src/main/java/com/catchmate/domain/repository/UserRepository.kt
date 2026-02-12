@@ -4,7 +4,7 @@ import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
-import com.catchmate.domain.model.user.GetUnreadInfoResponse
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -22,11 +22,14 @@ interface UserRepository {
 
     suspend fun getUserProfileById(profileUserId: Long): Result<GetUserProfileByIdResponse>
 
-    suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse>
+    suspend fun getBlockedUserList(
+        page: Int,
+        size: Int,
+    ): Result<GetBlockedUserListResponse>
 
-    suspend fun getUnreadInfo(): Result<GetUnreadInfoResponse>
+    suspend fun getUserAlarmState(): Result<GetUserAlarmResponse>
 
-    suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse>
+    suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse>
 
     suspend fun postUserAdditionalInfo(postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest): Result<PostUserAdditionalInfoResponse>
 

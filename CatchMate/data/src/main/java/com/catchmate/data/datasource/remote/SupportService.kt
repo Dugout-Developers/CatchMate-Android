@@ -15,28 +15,28 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SupportService {
-    @GET("inquiries/{inquiryId}")
+    @GET("api/inquiries/{inquiryId}")
     suspend fun getInquiry(
         @Path("inquiryId") inquiryId: Long,
     ): Response<GetInquiryResponseDTO?>
 
-    @POST("inquiries")
+    @POST("api/inquiries")
     suspend fun postInquiry(
         @Body postInquiryRequestDTO: PostInquiryRequestDTO,
     ): Response<PostInquiryResponseDTO?>
 
-    @POST("reports/{reportedUserId}")
+    @POST("api/reports")
     suspend fun postUserReport(
-        @Path("reportedUserId") reportedUserId: Long,
         @Body postUserReportRequestDTO: PostUserReportRequestDTO,
     ): Response<PostUserReportResponseDTO?>
 
-    @GET("notices/list")
+    @GET("api/notices")
     suspend fun getNoticeList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetNoticeListResponseDTO?>
 
-    @GET("notices/{noticeId}")
+    @GET("api/notices/{noticeId}")
     suspend fun getNoticeDetail(
         @Path("noticeId") noticeId: Long,
     ): Response<NoticeInfoDTO?>

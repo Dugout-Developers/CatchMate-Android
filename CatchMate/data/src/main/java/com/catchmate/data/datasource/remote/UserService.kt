@@ -4,7 +4,7 @@ import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
-import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
+import com.catchmate.data.dto.user.GetUserAlarmResponseDto
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -34,22 +34,23 @@ interface UserService {
     @GET("api/users/profile")
     suspend fun getUserProfile(): Response<GetUserProfileResponseDTO?>
 
-    @GET("users/profile/{profileUserId}")
+    @GET("api/users/profile/{profileUserId}")
     suspend fun getUserProfileById(
         @Path("profileUserId") profileUserId: Long,
     ): Response<GetUserProfileByIdResponseDTO?>
 
-    @GET("users/block")
+    @GET("api/users/blocks")
     suspend fun getBlockedUserList(
         @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetBlockedUserListResponseDTO?>
 
-    @GET("users/has-unread")
-    suspend fun getUnreadInfo(): Response<GetUnreadInfoResponseDTO?>
+    @GET("api/users/alarm")
+    suspend fun getUserAlarmState(): Response<GetUserAlarmResponseDto?>
 
-    @POST("users/block/{blockedUserId}")
+    @POST("api/users/blocks/{targetUserId}")
     suspend fun postUserBlock(
-        @Path("blockedUserId") blockedUserId: Long,
+        @Path("targetUserId") targetUserId: Long,
     ): Response<PostUserBlockResponseDTO?>
 
     @POST("api/users/additional-info")
@@ -58,7 +59,7 @@ interface UserService {
     ): Response<PostUserAdditionalInfoResponseDTO?>
 
     @Multipart
-    @PATCH("users/profile")
+    @PATCH("api/users/profile")
     suspend fun patchUserProfile(
         @Part("request") request: RequestBody,
         @Part profileImage: MultipartBody.Part,
@@ -70,9 +71,9 @@ interface UserService {
         @Query("isEnabled") isEnabled: Boolean,
     ): Response<PatchUserAlarmResponseDTO?>
 
-    @DELETE("users/block/{blockedUserId}")
+    @DELETE("api/users/blocks/{targetUserId}")
     suspend fun deleteBlockedUser(
-        @Path("blockedUserId") blockedUserId: Long,
+        @Path("targetUserId") targetUserId: Long,
     ): Response<DeleteBlockedUserResponseDTO?>
 
     @DELETE("users/withdraw")

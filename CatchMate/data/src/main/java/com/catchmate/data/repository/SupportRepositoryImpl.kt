@@ -36,20 +36,20 @@ class SupportRepositoryImpl
                 transform = { SupportMapper.toPostInquiryResponse(it!!) },
             )
 
-        override suspend fun portUserReport(
-            reportedUserId: Long,
-            request: PostUserReportRequest,
-        ): Result<PostUserReportResponse> =
+        override suspend fun postUserReport(request: PostUserReportRequest): Result<PostUserReportResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { supportApi.postUserReport(reportedUserId, SupportMapper.toPostUserReportRequestDTO(request)) },
+                apiFunction = { supportApi.postUserReport(SupportMapper.toPostUserReportRequestDTO(request)) },
                 transform = { SupportMapper.toPostUserReportResponse(it!!) },
             )
 
-        override suspend fun getNoticeList(page: Int): Result<GetNoticeListResponse> =
+        override suspend fun getNoticeList(
+            page: Int,
+            size: Int,
+        ): Result<GetNoticeListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { supportApi.getNoticeList(page) },
+                apiFunction = { supportApi.getNoticeList(page, size) },
                 transform = { SupportMapper.toGetNoticeListResponse(it!!) },
             )
 

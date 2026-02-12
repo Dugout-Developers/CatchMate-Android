@@ -9,7 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.BlockedUserInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentBlockedSettingBinding
 import com.catchmate.presentation.databinding.LayoutSimpleDialogBinding
@@ -28,10 +28,10 @@ class BlockedSettingFragment :
     private val blockedSettingViewModel: BlockedSettingViewModel by viewModels()
     private var deletedUserId = -1L
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
-    private var blockedUserList: MutableList<GetUserProfileResponse> = mutableListOf()
+    private var blockedUserList: MutableList<BlockedUserInfo> = mutableListOf()
 
     override fun onViewCreated(
         view: View,
@@ -65,7 +65,7 @@ class BlockedSettingFragment :
                                 (recyclerView.layoutManager as LinearLayoutManager)
                                     .findLastCompletelyVisibleItemPosition()
                             val itemTotalCount = recyclerView.adapter!!.itemCount
-                            if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                            if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                                 currentPage += 1
                                 getBlockedUserList()
                             }
@@ -78,23 +78,23 @@ class BlockedSettingFragment :
 
     private fun initViewModel() {
         blockedSettingViewModel.getBlockedUserListResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvBlockedUserListBlockedSetting.visibility = View.GONE
                 binding.layoutBlockedSettingNoList.visibility = View.VISIBLE
             } else {
                 binding.rvBlockedUserListBlockedSetting.visibility = View.VISIBLE
                 binding.layoutBlockedSettingNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    blockedUserList.addAll(response.userInfoList)
+                    blockedUserList.addAll(response.content)
                 }
                 blockedUserAdapter.submitList(blockedUserList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
         }
         blockedSettingViewModel.deleteBlockedUserResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
+            if (response != null) {
                 blockedSettingViewModel.deleteUserFromList(deletedUserId)
             }
         }
@@ -118,7 +118,7 @@ class BlockedSettingFragment :
     }
 
     private fun getBlockedUserList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         blockedSettingViewModel.getBlockedUserList(currentPage)
         isApiCalled = true

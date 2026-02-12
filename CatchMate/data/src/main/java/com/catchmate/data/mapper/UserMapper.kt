@@ -1,10 +1,11 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.user.BlockedUserInfoDto
 import com.catchmate.data.dto.user.DeleteBlockedUserResponseDTO
 import com.catchmate.data.dto.user.DeleteUserAccountResponseDTO
 import com.catchmate.data.dto.user.GetBlockedUserListResponseDTO
 import com.catchmate.data.dto.user.GetCheckNicknameResponseDTO
-import com.catchmate.data.dto.user.GetUnreadInfoResponseDTO
+import com.catchmate.data.dto.user.GetUserAlarmResponseDto
 import com.catchmate.data.dto.user.GetUserProfileByIdResponseDTO
 import com.catchmate.data.dto.user.GetUserProfileResponseDTO
 import com.catchmate.data.dto.user.PatchUserAlarmResponseDTO
@@ -13,11 +14,12 @@ import com.catchmate.data.dto.user.PostUserAdditionalInfoRequestDTO
 import com.catchmate.data.dto.user.PostUserAdditionalInfoResponseDTO
 import com.catchmate.data.dto.user.PostUserBlockResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toClub
+import com.catchmate.domain.model.user.BlockedUserInfo
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
-import com.catchmate.domain.model.user.GetUnreadInfoResponse
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -63,7 +65,18 @@ object UserMapper {
 
     fun toPatchUserProfileResponse(responseDTO: PatchUserProfileResponseDTO): PatchUserProfileResponse =
         PatchUserProfileResponse(
-            state = responseDTO.state,
+            userId = responseDTO.userId,
+            email = responseDTO.email,
+            profileImageUrl = responseDTO.profileImageUrl,
+            gender = responseDTO.gender,
+            allAlarm = responseDTO.allAlarm,
+            chatAlarm = responseDTO.chatAlarm,
+            enrollAlarm = responseDTO.enrollAlarm,
+            eventAlarm = responseDTO.eventAlarm,
+            nickName = responseDTO.nickName,
+            club = toClub(responseDTO.club)!!,
+            birthDate = responseDTO.birthDate,
+            watchStyle = responseDTO.watchStyle,
         )
 
     fun toPatchUserAlarmResponse(responseDTO: PatchUserAlarmResponseDTO): PatchUserAlarmResponse =
@@ -81,42 +94,51 @@ object UserMapper {
     fun toGetUserProfileByIdResponse(responseDTO: GetUserProfileByIdResponseDTO): GetUserProfileByIdResponse =
         GetUserProfileByIdResponse(
             userId = responseDTO.userId,
+            nickName = responseDTO.nickName,
             email = responseDTO.email,
             profileImageUrl = responseDTO.profileImageUrl,
             gender = responseDTO.gender,
-            allAlarm = responseDTO.allAlarm,
-            chatAlarm = responseDTO.chatAlarm,
-            enrollAlarm = responseDTO.enrollAlarm,
-            eventAlarm = responseDTO.eventAlarm,
-            nickName = responseDTO.nickName,
-            favoriteClub = toClub(responseDTO.favoriteClub)!!,
             birthDate = responseDTO.birthDate,
             watchStyle = responseDTO.watchStyle,
+            club = toClub(responseDTO.club)!!,
+        )
+
+    fun toGetUserAlarmStateResponse(dto: GetUserAlarmResponseDto): GetUserAlarmResponse =
+        GetUserAlarmResponse(
+            allAlarm = dto.allAlarm,
+            chatAlarm = dto.chatAlarm,
+            enrollAlarm = dto.enrollAlarm,
+            eventAlarm = dto.eventAlarm,
         )
 
     fun toGetBlockedUserListResponse(dto: GetBlockedUserListResponseDTO): GetBlockedUserListResponse =
         GetBlockedUserListResponse(
-            userInfoList = dto.userInfoList.map { toGetUserProfileResponse(it) },
+            content = dto.content.map { toBlockedUserInfo(it) },
+            pageNumber = dto.pageNumber,
             totalPages = dto.totalPages,
             totalElements = dto.totalElements,
-            isFirst = dto.isFirst,
-            isLast = dto.isLast,
+            hasNext = dto.hasNext,
+        )
+
+    private fun toBlockedUserInfo(dto: BlockedUserInfoDto): BlockedUserInfo =
+        BlockedUserInfo(
+            blockId = dto.blockId,
+            userId = dto.userId,
+            nickName = dto.nickName,
+            profileImageUrl = dto.profileImageUrl,
+            blockedAt = dto.blockedAt,
         )
 
     fun toDeleteBlockedUserResponse(dto: DeleteBlockedUserResponseDTO): DeleteBlockedUserResponse =
         DeleteBlockedUserResponse(
-            state = dto.state,
+            targetUserId = dto.targetUserId,
+            message = dto.message,
         )
 
     fun toPostUserBlockResponse(dto: PostUserBlockResponseDTO): PostUserBlockResponse =
         PostUserBlockResponse(
-            state = dto.state,
-        )
-
-    fun toGetUnreadInfoResponse(dto: GetUnreadInfoResponseDTO): GetUnreadInfoResponse =
-        GetUnreadInfoResponse(
-            hasUnreadChat = dto.hasUnreadChat,
-            hasUnreadNotification = dto.hasUnreadNotification,
+            targetUserId = dto.targetUserId,
+            message = dto.message,
         )
 
     fun toDeleteUserAccountResponse(dto: DeleteUserAccountResponseDTO): DeleteUserAccountResponse =

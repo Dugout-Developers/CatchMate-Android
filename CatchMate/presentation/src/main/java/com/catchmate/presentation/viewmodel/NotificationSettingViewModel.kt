@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
+import com.catchmate.domain.usecase.user.GetUserAlarmResponseUseCase
 import com.catchmate.domain.usecase.user.PatchUserAlarmUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,10 +18,15 @@ class NotificationSettingViewModel
     @Inject
     constructor(
         private val patchUserAlarmUseCase: PatchUserAlarmUseCase,
+        private val getUserAlarmResponseUseCase: GetUserAlarmResponseUseCase,
     ) : ViewModel() {
         private val _patchUserAlarmResponse = MutableLiveData<PatchUserAlarmResponse>()
         val patchUserAlarmResponse: LiveData<PatchUserAlarmResponse>
             get() = _patchUserAlarmResponse
+
+        private val _getUserAlarmResponse = MutableLiveData<GetUserAlarmResponse>()
+        val getUserAlarmResponse: LiveData<GetUserAlarmResponse>
+            get() = _getUserAlarmResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -38,6 +45,22 @@ class NotificationSettingViewModel
                 result
                     .onSuccess { response ->
                         _patchUserAlarmResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
+
+        fun getUserAlarm() {
+            viewModelScope.launch {
+                val result = getUserAlarmResponseUseCase()
+                result
+                    .onSuccess { response ->
+                        _getUserAlarmResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

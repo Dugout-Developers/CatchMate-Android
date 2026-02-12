@@ -29,9 +29,12 @@ class ReceivedJoinViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
-        fun getAllReceivedEnroll(page: Int) {
+        fun getAllReceivedEnroll(
+            page: Int = 0,
+            size: Int = 10,
+        ) {
             viewModelScope.launch {
-                val result = getAllReceivedEnrollUseCase.getAllReceivedEnroll(page)
+                val result = getAllReceivedEnrollUseCase.getAllReceivedEnroll(page, size)
                 result
                     .onSuccess { response ->
                         _getAllReceivedEnrollResponse.value = response

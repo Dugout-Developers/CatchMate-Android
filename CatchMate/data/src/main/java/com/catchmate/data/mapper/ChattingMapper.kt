@@ -8,6 +8,7 @@ import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
+import com.catchmate.data.dto.chatting.LastMessageInfoDto
 import com.catchmate.data.dto.chatting.PatchChattingRoomImageResponseDTO
 import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toBoard
@@ -20,31 +21,41 @@ import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
+import com.catchmate.domain.model.chatting.LastMessageInfo
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 
 object ChattingMapper {
     fun toGetChattingRoomListResponse(dto: GetChattingRoomListResponseDTO): GetChattingRoomListResponse =
         GetChattingRoomListResponse(
-            chatRoomInfoList = dto.chatRoomInfoList.map { toChatRoomInfo(it) },
+            content = dto.content.map { toChatRoomInfo(it) },
+            pageNumber = dto.pageNumber,
             totalPages = dto.totalPages,
             totalElements = dto.totalElements,
-            isFirst = dto.isFirst,
-            isLast = dto.isLast,
+            hasNext = dto.hasNext,
         )
 
     fun toChatRoomInfo(dto: ChatRoomInfoDTO): ChatRoomInfo =
         ChatRoomInfo(
             chatRoomId = dto.chatRoomId,
-            boardInfo = toBoard(dto.boardInfo),
-            participantCount = dto.participantCount,
-            lastMessageAt = dto.lastMessageAt,
-            lastMessageContent = dto.lastMessageContent,
-            chatRoomImage = dto.chatRoomImage,
-            unreadMessageCount = dto.unreadMessageCount,
-            isNewChatRoom = dto.isNewChatRoom,
-            isNotificationEnabled = dto.isNotificationEnabled,
+            board = toBoard(dto.board),
+            lastMessage = toLastMessageInfo(dto.lastMessage),
+            createdAt = dto.createdAt,
         )
+
+    private fun toLastMessageInfo(dto: LastMessageInfoDto?): LastMessageInfo? =
+        dto?.let {
+            LastMessageInfo(
+                messageId = dto.messageId,
+                chatRoomId = dto.chatRoomId,
+                senderId = dto.senderId,
+                senderNickName = dto.senderNickName,
+                senderProfileImageUrl = dto.senderProfileImageUrl,
+                content = dto.content,
+                messageType = dto.messageType,
+                createdAt = dto.createdAt,
+            )
+        }
 
     fun toGetChattingHistoryResponse(dto: GetChattingHistoryResponseDTO): GetChattingHistoryResponse =
         GetChattingHistoryResponse(

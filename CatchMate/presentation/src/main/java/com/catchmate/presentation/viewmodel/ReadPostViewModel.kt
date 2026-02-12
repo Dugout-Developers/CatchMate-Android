@@ -10,7 +10,7 @@ import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
-import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
+import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enroll.PostEnrollResponse
 import com.catchmate.domain.model.enumclass.EnrollState
@@ -19,7 +19,7 @@ import com.catchmate.domain.usecase.board.GetBoardUseCase
 import com.catchmate.domain.usecase.board.PatchBoardLiftUpUseCase
 import com.catchmate.domain.usecase.board.PostBoardLikeUseCase
 import com.catchmate.domain.usecase.enroll.DeleteEnrollUseCase
-import com.catchmate.domain.usecase.enroll.GetRequestedEnrollUseCase
+import com.catchmate.domain.usecase.enroll.GetEnrollUseCase
 import com.catchmate.domain.usecase.enroll.PostEnrollUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ class ReadPostViewModel
         private val postBoardLikeUseCase: PostBoardLikeUseCase,
         private val postEnrollUseCase: PostEnrollUseCase,
         private val patchBoardLiftUpUseCase: PatchBoardLiftUpUseCase,
-        private val getRequestedEnrollUseCase: GetRequestedEnrollUseCase,
+        private val getEnrollUseCase: GetEnrollUseCase,
         private val deleteEnrollUseCase: DeleteEnrollUseCase,
     ) : ViewModel() {
         private val _getBoardResponse = MutableLiveData<GetBoardResponse>()
@@ -61,9 +61,9 @@ class ReadPostViewModel
         val patchBoardLiftUpResponse: LiveData<PatchBoardLiftUpResponse>
             get() = _patchBoardLiftUpResponse
 
-        private val _getRequestedEnroll = MutableLiveData<GetRequestedEnrollResponse>()
-        val getRequestedEnroll: LiveData<GetRequestedEnrollResponse>
-            get() = _getRequestedEnroll
+        private val _getEnroll = MutableLiveData<GetEnrollResponse>()
+        val getEnroll: LiveData<GetEnrollResponse>
+            get() = _getEnroll
 
         private val _deleteEnrollResponse = MutableLiveData<DeleteEnrollResponse>()
         val deleteEnrollResponse: LiveData<DeleteEnrollResponse>
@@ -178,12 +178,12 @@ class ReadPostViewModel
             }
         }
 
-        fun getRequestedEnroll(boardId: Long) {
+        fun getEnroll(enrollId: Long) {
             viewModelScope.launch {
-                val result = getRequestedEnrollUseCase(boardId)
+                val result = getEnrollUseCase(enrollId)
                 result
                     .onSuccess { response ->
-                        _getRequestedEnroll.value = response
+                        _getEnroll.value = response
                     }.onFailure { exception ->
                         when (exception) {
                             is ReissueFailureException -> {

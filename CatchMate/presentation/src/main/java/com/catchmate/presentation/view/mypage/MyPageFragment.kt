@@ -1,14 +1,18 @@
 package com.catchmate.presentation.view.mypage
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.user.PatchUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentMyPageBinding
 import com.catchmate.presentation.util.AgeUtils
@@ -26,30 +30,52 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
+
         initViewModel()
         localDataViewModel.getAccessToken()
-        initHeader()
-        initViews()
+        initHeader(null, null)
+
+        setFragmentResultListener("patchedUserInfo") { _, bundle ->
+            val userInfo = bundle.getSerializable("userInfo", PatchUserProfileResponse::class.java)
+
+            userInfo?.let { patchResponse ->
+                val updatedProfile =
+                    GetUserProfileResponse(
+                        patchResponse.userId,
+                        patchResponse.nickName,
+                        patchResponse.email,
+                        patchResponse.profileImageUrl,
+                        patchResponse.gender,
+                        patchResponse.birthDate,
+                        patchResponse.watchStyle,
+                        patchResponse.club,
+                    )
+                myPageViewModel.updateUserProfile(updatedProfile)
+                initHeader(patchResponse.email, patchResponse.nickName)
+            }
+        }
     }
 
-    private fun initHeader() {
+    private fun initHeader(
+        email: String?,
+        nickName: String?,
+    ) {
         binding.layoutHeaderMyPage.apply {
             tvSettingHeaderTitle.setText(R.string.mypage_title)
             imgbtnSettingHeaderSetting.setOnClickListener {
+                val currentEmail = email ?: myPageViewModel.userProfile.value?.email
+                val currentNickName = nickName ?: myPageViewModel.userProfile.value?.nickName
                 val bundle =
                     Bundle().apply {
-                        putString("email", myPageViewModel.userProfile.value?.email)
-                        putString("nickname", myPageViewModel.userProfile.value?.nickName)
-//                        putString("allAlarm", myPageViewModel.userProfile.value?.allAlarm)
-//                        putString("chatAlarm", myPageViewModel.userProfile.value?.chatAlarm)
-//                        putString("enrollAlarm", myPageViewModel.userProfile.value?.enrollAlarm)
-//                        putString("eventAlarm", myPageViewModel.userProfile.value?.eventAlarm)
+                        putString("email", currentEmail)
+                        putString("nickname", currentNickName)
                     }
                 findNavController().navigate(R.id.action_myPageFragment_to_myPageSettingFragment, bundle)
             }
@@ -89,17 +115,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
     private fun initViewModel() {
         myPageViewModel.userProfile.observe(viewLifecycleOwner) { response ->
             initProfile(response)
+            initViews()
+            initHeader(response.email, response.nickName)
         }
-//        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
-//            if (response.newEnrollCount == 0) {
-//                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
-//            } else {
-//                binding.tvMyPageReceivedJoinUnreadCount.apply {
-//                    visibility = View.VISIBLE
-//                    text = response.newEnrollCount.toString()
-//                }
-//            }
-//        }
+        myPageViewModel.newCount.observe(viewLifecycleOwner) { response ->
+            if (response.count == 0) {
+                binding.tvMyPageReceivedJoinUnreadCount.visibility = View.INVISIBLE
+            } else {
+                binding.tvMyPageReceivedJoinUnreadCount.apply {
+                    visibility = View.VISIBLE
+                    text = response.count.toString()
+                }
+            }
+        }
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
             if (token.isNullOrEmpty()) {
                 binding.apply {
@@ -110,7 +138,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
                 }
             } else {
                 myPageViewModel.getUserProfile()
-//                myPageViewModel.getEnrollNewCount()
+                myPageViewModel.getEnrollNewCount()
             }
         }
         myPageViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -149,7 +177,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(FragmentMyPageBinding
             }
             layoutMyPageReceivedJoin.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putInt("newCount", myPageViewModel.newCount.value?.newEnrollCount ?: 0)
+                bundle.putInt("newCount", myPageViewModel.newCount.value?.count ?: 0)
                 findNavController().navigate(R.id.action_myPageFragment_to_receivedJoinFragment, bundle)
             }
             tvMyPageInformation.setOnClickListener {

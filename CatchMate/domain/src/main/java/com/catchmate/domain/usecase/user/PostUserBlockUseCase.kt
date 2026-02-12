@@ -9,5 +9,5 @@ class PostUserBlockUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend operator fun invoke(blockedUserId: Long): Result<PostUserBlockResponse> = userRepository.postUserBlock(blockedUserId)
+        suspend operator fun invoke(targetUserId: Long): Result<PostUserBlockResponse> = userRepository.postUserBlock(targetUserId)
     }

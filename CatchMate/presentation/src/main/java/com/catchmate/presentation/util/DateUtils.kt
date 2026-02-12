@@ -173,4 +173,14 @@ object DateUtils {
         val now = Instant.now()
         return gameDate.isBefore(now)
     }
+
+    fun formatNotificationGameInfo(gameInfo: String): Triple<String, String, String> {
+        val list = gameInfo.split("·", "vs").map { it.trim() } // 1: date, 2: region, 3: homeClubName, 4: awayClubName 공백제거 필요
+
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val formattedDate = inputDateFormat.parse(list[0])
+        val outputDateFormat = SimpleDateFormat("MM.dd", Locale.KOREAN)
+
+        return Triple<String, String, String>(outputDateFormat.format(formattedDate), "", list[1])
+    }
 }

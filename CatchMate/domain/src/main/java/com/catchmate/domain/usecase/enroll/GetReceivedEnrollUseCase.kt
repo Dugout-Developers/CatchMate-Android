@@ -9,5 +9,9 @@ class GetReceivedEnrollUseCase
     constructor(
         private val enrollRepository: EnrollRepository,
     ) {
-        suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse> = enrollRepository.getReceivedEnroll(boardId)
+        suspend fun getReceivedEnroll(
+            boardId: Long,
+            page: Int,
+            size: Int,
+        ): Result<GetReceivedEnrollResponse> = enrollRepository.getReceivedEnroll(boardId, page, size)
     }

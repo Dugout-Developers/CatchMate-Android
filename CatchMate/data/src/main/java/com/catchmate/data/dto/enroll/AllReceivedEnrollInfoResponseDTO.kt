@@ -1,6 +1,6 @@
 package com.catchmate.data.dto.enroll
 
 data class AllReceivedEnrollInfoResponseDTO(
-    val boardInfo: EnrollBoardInfoDTO,
-    val enrollReceiveInfoList: List<ReceivedEnrollInfoDTO>,
+    val boardResponse: EnrollBoardInfoDTO,
+    val enrollResponses: List<ReceivedEnrollInfoDTO>,
 )

@@ -11,7 +11,10 @@ import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import okhttp3.MultipartBody
 
 interface ChattingRepository {
-    suspend fun getChattingRoomList(page: Int): Result<GetChattingRoomListResponse>
+    suspend fun getChattingRoomList(
+        page: Int,
+        size: Int,
+    ): Result<GetChattingRoomListResponse>
 
     suspend fun getChattingCrewList(chatRoomId: Long): Result<GetChattingCrewListResponse>
 

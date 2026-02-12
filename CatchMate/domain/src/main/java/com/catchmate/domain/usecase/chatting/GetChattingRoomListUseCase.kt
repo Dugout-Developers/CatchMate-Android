@@ -9,5 +9,8 @@ class GetChattingRoomListUseCase
     constructor(
         private val chattingRepository: ChattingRepository,
     ) {
-        suspend fun getChattingRoomList(page: Int): Result<GetChattingRoomListResponse> = chattingRepository.getChattingRoomList(page)
+        suspend fun getChattingRoomList(
+            page: Int,
+            size: Int,
+        ): Result<GetChattingRoomListResponse> = chattingRepository.getChattingRoomList(page, size)
     }

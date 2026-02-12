@@ -24,7 +24,7 @@ class SentJoinFragment :
     private val sentJoinViewModel: SentJoinViewModel by viewModels()
 
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
@@ -70,7 +70,7 @@ class SentJoinFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getRequestedEnrollList()
                         }
@@ -82,18 +82,18 @@ class SentJoinFragment :
 
     private fun initViewModel() {
         sentJoinViewModel.requestedEnrollList.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvSentJoinPostList.visibility = View.GONE
                 binding.layoutSentJoinNoList.visibility = View.VISIBLE
             } else {
                 binding.rvSentJoinPostList.visibility = View.VISIBLE
                 binding.layoutSentJoinNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    enrollList.addAll(response.enrollInfoList)
+                    enrollList.addAll(response.content)
                 }
                 val adapter = binding.rvSentJoinPostList.adapter as SentJoinAdapter
                 adapter.updateList(enrollList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false
@@ -118,7 +118,7 @@ class SentJoinFragment :
     }
 
     private fun getRequestedEnrollList() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         sentJoinViewModel.getRequestedEnrollList(currentPage)
         isApiCalled = true

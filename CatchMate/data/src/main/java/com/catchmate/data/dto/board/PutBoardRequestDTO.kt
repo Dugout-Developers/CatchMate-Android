@@ -8,5 +8,5 @@ data class PutBoardRequestDTO(
     val preferredGender: String?,
     val preferredAgeRange: List<String>?,
     val completed: Boolean,
-    val gameRequest: GameRequestDto,
+    val gameUpdateRequest: GameRequestDto,
 )

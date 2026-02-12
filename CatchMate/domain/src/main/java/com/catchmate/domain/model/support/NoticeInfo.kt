@@ -4,7 +4,6 @@ data class NoticeInfo(
     val noticeId: Long,
     val title: String,
     val content: String,
-    val userInfo: AdminUserInfo,
+    val writerNickname: String,
     val createdAt: String,
-    val updatedAt: String,
 )

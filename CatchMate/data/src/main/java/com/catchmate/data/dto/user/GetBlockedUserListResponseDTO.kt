@@ -1,9 +1,9 @@
 package com.catchmate.data.dto.user
 
 data class GetBlockedUserListResponseDTO(
-    val userInfoList: List<GetUserProfileResponseDTO>,
+    val content: List<BlockedUserInfoDto>,
+    val pageNumber: Int,
     val totalPages: Int,
     val totalElements: Int,
-    val isFirst: Boolean,
-    val isLast: Boolean,
+    val hasNext: Boolean,
 )

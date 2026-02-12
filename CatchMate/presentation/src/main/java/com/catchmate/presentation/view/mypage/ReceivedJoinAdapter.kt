@@ -31,7 +31,7 @@ class ReceivedJoinAdapter(
         val tvGameTime: TextView
         val tvGamePlace: TextView
         val tvBoardTitle: TextView
-        val imgbtnMove: ImageButton
+        val imgBtnMove: ImageButton
         val rvProfile: RecyclerView
 
         init {
@@ -40,7 +40,7 @@ class ReceivedJoinAdapter(
             tvGameTime = itemBinding.tvReceivedJoinItemTime
             tvGamePlace = itemBinding.tvReceivedJoinItemPlace
             tvBoardTitle = itemBinding.tvReceivedJoinItemTitle
-            imgbtnMove = itemBinding.imgbtnReceivedJoinItemMove
+            imgBtnMove = itemBinding.imgbtnReceivedJoinItemMove
             rvProfile = itemBinding.rvReceivedJoinItemProfile
 
             rvProfile.apply {
@@ -69,14 +69,14 @@ class ReceivedJoinAdapter(
         holder: ReceivedJoinViewHolder,
         position: Int,
     ) {
-        val boardInfo = list[position].boardInfo
-        val enrollReceivedInfoList = list[position].enrollReceiveInfoList
+        val boardInfo = list[position].boardResponse
+        val enrollReceivedInfoList = list[position].enrollResponses
 
         holder.apply {
-            val dateTime = DateUtils.formatISODateTime(boardInfo.gameInfo.gameStartDate!!)
+            val dateTime = DateUtils.formatISODateTime(boardInfo.gameResponse.gameStartDate!!)
             tvGameDate.text = dateTime.first
             tvGameTime.text = dateTime.second
-            tvGamePlace.text = boardInfo.gameInfo.location
+            tvGamePlace.text = boardInfo.gameResponse.location
             tvBoardTitle.text = boardInfo.title
 
             val adapter = rvProfile.adapter as ReceivedJoinProfileAdapter

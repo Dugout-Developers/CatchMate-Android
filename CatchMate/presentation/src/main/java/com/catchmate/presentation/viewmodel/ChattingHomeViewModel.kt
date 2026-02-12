@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
+import com.catchmate.domain.model.chatting.LastMessageInfo
 import com.catchmate.domain.usecase.chatting.GetChattingRoomListUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.presentation.BuildConfig
@@ -100,37 +101,37 @@ class ChattingHomeViewModel
         }
 
         private fun handleWebSocketOpened() {
-            topic =
-                stompClient?.topic("/topic/chatList")!!.subscribe { msg ->
-                    Log.i("✅ New Msg", msg.payload)
-                    val jsonObject = JSONObject(msg.payload)
-                    val chatRoomId = jsonObject.getString("chatRoomId").toLong()
-                    val content = jsonObject.getString("content")
-                    val sentTime = jsonObject.getString("sendTime")
-                    updateLastChat(chatRoomId, content, sentTime)
-                }
+//            topic =
+//                stompClient?.topic("/topic/chatList")!!.subscribe { msg ->
+//                    Log.i("✅ New Msg", msg.payload)
+//                    val jsonObject = JSONObject(msg.payload)
+//                    val chatRoomId = jsonObject.getString("chatRoomId").toLong()
+//                    val content = jsonObject.getString("content")
+//                    val sentTime = jsonObject.getString("sendTime")
+//                    updateLastChat(chatRoomId, content, sentTime)
+//                }
         }
 
-        private fun updateLastChat(
-            chatRoomId: Long,
-            newContent: String,
-            newSentTime: String,
-        ) {
-            val currentResponse = _getChattingRoomListResponse.value
-            val currentList = (currentResponse?.chatRoomInfoList ?: emptyList()).toMutableList()
-            val targetIndex = currentList.indexOfFirst { it.chatRoomId == chatRoomId }
-            if (currentList.isNotEmpty() && targetIndex != -1) { // 해당하는 채팅방이 현재 목록에 있을때만 반영되도록
-                currentList[targetIndex] =
-                    currentList[targetIndex].copy(
-                        lastMessageContent = newContent,
-                        lastMessageAt = newSentTime,
-                        isNewChatRoom = false,
-                        unreadMessageCount = currentList[targetIndex].unreadMessageCount + 1,
-                    )
-                val updatedResponse = currentResponse?.copy(chatRoomInfoList = currentList)!!
-                _getChattingRoomListResponse.postValue(updatedResponse)
-            }
-        }
+//        private fun updateLastChat(
+//            chatRoomId: Long,
+//            newContent: String,
+//            newSentTime: String,
+//        ) {
+//            val currentResponse = _getChattingRoomListResponse.value
+//            val currentList = (currentResponse?.chatRoomInfoList ?: emptyList()).toMutableList()
+//            val targetIndex = currentList.indexOfFirst { it.chatRoomId == chatRoomId }
+//            if (currentList.isNotEmpty() && targetIndex != -1) { // 해당하는 채팅방이 현재 목록에 있을때만 반영되도록
+//                currentList[targetIndex] =
+//                    currentList[targetIndex].copy(
+//                        lastMessageContent = newContent,
+//                        lastMessageAt = newSentTime,
+//                        isNewChatRoom = false,
+//                        unreadMessageCount = currentList[targetIndex].unreadMessageCount + 1,
+//                    )
+//                val updatedResponse = currentResponse?.copy(chatRoomInfoList = currentList)!!
+//                _getChattingRoomListResponse.postValue(updatedResponse)
+//            }
+//        }
 
         override fun onCleared() {
             super.onCleared()
@@ -138,9 +139,12 @@ class ChattingHomeViewModel
             stompClient?.disconnect()
         }
 
-        fun getChattingRoomList(page: Int) {
+        fun getChattingRoomList(
+            page: Int = 0,
+            size: Int = 20,
+        ) {
             viewModelScope.launch {
-                val result = getChattingRoomListUseCase.getChattingRoomList(page)
+                val result = getChattingRoomListUseCase.getChattingRoomList(page, size)
                 result
                     .onSuccess { response ->
                         _getChattingRoomListResponse.value = response

@@ -1,15 +1,17 @@
 package com.catchmate.data.mapper
 
+import com.catchmate.data.dto.board.BoardDTO
 import com.catchmate.data.dto.enroll.AllReceivedEnrollInfoResponseDTO
 import com.catchmate.data.dto.enroll.DeleteEnrollResponseDTO
 import com.catchmate.data.dto.enroll.EnrollBoardInfoDTO
 import com.catchmate.data.dto.enroll.EnrollInfoDTO
+import com.catchmate.data.dto.enroll.EnrollUserInfoDto
 import com.catchmate.data.dto.enroll.GameInfoDTO
 import com.catchmate.data.dto.enroll.GetAllReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetEnrollNewCountResponseDTO
+import com.catchmate.data.dto.enroll.GetEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetReceivedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.GetRequestedEnrollListResponseDTO
-import com.catchmate.data.dto.enroll.GetRequestedEnrollResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollAcceptResponseDTO
 import com.catchmate.data.dto.enroll.PatchEnrollRejectResponseDTO
 import com.catchmate.data.dto.enroll.PostEnrollRequestDTO
@@ -18,16 +20,18 @@ import com.catchmate.data.dto.enroll.ReceivedEnrollInfoDTO
 import com.catchmate.data.dto.enroll.ReceivedEnrollInfoResponseDTO
 import com.catchmate.data.dto.enroll.UserInfoDTO
 import com.catchmate.data.mapper.BoardMapper.toClub
+import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.enroll.AllReceivedEnrollInfoResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.EnrollBoardInfo
 import com.catchmate.domain.model.enroll.EnrollInfo
+import com.catchmate.domain.model.enroll.EnrollUserInfo
 import com.catchmate.domain.model.enroll.GameInfo
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -51,28 +55,45 @@ object EnrollMapper {
     fun toPatchEnrollRejectResponse(responseDTO: PatchEnrollRejectResponseDTO): PatchEnrollRejectResponse =
         PatchEnrollRejectResponse(
             enrollId = responseDTO.enrollId,
-            acceptStatus = responseDTO.acceptStatus,
+            message = responseDTO.message,
         )
 
     fun toPatchEnrollAcceptResponse(responseDTO: PatchEnrollAcceptResponseDTO): PatchEnrollAcceptResponse =
         PatchEnrollAcceptResponse(
             enrollId = responseDTO.enrollId,
-            acceptStatus = responseDTO.acceptStatus,
+            message = responseDTO.message,
         )
 
-    fun toGetRequestedEnrollResponse(dto: GetRequestedEnrollResponseDTO): GetRequestedEnrollResponse =
-        GetRequestedEnrollResponse(
+    fun toGetEnrollResponse(dto: GetEnrollResponseDTO): GetEnrollResponse =
+        GetEnrollResponse(
             enrollId = dto.enrollId,
+            acceptStatus = dto.acceptStatus,
             description = dto.description,
+            requestDate = dto.requestDate,
+            applicant = toUserInfo(dto.applicant),
+            boardResponse = toEnrollBoardResponse(dto.boardResponse),
+        )
+
+    private fun toEnrollBoardResponse(dto: BoardDTO): Board =
+        Board(
+            dto.boardId,
+            dto.title,
+            dto.content,
+            dto.currentPerson,
+            dto.maxPerson,
+            dto.bookMarked,
+            toClub(dto.cheerClub)!!,
+            toGameInfo(dto.gameResponse),
+            toUserInfo(dto.userResponse),
         )
 
     fun toGetRequestedEnrollListResponse(responseDTO: GetRequestedEnrollListResponseDTO): GetRequestedEnrollListResponse =
         GetRequestedEnrollListResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toEnrollInfo(it) },
+            content = responseDTO.content.map { toEnrollInfo(it) },
+            pageNumber = responseDTO.pageNumber,
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
         )
 
     private fun toEnrollInfo(dto: EnrollInfoDTO): EnrollInfo =
@@ -81,11 +102,10 @@ object EnrollMapper {
             acceptStatus = dto.acceptStatus,
             description = dto.description,
             requestDate = dto.requestDate,
-            userInfo = toEnrollUserInfo(dto.userInfo),
-            boardInfo = toEnrollBoardInfo(dto.boardInfo),
+            boardResponse = toEnrollBoardInfo(dto.boardResponse),
         )
 
-    private fun toEnrollUserInfo(dto: UserInfoDTO): UserInfo =
+    private fun toUserInfo(dto: UserInfoDTO): UserInfo =
         UserInfo(
             userId = dto.userId,
             nickName = dto.nickName,
@@ -102,17 +122,23 @@ object EnrollMapper {
             boardId = dto.boardId,
             title = dto.title,
             content = dto.content,
-            cheerClubId = dto.cheerClubId,
             currentPerson = dto.currentPerson,
             maxPerson = dto.maxPerson,
-            preferredGender = dto.preferredGender,
-            preferredAgeRange = dto.preferredAgeRange,
-            gameInfo = toGameInfo(dto.gameInfo),
-            liftUpDate = dto.liftUpDate,
-            userInfo = toEnrollUserInfo(dto.userInfo),
-            buttonStatus = dto.buttonStatus,
-            chatRoomId = dto.chatRoomId,
             bookMarked = dto.bookMarked,
+            cheerClub = toClub(dto.cheerClub)!!,
+            gameResponse = toGameInfo(dto.gameResponse),
+            userResponse = toUserInfo(dto.userResponse),
+        )
+
+    private fun toEnrollUserInfo(dto: EnrollUserInfoDto): EnrollUserInfo =
+        EnrollUserInfo(
+            userId = dto.userId,
+            nickname = dto.nickname,
+            profileImageUrl = dto.profileImageUrl,
+            gender = dto.gender,
+            ageRange = dto.ageRange,
+            favoriteClub = dto.favoriteClub,
+            watchStyle = dto.watchStyle,
         )
 
     private fun toGameInfo(dto: GameInfoDTO): GameInfo =
@@ -126,46 +152,49 @@ object EnrollMapper {
 
     fun toGetReceivedEnrollResponse(responseDTO: GetReceivedEnrollResponseDTO): GetReceivedEnrollResponse =
         GetReceivedEnrollResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toReceivedEnrollInfoResponse(it) },
+            content = responseDTO.content.map { toReceivedEnrollInfoResponse(it) },
+            pageNumber = responseDTO.pageNumber,
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
         )
 
     private fun toReceivedEnrollInfoResponse(dto: ReceivedEnrollInfoResponseDTO): ReceivedEnrollInfoResponse =
         ReceivedEnrollInfoResponse(
-            enrollReceiveInfoList = dto.enrollReceiveInfoList.map { toReceivedEnrollInfo(it) },
+            enrollId = dto.enrollId,
+            description = dto.description,
+            requestDate = dto.requestDate,
+            newEnroll = dto.newEnroll,
+            applicantResponse = toEnrollUserInfo(dto.applicantResponse),
         )
 
     private fun toReceivedEnrollInfo(dto: ReceivedEnrollInfoDTO): ReceivedEnrollInfo =
         ReceivedEnrollInfo(
             enrollId = dto.enrollId,
-            acceptStatus = dto.acceptStatus,
             description = dto.description,
+            newEnroll = dto.newEnroll,
             requestDate = dto.requestDate,
-            userInfo = toEnrollUserInfo(dto.userInfo),
-            new = dto.new,
+            applicant = toEnrollUserInfo(dto.applicant),
         )
 
     fun toGetAllReceivedEnrollResponse(responseDTO: GetAllReceivedEnrollResponseDTO): GetAllReceivedEnrollResponse =
         GetAllReceivedEnrollResponse(
-            enrollInfoList = responseDTO.enrollInfoList.map { toAllReceivedEnrollInfoResponse(it) },
+            content = responseDTO.content.map { toAllReceivedEnrollInfoResponse(it) },
+            pageNumber = responseDTO.pageNumber,
             totalPages = responseDTO.totalPages,
             totalElements = responseDTO.totalElements,
-            isFirst = responseDTO.isFirst,
-            isLast = responseDTO.isLast,
+            hasNext = responseDTO.hasNext,
         )
 
     private fun toAllReceivedEnrollInfoResponse(dto: AllReceivedEnrollInfoResponseDTO): AllReceivedEnrollInfoResponse =
         AllReceivedEnrollInfoResponse(
-            boardInfo = toEnrollBoardInfo(dto.boardInfo),
-            enrollReceiveInfoList = dto.enrollReceiveInfoList.map { toReceivedEnrollInfo(it) },
+            boardResponse = toEnrollBoardInfo(dto.boardResponse),
+            enrollResponses = dto.enrollResponses.map { toReceivedEnrollInfo(it) },
         )
 
     fun toGetEnrollNewCountResponse(responseDTO: GetEnrollNewCountResponseDTO): GetEnrollNewCountResponse =
         GetEnrollNewCountResponse(
-            newEnrollCount = responseDTO.newEnrollCount,
+            count = responseDTO.count,
         )
 
     fun toDeleteEnrollResponse(responseDTO: DeleteEnrollResponseDTO): DeleteEnrollResponse =

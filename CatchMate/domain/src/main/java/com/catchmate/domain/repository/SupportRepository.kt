@@ -13,12 +13,12 @@ interface SupportRepository {
 
     suspend fun postInquiry(request: PostInquiryRequest): Result<PostInquiryResponse>
 
-    suspend fun portUserReport(
-        reportedUserId: Long,
-        request: PostUserReportRequest,
-    ): Result<PostUserReportResponse>
+    suspend fun postUserReport(request: PostUserReportRequest): Result<PostUserReportResponse>
 
-    suspend fun getNoticeList(page: Int): Result<GetNoticeListResponse>
+    suspend fun getNoticeList(
+        page: Int,
+        size: Int,
+    ): Result<GetNoticeListResponse>
 
     suspend fun getNoticeDetail(noticeId: Long): Result<NoticeInfo>
 }

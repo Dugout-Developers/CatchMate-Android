@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.user.GetUnreadInfoResponse
-import com.catchmate.domain.usecase.user.GetUnreadInfoUseCase
+import com.catchmate.domain.model.notification.GetHasUnreadNotificationResponse
+import com.catchmate.domain.usecase.notification.GetHasUnreadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,11 +15,11 @@ import javax.inject.Inject
 class MainViewModel
     @Inject
     constructor(
-        private val getUnreadInfoUseCase: GetUnreadInfoUseCase,
+        private val getHasUnreadNotificationUseCase: GetHasUnreadNotificationUseCase,
     ) : ViewModel() {
-        private val _getUnreadInfoResponse = MutableLiveData<GetUnreadInfoResponse>()
-        val getUnreadInfoResponse: LiveData<GetUnreadInfoResponse>
-            get() = _getUnreadInfoResponse
+        private val _getHasUnreadNotificationResponse = MutableLiveData<GetHasUnreadNotificationResponse>()
+        val getHasUnreadNotificationResponse: LiveData<GetHasUnreadNotificationResponse>
+            get() = _getHasUnreadNotificationResponse
 
         private val _isGuestLogin = MutableLiveData<Boolean>()
         val isGuestLogin: LiveData<Boolean> get() = _isGuestLogin
@@ -36,12 +36,12 @@ class MainViewModel
             _isGuestLogin.value = isGuest
         }
 
-        fun getUnreadInfo() {
+        fun getHasUnreadNotification() {
             viewModelScope.launch {
-                val result = getUnreadInfoUseCase()
+                val result = getHasUnreadNotificationUseCase()
                 result
-                    .onSuccess { unreadInfo ->
-                        _getUnreadInfoResponse.value = unreadInfo
+                    .onSuccess { response ->
+                        _getHasUnreadNotificationResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

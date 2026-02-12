@@ -43,10 +43,11 @@ class MyPostViewModel
 
         fun getUserBoardList(
             userId: Long,
-            page: Int,
+            page: Int = 0,
+            size: Int = 10,
         ) {
             viewModelScope.launch {
-                val result = getUserBoardListUseCase.getUserBoardList(userId, page)
+                val result = getUserBoardListUseCase.getUserBoardList(userId, page, size)
                 result
                     .onSuccess { response ->
                         _getUserBoardListResponse.value = response
@@ -60,9 +61,9 @@ class MyPostViewModel
             }
         }
 
-        fun postUserBlock(blockedUserId: Long) {
+        fun postUserBlock(targetUserId: Long) {
             viewModelScope.launch {
-                val result = postUserBlockUseCase(blockedUserId)
+                val result = postUserBlockUseCase(targetUserId)
                 result
                     .onSuccess { response ->
                         _postUserBlockResponse.value = response

@@ -24,7 +24,7 @@ class ReceivedJoinFragment :
     private var newCount: Int = -1
     private val receivedJoinViewModel: ReceivedJoinViewModel by viewModels()
     private var currentPage: Int = 0
-    private var isLastPage = false
+    private var hasNext = true
     private var isLoading = false
     private var isApiCalled = false
     private var receivedJoinList: MutableList<AllReceivedEnrollInfoResponse> = mutableListOf()
@@ -76,7 +76,7 @@ class ReceivedJoinFragment :
                             (recyclerView.layoutManager as LinearLayoutManager)
                                 .findLastCompletelyVisibleItemPosition()
                         val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && !isLastPage && !isLoading) {
+                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
                             currentPage += 1
                             getAllReceivedEnroll()
                         }
@@ -87,7 +87,7 @@ class ReceivedJoinFragment :
     }
 
     private fun getAllReceivedEnroll() {
-        if (isLoading || isLastPage) return
+        if (isLoading || !hasNext) return
         isLoading = true
         receivedJoinViewModel.getAllReceivedEnroll(currentPage)
         isApiCalled = true
@@ -95,18 +95,18 @@ class ReceivedJoinFragment :
 
     private fun initViewModel() {
         receivedJoinViewModel.getAllReceivedEnrollResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.totalElements == 0) {
+            if (!response.hasNext && response.totalElements == 0) {
                 binding.rvReceivedJoinList.visibility = View.GONE
                 binding.layoutReceivedJoinNoList.visibility = View.VISIBLE
             } else {
                 binding.rvReceivedJoinList.visibility = View.VISIBLE
                 binding.layoutReceivedJoinNoList.visibility = View.GONE
                 if (isApiCalled) {
-                    receivedJoinList.addAll(response.enrollInfoList)
+                    receivedJoinList.addAll(response.content)
                 }
                 val adapter = binding.rvReceivedJoinList.adapter as ReceivedJoinAdapter
                 adapter.updateList(receivedJoinList)
-                isLastPage = response.isLast
+                hasNext = response.hasNext
                 isLoading = false
             }
             isApiCalled = false

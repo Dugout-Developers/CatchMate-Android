@@ -4,13 +4,14 @@ import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
 import com.catchmate.data.mapper.UserMapper.toGetCheckNicknameResponse
+import com.catchmate.data.mapper.UserMapper.toGetUserAlarmStateResponse
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.exception.UserBlockFailureException
 import com.catchmate.domain.model.user.DeleteBlockedUserResponse
 import com.catchmate.domain.model.user.DeleteUserAccountResponse
 import com.catchmate.domain.model.user.GetBlockedUserListResponse
 import com.catchmate.domain.model.user.GetCheckNicknameResponse
-import com.catchmate.domain.model.user.GetUnreadInfoResponse
+import com.catchmate.domain.model.user.GetUserAlarmResponse
 import com.catchmate.domain.model.user.GetUserProfileByIdResponse
 import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.model.user.PatchUserAlarmResponse
@@ -52,24 +53,27 @@ class UserRepositoryImpl
                 transform = { UserMapper.toGetUserProfileByIdResponse(it!!) },
             )
 
-        override suspend fun getBlockedUserList(page: Int): Result<GetBlockedUserListResponse> =
+        override suspend fun getBlockedUserList(
+            page: Int,
+            size: Int,
+        ): Result<GetBlockedUserListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.getBlockedUserList(page) },
+                apiFunction = { userApi.getBlockedUserList(page, size) },
                 transform = { UserMapper.toGetBlockedUserListResponse(it!!) },
             )
 
-        override suspend fun getUnreadInfo(): Result<GetUnreadInfoResponse> =
+        override suspend fun getUserAlarmState(): Result<GetUserAlarmResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.getUnreadInfo() },
-                transform = { UserMapper.toGetUnreadInfoResponse(it!!) },
+                apiFunction = { userApi.getUserAlarmState() },
+                transform = { toGetUserAlarmStateResponse(it!!) },
             )
 
-        override suspend fun postUserBlock(blockedUserId: Long): Result<PostUserBlockResponse> =
+        override suspend fun postUserBlock(targetUserId: Long): Result<PostUserBlockResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.postUserBlock(blockedUserId) },
+                apiFunction = { userApi.postUserBlock(targetUserId) },
                 transform = { UserMapper.toPostUserBlockResponse(it!!) },
                 errorHandler = { response, jsonObject ->
                     if (response.code() == 400) {
@@ -117,10 +121,10 @@ class UserRepositoryImpl
                 transform = { UserMapper.toPatchUserAlarmResponse(it!!) },
             )
 
-        override suspend fun deleteBlockedUser(blockedUserId: Long): Result<DeleteBlockedUserResponse> =
+        override suspend fun deleteBlockedUser(targetUserId: Long): Result<DeleteBlockedUserResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { userApi.deleteBlockedUser(blockedUserId) },
+                apiFunction = { userApi.deleteBlockedUser(targetUserId) },
                 transform = { UserMapper.toDeleteBlockedUserResponse(it!!) },
             )
 

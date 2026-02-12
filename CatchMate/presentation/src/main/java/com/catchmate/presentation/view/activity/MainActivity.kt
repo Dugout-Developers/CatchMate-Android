@@ -67,14 +67,12 @@ class MainActivity : AppCompatActivity() {
         }
         initNavController()
         initBottomNavigationView()
-        // 채팅 및 알림 뱃지 표시 중단
-//        observeChatNotifications()
+        observeResponse()
     }
 
-    private fun observeChatNotifications() {
-        mainViewModel.getUnreadInfoResponse.observe(this) { info ->
-            updateChatBadge(info.hasUnreadChat)
-            updateHomeNotificationBadge(info.hasUnreadNotification)
+    private fun observeResponse() {
+        mainViewModel.getHasUnreadNotificationResponse.observe(this) { response ->
+            updateHomeNotificationBadge(response.hasUnread)
         }
     }
 
@@ -237,7 +235,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshNotificationStatus() {
-        mainViewModel.getUnreadInfo()
+        mainViewModel.getHasUnreadNotification()
     }
 
     private fun updateHomeNotificationBadge(hasUnreadNotification: Boolean) {

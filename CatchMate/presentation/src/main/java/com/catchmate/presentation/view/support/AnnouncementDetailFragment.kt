@@ -46,7 +46,7 @@ class AnnouncementDetailFragment : BaseFragment<FragmentAnnouncementDetailBindin
                 binding.apply {
                     tvTitleAnnouncementDetail.text = response.title
                     tvContentAnnouncementDetail.text = response.content
-                    tvDateAnnouncementDetail.text = formatInquiryAnsweredDate(response.updatedAt)
+                    tvDateAnnouncementDetail.text = formatInquiryAnsweredDate(response.createdAt)
                 }
             }
         }

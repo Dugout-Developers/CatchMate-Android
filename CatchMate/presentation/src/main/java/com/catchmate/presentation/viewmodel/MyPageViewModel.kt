@@ -36,7 +36,12 @@ class MyPageViewModel
         val navigateToLogin: LiveData<Boolean>
             get() = _navigateToLogin
 
+        fun updateUserProfile(profile: GetUserProfileResponse) {
+            _userProfile.value = profile
+        }
+
         fun getUserProfile() {
+            if (_userProfile.value != null) return
             viewModelScope.launch {
                 val result = getUserProfileUseCase.getUserProfile()
                 result

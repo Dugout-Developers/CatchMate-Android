@@ -5,6 +5,9 @@ plugins {
 
 android {
     namespace = "com.catchmate.domain"
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+    }
 }
 
 dependencies {

@@ -54,8 +54,8 @@ class AccountInfoFragment : BaseFragment<FragmentAccountInfoBinding>(FragmentAcc
             tvAccountInfoEmail.text = email
             val targetResource =
                 when (provider) {
-                    "kakao" -> R.drawable.vec_login_kakao
-                    "naver" -> R.drawable.vec_login_naver
+                    "KAKAO" -> R.drawable.vec_login_kakao
+                    "NAVER" -> R.drawable.vec_login_naver
                     else -> R.drawable.vec_login_google
                 }
             Glide

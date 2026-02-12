@@ -7,9 +7,9 @@ import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.GetAllReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollNewCountResponse
+import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.GetReceivedEnrollResponse
 import com.catchmate.domain.model.enroll.GetRequestedEnrollListResponse
-import com.catchmate.domain.model.enroll.GetRequestedEnrollResponse
 import com.catchmate.domain.model.enroll.PatchEnrollAcceptResponse
 import com.catchmate.domain.model.enroll.PatchEnrollRejectResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -49,31 +49,41 @@ class EnrollRepositoryImpl
                 transform = { EnrollMapper.toPatchEnrollAcceptResponse(it!!) },
             )
 
-        override suspend fun getRequestedEnroll(boardId: Long): Result<GetRequestedEnrollResponse> =
+        override suspend fun getEnroll(enrollId: Long): Result<GetEnrollResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getRequestedEnroll(boardId) },
-                transform = { EnrollMapper.toGetRequestedEnrollResponse(it!!) },
+                apiFunction = { enrollApi.getEnroll(enrollId) },
+                transform = { EnrollMapper.toGetEnrollResponse(it!!) },
             )
 
-        override suspend fun getRequestedEnrollList(page: Int): Result<GetRequestedEnrollListResponse> =
+        override suspend fun getRequestedEnrollList(
+            page: Int,
+            size: Int,
+        ): Result<GetRequestedEnrollListResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getRequestedEnrollList(page) },
+                apiFunction = { enrollApi.getRequestedEnrollList(page, size) },
                 transform = { EnrollMapper.toGetRequestedEnrollListResponse(it!!) },
             )
 
-        override suspend fun getReceivedEnroll(boardId: Long): Result<GetReceivedEnrollResponse> =
+        override suspend fun getReceivedEnroll(
+            boardId: Long,
+            page: Int,
+            size: Int,
+        ): Result<GetReceivedEnrollResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getReceivedEnroll(boardId) },
+                apiFunction = { enrollApi.getReceivedEnroll(boardId, page, size) },
                 transform = { EnrollMapper.toGetReceivedEnrollResponse(it!!) },
             )
 
-        override suspend fun getAllReceivedEnroll(page: Int): Result<GetAllReceivedEnrollResponse> =
+        override suspend fun getAllReceivedEnroll(
+            page: Int,
+            size: Int,
+        ): Result<GetAllReceivedEnrollResponse> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { enrollApi.getAllReceivedEnroll(page) },
+                apiFunction = { enrollApi.getAllReceivedEnroll(page, size) },
                 transform = { EnrollMapper.toGetAllReceivedEnrollResponse(it!!) },
             )
 
