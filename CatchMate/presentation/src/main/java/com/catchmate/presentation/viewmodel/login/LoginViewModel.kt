@@ -65,9 +65,6 @@ class LoginViewModel
                             )
                         _event.emit(LoginEvent.NavigateToSignUp(userInfo))
                     } else {
-                        localDataUseCase.saveAccessToken(response.accessToken!!)
-                        localDataUseCase.saveRefreshToken(response.refreshToken!!)
-                        localDataUseCase.saveProvider(userData.provider)
                         _event.emit(LoginEvent.NavigateToHome)
                     }
                 }
