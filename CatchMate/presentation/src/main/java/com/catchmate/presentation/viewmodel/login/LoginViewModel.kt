@@ -11,7 +11,6 @@ import com.catchmate.domain.model.auth.UserData
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.domain.usecase.auth.PostAuthLoginUseCase
 import com.catchmate.domain.usecase.auth.SocialLoginUseCase
-import com.catchmate.domain.usecase.local.LocalDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +26,6 @@ class LoginViewModel
     constructor(
         private val socialLoginUseCase: SocialLoginUseCase,
         private val postAuthLoginUseCase: PostAuthLoginUseCase,
-        private val localDataUseCase: LocalDataUseCase,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(LoginUiState())
         val uiState = _uiState.asStateFlow()

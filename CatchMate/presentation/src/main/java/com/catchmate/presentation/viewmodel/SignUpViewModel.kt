@@ -22,15 +22,10 @@ class SignUpViewModel
     constructor(
         private val getCheckNicknameUseCase: GetCheckNicknameUseCase,
         private val postUserAdditionalInfoUseCase: PostUserAdditionalInfoUseCase,
-        private val patchUserAlarmUseCase: PatchUserAlarmUseCase,
     ) : ViewModel() {
         private val _getCheckNicknameResponse = MutableLiveData<GetCheckNicknameResponse>()
         val getCheckNicknameResponse: LiveData<GetCheckNicknameResponse>
             get() = _getCheckNicknameResponse
-
-        private val _patchUserAlarmResponse = MutableLiveData<PatchUserAlarmResponse>()
-        val patchUserAlarmResponse: LiveData<PatchUserAlarmResponse>
-            get() = _patchUserAlarmResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -66,25 +61,6 @@ class SignUpViewModel
                 result
                     .onSuccess { response ->
                         _userAdditionalInfoResponse.value = response
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            _errorMessage.value = exception.message
-                        }
-                    }
-            }
-        }
-
-        fun patchUserAlarm(
-            alarmType: String,
-            isEnabled: Boolean,
-        ) {
-            viewModelScope.launch {
-                val result = patchUserAlarmUseCase.patchUserAlarm(alarmType, isEnabled)
-                result
-                    .onSuccess { response ->
-                        _patchUserAlarmResponse.value = response
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true

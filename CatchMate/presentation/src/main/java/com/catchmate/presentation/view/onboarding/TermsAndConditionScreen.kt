@@ -27,30 +27,20 @@ import com.catchmate.presentation.view.theme.CatchMateTextStyle.HeadLine01Regula
 import com.catchmate.presentation.view.theme.Grey0
 import com.catchmate.presentation.view.theme.Grey500
 import com.catchmate.presentation.view.theme.Grey800
+import com.catchmate.presentation.viewmodel.onboarding.TermsAndConditionEvent
+import com.catchmate.presentation.viewmodel.onboarding.TermsAndConditionUiState
 
 @Composable
 fun TermsAndConditionScreen(
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
-    onAllAgreementRowCheckedChange: (Boolean) -> Unit,
-    onServiceTermsRowCheckedChange: (Boolean) -> Unit,
-    onPrivacyPolicyRowCheckedChange: (Boolean) -> Unit,
-    onMarketingPushRowCheckedChange: (Boolean) -> Unit,
-    onServiceTermsDetailClick: () -> Unit,
-    onPrivacyPolicyDetailClick: () -> Unit,
-    onMarketingPushDetailClick: () -> Unit,
-    isBottomButtonEnable: Boolean,
-    isAllAgreementChecked: Boolean,
-    isServiceTermsChecked: Boolean,
-    isPrivacyPolicyChecked: Boolean,
-    isMarketingPushChecked: Boolean,
+    uiState: TermsAndConditionUiState,
+    onEvent: (TermsAndConditionEvent) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = Grey0,
         topBar = {
             CatchMateTopAppBar(
-                onBackClick = onBackClick,
+                onBackClick = { onEvent(TermsAndConditionEvent.OnClickBack) },
                 actions = {
                     CatchMateIndicator(currentPage = 1)
                 }
@@ -64,8 +54,8 @@ fun TermsAndConditionScreen(
             ) {
                 CatchMateFilledButton(
                     text = stringResource(R.string.next),
-                    onClick = onNextClick,
-                    enabled = isBottomButtonEnable,
+                    onClick = { onEvent(TermsAndConditionEvent.OnClickNext) },
+                    enabled = uiState.isNextButtonEnable,
                     buttonType = ButtonType.FILLED,
                     modifier =
                         Modifier
@@ -104,8 +94,8 @@ fun TermsAndConditionScreen(
             }
             Spacer(Modifier.height(39.dp))
             TermsAndConditionAllAgreementRow(
-                isChecked = isAllAgreementChecked,
-                onCheckedChange = { onAllAgreementRowCheckedChange(!isAllAgreementChecked) },
+                isChecked = uiState.isAllAgreementChecked,
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleAllAgreement) },
             )
             Spacer(Modifier.height(20.dp))
             Text(
@@ -116,21 +106,21 @@ fun TermsAndConditionScreen(
             Spacer(Modifier.height(10.dp))
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_1),
-                isChecked = isServiceTermsChecked,
-                onCheckedChange = { onServiceTermsRowCheckedChange(!isServiceTermsChecked) },
-                onDetailClick = onServiceTermsDetailClick,
+                isChecked = uiState.isServiceTermsChecked,
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleServiceTerms) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickServiceDetail) },
             )
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_2),
-                isChecked = isPrivacyPolicyChecked,
-                onCheckedChange = { onPrivacyPolicyRowCheckedChange(!isPrivacyPolicyChecked) },
-                onDetailClick = onPrivacyPolicyDetailClick,
+                isChecked = uiState.isPrivacyPolicyChecked,
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnTogglePrivacyPolicy) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickPrivacyDetail) },
             )
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_3),
-                isChecked = isMarketingPushChecked,
-                onCheckedChange = { onMarketingPushRowCheckedChange(!isMarketingPushChecked) },
-                onDetailClick = onMarketingPushDetailClick,
+                isChecked = uiState.isMarketingPushChecked,
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleMarketingPush) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickMarketingDetail) },
             )
         }
     }
@@ -139,5 +129,8 @@ fun TermsAndConditionScreen(
 @Composable
 @Preview
 fun PreviewTermsAndConditionScreen() {
-    TermsAndConditionScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, true, false, false, false, false)
+    TermsAndConditionScreen(
+        uiState = TermsAndConditionUiState(),
+        onEvent = {}
+    )
 }

@@ -12,8 +12,6 @@ import com.catchmate.presentation.view.base.BaseFragment
 
 class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(FragmentTeamOnboardingBinding::inflate) {
     private lateinit var userInfo: PostUserAdditionalInfoRequest
-    private val pushNotificationAgree by lazy { arguments?.getBoolean("PushNotificationAgree") ?: false }
-
     private var selectedButton: TeamButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +103,6 @@ class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(Fragm
                     )
                 val bundle = Bundle()
                 bundle.putSerializable("userInfo", newUserInfo)
-                bundle.putBoolean("PushNotificationAgree", pushNotificationAgree)
                 findNavController().navigate(R.id.action_teamOnboardingFragment_to_cheerStyleOnboardingFragment, bundle)
             }
         }
