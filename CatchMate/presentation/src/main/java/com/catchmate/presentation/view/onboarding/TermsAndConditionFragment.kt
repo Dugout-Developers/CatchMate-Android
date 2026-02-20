@@ -14,9 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
+import com.catchmate.presentation.R
 import com.catchmate.presentation.view.base.BaseComposeFragment
 import com.catchmate.presentation.viewmodel.onboarding.TermsAndConditionSideEffect
 import com.catchmate.presentation.viewmodel.onboarding.TermsAndConditionViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,15 +50,16 @@ class TermsAndConditionFragment : BaseComposeFragment() {
                     when (effect) {
                         TermsAndConditionSideEffect.NavigateBack -> findNavController().popBackStack()
                         TermsAndConditionSideEffect.NavigateToNext -> {
-                            // 여기서 pushNotificationAgree alarm patch api 호출하기
-//                            val bundle = Bundle()
-//                            bundle.putSerializable("userInfo", userInfo)
-//                            bundle.putBoolean("PushNotificationAgree", isThirdChecked)
-//                            findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment, bundle)
+                            val bundle = Bundle()
+                            bundle.putSerializable("userInfo", userInfo)
+                            findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment, bundle)
                         }
                         is TermsAndConditionSideEffect.NavigateToWeb -> {
                             val intent = Intent(Intent.ACTION_VIEW, effect.url.toUri())
                             startActivity(intent)
+                        }
+                        is TermsAndConditionSideEffect.ShowError -> {
+                            Snackbar.make(requireView(), effect.message, Snackbar.LENGTH_SHORT).show()
                         }
                     }
                 }

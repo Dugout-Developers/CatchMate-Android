@@ -2,6 +2,7 @@ package com.catchmate.presentation.viewmodel.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.catchmate.domain.model.enumclass.AlarmType
 import com.catchmate.domain.usecase.user.PatchUserAlarmUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -30,7 +31,7 @@ class TermsAndConditionViewModel
 
                 TermsAndConditionEvent.OnClickNext ->
                     if (uiState.value.isNextButtonEnable) {
-                        sendSideEffect(TermsAndConditionSideEffect.NavigateToNext)
+                        patchUserAlarm()
                     }
 
                 TermsAndConditionEvent.OnClickServiceDetail ->
@@ -109,6 +110,22 @@ class TermsAndConditionViewModel
                     isAllAgreementChecked = isAllChecked,
                     isNextButtonEnable = isNextButtonEnabled
                 )
+            }
+        }
+
+        fun patchUserAlarm() {
+            viewModelScope.launch {
+                val result =
+                    patchUserAlarmUseCase.patchUserAlarm(
+                        AlarmType.ALL.name,
+                        uiState.value.isAllAgreementChecked,
+                    )
+                result
+                    .onSuccess { response ->
+                        sendSideEffect(TermsAndConditionSideEffect.NavigateToNext)
+                    }.onFailure { exception ->
+                        sendSideEffect(TermsAndConditionSideEffect.ShowError(exception.message.toString()))
+                    }
             }
         }
     }
