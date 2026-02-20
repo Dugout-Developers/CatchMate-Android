@@ -2,8 +2,6 @@ package com.catchmate.presentation.viewmodel.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catchmate.domain.model.enumclass.AlarmType
-import com.catchmate.domain.usecase.user.PatchUserAlarmUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TermsAndConditionViewModel
     @Inject
-    constructor(
-        private val patchUserAlarmUseCase: PatchUserAlarmUseCase,
-    ) : ViewModel() {
+    constructor() : ViewModel() {
         private val _uiState = MutableStateFlow(TermsAndConditionUiState())
         val uiState = _uiState.asStateFlow()
 
@@ -27,46 +23,46 @@ class TermsAndConditionViewModel
 
         fun onEvent(event: TermsAndConditionEvent) {
             when (event) {
-                TermsAndConditionEvent.OnClickBack -> sendSideEffect(TermsAndConditionSideEffect.NavigateBack)
+                TermsAndConditionEvent.OnBackClicked -> sendSideEffect(TermsAndConditionSideEffect.NavigateBack)
 
-                TermsAndConditionEvent.OnClickNext ->
-                    if (uiState.value.isNextButtonEnable) {
-                        patchUserAlarm()
+                TermsAndConditionEvent.OnSubmitClicked ->
+                    if (uiState.value.isSubmitButtonEnable) {
+                        sendSideEffect(TermsAndConditionSideEffect.NavigateToNext(uiState.value.isMarketingPushChecked))
                     }
 
-                TermsAndConditionEvent.OnClickServiceDetail ->
+                TermsAndConditionEvent.OnServiceDetailClicked ->
                     sendSideEffect(
                         TermsAndConditionSideEffect
                             .NavigateToWeb("https://catchmate.notion.site/19690504ec15803588a7ca69b306bf3e")
                     )
 
-                TermsAndConditionEvent.OnClickPrivacyDetail ->
+                TermsAndConditionEvent.OnPrivacyDetailClicked ->
                     sendSideEffect(
                         TermsAndConditionSideEffect
                             .NavigateToWeb("https://catchmate.notion.site/19690504ec15804ba163fcf8fa0ab937")
                     )
 
-                TermsAndConditionEvent.OnClickMarketingDetail ->
+                TermsAndConditionEvent.OnMarketingDetailClicked ->
                     sendSideEffect(
                         TermsAndConditionSideEffect
                             .NavigateToWeb("https://catchmate.notion.site/1b890504ec15805fa95ef55c252d53e6")
                     )
 
-                TermsAndConditionEvent.OnToggleAllAgreement -> toggleAllAgreement()
+                TermsAndConditionEvent.OnAllAgreementToggled -> toggleAllAgreement()
 
-                TermsAndConditionEvent.OnToggleServiceTerms -> {
+                TermsAndConditionEvent.OnServiceTermsToggled -> {
                     updateCheckState {
                         it.copy(isServiceTermsChecked = !it.isServiceTermsChecked)
                     }
                 }
 
-                TermsAndConditionEvent.OnTogglePrivacyPolicy -> {
+                TermsAndConditionEvent.OnPrivacyPolicyToggled -> {
                     updateCheckState {
                         it.copy(isPrivacyPolicyChecked = !it.isPrivacyPolicyChecked)
                     }
                 }
 
-                TermsAndConditionEvent.OnToggleMarketingPush -> {
+                TermsAndConditionEvent.OnMarketingPushToggled -> {
                     updateCheckState {
                         it.copy(isMarketingPushChecked = !it.isMarketingPushChecked)
                     }
@@ -88,7 +84,7 @@ class TermsAndConditionViewModel
                     isServiceTermsChecked = newValue,
                     isPrivacyPolicyChecked = newValue,
                     isMarketingPushChecked = newValue,
-                    isNextButtonEnable = newValue,
+                    isSubmitButtonEnable = newValue,
                 )
             }
         }
@@ -108,24 +104,8 @@ class TermsAndConditionViewModel
 
                 newState.copy(
                     isAllAgreementChecked = isAllChecked,
-                    isNextButtonEnable = isNextButtonEnabled
+                    isSubmitButtonEnable = isNextButtonEnabled
                 )
-            }
-        }
-
-        fun patchUserAlarm() {
-            viewModelScope.launch {
-                val result =
-                    patchUserAlarmUseCase.patchUserAlarm(
-                        AlarmType.ALL.name,
-                        uiState.value.isAllAgreementChecked,
-                    )
-                result
-                    .onSuccess { response ->
-                        sendSideEffect(TermsAndConditionSideEffect.NavigateToNext)
-                    }.onFailure { exception ->
-                        sendSideEffect(TermsAndConditionSideEffect.ShowError(exception.message.toString()))
-                    }
             }
         }
     }

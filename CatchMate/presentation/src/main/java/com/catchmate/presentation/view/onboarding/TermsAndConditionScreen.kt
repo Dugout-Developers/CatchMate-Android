@@ -40,7 +40,7 @@ fun TermsAndConditionScreen(
         containerColor = Grey0,
         topBar = {
             CatchMateTopAppBar(
-                onBackClick = { onEvent(TermsAndConditionEvent.OnClickBack) },
+                onBackClick = { onEvent(TermsAndConditionEvent.OnBackClicked) },
                 actions = {
                     CatchMateIndicator(currentPage = 1)
                 }
@@ -54,8 +54,8 @@ fun TermsAndConditionScreen(
             ) {
                 CatchMateFilledButton(
                     text = stringResource(R.string.next),
-                    onClick = { onEvent(TermsAndConditionEvent.OnClickNext) },
-                    enabled = uiState.isNextButtonEnable,
+                    onClick = { onEvent(TermsAndConditionEvent.OnSubmitClicked) },
+                    enabled = uiState.isSubmitButtonEnable,
                     buttonType = ButtonType.FILLED,
                     modifier =
                         Modifier
@@ -95,7 +95,7 @@ fun TermsAndConditionScreen(
             Spacer(Modifier.height(39.dp))
             TermsAndConditionAllAgreementRow(
                 isChecked = uiState.isAllAgreementChecked,
-                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleAllAgreement) },
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnAllAgreementToggled) },
             )
             Spacer(Modifier.height(20.dp))
             Text(
@@ -107,20 +107,20 @@ fun TermsAndConditionScreen(
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_1),
                 isChecked = uiState.isServiceTermsChecked,
-                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleServiceTerms) },
-                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickServiceDetail) },
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnServiceTermsToggled) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnServiceDetailClicked) },
             )
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_2),
                 isChecked = uiState.isPrivacyPolicyChecked,
-                onCheckedChange = { onEvent(TermsAndConditionEvent.OnTogglePrivacyPolicy) },
-                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickPrivacyDetail) },
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnPrivacyPolicyToggled) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnPrivacyDetailClicked) },
             )
             TermsAndConditionCheckRow(
                 text = stringResource(R.string.tac_content_3),
                 isChecked = uiState.isMarketingPushChecked,
-                onCheckedChange = { onEvent(TermsAndConditionEvent.OnToggleMarketingPush) },
-                onDetailClick = { onEvent(TermsAndConditionEvent.OnClickMarketingDetail) },
+                onCheckedChange = { onEvent(TermsAndConditionEvent.OnMarketingPushToggled) },
+                onDetailClick = { onEvent(TermsAndConditionEvent.OnMarketingDetailClicked) },
             )
         }
     }

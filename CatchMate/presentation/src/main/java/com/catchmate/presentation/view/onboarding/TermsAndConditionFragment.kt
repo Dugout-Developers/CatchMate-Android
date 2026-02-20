@@ -49,9 +49,10 @@ class TermsAndConditionFragment : BaseComposeFragment() {
                 termsAndConditionViewModel.sideEffect.collect { effect ->
                     when (effect) {
                         TermsAndConditionSideEffect.NavigateBack -> findNavController().popBackStack()
-                        TermsAndConditionSideEffect.NavigateToNext -> {
+                        is TermsAndConditionSideEffect.NavigateToNext -> {
                             val bundle = Bundle()
                             bundle.putSerializable("userInfo", userInfo)
+                            bundle.putBoolean("isMarketingPushChecked", effect.isMarketingPushChecked)
                             findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment, bundle)
                         }
                         is TermsAndConditionSideEffect.NavigateToWeb -> {

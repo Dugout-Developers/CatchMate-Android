@@ -15,12 +15,12 @@ import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.catchmate.presentation.viewmodel.MainViewModel
-import com.catchmate.presentation.viewmodel.SignUpViewModel
+import com.catchmate.presentation.viewmodel.onboarding.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBinding>(FragmentCheerStyleOnboardingBinding::inflate) {
-    private val signUpViewModel: SignUpViewModel by viewModels()
+//    private val signUpViewModel: SignUpViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -90,7 +90,7 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
                                     .replace(" 스타일", "")
                             },
                     )
-                signUpViewModel.postUserAdditionalInfo(newUserInfo)
+//                signUpViewModel.postUserAdditionalInfo(newUserInfo)
             }
         }
     }
@@ -127,33 +127,33 @@ class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBi
     }
 
     private fun initViewModel() {
-        signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.i("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
-                localDataViewModel.saveAccessToken(response.accessToken)
-                localDataViewModel.saveRefreshToken(response.refreshToken)
-                localDataViewModel.saveUserId(response.userId)
-                localDataViewModel.saveProvider(userInfo.provider)
-                mainViewModel.setGuestLogin(false)
-                findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
-            }
-        }
-        signUpViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
-            if (isTrue) {
-                if (isTrue) {
-                    val navOptions =
-                        NavOptions
-                            .Builder()
-                            .setPopUpTo(R.id.cheerStyleOnboardingFragment, true)
-                            .build()
-                    val bundle = Bundle()
-                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
-                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, bundle, navOptions)
-                }
-            }
-        }
-        signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Log.i("SIGN UP ERR", message.toString())
-        }
+//        signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
+//            if (response != null) {
+//                Log.i("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
+//                localDataViewModel.saveAccessToken(response.accessToken)
+//                localDataViewModel.saveRefreshToken(response.refreshToken)
+//                localDataViewModel.saveUserId(response.userId)
+//                localDataViewModel.saveProvider(userInfo.provider)
+//                mainViewModel.setGuestLogin(false)
+//                findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
+//            }
+//        }
+//        signUpViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
+//            if (isTrue) {
+//                if (isTrue) {
+//                    val navOptions =
+//                        NavOptions
+//                            .Builder()
+//                            .setPopUpTo(R.id.cheerStyleOnboardingFragment, true)
+//                            .build()
+//                    val bundle = Bundle()
+//                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+//                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, bundle, navOptions)
+//                }
+//            }
+//        }
+//        signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+//            Log.i("SIGN UP ERR", message.toString())
+//        }
     }
 }
