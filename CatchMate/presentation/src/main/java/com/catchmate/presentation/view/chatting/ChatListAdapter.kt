@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.chatting.ChatMessageInfo
+import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
+import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.enumclass.ChatMessageType
-import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.ItemReceivedChatBinding
 import com.catchmate.presentation.databinding.ItemSendChatBinding
@@ -19,34 +19,34 @@ import com.catchmate.presentation.util.DateUtils.formatChatSendTime
 
 class ChatListAdapter(
     private val userId: Long,
-    private val chattingCrewList: List<GetUserProfileResponse>,
-) : ListAdapter<ChatMessageInfo, RecyclerView.ViewHolder>(diffUtil) {
+    private val chattingCrewList: List<GetChattingCrewListResponse>,
+) : ListAdapter<GetChattingMessagesResponse, RecyclerView.ViewHolder>(diffUtil) {
     inner class SendChatViewHolder(
         private val binding: ItemSendChatBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatMessageInfo: ChatMessageInfo) {
-            binding.tvSendChatMessage.text = chatMessageInfo.content
-            binding.tvSendChatTime.text = formatChatSendTime(chatMessageInfo.id?.date!!)
+        fun bind(chat: GetChattingMessagesResponse) {
+            binding.tvSendChatMessage.text = chat.content
+            binding.tvSendChatTime.text = formatChatSendTime(chat.createdAt)
         }
     }
 
     inner class ReceivedChatViewHolder(
         private val binding: ItemReceivedChatBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatMessageInfo: ChatMessageInfo) {
+        fun bind(chat: GetChattingMessagesResponse) {
             // 현재 메시지가 리스트의 마지막인지 확인
             val isLastMessage = absoluteAdapterPosition == currentList.lastIndex
             // 현재 메시지와 다음 메시지의 senderId가 같은지 비교
             val isSameSenderAsNext =
                 absoluteAdapterPosition < currentList.lastIndex &&
-                    currentList[absoluteAdapterPosition + 1].senderId == chatMessageInfo.senderId
+                    currentList[absoluteAdapterPosition + 1].senderId == chat.senderId
 
             if (isLastMessage || !isSameSenderAsNext) {
                 // 마지막 메시지(서버에서 주는 데이터를 역순으로 스크롤하게 출력했기 때문에 마지막 메시지인지 판단)이거나 다음 메시지와 보낸 사람이 다르면 프로필과 닉네임 표시
                 binding.ivReceivedChatProfile.visibility = View.VISIBLE
                 binding.tvReceivedChatNickname.visibility = View.VISIBLE
                 val currentUserInfo =
-                    chattingCrewList.firstOrNull { it.userId == chatMessageInfo.senderId }
+                    chattingCrewList.firstOrNull { it.userId == chat.senderId }
                 binding.tvReceivedChatNickname.text = currentUserInfo?.nickName ?: "알수없음"
                 Glide
                     .with(binding.root)
@@ -58,16 +58,16 @@ class ChatListAdapter(
                 binding.ivReceivedChatProfile.visibility = View.GONE
                 binding.tvReceivedChatNickname.visibility = View.GONE
             }
-            binding.tvReceivedChatMessage.text = chatMessageInfo.content
-            binding.tvReceivedChatTime.text = formatChatSendTime(chatMessageInfo.id?.date!!)
+            binding.tvReceivedChatMessage.text = chat.content
+            binding.tvReceivedChatTime.text = formatChatSendTime(chat.createdAt)
         }
     }
 
     inner class ChattingDateViewHolder(
         private val binding: ViewChattingDateBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatMessageInfo: ChatMessageInfo) {
-            binding.tvChattingDate.text = chatMessageInfo.content
+        fun bind(chat: GetChattingMessagesResponse) {
+            binding.tvChattingDate.text = chat.content
         }
     }
 
@@ -75,11 +75,11 @@ class ChatListAdapter(
         private val binding: ViewChattingParticipantAlertBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            chatMessageInfo: ChatMessageInfo,
+            chat: GetChattingMessagesResponse,
             viewType: Int,
         ) {
             val nickname =
-                chattingCrewList.firstOrNull { it.userId == chatMessageInfo.senderId }?.nickName ?: "알수없음"
+                chattingCrewList.firstOrNull { it.userId == chat.senderId }?.nickName ?: "알수없음"
             val message =
                 if (viewType == ENTER) {
                     "$nickname 님이 채팅에 참여했어요"
@@ -150,7 +150,7 @@ class ChatListAdapter(
 
     override fun getItemViewType(position: Int): Int =
         when (currentList[position].messageType) {
-            ChatMessageType.TALK.name -> {
+            ChatMessageType.TEXT.name -> {
                 if (currentList[position].senderId == userId) {
                     MY_CHAT
                 } else {
@@ -173,15 +173,15 @@ class ChatListAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<ChatMessageInfo>() {
+            object : DiffUtil.ItemCallback<GetChattingMessagesResponse>() {
                 override fun areItemsTheSame(
-                    oldItem: ChatMessageInfo,
-                    newItem: ChatMessageInfo,
+                    oldItem: GetChattingMessagesResponse,
+                    newItem: GetChattingMessagesResponse,
                 ): Boolean = oldItem == newItem
 
                 override fun areContentsTheSame(
-                    oldItem: ChatMessageInfo,
-                    newItem: ChatMessageInfo,
+                    oldItem: GetChattingMessagesResponse,
+                    newItem: GetChattingMessagesResponse,
                 ): Boolean = oldItem == newItem
             }
 

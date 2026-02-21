@@ -8,7 +8,7 @@ import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
-import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
+import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
@@ -34,11 +34,15 @@ class ChattingRepositoryImpl
                 transform = { ChattingMapper.toGetChattingRoomListResponse(it!!) },
             )
 
-        override suspend fun getChattingCrewList(chatRoomId: Long): Result<GetChattingCrewListResponse> =
+        override suspend fun getChattingCrewList(chatRoomId: Long): Result<List<GetChattingCrewListResponse>> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { chattingApi.getChattingCrewList(chatRoomId) },
-                transform = { ChattingMapper.toGetChattingCrewListResponse(it!!) },
+                transform = { list ->
+                    list?.map { crew ->
+                        ChattingMapper.toGetChattingCrewListResponse(crew)
+                    } ?: emptyList()
+                },
             )
 
         override suspend fun getChattingRoomInfo(chatRoomId: Long): Result<ChatRoomInfo> =
@@ -85,14 +89,18 @@ class ChattingRepositoryImpl
                 transform = { ChattingMapper.toDeleteChattingCrewKickOutResponse(it!!) },
             )
 
-        override suspend fun getChattingHistory(
+        override suspend fun getChattingMessages(
             chatRoomId: Long,
-            lastMessageId: String?,
-            size: Int?,
-        ): Result<GetChattingHistoryResponse> =
+            lastMessageId: Long?,
+            size: Int,
+        ): Result<List<GetChattingMessagesResponse>> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.getChattingHistory(chatRoomId, lastMessageId, size) },
-                transform = { ChattingMapper.toGetChattingHistoryResponse(it!!) },
+                apiFunction = { chattingApi.getChattingMessages(chatRoomId, lastMessageId, size) },
+                transform = { list ->
+                    list?.map { message ->
+                        ChattingMapper.toGetChattingHistoryResponse(message)
+                    } ?: emptyList()
+                },
             )
     }

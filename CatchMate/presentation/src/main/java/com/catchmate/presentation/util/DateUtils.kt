@@ -5,7 +5,6 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
@@ -152,20 +151,26 @@ object DateUtils {
 
     // 채팅 전송 시간 포맷하는 함수
     fun formatChatSendTime(dateTime: String): String {
-        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val parsedTime =
-            ZonedDateTime
-                .parse(dateTime, formatter)
-                .withZoneSameInstant(ZoneId.of("Asia/Seoul")) // 시스템 시간대로 변환
+        val tFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val spaceFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val outputFormatter = DateTimeFormatter.ofPattern("a h:mm")
+        return try {
+            // 시간대 정보가 없는 문자열을 LocalDateTime으로 파싱
+            val localDateTime =
+                if (dateTime.contains("T")) {
+                    LocalDateTime.parse(dateTime)
+                } else {
+                    LocalDateTime.parse(dateTime, spaceFormatter)
+                }
 
-        val outputFormatter = DateTimeFormatter.ofPattern("a h:mm") // "오전 4:55" 형식
-        return parsedTime.format(outputFormatter)
-    }
-
-    // 채팅 수신 시 날짜값 포맷하는 함수
-    fun getCurrentTimeFormatted(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-        return ZonedDateTime.now().format(formatter)
+            localDateTime
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                .format(outputFormatter)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "" // 에러 발생 시 빈 문자열 또는 기본값 반환
+        }
     }
 
     fun checkIsFinishedGame(dateTime: String): Boolean {

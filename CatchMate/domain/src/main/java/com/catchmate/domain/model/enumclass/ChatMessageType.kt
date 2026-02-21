@@ -5,4 +5,5 @@ enum class ChatMessageType {
     DATE,
     ENTER,
     LEAVE,
+    TEXT,
 }

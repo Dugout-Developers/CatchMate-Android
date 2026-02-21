@@ -4,7 +4,7 @@ import com.catchmate.data.dto.chatting.ChatRoomInfoDTO
 import com.catchmate.data.dto.chatting.DeleteChattingCrewKickOutResponseDTO
 import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
-import com.catchmate.data.dto.chatting.GetChattingHistoryResponseDTO
+import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import com.catchmate.data.dto.chatting.PatchChattingRoomImageResponseDTO
 import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
@@ -26,10 +26,10 @@ interface ChattingService {
         @Query("size") size: Int,
     ): Response<GetChattingRoomListResponseDTO?>
 
-    @GET("chat-rooms/{chatRoomId}/user-list")
+    @GET("api/chat/rooms/{chatRoomId}/members")
     suspend fun getChattingCrewList(
         @Path("chatRoomId") chatRoomId: Long,
-    ): Response<GetChattingCrewListResponseDTO?>
+    ): Response<List<GetChattingCrewListResponseDTO>?>
 
     @GET("chat-rooms/{chatRoomId}")
     suspend fun getChattingRoomInfo(
@@ -60,10 +60,10 @@ interface ChattingService {
         @Path("userId") userId: Long,
     ): Response<DeleteChattingCrewKickOutResponseDTO?>
 
-    @GET("chats/{chatRoomId}")
-    suspend fun getChattingHistory(
-        @Path("chatRoomId") chatRoomId: Long,
-        @Query("lastMessageId") lastMessageId: String?,
-        @Query("size") size: Int?, // default = 20
-    ): Response<GetChattingHistoryResponseDTO?>
+    @GET("api/chat/rooms/{roomId}/messages")
+    suspend fun getChattingMessages(
+        @Path("roomId") roomId: Long,
+        @Query("lastMessageId") lastMessageId: Long?,
+        @Query("size") size: Int, // default = 20
+    ): Response<List<GetChattingMessagesResponseDTO>?>
 }
