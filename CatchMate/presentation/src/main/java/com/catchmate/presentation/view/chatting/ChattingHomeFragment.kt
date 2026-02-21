@@ -20,7 +20,6 @@ import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +31,6 @@ class ChattingHomeFragment :
     OnItemSwipeListener,
     OnListItemAllRemovedListener {
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
     private var currentPage: Int = 0
     private var hasNext = true
     private var isLoading = false
@@ -51,7 +49,6 @@ class ChattingHomeFragment :
             val deletedChatRoomId = bundle.getLong("chatRoomId")
             deleteChatRoom(deletedChatRoomId)
         }
-        localDataViewModel.getAccessToken()
         initHeader()
         initRecyclerView()
         initViewModel()
@@ -93,9 +90,6 @@ class ChattingHomeFragment :
     }
 
     private fun initViewModel() {
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-//            chattingHomeViewModel.connectToWebSocket(token)
-        }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             isLoading = false
             if (!response.hasNext && response.totalElements == 0) {

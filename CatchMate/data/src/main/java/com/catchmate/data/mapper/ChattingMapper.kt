@@ -40,6 +40,7 @@ object ChattingMapper {
             chatRoomId = dto.chatRoomId,
             board = toBoard(dto.board),
             lastMessage = toLastMessageInfo(dto.lastMessage),
+            unreadCount = dto.unreadCount,
             createdAt = dto.createdAt,
         )
 

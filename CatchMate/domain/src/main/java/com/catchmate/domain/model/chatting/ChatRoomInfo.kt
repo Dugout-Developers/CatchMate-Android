@@ -6,5 +6,6 @@ data class ChatRoomInfo(
     val chatRoomId: Long,
     val board: Board,
     val lastMessage: LastMessageInfo?,
+    val unreadCount: Long,
     val createdAt: String,
 )

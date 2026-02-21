@@ -95,28 +95,23 @@ class ChattingRoomListAdapter(
                     )
 
                 tvChattingItemTitle.text = chatRoomInfo.board.title
+                tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.createdAt)
                 if (chatRoomInfo.lastMessage == null) {
                     tvChattingItemNew.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.visibility = View.GONE
+                    tvChattingItemLastChat.text = root.context.getString(R.string.chatting_start_message)
+                    tvChattingItemUnreadMessageCount.visibility = View.GONE
                 } else {
                     tvChattingItemNew.visibility = View.GONE
                     tvChattingItemPeopleCount.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.text = chatRoomInfo.board.currentPerson.toString()
-                }
-
-                if (chatRoomInfo.lastMessage == null) {
-                    tvChattingItemLastChat.text = root.context.getString(R.string.chatting_start_message)
-                    tvChattingItemTime.text = "방금"
-                    tvChattingItemUnreadMessageCount.visibility = View.GONE
-                } else {
                     tvChattingItemLastChat.text = chatRoomInfo.lastMessage?.content
-                    tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.lastMessage?.createdAt!!)
-//                    if (chatRoomInfo.unreadMessageCount == 0) {
-//                        tvChattingItemUnreadMessageCount.visibility = View.GONE
-//                    } else {
-//                        tvChattingItemUnreadMessageCount.visibility = View.VISIBLE
-//                        tvChattingItemUnreadMessageCount.text = chatRoomInfo.unreadMessageCount.toString()
-//                    }
+                    if (chatRoomInfo.unreadCount == 0L) {
+                        tvChattingItemUnreadMessageCount.visibility = View.GONE
+                    } else {
+                        tvChattingItemUnreadMessageCount.visibility = View.VISIBLE
+                        tvChattingItemUnreadMessageCount.text = chatRoomInfo.unreadCount.toString()
+                    }
                 }
             }
         }
