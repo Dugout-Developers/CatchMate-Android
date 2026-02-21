@@ -64,7 +64,7 @@ interface BoardService {
         @Path("boardId") boardId: Long,
     ): Response<GetBoardResponseDTO?>
 
-    @GET("api/bookmarks/me")
+    @GET("api/bookmarks")
     suspend fun getLikedBoard(
         @Query("page") page: Int,
         @Query("size") size: Int = 10,
