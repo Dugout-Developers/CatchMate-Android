@@ -1,5 +1,9 @@
 package com.catchmate.domain.model.chatting
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class LastMessageInfo(
     val messageId: Long,
     val chatRoomId: Long,
@@ -9,4 +13,4 @@ data class LastMessageInfo(
     val content: String,
     val messageType: String,
     val createdAt: String,
-)
+) : Parcelable

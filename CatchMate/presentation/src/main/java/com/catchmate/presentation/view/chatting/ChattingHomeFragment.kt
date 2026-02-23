@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
@@ -52,28 +53,20 @@ class ChattingHomeFragment :
         initHeader()
         initRecyclerView()
         initViewModel()
-
-        if (isFirstLoad) {
-            getChattingRoomList()
-            isFirstLoad = false
-        }
 //        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     override fun onResume() {
         super.onResume()
-        // 화면이 다시 보일 때만 새로고침 (최초 실행 시에는 제외)
-        if (!isFirstLoad) {
-            Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
-            // 페이지 초기화
-            currentPage = 0
-            hasNext = true
-            isLoading = false
+        Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
+        // 페이지 초기화
+        currentPage = 0
+        hasNext = true
+        isLoading = false
 
-            chattingRoomListAdapter.submitList(emptyList())
-            // 채팅방 목록 새로 불러오기
-            getChattingRoomList()
-        }
+        chattingRoomListAdapter.submitList(emptyList())
+        // 채팅방 목록 새로 불러오기
+        getChattingRoomList()
     }
 
     override fun onDestroyView() {
@@ -139,13 +132,13 @@ class ChattingHomeFragment :
                 }
             }
         }
-        chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                chattingRoomListAdapter.removeItem(deletedItemPos)
-            } else {
-                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
-            }
-        }
+//        chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
+//            if (response.state) {
+//                chattingRoomListAdapter.removeItem(deletedItemPos)
+//            } else {
+//                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun initRecyclerView() {
@@ -214,14 +207,11 @@ class ChattingHomeFragment :
         dialog.show()
     }
 
-    override fun onChattingRoomSelected(
-        chatRoomId: Long,
-        isNewChatRoom: Boolean,
-    ) {
+    override fun onChattingRoomSelected(chatRoomInfo: ChatRoomInfo) {
         val bundle = Bundle()
-        bundle.putLong("chatRoomId", chatRoomId)
+        bundle.putParcelable("chatRoomInfo", chatRoomInfo)
         findNavController().navigate(R.id.action_chattingHomeFragment_to_chattingRoomFragment, bundle)
-        if (isNewChatRoom) {
+        if (chatRoomInfo.lastMessage == null) {
             showChattingSystemAlertDialog()
         }
     }
@@ -231,7 +221,7 @@ class ChattingHomeFragment :
         swipedItemId: Long,
     ) {
         deletedItemPos = position
-        chattingHomeViewModel.leaveChattingRoom(swipedItemId)
+//        chattingHomeViewModel.leaveChattingRoom(swipedItemId)
     }
 
     override fun onListItemAllRemoved() {

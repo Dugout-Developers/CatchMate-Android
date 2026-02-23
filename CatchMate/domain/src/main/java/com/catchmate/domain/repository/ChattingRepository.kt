@@ -1,8 +1,6 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
@@ -18,8 +16,6 @@ interface ChattingRepository {
 
     suspend fun getChattingCrewList(chatRoomId: Long): Result<List<GetChattingCrewListResponse>>
 
-    suspend fun getChattingRoomInfo(chatRoomId: Long): Result<ChatRoomInfo>
-
     suspend fun patchChattingRoomImage(
         chatRoomId: Long,
         chatRoomImage: MultipartBody.Part,
@@ -30,7 +26,7 @@ interface ChattingRepository {
         enable: Boolean,
     ): Result<PutChattingRoomAlarmResponse>
 
-    suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse>
+//    suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse>
 
     suspend fun deleteChattingCrewKickOut(
         chatRoomId: Long,

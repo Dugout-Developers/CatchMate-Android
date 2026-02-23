@@ -2,7 +2,6 @@ package com.catchmate.data.mapper
 
 import com.catchmate.data.dto.chatting.ChatRoomInfoDTO
 import com.catchmate.data.dto.chatting.DeleteChattingCrewKickOutResponseDTO
-import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
@@ -12,7 +11,6 @@ import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
 import com.catchmate.data.mapper.BoardMapper.toBoard
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
@@ -74,10 +72,10 @@ object ChattingMapper {
             joinedAt = dto.joinedAt,
         )
 
-    fun toDeleteChattingRoomResponse(dto: DeleteChattingRoomResponseDTO): DeleteChattingRoomResponse =
-        DeleteChattingRoomResponse(
-            state = dto.state,
-        )
+//    fun toDeleteChattingRoomResponse(dto: DeleteChattingRoomResponseDTO): DeleteChattingRoomResponse =
+//        DeleteChattingRoomResponse(
+//            state = dto.state,
+//        )
 
     fun toDeleteChattingCrewKickOutResponse(dto: DeleteChattingCrewKickOutResponseDTO): DeleteChattingCrewKickOutResponse =
         DeleteChattingCrewKickOutResponse(

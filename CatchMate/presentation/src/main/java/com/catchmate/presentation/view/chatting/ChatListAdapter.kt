@@ -78,15 +78,7 @@ class ChatListAdapter(
             chat: GetChattingMessagesResponse,
             viewType: Int,
         ) {
-            val nickname =
-                chattingCrewList.firstOrNull { it.userId == chat.senderId }?.nickName ?: "알수없음"
-            val message =
-                if (viewType == ENTER) {
-                    "$nickname 님이 채팅에 참여했어요"
-                } else {
-                    "$nickname 님이 나갔어요"
-                }
-            binding.tvChattingParticipantAlert.text = message
+            binding.tvChattingParticipantAlert.text = chat.content
         }
     }
 
@@ -144,7 +136,7 @@ class ChatListAdapter(
             MY_CHAT -> (holder as SendChatViewHolder).bind(currentList[position])
             OTHER_CHAT -> (holder as ReceivedChatViewHolder).bind(currentList[position])
             DATE -> (holder as ChattingDateViewHolder).bind(currentList[position])
-            ENTER, LEAVE -> (holder as ChattingParticipantViewHolder).bind(currentList[position], getItemViewType(position))
+            SYSTEM -> (holder as ChattingParticipantViewHolder).bind(currentList[position], getItemViewType(position))
         }
     }
 
@@ -162,12 +154,12 @@ class ChatListAdapter(
                 DATE
             }
 
-            ChatMessageType.ENTER.name -> {
-                ENTER
+            ChatMessageType.SYSTEM.name -> {
+                SYSTEM
             }
 
             else -> {
-                LEAVE
+                SYSTEM
             }
         }
 
@@ -188,7 +180,6 @@ class ChatListAdapter(
         private const val MY_CHAT = 1
         private const val OTHER_CHAT = 2
         private const val DATE = 3
-        private const val ENTER = 4
-        private const val LEAVE = 5
+        private const val SYSTEM = 4
     }
 }

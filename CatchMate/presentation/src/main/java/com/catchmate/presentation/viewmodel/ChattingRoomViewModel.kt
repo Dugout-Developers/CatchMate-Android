@@ -7,15 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingMessagesUseCase
-import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
-import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
 import com.catchmate.presentation.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,8 +33,6 @@ class ChattingRoomViewModel
     constructor(
         private val getChattingMessagesUseCase: GetChattingMessagesUseCase,
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
-        private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
-        private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
         private val putChattingRoomAlarmUseCase: PutChattingRoomAlarmUseCase,
     ) : ViewModel() {
         var topic: Disposable? = null
@@ -56,9 +51,9 @@ class ChattingRoomViewModel
         val chattingRoomInfo: LiveData<ChatRoomInfo>
             get() = _chattingRoomInfo
 
-        private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
-        val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
-            get() = _deleteChattingRoomResponse
+        private val _isLeft = MutableLiveData<Boolean>()
+        val isLeft: LiveData<Boolean>
+            get() = _isLeft
 
         private val _putChattingRoomAlarmResponse = MutableLiveData<PutChattingRoomAlarmResponse>()
         val putChattingRoomAlarmResponse: LiveData<PutChattingRoomAlarmResponse>
@@ -79,6 +74,10 @@ class ChattingRoomViewModel
         private val _isInstability = MutableLiveData<Boolean>()
         val isInstability: LiveData<Boolean>
             get() = _isInstability
+
+        fun setChatRoomInfo(info: ChatRoomInfo) {
+            _chattingRoomInfo.value = info
+        }
 
         /** WebSocket 연결 */
         fun connectToWebSocket(
@@ -222,16 +221,43 @@ class ChattingRoomViewModel
         }
 
         fun sendMessage(
-            message: String,
+            request: String,
         ) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
-                stompClient?.send("/pub/chat/message", message)?.subscribe({
+                stompClient?.send("/pub/chat/message", request)?.subscribe({
                     Log.d("Web Socket📬", "메시지 전달")
                     _isMessageSent.value = true
                 }, { error ->
                     Log.d("Web Socket✉️❌", "메시지 전송 실패", error)
                     _isMessageSent.value = false
+                })
+            }
+        }
+
+        fun leaveChattingRoom(request: String) {
+            viewModelScope.launch {
+                stompClient?.send("/pub/chat/leave", request)?.subscribe({
+                    Log.d("Web Socket🚪", "방 탈퇴")
+                    _isLeft.value = true
+                }, { error ->
+                    Log.d("Web Socket🚪❌", "방 탈퇴 실패", error)
+                    _isLeft.value = false
+                })
+            }
+        }
+
+        fun sendEnterRequest(chatRoomId: Long) {
+            viewModelScope.launch {
+                val request =
+                    JSONObject()
+                        .apply {
+                            put("chatRoomId", chatRoomId)
+                        }.toString()
+                stompClient?.send("/pub/chat/enter", request)?.subscribe({
+                    Log.d("Web Socket🪟", "입장 알림 성공")
+                }, { error ->
+                    Log.d("Web Socket🪟❌", "입장 알림 실패", error)
                 })
             }
         }
@@ -253,12 +279,20 @@ class ChattingRoomViewModel
             chatRoomId: Long,
             lastMessageId: Long? = null,
             size: Int = 20,
+            userId: Long,
         ) {
             viewModelScope.launch {
                 val result = getChattingMessagesUseCase(chatRoomId, lastMessageId, size)
                 result
                     .onSuccess { response ->
                         _getChattingMessagesResponse.value = response
+                        val hasEnterMsg =
+                            response.any {
+                                it.messageType == "SYSTEM" && it.senderId == userId
+                            }
+                        if (response.isEmpty() || !hasEnterMsg) {
+                            sendEnterRequest(chatRoomId)
+                        }
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
@@ -284,38 +318,6 @@ class ChattingRoomViewModel
                     }
             }
         }
-
-//        fun getChattingRoomInfo(chatRoomId: Long) {
-//            viewModelScope.launch {
-//                val result = getChattingRoomInfoUseCase(chatRoomId)
-//                result
-//                    .onSuccess { info ->
-//                        _chattingRoomInfo.value = info
-//                    }.onFailure { exception ->
-//                        if (exception is ReissueFailureException) {
-//                            _navigateToLogin.value = true
-//                        } else {
-//                            _errorMessage.value = exception.message
-//                        }
-//                    }
-//            }
-//        }
-//
-//        fun deleteChattingRoom(chatRoomId: Long) {
-//            viewModelScope.launch {
-//                val result = deleteChattingRoomUseCase(chatRoomId)
-//                result
-//                    .onSuccess { response ->
-//                        _deleteChattingRoomResponse.value = response
-//                    }.onFailure { exception ->
-//                        if (exception is ReissueFailureException) {
-//                            _navigateToLogin.value = true
-//                        } else {
-//                            _errorMessage.value = exception.message
-//                        }
-//                    }
-//            }
-//        }
 //
 //        fun putChattingRoomAlarm(
 //            chatRoomId: Long,

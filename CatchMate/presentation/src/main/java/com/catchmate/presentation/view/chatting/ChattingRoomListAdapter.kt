@@ -47,7 +47,7 @@ class ChattingRoomListAdapter(
         fun bind(chatRoomInfo: ChatRoomInfo) {
             binding.apply {
                 root.setOnClickListener {
-                    onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo.chatRoomId, chatRoomInfo.lastMessage == null)
+                    onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo)
                 }
                 // 채팅방 이미지가 변경된 적 없는 경우 chatRoomImage에 cheerTeamId가 String으로 담겨옴
                 // 해당 변수를 int로 변환할 때 예외 처리를 통해 변경된 적 있을 경우의 imageUrl을 imageView에 표시

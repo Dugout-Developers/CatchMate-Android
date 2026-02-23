@@ -1,8 +1,6 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.chatting.ChatRoomInfoDTO
 import com.catchmate.data.dto.chatting.DeleteChattingCrewKickOutResponseDTO
-import com.catchmate.data.dto.chatting.DeleteChattingRoomResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
@@ -31,11 +29,6 @@ interface ChattingService {
         @Path("chatRoomId") chatRoomId: Long,
     ): Response<List<GetChattingCrewListResponseDTO>?>
 
-    @GET("chat-rooms/{chatRoomId}")
-    suspend fun getChattingRoomInfo(
-        @Path("chatRoomId") chatRoomId: Long,
-    ): Response<ChatRoomInfoDTO?>
-
     @Multipart
     @PATCH("chat-rooms/{chatRoomId}/image")
     suspend fun patchChattingRoomImage(
@@ -49,10 +42,10 @@ interface ChattingService {
         @Query("enable") enable: Boolean,
     ): Response<PutChattingRoomAlarmResponseDTO?>
 
-    @DELETE("chat-rooms/{chatRoomId}")
-    suspend fun deleteChattingRoom(
-        @Path("chatRoomId") chatRoomId: Long,
-    ): Response<DeleteChattingRoomResponseDTO?>
+//    @DELETE("chat-rooms/{chatRoomId}")
+//    suspend fun deleteChattingRoom(
+//        @Path("chatRoomId") chatRoomId: Long,
+//    ): Response<DeleteChattingRoomResponseDTO?>
 
     @DELETE("chat-rooms/{chatRoomId}/users/{userId}")
     suspend fun deleteChattingCrewKickOut(

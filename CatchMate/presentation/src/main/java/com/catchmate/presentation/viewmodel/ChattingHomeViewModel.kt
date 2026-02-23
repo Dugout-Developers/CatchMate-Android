@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.LastMessageInfo
 import com.catchmate.domain.usecase.chatting.GetChattingRoomListUseCase
@@ -41,9 +40,9 @@ class ChattingHomeViewModel
         val getChattingRoomListResponse: LiveData<GetChattingRoomListResponse>
             get() = _getChattingRoomListResponse
 
-        private val _leaveChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
-        val leaveChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
-            get() = _leaveChattingRoomResponse
+//        private val _leaveChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
+//        val leaveChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
+//            get() = _leaveChattingRoomResponse
 
         private val _errorMessage = MutableLiveData<String?>()
         val errorMessage: LiveData<String?>
@@ -158,20 +157,20 @@ class ChattingHomeViewModel
             }
         }
 
-        fun leaveChattingRoom(chatRoomId: Long) {
-            viewModelScope.launch {
-                val result = leaveChattingRoomUseCase(chatRoomId)
-                result
-                    .onSuccess { response ->
-                        _leaveChattingRoomResponse.value = response
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            Log.d("ChattingHomeVM", exception.message.toString())
-                            _errorMessage.value = "LeaveChattingRoomError"
-                        }
-                    }
-            }
-        }
+//        fun leaveChattingRoom(chatRoomId: Long) {
+//            viewModelScope.launch {
+//                val result = leaveChattingRoomUseCase(chatRoomId)
+//                result
+//                    .onSuccess { response ->
+//                        _leaveChattingRoomResponse.value = response
+//                    }.onFailure { exception ->
+//                        if (exception is ReissueFailureException) {
+//                            _navigateToLogin.value = true
+//                        } else {
+//                            Log.d("ChattingHomeVM", exception.message.toString())
+//                            _errorMessage.value = "LeaveChattingRoomError"
+//                        }
+//                    }
+//            }
+//        }
     }
