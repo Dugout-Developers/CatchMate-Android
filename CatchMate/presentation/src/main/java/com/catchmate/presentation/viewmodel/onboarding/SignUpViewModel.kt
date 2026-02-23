@@ -37,9 +37,9 @@ class SignUpViewModel
                     if (uiState.value.isSubmitButtonEnable) {
                         sendSideEffect(
                             SignUpSideEffect.NavigateToNext(
-                                nickname = event.nickname,
-                                birthDate = event.birthDate,
-                                gender = event.gender,
+                                nickname = uiState.value.nickname,
+                                birthDate = uiState.value.birthDate,
+                                gender = uiState.value.gender,
                             )
                         )
                     }

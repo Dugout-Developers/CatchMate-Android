@@ -58,7 +58,7 @@ fun SignUpScreen(
             ) {
                 CatchMateFilledButton(
                     text = stringResource(R.string.next),
-                    onClick = { onEvent(SignUpEvent.OnSubmitClicked(uiState.nickname, uiState.birthDate, uiState.gender)) },
+                    onClick = { onEvent(SignUpEvent.OnSubmitClicked) },
                     enabled = uiState.isSubmitButtonEnable,
                     buttonType = ButtonType.FILLED,
                     modifier =
@@ -67,7 +67,6 @@ fun SignUpScreen(
                 )
                 Spacer(Modifier.height(34.dp))
             }
-
         },
     ) { innerPadding ->
         Column(

@@ -81,20 +81,6 @@ class SignupFragment : BaseComposeFragment() {
         }
     }
 
-//
-//    private fun initGenderChip() {
-//        binding.chipSignupMale.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (!isChecked) {
-//                binding.chipSignupFemale.isChecked = true
-//            }
-//        }
-//        binding.chipSignupFemale.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (!isChecked) {
-//                binding.chipSignupMale.isChecked = true
-//            }
-//        }
-//    }
-
     @Composable
     override fun ComposeContent() {
         val uiState by signUpViewModel.uiState.collectAsState()
