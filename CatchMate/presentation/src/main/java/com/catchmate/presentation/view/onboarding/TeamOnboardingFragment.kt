@@ -3,16 +3,27 @@ package com.catchmate.presentation.view.onboarding
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.catchmate.domain.model.enumclass.Club
 import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
-import com.catchmate.presentation.databinding.FragmentTeamOnboardingBinding
-import com.catchmate.presentation.view.base.BaseFragment
+import com.catchmate.presentation.view.base.BaseComposeFragment
+import com.catchmate.presentation.viewmodel.onboarding.TeamOnboardingSideEffect
+import com.catchmate.presentation.viewmodel.onboarding.TeamOnboardingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(FragmentTeamOnboardingBinding::inflate) {
+@AndroidEntryPoint
+class TeamOnboardingFragment : BaseComposeFragment() {
+    private val teamOnboardingViewModel: TeamOnboardingViewModel by viewModels()
     private lateinit var userInfo: PostUserAdditionalInfoRequest
-    private var selectedButton: TeamButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,86 +35,73 @@ class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(Fragm
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initTitle()
-        initHeader()
-        initFooterBtn()
-        initTeamButtons()
+        observeEvent()
+        setUiState()
     }
 
-    private fun initTitle() {
-        val title = getString(R.string.team_onboarding_title1)
-        binding.tvTeamOnboardingTitle1.text = title.format(userInfo.nickName)
-    }
-
-    private fun initTeamButtons() {
-        val teamButtons: List<TeamButtonView> =
-            listOf(
-                binding.tbvNc,
-                binding.tbvSamsung,
-                binding.tbvSsg,
-                binding.tbvDoosan,
-                binding.tbvKt,
-                binding.tbvHanwha,
-                binding.tbvLotte,
-                binding.tbvKia,
-                binding.tbvLg,
-                binding.tbvKiwoom,
-                binding.tbvPacifist,
-                binding.tbvBaseballBeginner,
+    private fun setUiState() {
+        val logoList =
+            listOf<Int>(
+                R.drawable.vec_all_kia_tigers_logo,
+                R.drawable.vec_all_samsung_lions_logo,
+                R.drawable.vec_all_lg_twins_logo,
+                R.drawable.vec_all_doosan_bears_logo,
+                R.drawable.vec_all_kt_wiz_logo,
+                R.drawable.vec_all_ssg_landers_logo,
+                R.drawable.vec_all_lotte_giants_logo,
+                R.drawable.vec_all_hanwha_eagles_logo,
+                R.drawable.vec_all_nc_dinos_logo,
+                R.drawable.vec_all_kiwoom_heroes_logo,
+                R.drawable.imb_baseball_beginner_icon,
+                R.drawable.img_pacifist_icon,
             )
+        val textList =
+            listOf<String>(
+                Club.KIA.teamName,
+                Club.SAMSUNG.teamName,
+                Club.LG.teamName,
+                Club.DOOSAN.teamName,
+                Club.KT.teamName,
+                Club.SSG.teamName,
+                Club.LOTTE.teamName,
+                Club.HANWHA.teamName,
+                Club.NC.teamName,
+                Club.KIWOOM.teamName,
+                Club.BEGINNER.teamName,
+                Club.PACIFIST.teamName,
+            )
+        teamOnboardingViewModel.setTeamButtonData(logoList, textList)
+        teamOnboardingViewModel.setNickname(userInfo.nickName)
+    }
 
-        teamButtons.forEach { btn ->
-            btn.binding.toggleTeamButton.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    selectedButton?.binding?.toggleTeamButton?.isChecked = false
-                    buttonView.isChecked = true
-                    selectedButton = btn
-                    binding.layoutTeamOnboardingFooter.btnFooterOne.isEnabled = true
-                } else {
-                    binding.layoutTeamOnboardingFooter.btnFooterOne.isEnabled = false
+    private fun observeEvent() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                teamOnboardingViewModel.sideEffect.collect { effect ->
+                    when (effect) {
+                        TeamOnboardingSideEffect.NavigateToBack -> {
+                            findNavController().popBackStack()
+                        }
+                        is TeamOnboardingSideEffect.NavigateToNext -> {
+                            val newUserInfo =
+                                PostUserAdditionalInfoRequest(
+                                    userInfo.email,
+                                    userInfo.providerId,
+                                    userInfo.provider,
+                                    userInfo.profileImageUrl,
+                                    userInfo.fcmToken,
+                                    userInfo.gender,
+                                    userInfo.nickName,
+                                    userInfo.birthDate,
+                                    effect.clubId,
+                                    "",
+                                )
+                            val bundle = Bundle()
+                            bundle.putSerializable("userInfo", newUserInfo)
+                            findNavController().navigate(R.id.action_teamOnboardingFragment_to_cheerStyleOnboardingFragment, bundle)
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    private fun initHeader() {
-        binding.layoutTeamOnboardingHeader.apply {
-            imgbtnOnboardingIndicator3.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
-            imgbtnOnboardingIndicator2.setOnClickListener {
-                findNavController().popBackStack()
-            }
-            imgbtnOnboardingBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
-        }
-    }
-
-    private fun initFooterBtn() {
-        binding.layoutTeamOnboardingFooter.btnFooterOne.apply {
-            setText(R.string.next)
-            setOnClickListener {
-                val newUserInfo =
-                    PostUserAdditionalInfoRequest(
-                        userInfo.email,
-                        userInfo.providerId,
-                        userInfo.provider,
-                        userInfo.profileImageUrl,
-                        userInfo.fcmToken,
-                        userInfo.gender,
-                        userInfo.nickName,
-                        userInfo.birthDate,
-                        getSelectedTeamId(
-                            selectedButton
-                                ?.binding
-                                ?.tvTeamButton
-                                ?.text
-                                .toString(),
-                        ),
-                        "",
-                    )
-                val bundle = Bundle()
-                bundle.putSerializable("userInfo", newUserInfo)
-                findNavController().navigate(R.id.action_teamOnboardingFragment_to_cheerStyleOnboardingFragment, bundle)
             }
         }
     }
@@ -115,19 +113,12 @@ class TeamOnboardingFragment : BaseFragment<FragmentTeamOnboardingBinding>(Fragm
             arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
         }
 
-    private fun getSelectedTeamId(teamName: String): Int =
-        when (teamName) {
-            Club.KIA.teamName -> Club.KIA.id
-            Club.SAMSUNG.teamName -> Club.SAMSUNG.id
-            Club.LG.teamName -> Club.LG.id
-            Club.DOOSAN.teamName -> Club.DOOSAN.id
-            Club.KT.teamName -> Club.KT.id
-            Club.SSG.teamName -> Club.SSG.id
-            Club.LOTTE.teamName -> Club.LOTTE.id
-            Club.HANWHA.teamName -> Club.HANWHA.id
-            Club.NC.teamName -> Club.NC.id
-            Club.KIWOOM.teamName -> Club.KIWOOM.id
-            Club.PACIFIST.teamName -> Club.PACIFIST.id
-            else -> Club.BEGINNER.id
-        }
+    @Composable
+    override fun ComposeContent() {
+        val uiState by teamOnboardingViewModel.uiState.collectAsState()
+        TeamOnboardingScreen(
+            uiState = uiState,
+            onEvent = teamOnboardingViewModel::onEvent,
+        )
+    }
 }
