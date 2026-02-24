@@ -70,8 +70,7 @@ class TeamOnboardingFragment : BaseComposeFragment() {
                 Club.BEGINNER.teamName,
                 Club.PACIFIST.teamName,
             )
-        teamOnboardingViewModel.setTeamButtonData(logoList, textList)
-        teamOnboardingViewModel.setNickname(userInfo.nickName)
+        teamOnboardingViewModel.setTeamScreenData(userInfo.nickName, logoList, textList)
     }
 
     private fun observeEvent() {

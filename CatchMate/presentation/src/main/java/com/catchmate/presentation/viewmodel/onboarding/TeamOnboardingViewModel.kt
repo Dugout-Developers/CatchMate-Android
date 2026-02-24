@@ -45,20 +45,14 @@ class TeamOnboardingViewModel
             }
         }
 
-        fun setNickname(nickname: String) {
-            _uiState.update {
-                it.copy(
-                    nickname = nickname,
-                )
-            }
-        }
-
-        fun setTeamButtonData(
+        fun setTeamScreenData(
+            nickname: String,
             logoList: List<Int>,
             textList: List<String>,
         ) {
             _uiState.update {
                 it.copy(
+                    nickname = nickname,
                     teamButtonLogoList = logoList,
                     teamButtonTextList = textList,
                 )
