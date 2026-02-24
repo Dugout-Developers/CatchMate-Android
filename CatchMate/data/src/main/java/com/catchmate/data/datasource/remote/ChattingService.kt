@@ -3,7 +3,6 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
-import com.catchmate.data.dto.chatting.PatchChattingRoomImageResponseDTO
 import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -29,11 +28,11 @@ interface ChattingService {
     ): Response<List<GetChattingCrewListResponseDTO>?>
 
     @Multipart
-    @PATCH("chat-rooms/{chatRoomId}/image")
+    @PATCH("api/chat/rooms/{roomId}/image")
     suspend fun patchChattingRoomImage(
-        @Path("chatRoomId") chatRoomId: Long,
+        @Path("roomId") roomId: Long,
         @Part chatRoomImage: MultipartBody.Part,
-    ): Response<PatchChattingRoomImageResponseDTO?>
+    ): Response<Unit>
 
     @PUT("chat-rooms/{chatRoomId}/notification")
     suspend fun putChattingRoomAlarm(

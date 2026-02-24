@@ -7,7 +7,6 @@ import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
-import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
@@ -43,13 +42,13 @@ class ChattingRepositoryImpl
             )
 
         override suspend fun patchChattingRoomImage(
-            chatRoomId: Long,
+            roomId: Long,
             chatRoomImage: MultipartBody.Part,
-        ): Result<PatchChattingRoomImageResponse> =
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.patchChattingRoomImage(chatRoomId, chatRoomImage) },
-                transform = { ChattingMapper.toPatchChattingRoomImageResponse(it!!) },
+                apiFunction = { chattingApi.patchChattingRoomImage(roomId, chatRoomImage) },
+                transform = { it },
             )
 
         override suspend fun putChattingRoomAlarm(

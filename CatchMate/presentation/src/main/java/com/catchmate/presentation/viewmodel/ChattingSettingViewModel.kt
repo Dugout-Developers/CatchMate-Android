@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.usecase.chatting.KickOutChattingCrewUseCase
 import com.catchmate.domain.usecase.chatting.PatchChattingRoomImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +23,8 @@ class ChattingSettingViewModel
         val kickOutChattingCrewResponse: LiveData<Unit>
             get() = _kickOutChattingCrewResponse
 
-        private val _patchChattingRoomImageResponse = MutableLiveData<PatchChattingRoomImageResponse>()
-        val patchChattingRoomImageResponse: LiveData<PatchChattingRoomImageResponse>
+        private val _patchChattingRoomImageResponse = MutableLiveData<Unit>()
+        val patchChattingRoomImageResponse: LiveData<Unit>
             get() = _patchChattingRoomImageResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -56,11 +55,11 @@ class ChattingSettingViewModel
         }
 
         fun patchChattingRoomImage(
-            chatRoomId: Long,
+            roomId: Long,
             chatRoomImage: MultipartBody.Part,
         ) {
             viewModelScope.launch {
-                val result = patchChattingRoomImageUseCase(chatRoomId, chatRoomImage)
+                val result = patchChattingRoomImageUseCase(roomId, chatRoomImage)
                 result
                     .onSuccess { response ->
                         _patchChattingRoomImageResponse.value = response

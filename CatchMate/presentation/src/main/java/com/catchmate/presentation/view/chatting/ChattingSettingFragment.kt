@@ -100,10 +100,8 @@ class ChattingSettingFragment :
             chattingCrewAdapter.submitList(chattingCrewList)
         }
         chattingSettingViewModel.patchChattingRoomImageResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                Log.d("📸채팅방 프로필 변경 성공", "성공")
-                binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
-            }
+            Log.d("📸채팅방 프로필 변경 성공", "성공")
+            binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
         }
         chattingSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {
