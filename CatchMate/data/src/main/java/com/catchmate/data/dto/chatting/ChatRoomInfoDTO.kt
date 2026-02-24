@@ -7,5 +7,7 @@ data class ChatRoomInfoDTO(
     val board: BoardDTO,
     val lastMessage: LastMessageInfoDto?,
     val unreadCount: Long,
+    val chatRoomImageUrl: String?,
     val createdAt: String,
+    val notificationOn: Boolean,
 )

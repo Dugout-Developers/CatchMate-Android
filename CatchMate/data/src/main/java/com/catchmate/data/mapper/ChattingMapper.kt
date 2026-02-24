@@ -30,7 +30,9 @@ object ChattingMapper {
             board = toBoard(dto.board),
             lastMessage = toLastMessageInfo(dto.lastMessage),
             unreadCount = dto.unreadCount,
+            chatRoomImageUrl = dto.chatRoomImageUrl,
             createdAt = dto.createdAt,
+            notificationOn = dto.notificationOn,
         )
 
     private fun toLastMessageInfo(dto: LastMessageInfoDto?): LastMessageInfo? =

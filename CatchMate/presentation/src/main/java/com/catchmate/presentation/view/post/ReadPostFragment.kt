@@ -238,7 +238,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                                     ),
                                 lastMessage = null,
                                 unreadCount = 0,
+                                chatRoomImageUrl = null,
                                 createdAt = "",
+                                notificationOn = true,
                             )
                         val bundle = Bundle()
                         bundle.putParcelable("chatRoomInfo", chatRoomInfo)

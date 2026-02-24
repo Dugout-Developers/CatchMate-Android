@@ -10,5 +10,7 @@ data class ChatRoomInfo(
     val board: Board,
     val lastMessage: LastMessageInfo?,
     val unreadCount: Long,
+    val chatRoomImageUrl: String?,
     val createdAt: String,
+    val notificationOn: Boolean,
 ) : Parcelable

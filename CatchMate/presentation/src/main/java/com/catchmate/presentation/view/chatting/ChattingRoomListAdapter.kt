@@ -49,50 +49,31 @@ class ChattingRoomListAdapter(
                 root.setOnClickListener {
                     onChattingRoomSelectedListener.onChattingRoomSelected(chatRoomInfo)
                 }
-                // 채팅방 이미지가 변경된 적 없는 경우 chatRoomImage에 cheerTeamId가 String으로 담겨옴
-                // 해당 변수를 int로 변환할 때 예외 처리를 통해 변경된 적 있을 경우의 imageUrl을 imageView에 표시
-//                try {
-//                    val clubId = chatRoomInfo.chatRoomImage.toInt()
-//                    val logoResource = convertTeamLogo(clubId)
-//                    ivChattingItemLogo.visibility = View.VISIBLE
-//                    Glide
-//                        .with(root.context)
-//                        .load(logoResource)
-//                        .into(ivChattingItemLogo)
-//                    DrawableCompat
-//                        .setTint(
-//                            ivChattingItemBg.drawable,
-//                            convertTeamColor(
-//                                root.context,
-//                                clubId,
-//                                true,
-//                                "chattingHome",
-//                            ),
-//                        )
-//                } catch (e: Exception) {
-//                    ivChattingItemLogo.visibility = View.GONE
-//                    Glide
-//                        .with(root.context)
-//                        .load(chatRoomInfo.chatRoomImage)
-//                        .into(ivChattingItemBg)
-//                }
-                val clubId = chatRoomInfo.board.cheerClub.clubId
-                val logoResource = convertTeamLogo(clubId)
-                ivChattingItemLogo.visibility = View.VISIBLE
-                Glide
-                    .with(root.context)
-                    .load(logoResource)
-                    .into(ivChattingItemLogo)
-                DrawableCompat
-                    .setTint(
-                        ivChattingItemBg.drawable,
-                        convertTeamColor(
-                            root.context,
-                            clubId,
-                            true,
-                            "chattingHome",
-                        ),
-                    )
+                if (chatRoomInfo.chatRoomImageUrl == null) {
+                    val clubId = chatRoomInfo.board.cheerClub.clubId
+                    val logoResource = convertTeamLogo(clubId)
+                    ivChattingItemLogo.visibility = View.VISIBLE
+                    Glide
+                        .with(root.context)
+                        .load(logoResource)
+                        .into(ivChattingItemLogo)
+                    DrawableCompat
+                        .setTint(
+                            ivChattingItemBg.drawable,
+                            convertTeamColor(
+                                root.context,
+                                clubId,
+                                true,
+                                "chattingHome",
+                            ),
+                        )
+                } else {
+                    ivChattingItemLogo.visibility = View.GONE
+                    Glide
+                        .with(root.context)
+                        .load(chatRoomInfo.chatRoomImageUrl)
+                        .into(ivChattingItemBg)
+                }
 
                 tvChattingItemTitle.text = chatRoomInfo.board.title
                 if (chatRoomInfo.lastMessage == null) {
