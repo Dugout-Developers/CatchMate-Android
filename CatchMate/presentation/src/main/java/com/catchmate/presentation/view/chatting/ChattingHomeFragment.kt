@@ -35,7 +35,6 @@ class ChattingHomeFragment :
     private var currentPage: Int = 0
     private var hasNext = true
     private var isLoading = false
-    private var isFirstLoad = true
     private var deletedItemPos: Int = -1
     private lateinit var chattingRoomListAdapter: ChattingRoomListAdapter
 
@@ -132,13 +131,10 @@ class ChattingHomeFragment :
                 }
             }
         }
-//        chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
-//            if (response.state) {
-//                chattingRoomListAdapter.removeItem(deletedItemPos)
-//            } else {
-//                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
-//            }
-//        }
+        chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
+            Log.i("채팅방 나가기 성공", "$response")
+            chattingRoomListAdapter.removeItem(deletedItemPos)
+        }
     }
 
     private fun initRecyclerView() {
@@ -221,7 +217,7 @@ class ChattingHomeFragment :
         swipedItemId: Long,
     ) {
         deletedItemPos = position
-//        chattingHomeViewModel.leaveChattingRoom(swipedItemId)
+        chattingHomeViewModel.leaveChattingRoom(swipedItemId)
     }
 
     override fun onListItemAllRemoved() {

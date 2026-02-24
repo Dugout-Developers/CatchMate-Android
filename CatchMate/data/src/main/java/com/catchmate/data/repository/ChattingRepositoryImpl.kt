@@ -63,12 +63,12 @@ class ChattingRepositoryImpl
                 transform = { ChattingMapper.toPutChattingRoomAlarmResponse(it!!) },
             )
 
-//        override suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse> =
-//            apiCall(
-//                tag = this.tag,
-//                apiFunction = { chattingApi.deleteChattingRoom(chatRoomId) },
-//                transform = { ChattingMapper.toDeleteChattingRoomResponse(it!!) },
-//            )
+        override suspend fun deleteChattingRoom(roomId: Long): Result<Unit> =
+            apiCall(
+                tag = this.tag,
+                apiFunction = { chattingApi.deleteChattingRoom(roomId) },
+                transform = { it },
+            )
 
         override suspend fun deleteChattingCrewKickOut(
             chatRoomId: Long,

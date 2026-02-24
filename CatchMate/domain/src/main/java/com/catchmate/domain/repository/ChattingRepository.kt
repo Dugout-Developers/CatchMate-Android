@@ -26,7 +26,7 @@ interface ChattingRepository {
         enable: Boolean,
     ): Result<PutChattingRoomAlarmResponse>
 
-//    suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse>
+    suspend fun deleteChattingRoom(roomId: Long): Result<Unit>
 
     suspend fun deleteChattingCrewKickOut(
         chatRoomId: Long,

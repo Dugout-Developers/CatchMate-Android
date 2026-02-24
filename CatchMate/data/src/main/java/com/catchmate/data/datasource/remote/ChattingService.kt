@@ -42,10 +42,10 @@ interface ChattingService {
         @Query("enable") enable: Boolean,
     ): Response<PutChattingRoomAlarmResponseDTO?>
 
-//    @DELETE("chat-rooms/{chatRoomId}")
-//    suspend fun deleteChattingRoom(
-//        @Path("chatRoomId") chatRoomId: Long,
-//    ): Response<DeleteChattingRoomResponseDTO?>
+    @DELETE("api/chat/rooms/{roomId}")
+    suspend fun deleteChattingRoom(
+        @Path("roomId") roomId: Long,
+    ): Response<Unit>
 
     @DELETE("chat-rooms/{chatRoomId}/users/{userId}")
     suspend fun deleteChattingCrewKickOut(

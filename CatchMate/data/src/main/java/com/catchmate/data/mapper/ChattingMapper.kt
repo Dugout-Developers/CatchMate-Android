@@ -72,11 +72,6 @@ object ChattingMapper {
             joinedAt = dto.joinedAt,
         )
 
-//    fun toDeleteChattingRoomResponse(dto: DeleteChattingRoomResponseDTO): DeleteChattingRoomResponse =
-//        DeleteChattingRoomResponse(
-//            state = dto.state,
-//        )
-
     fun toDeleteChattingCrewKickOutResponse(dto: DeleteChattingCrewKickOutResponseDTO): DeleteChattingCrewKickOutResponse =
         DeleteChattingCrewKickOutResponse(
             state = dto.state,
