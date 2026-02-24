@@ -1,6 +1,5 @@
 package com.catchmate.domain.repository
 
-import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
@@ -28,10 +27,10 @@ interface ChattingRepository {
 
     suspend fun deleteChattingRoom(roomId: Long): Result<Unit>
 
-    suspend fun deleteChattingCrewKickOut(
+    suspend fun deleteChattingCrew(
         chatRoomId: Long,
-        userId: Long,
-    ): Result<DeleteChattingCrewKickOutResponse>
+        targetUserId: Long,
+    ): Result<Unit>
 
     suspend fun getChattingMessages(
         chatRoomId: Long,

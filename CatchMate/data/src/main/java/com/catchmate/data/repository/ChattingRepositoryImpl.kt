@@ -4,7 +4,6 @@ import com.catchmate.data.datasource.remote.ChattingService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.ChattingMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
-import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
@@ -70,14 +69,14 @@ class ChattingRepositoryImpl
                 transform = { it },
             )
 
-        override suspend fun deleteChattingCrewKickOut(
+        override suspend fun deleteChattingCrew(
             chatRoomId: Long,
-            userId: Long,
-        ): Result<DeleteChattingCrewKickOutResponse> =
+            targetUserId: Long,
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.deleteChattingCrewKickOut(chatRoomId, userId) },
-                transform = { ChattingMapper.toDeleteChattingCrewKickOutResponse(it!!) },
+                apiFunction = { chattingApi.deleteChattingCrew(chatRoomId, targetUserId) },
+                transform = { it },
             )
 
         override suspend fun getChattingMessages(

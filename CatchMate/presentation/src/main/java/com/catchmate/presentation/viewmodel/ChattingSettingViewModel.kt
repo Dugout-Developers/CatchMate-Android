@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.usecase.chatting.KickOutChattingCrewUseCase
 import com.catchmate.domain.usecase.chatting.PatchChattingRoomImageUseCase
@@ -21,8 +20,8 @@ class ChattingSettingViewModel
         private val kickOutChattingCrewUseCase: KickOutChattingCrewUseCase,
         private val patchChattingRoomImageUseCase: PatchChattingRoomImageUseCase,
     ) : ViewModel() {
-        private val _kickOutChattingCrewResponse = MutableLiveData<DeleteChattingCrewKickOutResponse>()
-        val kickOutChattingCrewResponse: LiveData<DeleteChattingCrewKickOutResponse>
+        private val _kickOutChattingCrewResponse = MutableLiveData<Unit>()
+        val kickOutChattingCrewResponse: LiveData<Unit>
             get() = _kickOutChattingCrewResponse
 
         private val _patchChattingRoomImageResponse = MutableLiveData<PatchChattingRoomImageResponse>()

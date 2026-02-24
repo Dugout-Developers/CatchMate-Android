@@ -94,12 +94,10 @@ class ChattingSettingFragment :
 
     private fun initViewModel() {
         chattingSettingViewModel.kickOutChattingCrewResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                Log.i("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
-                chattingCrewList = chattingCrewList.filter { it.userId != deletedCrewId }.toMutableList()
-                Log.i("crew list", "$chattingCrewList")
-                chattingCrewAdapter.submitList(chattingCrewList)
-            }
+            Log.i("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
+            chattingCrewList = chattingCrewList.filter { it.userId != deletedCrewId }.toMutableList()
+            Log.i("crew list", "$chattingCrewList")
+            chattingCrewAdapter.submitList(chattingCrewList)
         }
         chattingSettingViewModel.patchChattingRoomImageResponse.observe(viewLifecycleOwner) { response ->
             if (response.state) {

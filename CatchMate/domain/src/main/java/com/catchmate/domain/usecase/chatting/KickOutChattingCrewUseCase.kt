@@ -1,6 +1,5 @@
 package com.catchmate.domain.usecase.chatting
 
-import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
 import com.catchmate.domain.repository.ChattingRepository
 import javax.inject.Inject
 
@@ -11,6 +10,6 @@ class KickOutChattingCrewUseCase
     ) {
         suspend operator fun invoke(
             chatRoomId: Long,
-            userId: Long,
-        ): Result<DeleteChattingCrewKickOutResponse> = chattingRepository.deleteChattingCrewKickOut(chatRoomId, userId)
+            targetUserId: Long,
+        ): Result<Unit> = chattingRepository.deleteChattingCrew(chatRoomId, targetUserId)
     }

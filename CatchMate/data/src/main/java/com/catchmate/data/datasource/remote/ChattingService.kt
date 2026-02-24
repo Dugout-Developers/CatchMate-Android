@@ -1,6 +1,5 @@
 package com.catchmate.data.datasource.remote
 
-import com.catchmate.data.dto.chatting.DeleteChattingCrewKickOutResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
@@ -47,11 +46,11 @@ interface ChattingService {
         @Path("roomId") roomId: Long,
     ): Response<Unit>
 
-    @DELETE("chat-rooms/{chatRoomId}/users/{userId}")
-    suspend fun deleteChattingCrewKickOut(
-        @Path("chatRoomId") chatRoomId: Long,
-        @Path("userId") userId: Long,
-    ): Response<DeleteChattingCrewKickOutResponseDTO?>
+    @DELETE("api/chat/rooms/{roomId}/members/{targetUserId}")
+    suspend fun deleteChattingCrew(
+        @Path("roomId") roomId: Long,
+        @Path("targetUserId") targetUserId: Long,
+    ): Response<Unit>
 
     @GET("api/chat/rooms/{roomId}/messages")
     suspend fun getChattingMessages(

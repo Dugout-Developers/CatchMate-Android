@@ -48,9 +48,8 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
-    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") == true }
     private var isNotificationEnabled = false
-    private lateinit var chatRoomInfo: ChatRoomInfo
     private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onViewCreated(
