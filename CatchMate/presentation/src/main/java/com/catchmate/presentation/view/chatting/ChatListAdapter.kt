@@ -1,5 +1,6 @@
 package com.catchmate.presentation.view.chatting
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +77,6 @@ class ChatListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             chat: GetChattingMessagesResponse,
-            viewType: Int,
         ) {
             binding.tvChattingParticipantAlert.text = chat.content
         }
@@ -136,7 +136,7 @@ class ChatListAdapter(
             MY_CHAT -> (holder as SendChatViewHolder).bind(currentList[position])
             OTHER_CHAT -> (holder as ReceivedChatViewHolder).bind(currentList[position])
             DATE -> (holder as ChattingDateViewHolder).bind(currentList[position])
-            SYSTEM -> (holder as ChattingParticipantViewHolder).bind(currentList[position], getItemViewType(position))
+            SYSTEM -> (holder as ChattingParticipantViewHolder).bind(currentList[position])
         }
     }
 

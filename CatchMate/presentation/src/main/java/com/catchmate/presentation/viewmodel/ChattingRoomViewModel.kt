@@ -151,55 +151,25 @@ class ChattingRoomViewModel
                 stompClient?.topic("/sub/chat/room/$chatRoomId")?.subscribe({ message ->
                     Log.i("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
+                    val messageId = jsonObject.getLong("messageId")
+                    val roomId = jsonObject.getLong("roomId")
+                    val senderId = jsonObject.getLong("senderId")
+                    val senderNickname = jsonObject.getString("senderNickname")
+                    val senderProfileImage = jsonObject.getString("senderProfileImage")
+                    val content = jsonObject.getString("content")
                     val messageType = jsonObject.getString("messageType")
-                    val chatMessage: GetChattingMessagesResponse =
-                        when (messageType) {
-//                            ChatMessageType.DATE.name -> {
-//                                val roomId = jsonObject.getString("chatRoomId").toLong()
-//                                val content = jsonObject.getString("content")
-//                                val senderId = jsonObject.getString("senderId").toLong()
-//                                ChatMessageInfo(
-//                                    chatMessageId = "",
-//                                    roomId = roomId,
-//                                    content = content,
-//                                    senderId = senderId,
-//                                    messageType = messageType,
-//                                )
-//                            }
-
-                            ChatMessageType.TEXT.name -> {
-                                val messageId = jsonObject.getLong("messageId")
-                                val roomId = jsonObject.getLong("roomId")
-                                val senderId = jsonObject.getLong("senderId")
-                                val senderNickname = jsonObject.getString("senderNickname")
-                                val senderProfileImage = jsonObject.getString("senderProfileImage")
-                                val content = jsonObject.getString("content")
-                                val createdAt = jsonObject.getString("createdAt")
-                                GetChattingMessagesResponse(
-                                    messageId = messageId,
-                                    chatRoomId = roomId,
-                                    senderId = senderId,
-                                    senderNickName = senderNickname,
-                                    senderProfileImageUrl = senderProfileImage,
-                                    content = content,
-                                    messageType = messageType,
-                                    createdAt = createdAt,
-                                )
-                            }
-
-                            else -> { // 채팅방 나가고 들어올때 메시지 처리하기
-                                GetChattingMessagesResponse(
-                                    messageId = -1,
-                                    chatRoomId = -1,
-                                    senderId = -1,
-                                    senderNickName = "",
-                                    senderProfileImageUrl = "",
-                                    content = "",
-                                    messageType = "",
-                                    createdAt = "",
-                                )
-                            }
-                        }
+                    val createdAt = jsonObject.getString("createdAt")
+                    val chatMessage =
+                        GetChattingMessagesResponse(
+                            messageId = messageId,
+                            chatRoomId = roomId,
+                            senderId = senderId,
+                            senderNickName = senderNickname,
+                            senderProfileImageUrl = senderProfileImage,
+                            content = content,
+                            messageType = messageType,
+                            createdAt = createdAt,
+                        )
                     addChatMessage(chatMessage)
                     sendIsMsgRead(chatRoomId)
                 }, { error ->
