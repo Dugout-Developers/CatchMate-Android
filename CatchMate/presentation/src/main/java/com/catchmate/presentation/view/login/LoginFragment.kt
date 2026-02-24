@@ -96,7 +96,7 @@ class LoginFragment : BaseComposeFragment() {
 
         LoginScreen(
             isLoading = uiState.isLoading, // indicator 표시를 위한 boolean 속성
-            onKakaoLoginClick = { loginViewModel.kakaoLogin() },
+            onKakaoLoginClick = { loginViewModel.kakaoLogin(requireActivity()) },
             onNaverLoginClick = { loginViewModel.naverLogin(requireActivity()) },
             onGoogleLoginClick = { loginViewModel.googleLogin(requireActivity()) },
             onGuestLoginClick = {

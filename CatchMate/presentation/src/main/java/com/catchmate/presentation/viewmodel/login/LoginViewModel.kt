@@ -70,9 +70,9 @@ class LoginViewModel
             }
         }
 
-        fun kakaoLogin() {
+        fun kakaoLogin(activity: Activity) {
             viewModelScope.launch {
-                handleSocialLoginResult(socialLoginUseCase.loginWithKakao())
+                handleSocialLoginResult(socialLoginUseCase.loginWithKakao(activity))
             }
         }
 

@@ -21,8 +21,8 @@ class LoginRepositoryImpl
         private val naverLoginDataSource: NaverLoginDataSource,
         private val googleLoginDataSource: GoogleLoginDataSource,
     ) : LoginRepository {
-        override suspend fun loginWithKakao(): UserData? {
-            val userDataDTO = kakaoLoginDataSource.loginWithKakao()
+        override suspend fun loginWithKakao(activity: Activity): UserData? {
+            val userDataDTO = kakaoLoginDataSource.loginWithKakao(activity)
             return toUserData(userDataDTO)
         }
 
