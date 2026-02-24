@@ -115,7 +115,8 @@ object DateUtils {
         val parsedTime =
             LocalDateTime
                 .parse(dateTime, formatter)
-                .atZone(ZoneId.of("Asia/Seoul"))
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("Asia/Seoul"))
                 .toInstant()
         val now = Instant.now()
         val duration = Duration.between(parsedTime, now)

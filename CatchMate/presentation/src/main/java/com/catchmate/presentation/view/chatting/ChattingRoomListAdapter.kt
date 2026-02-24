@@ -95,17 +95,18 @@ class ChattingRoomListAdapter(
                     )
 
                 tvChattingItemTitle.text = chatRoomInfo.board.title
-                tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.createdAt)
                 if (chatRoomInfo.lastMessage == null) {
                     tvChattingItemNew.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.visibility = View.GONE
                     tvChattingItemLastChat.text = root.context.getString(R.string.chatting_start_message)
                     tvChattingItemUnreadMessageCount.visibility = View.GONE
+                    tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.createdAt)
                 } else {
                     tvChattingItemNew.visibility = View.GONE
                     tvChattingItemPeopleCount.visibility = View.VISIBLE
                     tvChattingItemPeopleCount.text = chatRoomInfo.board.currentPerson.toString()
                     tvChattingItemLastChat.text = chatRoomInfo.lastMessage?.content
+                    tvChattingItemTime.text = formatLastChatTime(chatRoomInfo.lastMessage?.createdAt!!)
                     if (chatRoomInfo.unreadCount == 0L) {
                         tvChattingItemUnreadMessageCount.visibility = View.GONE
                     } else {
