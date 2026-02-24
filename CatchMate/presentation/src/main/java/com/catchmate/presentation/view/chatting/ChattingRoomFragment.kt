@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.model.enumclass.ChatMessageType
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
@@ -36,7 +37,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
-import kotlin.lazy
 
 @AndroidEntryPoint
 class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentChattingRoomBinding::inflate) {
@@ -114,7 +114,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) {
-//                isNotificationEnabled = info.isNotificationEnabled
+                isNotificationEnabled = info.notificationOn
                 initChatRoomInfo(info)
                 initHeader(info)
             }
@@ -350,7 +350,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                             // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id, 채팅방 id 넘김
                             val bundle =
                                 Bundle().apply {
-//                                    putString("chattingRoomImage", info.chatRoomImage)
+                                    putString("chattingRoomImage", info.chatRoomImageUrl)
                                     putParcelableArrayList("chattingCrewList",
                                         chattingRoomViewModel.getChattingCrewListResponse.value as ArrayList<out Parcelable?>?
                                     )
@@ -368,7 +368,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     toggleSideSheetChattingRoomNotification.setOnClickListener {
                         isNotificationEnabled = !isNotificationEnabled
                         toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
-//                        chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
+                        chattingRoomViewModel.putChattingRoomAlarm(
+                            chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1,
+                            PutChattingRoomAlarmRequest(
+                                isNotificationEnabled,
+                            )
+                        )
                     }
                     layoutSideSheetPostInfo.setOnClickListener {
                         val bundle = Bundle()

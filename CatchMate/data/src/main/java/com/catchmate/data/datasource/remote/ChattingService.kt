@@ -3,9 +3,10 @@ package com.catchmate.data.datasource.remote
 import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
-import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
+import com.catchmate.data.dto.chatting.PutChattingRoomAlarmRequestDTO
 import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -34,11 +35,11 @@ interface ChattingService {
         @Part chatRoomImage: MultipartBody.Part,
     ): Response<Unit>
 
-    @PUT("chat-rooms/{chatRoomId}/notification")
+    @PUT("api/chat/rooms/{roomId}/notifications")
     suspend fun putChattingRoomAlarm(
-        @Path("chatRoomId") chatRoomId: Long,
-        @Query("enable") enable: Boolean,
-    ): Response<PutChattingRoomAlarmResponseDTO?>
+        @Path("roomId") roomId: Long,
+        @Body putChattingRoomAlarmRequestDTO: PutChattingRoomAlarmRequestDTO,
+    ): Response<Unit?>
 
     @DELETE("api/chat/rooms/{roomId}")
     suspend fun deleteChattingRoom(

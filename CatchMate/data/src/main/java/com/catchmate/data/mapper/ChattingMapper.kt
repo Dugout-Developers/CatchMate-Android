@@ -5,14 +5,14 @@ import com.catchmate.data.dto.chatting.GetChattingCrewListResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingMessagesResponseDTO
 import com.catchmate.data.dto.chatting.GetChattingRoomListResponseDTO
 import com.catchmate.data.dto.chatting.LastMessageInfoDto
-import com.catchmate.data.dto.chatting.PutChattingRoomAlarmResponseDTO
+import com.catchmate.data.dto.chatting.PutChattingRoomAlarmRequestDTO
 import com.catchmate.data.mapper.BoardMapper.toBoard
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
 import com.catchmate.domain.model.chatting.LastMessageInfo
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 
 object ChattingMapper {
     fun toGetChattingRoomListResponse(dto: GetChattingRoomListResponseDTO): GetChattingRoomListResponse =
@@ -70,8 +70,8 @@ object ChattingMapper {
             joinedAt = dto.joinedAt,
         )
 
-    fun toPutChattingRoomAlarmResponse(dto: PutChattingRoomAlarmResponseDTO): PutChattingRoomAlarmResponse =
-        PutChattingRoomAlarmResponse(
-            state = dto.state,
+    fun toPutChattingRoomAlarmRequestDTO(request: PutChattingRoomAlarmRequest): PutChattingRoomAlarmRequestDTO =
+        PutChattingRoomAlarmRequestDTO(
+            on = request.on,
         )
 }

@@ -3,7 +3,7 @@ package com.catchmate.domain.repository
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import okhttp3.MultipartBody
 
 interface ChattingRepository {
@@ -20,9 +20,9 @@ interface ChattingRepository {
     ): Result<Unit>
 
     suspend fun putChattingRoomAlarm(
-        chatRoomId: Long,
-        enable: Boolean,
-    ): Result<PutChattingRoomAlarmResponse>
+        roomId: Long,
+        dto: PutChattingRoomAlarmRequest,
+    ): Result<Unit>
 
     suspend fun deleteChattingRoom(roomId: Long): Result<Unit>
 

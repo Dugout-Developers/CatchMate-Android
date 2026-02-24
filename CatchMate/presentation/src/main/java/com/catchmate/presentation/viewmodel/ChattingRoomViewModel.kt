@@ -9,8 +9,7 @@ import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
-import com.catchmate.domain.model.enumclass.ChatMessageType
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
 import com.catchmate.domain.usecase.chatting.GetChattingMessagesUseCase
 import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
@@ -55,8 +54,8 @@ class ChattingRoomViewModel
         val isLeft: LiveData<Boolean>
             get() = _isLeft
 
-        private val _putChattingRoomAlarmResponse = MutableLiveData<PutChattingRoomAlarmResponse>()
-        val putChattingRoomAlarmResponse: LiveData<PutChattingRoomAlarmResponse>
+        private val _putChattingRoomAlarmResponse = MutableLiveData<Unit>()
+        val putChattingRoomAlarmResponse: LiveData<Unit>
             get() = _putChattingRoomAlarmResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -288,23 +287,23 @@ class ChattingRoomViewModel
                     }
             }
         }
-//
-//        fun putChattingRoomAlarm(
-//            chatRoomId: Long,
-//            enable: Boolean,
-//        ) {
-//            viewModelScope.launch {
-//                val result = putChattingRoomAlarmUseCase(chatRoomId, enable)
-//                result
-//                    .onSuccess { response ->
-//                        _putChattingRoomAlarmResponse.value = response
-//                    }.onFailure { exception ->
-//                        if (exception is ReissueFailureException) {
-//                            _navigateToLogin.value = true
-//                        } else {
-//                            _errorMessage.value = exception.message
-//                        }
-//                    }
-//            }
-//        }
+
+        fun putChattingRoomAlarm(
+            roomId: Long,
+            request: PutChattingRoomAlarmRequest,
+        ) {
+            viewModelScope.launch {
+                val result = putChattingRoomAlarmUseCase(roomId, request)
+                result
+                    .onSuccess { response ->
+                        _putChattingRoomAlarmResponse.value = response
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            _navigateToLogin.value = true
+                        } else {
+                            _errorMessage.value = exception.message
+                        }
+                    }
+            }
+        }
     }

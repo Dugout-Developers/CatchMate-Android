@@ -7,7 +7,7 @@ import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -52,13 +52,18 @@ class ChattingRepositoryImpl
             )
 
         override suspend fun putChattingRoomAlarm(
-            chatRoomId: Long,
-            enable: Boolean,
-        ): Result<PutChattingRoomAlarmResponse> =
+            roomId: Long,
+            request: PutChattingRoomAlarmRequest,
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.putChattingRoomAlarm(chatRoomId, enable) },
-                transform = { ChattingMapper.toPutChattingRoomAlarmResponse(it!!) },
+                apiFunction = {
+                    chattingApi.putChattingRoomAlarm(
+                        roomId,
+                        ChattingMapper.toPutChattingRoomAlarmRequestDTO(request),
+                    )
+                },
+                transform = { it },
             )
 
         override suspend fun deleteChattingRoom(roomId: Long): Result<Unit> =
