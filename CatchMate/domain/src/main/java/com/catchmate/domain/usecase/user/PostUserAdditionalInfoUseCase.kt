@@ -10,7 +10,7 @@ class PostUserAdditionalInfoUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend fun postUserAdditionalInfo(
+        suspend operator fun invoke(
             postUserAdditionalInfoRequest: PostUserAdditionalInfoRequest,
         ): Result<PostUserAdditionalInfoResponse> = userRepository.postUserAdditionalInfo(postUserAdditionalInfoRequest)
     }

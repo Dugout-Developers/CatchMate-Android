@@ -1,5 +1,6 @@
 package com.catchmate.data.repository
 
+import com.catchmate.data.datasource.local.LocalStorageDataSource
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.datasource.remote.UserService
 import com.catchmate.data.mapper.UserMapper
@@ -28,6 +29,7 @@ class UserRepositoryImpl
     @Inject
     constructor(
         retrofitClient: RetrofitClient,
+        private val localStorageDataSource: LocalStorageDataSource,
     ) : UserRepository {
         private val userApi = retrofitClient.createApi<UserService>()
         private val tag = "UserRepo"
@@ -99,7 +101,12 @@ class UserRepositoryImpl
                         )
                     },
                 transform = { UserMapper.toPostUserAdditionalInfoResponse(it!!) },
-            )
+            ).onSuccess {
+                localStorageDataSource.saveAccessToken(it.accessToken)
+                localStorageDataSource.saveRefreshToken(it.refreshToken)
+                localStorageDataSource.saveUserId(it.userId)
+                localStorageDataSource.saveProvider(postUserAdditionalInfoRequest.provider)
+            }
 
         override suspend fun patchUserProfile(
             request: RequestBody,
