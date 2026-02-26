@@ -49,19 +49,19 @@ class HomeFilterView(
         }
     }
 
-    fun setClubFilterText(clubIdList: Array<Int>?) {
-        if (clubIdList != null) {
-            val clubNameList = convertClubIdListToNameList(clubIdList)
-            var clubs: String = ""
-            clubNameList.forEach { name ->
-                clubs += ("$name, ")
-            }
-            clubs = clubs.substring(0, clubs.length - 2)
-            binding.tvFilterName.text = clubs
-        } else {
-            binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_team)
-        }
-    }
+//    fun setClubFilterText(clubIdList: Array<Int>?) {
+//        if (clubIdList != null) {
+//            val clubNameList = convertClubIdListToNameList(clubIdList)
+//            var clubs: String = ""
+//            clubNameList.forEach { name ->
+//                clubs += ("$name, ")
+//            }
+//            clubs = clubs.substring(0, clubs.length - 2)
+//            binding.tvFilterName.text = clubs
+//        } else {
+//            binding.tvFilterName.text = ContextCompat.getString(context, R.string.home_filter_team)
+//        }
+//    }
 
     fun setPersonFilterText(count: Int?) {
         if (count != null) {
