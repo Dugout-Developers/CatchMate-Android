@@ -51,7 +51,6 @@ object ResourceUtil {
             else -> Brand500
         }
 
-
     fun convertTeamColor(
         context: Context,
         clubId: Int,
