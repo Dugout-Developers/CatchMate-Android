@@ -15,15 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.catchmate.presentation.R
+import com.catchmate.presentation.view.components.CatchMateCheckBox
 import com.catchmate.presentation.view.components.CatchMateIcon
+import com.catchmate.presentation.view.components.CatchMateTeamLogoBox
 import com.catchmate.presentation.view.theme.Brand500
+import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body01Medium
 import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body03Medium
 import com.catchmate.presentation.view.theme.Grey0
 import com.catchmate.presentation.view.theme.Grey50
 import com.catchmate.presentation.view.theme.Grey700
+import com.catchmate.presentation.view.theme.Grey800
+import com.catchmate.presentation.view.theme.KtWiz
 
 @Composable
 fun HomeFilterChip(
@@ -85,6 +91,49 @@ fun HomeFilterChip(
             )
         }
     }
+}
+
+@Composable
+fun HomeCheerTeamCheckView(
+    logoRes: Int,
+    teamColor: Color,
+    isChecked: Boolean,
+    teamName: String,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CatchMateTeamLogoBox(
+            logoRes = logoRes,
+            teamColor = teamColor,
+            isSelected = isChecked,
+            isAlphaApplied = false,
+            isEnabled = true,
+            onClick = {}, //
+        )
+        Spacer(Modifier.width(12.dp))
+        Text(
+            text = teamName,
+            style = Body01Medium,
+            color = Grey800,
+            modifier = Modifier.weight(1f),
+        )
+        CatchMateCheckBox(
+            isChecked = isChecked,
+            onCheckedChange = {},//
+        )
+    }
+}
+
+@Composable
+@Preview
+fun PreviewHomeCheerTeamCheckView() {
+    HomeCheerTeamCheckView(
+        R.drawable.vec_all_kia_tigers_logo,
+        KtWiz,
+        false,
+        "위즈"
+    )
 }
 
 @Composable
