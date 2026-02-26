@@ -32,13 +32,14 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeCheerTeamBottomSheet(
+fun HomeClubBottomSheet(
     onDismissRequest: () -> Unit,
-    onDateSelected: (LocalDate?) -> Unit,
-    teamIdList: List<Int>,
+    onApply: () -> Unit,
     selectedTeamId: List<Int>? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
+    val teamIdList =
+        listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -96,9 +97,8 @@ fun HomeCheerTeamBottomSheet(
 @Composable
 @Preview
 fun PreviewHomeCheerTeamBottomSheet() {
-    HomeCheerTeamBottomSheet(
+    HomeClubBottomSheet(
         {},
         {},
-        listOf(1,2,3,4,5,6,7,8,9,10),
     )
 }

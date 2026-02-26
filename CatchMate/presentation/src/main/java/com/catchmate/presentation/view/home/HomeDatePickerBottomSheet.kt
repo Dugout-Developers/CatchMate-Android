@@ -27,7 +27,7 @@ import java.time.LocalDate
 @Composable
 fun HomeDatePickerBottomSheet(
     onDismissRequest: () -> Unit,
-    onDateSelected: (LocalDate?) -> Unit,
+    onApply: (String) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
