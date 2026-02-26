@@ -30,6 +30,7 @@ import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body01Medium
 import com.catchmate.presentation.view.theme.CatchMateTextStyle.Caption01Medium
 import com.catchmate.presentation.view.theme.CatchMateTextStyle.HeadLine03Medium
 import com.catchmate.presentation.view.theme.Grey0
+import com.catchmate.presentation.view.theme.Grey50
 import com.catchmate.presentation.view.theme.Grey500
 import com.catchmate.presentation.view.theme.Grey700
 import com.catchmate.presentation.view.theme.Grey800
@@ -131,12 +132,18 @@ fun CatchMateTopAppBar(
     title: @Composable (() -> Unit)? = null,
     actions: @Composable (RowScope. () -> Unit)? = null,
 ) {
+    val  backgroundColor =
+        if (onBackClick == null) {
+            Grey50
+        } else {
+            Grey0
+        }
     Row(
         modifier =
             modifier
                 .padding(horizontal = 18.dp, vertical = 9.dp)
                 .fillMaxWidth()
-                .background(Grey0),
+                .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         onBackClick?.let {
