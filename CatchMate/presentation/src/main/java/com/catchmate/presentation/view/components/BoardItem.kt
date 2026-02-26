@@ -80,7 +80,9 @@ fun BoardItem(
                 CatchMateTeamLogoBox(
                     logoRes = homeTeamLogo,
                     teamColor = homeTeamColor,
-                    isCheerTeam = isCheerTeam,
+                    isSelected = isCheerTeam,
+                    isAlphaApplied = !isCheerTeam,
+                    onClick = {},
                 )
                 Text(
                     modifier = Modifier.padding(horizontal = 24.dp),
@@ -91,7 +93,9 @@ fun BoardItem(
                 CatchMateTeamLogoBox(
                     logoRes = awayTeamLogo,
                     teamColor = awayTeamColor,
-                    isCheerTeam = !isCheerTeam,
+                    isSelected = !isCheerTeam,
+                    isAlphaApplied = isCheerTeam,
+                    onClick = {},
                 )
             }
         }
