@@ -13,7 +13,7 @@ class GetBoardListUseCase
             gameDate: String?,
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
-            page: Int?,
-            size: Int?,
+            page: Int,
+            size: Int,
         ): Result<GetBoardListResponse> = boardRepository.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size)
     }

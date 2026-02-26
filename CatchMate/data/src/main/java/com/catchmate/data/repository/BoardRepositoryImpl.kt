@@ -70,8 +70,8 @@ class BoardRepositoryImpl
             gameDate: String?,
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
-            page: Int?,
-            size: Int?,
+            page: Int,
+            size: Int,
         ): Result<GetBoardListResponse> =
             apiCall(
                 tag = this.tag,

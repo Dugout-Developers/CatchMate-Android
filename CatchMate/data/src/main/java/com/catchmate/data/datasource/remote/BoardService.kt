@@ -48,8 +48,8 @@ interface BoardService {
         @Query("gameDate") gameDate: String? = null,
         @Query("maxPerson") maxPerson: Int? = null,
         @Query("preferredTeamIdList") preferredTeamIdList: Array<Int>? = null,
-        @Query("page") page: Int? = null,
-        @Query("size") size: Int? = null,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
     ): Response<GetBoardListResponseDTO?>
 
     @GET("api/boards/users/{userId}")
