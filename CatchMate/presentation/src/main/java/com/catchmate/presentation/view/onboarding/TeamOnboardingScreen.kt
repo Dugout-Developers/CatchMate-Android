@@ -61,7 +61,8 @@ fun TeamOnboardingScreen(
                     buttonType = ButtonType.FILLED,
                     modifier =
                         Modifier
-                            .padding(horizontal = 12.dp, vertical = 4.dp),
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .fillMaxWidth(),
                 )
                 Spacer(Modifier.height(34.dp))
             }
