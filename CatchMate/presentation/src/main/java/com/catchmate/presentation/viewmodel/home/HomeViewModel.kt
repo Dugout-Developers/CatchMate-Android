@@ -1,15 +1,17 @@
 package com.catchmate.presentation.viewmodel.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.board.GetBoardListResponse
-import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.domain.usecase.board.GetBoardListUseCase
-import com.catchmate.domain.usecase.user.GetUserProfileUseCase
-import com.catchmate.presentation.viewmodel.home.HomeSideEffect.*
+import com.catchmate.presentation.util.DateUtils.formatDateToFilterDate
+import com.catchmate.presentation.view.components.FilterSheetType
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.NavigateToLogin
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.NavigateToNotification
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.NavigateToReadPost
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.ShowClubBottomSheet
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.ShowDatePickerBottomSheet
+import com.catchmate.presentation.viewmodel.home.HomeSideEffect.ShowMemberCountBottomSheet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,12 +65,41 @@ class HomeViewModel
                 }
                 HomeEvent.OnLoadMoreBoards -> {
                     getBoardList(
-                        gameDate = uiState.value.dateFilterData,
+//                        gameDate = uiState.value.dateFilterData,
                         maxPerson = uiState.value.memberFilterData.toInt(),
                     )
                 }
                 is HomeEvent.OnBoardDeleted -> {
                     removeBoardItem(event.boardId)
+                }
+                is HomeEvent.OnClubFilterApplied -> {
+                    _uiState.update {
+                        it.copy(
+                            clubFilterData = event.clubIds
+                        )
+                    }
+                }
+                is HomeEvent.OnDateFilterApplied -> {
+                    _uiState.update {
+                        it.copy(
+                            selectedDate = event.date
+                        )
+                    }
+                }
+                is HomeEvent.OnMemberFilterApplied -> {
+                    _uiState.update {
+                        it.copy(
+                            memberFilterData = event.memberCount
+                        )
+                    }
+                }
+
+                is HomeEvent.OnFilterReset -> {
+                    when (event.filterSheetType) {
+                        is FilterSheetType.Club -> _uiState.update { it.copy(clubFilterData = emptyList()) }
+                        is FilterSheetType.Date -> _uiState.update { it.copy(selectedDate = null) }
+                        is FilterSheetType.Member -> _uiState.update { it.copy(memberFilterData = "") }
+                    }
                 }
             }
         }

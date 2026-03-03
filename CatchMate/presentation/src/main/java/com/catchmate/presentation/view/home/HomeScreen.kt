@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.util.ClubUtils.convertClubIdListToString
+import com.catchmate.presentation.util.DateUtils.formatDateToFilterDate
 import com.catchmate.presentation.view.components.BoardItem
 import com.catchmate.presentation.view.components.CatchMateIcon
 import com.catchmate.presentation.view.components.CatchMateTopAppBar
@@ -101,8 +102,8 @@ fun HomeScreen(
             ) {
                 HomeFilterChip(
                     text = stringResource(R.string.home_filter_date),
-                    selectedData = uiState.dateFilterData,
-                    onClick = { onEvent(HomeEvent.OnDateFilterClicked("2026-04-23")) },
+                    selectedData = uiState.selectedDate?.let { formatDateToFilterDate(it) } ?: "",
+                    onClick = { onEvent(HomeEvent.OnDateFilterClicked(uiState.selectedDate)) },
                 )
                 HomeFilterChip(
                     text = stringResource(R.string.home_filter_team),

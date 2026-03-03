@@ -84,7 +84,9 @@ fun DateItem(
 @Composable
 fun HomeCalendarGrid(
     currentMonth: LocalDate,
-    selectedDate: LocalDate,
+    selectedDate: LocalDate?,
+    onDateClick: (LocalDate) -> Unit,
+    onMonthChange: (Int) -> Unit,
 ) {
     val daysInMonth = currentMonth.lengthOfMonth()
     val firstDayOfWeek = currentMonth.dayOfWeek.value % 7
@@ -97,10 +99,10 @@ fun HomeCalendarGrid(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 24.dp),
+            modifier = Modifier.padding(bottom = 24.dp),
         ) {
             IconButton(
-                onClick = {},//
+                onClick = { onMonthChange(-1) },
             ) {
                 Icon(
                     painter = painterResource(R.drawable.vec_calendar_before_triangle_20dp),
@@ -109,12 +111,12 @@ fun HomeCalendarGrid(
                 )
             }
             Text(
-                text = "월",//
+                text = "${currentMonth.monthValue}월",
                 style = HeadLine03Medium,
                 color = Grey800,
             )
             IconButton(
-                onClick = {},//
+                onClick = { onMonthChange(1) },
             ) {
                 Icon(
                     painter = painterResource(R.drawable.vec_calendar_triangle_next_20dp),
@@ -157,13 +159,12 @@ fun HomeCalendarGrid(
                     date = date,
                     isSelected = isSelected,
                     isEnabled = !isPast,
-                    onClick = {},
+                    onClick = { onDateClick(date) },
                 )
             }
         }
         Spacer(Modifier.height(30.dp))
     }
-
 }
 
 @Composable
@@ -172,6 +173,7 @@ fun PreviewHomeCalendarGrid() {
     HomeCalendarGrid(
         currentMonth = LocalDate.now().withDayOfMonth(1),
         selectedDate = LocalDate.parse("2026-02-28"),
+        {}, {},
     )
 }
 

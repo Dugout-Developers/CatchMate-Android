@@ -99,6 +99,7 @@ fun HomeCheerTeamCheckView(
     teamColor: Color,
     isChecked: Boolean,
     teamName: String,
+    onClick: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -128,12 +129,12 @@ fun HomeCheerTeamCheckView(
 @Composable
 @Preview
 fun PreviewHomeCheerTeamCheckView() {
-    HomeCheerTeamCheckView(
-        R.drawable.vec_all_kia_tigers_logo,
-        KtWiz,
-        false,
-        "위즈"
-    )
+//    HomeCheerTeamCheckView(
+//        R.drawable.vec_all_kia_tigers_logo,
+//        KtWiz,
+//        false,
+//        "위즈"
+//    )
 }
 
 @Composable

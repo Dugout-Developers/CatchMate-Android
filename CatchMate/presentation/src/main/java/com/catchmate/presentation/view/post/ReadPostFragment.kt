@@ -48,7 +48,6 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var isWriter = false
     private val boardId by lazy { arguments?.getLong("boardId") ?: -1L }
-    private val position by lazy { arguments?.getInt("position") ?: -1 }
     private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
     private var isFinishedGame = false
 
@@ -290,7 +289,9 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
         }
         readPostViewModel.deleteBoardResponse.observe(viewLifecycleOwner) { response ->
             Log.i("삭제 성공", "$response")
-            setFragmentResult("deleteBoardResultKey", bundleOf("position" to position))
+            findNavController().previousBackStackEntry?.savedStateHandle?.let {
+                it["deletedBoardId"] = boardId
+            }
             findNavController().popBackStack()
         }
         readPostViewModel.getEnroll.observe(viewLifecycleOwner) { response ->

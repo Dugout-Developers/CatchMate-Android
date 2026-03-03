@@ -19,6 +19,7 @@ import com.catchmate.presentation.R
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.activity.MainActivity
 import com.catchmate.presentation.view.base.BaseComposeFragment
+import com.catchmate.presentation.view.components.FilterSheetType
 import com.catchmate.presentation.viewmodel.MainViewModel
 import com.catchmate.presentation.viewmodel.home.HomeEvent
 import com.catchmate.presentation.viewmodel.home.HomeSideEffect
@@ -67,9 +68,7 @@ class HomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeContent() {
         val uiState by homeViewModel.uiState.collectAsState()
-        var showDatePickerSheet by remember { mutableStateOf(false) }
-        var showClubSheet by remember { mutableStateOf(false) }
-        var showMemberSheet by remember { mutableStateOf(false) }
+        var showBottomSheet by remember { mutableStateOf<FilterSheetType?>(null) }
 
         val result = findNavController().currentBackStackEntry
             ?.savedStateHandle
@@ -112,13 +111,13 @@ class HomeFragment : BaseComposeFragment() {
                         }
                     }
                     HomeSideEffect.ShowClubBottomSheet -> {
-                        showClubSheet = true
+                        showBottomSheet = FilterSheetType.Club(uiState.clubFilterData)
                     }
                     HomeSideEffect.ShowDatePickerBottomSheet -> {
-                        showDatePickerSheet = true
+                        showBottomSheet = FilterSheetType.Date(uiState.selectedDate)
                     }
                     HomeSideEffect.ShowMemberCountBottomSheet -> {
-                        showMemberSheet = true
+                        showBottomSheet = FilterSheetType.Member(uiState.memberFilterData)
                     }
                     is HomeSideEffect.NavigateToReadPost -> {
                         if (mainViewModel.isGuestLogin.value == true) {
@@ -146,28 +145,26 @@ class HomeFragment : BaseComposeFragment() {
             onEvent = homeViewModel::onEvent,
         )
 
-        if (showDatePickerSheet) {
-            HomeDatePickerBottomSheet(
-                onDismissRequest = { showDatePickerSheet = false },
-                onApply = { date ->
-                    homeViewModel.onEvent(HomeEvent.OnDateFilterClicked(date))
-                    showDatePickerSheet = false
-                }
-            )
-        }
-
-        if (showClubSheet) {
-            HomeClubBottomSheet(
-                onDismissRequest = { showClubSheet = false },
-                onApply = {
-                    homeViewModel.onEvent(HomeEvent.OnClubFilterClicked)
-                    showClubSheet = false
+        showBottomSheet?.let { type ->
+            HomeBottomSheet(
+                sheetType = type,
+                onDismissRequest = { showBottomSheet = null },
+                onDateApply = { dateStr ->
+                    homeViewModel.onEvent(HomeEvent.OnDateFilterApplied(dateStr))
+                    showBottomSheet = null
+                },
+                onClubApply = { clubIds ->
+                    homeViewModel.onEvent(HomeEvent.OnClubFilterApplied(clubIds))
+                    showBottomSheet = null
+                },
+                onMemberApply = { memberStr ->
+                    homeViewModel.onEvent(HomeEvent.OnMemberFilterApplied(memberStr))
+                    showBottomSheet = null
+                },
+                onReset = { filterSheetType ->
+                    homeViewModel.onEvent(HomeEvent.OnFilterReset(filterSheetType))
                 },
             )
-        }
-
-        if (showMemberSheet) {
-            ///////////////
         }
     }
 }

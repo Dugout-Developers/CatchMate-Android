@@ -3,6 +3,7 @@ package com.catchmate.presentation.util
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -75,11 +76,9 @@ object DateUtils {
     }
 
     // home date filter 포맷하는 함수
-    fun formatDateToFilterDate(date: String): String {
-        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val formattedDate = inputDateFormat.parse(date)
-        val outputDateFormat = SimpleDateFormat("MM.dd E", Locale.KOREAN)
-        return outputDateFormat.format(formattedDate)
+    fun formatDateToFilterDate(date: LocalDate): String {
+        val formatter = DateTimeFormatter.ofPattern("MM.dd E", Locale.KOREAN)
+        return date.format(formatter)
     }
 
     // 날짜+시간 값 분리해서 원하는 형태로 포맷 후 Pair로 반환 - 날짜:MM.dd
