@@ -31,6 +31,7 @@ import com.catchmate.presentation.view.components.BoardItem
 import com.catchmate.presentation.view.components.CatchMateIcon
 import com.catchmate.presentation.view.components.CatchMateTopAppBar
 import com.catchmate.presentation.view.components.CatchMateTopAppBarMenu
+import com.catchmate.presentation.view.components.ListEmptyComponent
 import com.catchmate.presentation.view.theme.Grey50
 import com.catchmate.presentation.viewmodel.home.HomeEvent
 import com.catchmate.presentation.viewmodel.home.HomeUiState
@@ -116,15 +117,22 @@ fun HomeScreen(
                     onClick = { onEvent(HomeEvent.OnMemberFilterClicked) },
                 )
             }
-            LazyColumn(
-                state = listState,
-                modifier = Modifier,
-            ) {
-                items(boardList) { board ->
-                    BoardItem(
-                        onClick = { onEvent(HomeEvent.OnBoardItemClicked(board.boardId)) },
-                        board = board,
-                    )
+            if (boardList.isEmpty()) {
+                ListEmptyComponent(
+                    iconRes = R.drawable.img_no_list_icon,
+                    titleText = stringResource(R.string.home_no_list_message),
+                )
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier,
+                ) {
+                    items(boardList) { board ->
+                        BoardItem(
+                            onClick = { onEvent(HomeEvent.OnBoardItemClicked(board.boardId)) },
+                            board = board,
+                        )
+                    }
                 }
             }
         }

@@ -63,9 +63,8 @@ class HomeViewModel
                     sendSideEffect(NavigateToReadPost(event.boardId))
                 }
                 HomeEvent.OnLoadMoreBoards -> {
-                    getBoardList(
-//                        gameDate = uiState.value.dateFilterData,
-                        maxPerson = uiState.value.memberFilterData.toInt(),
+                    getMoreBoardList(
+                        page = uiState.value.pageNumber + 1,
                     )
                 }
                 is HomeEvent.OnBoardDeleted -> {
@@ -123,7 +122,35 @@ class HomeViewModel
                     .onSuccess { response ->
                         _uiState.update {
                             it.copy(
-                                boardList = it.boardList + response.content,
+                                boardList = response.content,
+                                pageNumber = response.pageNumber,
+                                hasNext = response.hasNext,
+                            )
+                        }
+                    }.onFailure { exception ->
+                        if (exception is ReissueFailureException) {
+                            sendSideEffect(NavigateToLogin)
+                        } else {
+                            // 빈 리스트 화면에 문제 발생 화면 표시 로직 구현
+                        }
+                    }
+            }
+        }
+
+        private fun getMoreBoardList(
+            gameDate: String? = null,
+            maxPerson: Int? = null,
+            preferredTeamIdList: Array<Int>? = null,
+            page: Int = 0,
+            size: Int = 10,
+        ) {
+            viewModelScope.launch {
+                val result = getBoardListUseCase.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size)
+                result
+                    .onSuccess { response ->
+                        _uiState.update {
+                            it.copy(
+                                boardList = it.boardList + response.content,  // 필터 선택시에는 기존 boardList를 비워야함. next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
                                 pageNumber = response.pageNumber,
                                 hasNext = response.hasNext,
                             )
