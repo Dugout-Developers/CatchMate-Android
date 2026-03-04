@@ -48,6 +48,7 @@ fun ListEmptyComponent(
             text = titleText,
             style = HeadLine03SemiBold,
             color = Grey800,
+            textAlign = TextAlign.Center,
         )
         if (descriptionText != null) {
             Spacer(Modifier.height(20.dp))

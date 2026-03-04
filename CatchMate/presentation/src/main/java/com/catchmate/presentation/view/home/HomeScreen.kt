@@ -38,7 +38,7 @@ import com.catchmate.presentation.viewmodel.home.HomeUiState
 
 @Composable
 fun HomeScreen(
-    boardList: List<Board>,
+    boardList: List<Board>?,
     uiState: HomeUiState,
     onEvent: (HomeEvent) -> Unit,
 ) {
@@ -117,21 +117,30 @@ fun HomeScreen(
                     onClick = { onEvent(HomeEvent.OnMemberFilterClicked) },
                 )
             }
-            if (boardList.isEmpty()) {
-                ListEmptyComponent(
-                    iconRes = R.drawable.img_no_list_icon,
-                    titleText = stringResource(R.string.home_no_list_message),
-                )
-            } else {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier,
-                ) {
-                    items(boardList) { board ->
-                        BoardItem(
-                            onClick = { onEvent(HomeEvent.OnBoardItemClicked(board.boardId)) },
-                            board = board,
-                        )
+            when {
+                boardList == null -> {
+                    ListEmptyComponent(
+                        iconRes = R.drawable.vec_all_list_error_icon,
+                        titleText = stringResource(R.string.all_error_page_title),
+                    )
+                }
+                boardList.isEmpty() -> {
+                    ListEmptyComponent(
+                        iconRes = R.drawable.img_no_list_icon,
+                        titleText = stringResource(R.string.home_no_list_message),
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier,
+                    ) {
+                        items(boardList) { board ->
+                            BoardItem(
+                                onClick = { onEvent(HomeEvent.OnBoardItemClicked(board.boardId)) },
+                                board = board,
+                            )
+                        }
                     }
                 }
             }

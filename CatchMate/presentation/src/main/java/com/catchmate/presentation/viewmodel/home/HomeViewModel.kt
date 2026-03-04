@@ -104,7 +104,7 @@ class HomeViewModel
 
         private fun removeBoardItem(deletedBoardId: Long) {
             _uiState.update { currentState ->
-                val updatedList = currentState.boardList.filter { it.boardId != deletedBoardId }
+                val updatedList = currentState.boardList?.filter { it.boardId != deletedBoardId }
                 currentState.copy(boardList = updatedList)
             }
         }
@@ -131,7 +131,11 @@ class HomeViewModel
                         if (exception is ReissueFailureException) {
                             sendSideEffect(NavigateToLogin)
                         } else {
-                            // 빈 리스트 화면에 문제 발생 화면 표시 로직 구현
+                            _uiState.update {
+                                it.copy(
+                                    boardList = null,
+                                )
+                            }
                         }
                     }
             }
@@ -150,7 +154,7 @@ class HomeViewModel
                     .onSuccess { response ->
                         _uiState.update {
                             it.copy(
-                                boardList = it.boardList + response.content,  // 필터 선택시에는 기존 boardList를 비워야함. next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
+                                boardList = it.boardList?.plus(response.content),  // 필터 선택시에는 기존 boardList를 비워야함. next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
                                 pageNumber = response.pageNumber,
                                 hasNext = response.hasNext,
                             )
@@ -159,7 +163,11 @@ class HomeViewModel
                         if (exception is ReissueFailureException) {
                             sendSideEffect(NavigateToLogin)
                         } else {
-                            // 빈 리스트 화면에 문제 발생 화면 표시 로직 구현
+                            _uiState.update {
+                                it.copy(
+                                    boardList = null,
+                                )
+                            }
                         }
                     }
             }
