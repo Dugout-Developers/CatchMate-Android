@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -76,7 +77,9 @@ fun HomeFilterChip(
                 .then(border),
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 12.dp).padding(start = 16.dp, end = 12.dp),
+            modifier = Modifier
+                .padding(vertical = 12.dp)
+                .padding(start = 16.dp, end = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -99,9 +102,13 @@ fun HomeCheerTeamCheckView(
     teamColor: Color,
     isChecked: Boolean,
     teamName: String,
-    onClick: () -> Unit,
+    onClick: (Boolean) -> Unit,
 ) {
     Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onClick(!isChecked) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CatchMateTeamLogoBox(
@@ -110,7 +117,7 @@ fun HomeCheerTeamCheckView(
             isSelected = isChecked,
             isAlphaApplied = false,
             isEnabled = true,
-            onClick = {}, //
+            onClick = { onClick(!isChecked) },
         )
         Spacer(Modifier.width(12.dp))
         Text(
@@ -121,7 +128,7 @@ fun HomeCheerTeamCheckView(
         )
         CatchMateCheckBox(
             isChecked = isChecked,
-            onCheckedChange = {},//
+            onCheckedChange = { onClick(!isChecked) },
         )
     }
 }

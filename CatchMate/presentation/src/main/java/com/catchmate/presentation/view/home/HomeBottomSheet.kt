@@ -52,6 +52,10 @@ fun HomeBottomSheet(
     var tempClubIds by remember(sheetType) {
         mutableStateOf(if (sheetType is FilterSheetType.Club && sheetType.initialClubIds.isNotEmpty()) sheetType.initialClubIds.toSet() else emptySet())
     }
+    var tempMemberCount by remember(sheetType) {
+        mutableStateOf(if (sheetType is FilterSheetType.Member && sheetType.initialCount.isNotEmpty()) sheetType.initialCount else "")
+    }
+
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
 
     ModalBottomSheet(
@@ -87,7 +91,7 @@ fun HomeBottomSheet(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         items(teamIdList) { id ->
-                            val isSelected = sheetType.initialClubIds.contains(id) == true
+                            val isChecked = tempClubIds.contains(id)
                             val logo = convertTeamLogo(id)
                             val color = convertTeamColor(id)
                             val name = convertClubIdToName(id)
@@ -95,13 +99,13 @@ fun HomeBottomSheet(
                                 logoRes = logo,
                                 teamColor = color,
                                 teamName = name,
-                                isChecked = isSelected,
-                                onClick = {
+                                isChecked = isChecked,
+                                onClick = { nextState ->
                                     tempClubIds =
-                                        if (isSelected) {
-                                            tempClubIds - id
-                                        } else {
+                                        if (nextState) {
                                             tempClubIds + id
+                                        } else {
+                                            tempClubIds - id
                                         }
                                 }
                             )
@@ -131,7 +135,7 @@ fun HomeBottomSheet(
                     when (sheetType) {
                         is FilterSheetType.Club -> onClubApply(tempClubIds.toList())
                         is FilterSheetType.Date -> tempDate?.let { onDateApply(it) }
-                        is FilterSheetType.Member -> onMemberApply("") //
+                        is FilterSheetType.Member -> onMemberApply(tempMemberCount)
                     }
                     onDismissRequest()
                 },
@@ -139,7 +143,7 @@ fun HomeBottomSheet(
                     when (sheetType) {
                         is FilterSheetType.Club -> tempClubIds.isNotEmpty()
                         is FilterSheetType.Date -> tempDate != null
-                        is FilterSheetType.Member -> TODO()
+                        is FilterSheetType.Member -> tempMemberCount.isBlank()
                     },
             )
         }

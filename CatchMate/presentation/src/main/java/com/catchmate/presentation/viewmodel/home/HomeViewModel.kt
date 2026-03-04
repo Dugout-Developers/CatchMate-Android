@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.usecase.board.GetBoardListUseCase
-import com.catchmate.presentation.util.DateUtils.formatDateToFilterDate
 import com.catchmate.presentation.view.components.FilterSheetType
 import com.catchmate.presentation.viewmodel.home.HomeSideEffect.NavigateToLogin
 import com.catchmate.presentation.viewmodel.home.HomeSideEffect.NavigateToNotification

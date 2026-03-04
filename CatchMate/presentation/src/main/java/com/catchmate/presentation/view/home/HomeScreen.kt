@@ -107,7 +107,7 @@ fun HomeScreen(
                 )
                 HomeFilterChip(
                     text = stringResource(R.string.home_filter_team),
-                    selectedData = clubText, //
+                    selectedData = clubText,
                     onClick = { onEvent(HomeEvent.OnClubFilterClicked) },
                 )
                 HomeFilterChip(
