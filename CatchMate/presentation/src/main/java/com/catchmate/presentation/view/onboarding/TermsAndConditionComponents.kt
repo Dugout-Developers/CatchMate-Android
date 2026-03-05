@@ -51,6 +51,8 @@ fun TermsAndConditionAllAgreementRow(
             CatchMateCheckBox(
                 isChecked = isChecked,
                 onCheckedChange = onCheckedChange,
+                checkedIconRes = R.drawable.vec_all_check_btn_checked_24dp,
+                uncheckedIconRes = R.drawable.vec_all_check_btn_unchecked_24dp,
             )
             Spacer(Modifier.width(6.dp))
             Text(
@@ -81,6 +83,8 @@ fun TermsAndConditionCheckRow(
         CatchMateCheckBox(
             isChecked = isChecked,
             onCheckedChange = onCheckedChange,
+            checkedIconRes = R.drawable.vec_all_check_btn_checked_24dp,
+            uncheckedIconRes = R.drawable.vec_all_check_btn_unchecked_24dp,
         )
         Spacer(Modifier.width(6.dp))
         Text(

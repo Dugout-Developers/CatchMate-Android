@@ -129,6 +129,8 @@ fun HomeCheerTeamCheckView(
         CatchMateCheckBox(
             isChecked = isChecked,
             onCheckedChange = { onClick(!isChecked) },
+            checkedIconRes = R.drawable.vec_all_check_btn_checked_24dp,
+            uncheckedIconRes = R.drawable.vec_all_check_btn_unchecked_24dp,
         )
     }
 }

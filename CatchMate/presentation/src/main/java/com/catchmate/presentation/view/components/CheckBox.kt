@@ -19,13 +19,15 @@ import com.catchmate.presentation.R
 fun CatchMateCheckBox(
     modifier: Modifier = Modifier,
     isChecked: Boolean,
+    checkedIconRes: Int,
+    uncheckedIconRes: Int,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val iconRes =
         if (isChecked) {
-            R.drawable.vec_all_check_btn_checked_24dp
+            checkedIconRes
         } else {
-            R.drawable.vec_all_check_btn_unchecked_24dp
+            uncheckedIconRes
         }
 
     Box(
@@ -50,5 +52,7 @@ fun PreviewCatchMateCheckBox() {
     CatchMateCheckBox(
         isChecked = true,
         onCheckedChange = {},
+        checkedIconRes = R.drawable.vec_all_check_btn_checked_24dp,
+        uncheckedIconRes = R.drawable.vec_all_check_btn_unchecked_24dp,
     )
 }

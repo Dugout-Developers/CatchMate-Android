@@ -35,6 +35,8 @@ import com.catchmate.presentation.view.theme.Grey800
 fun BoardItem(
     onClick: () -> Unit,
     board: Board,
+    isChecked: Boolean? = null,
+    onLiked: ((Boolean) -> Unit)? = null,
 ) {
     val dateTimePair = DateUtils.formatISODateTime(board.gameResponse.gameStartDate!!)
     val homeTeamLogo = convertTeamLogo(board.gameResponse.homeClub?.clubId!!)
@@ -57,10 +59,23 @@ fun BoardItem(
                 Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            BoardMemberCountText(
-                currentMemberCount = board.currentPerson,
-                maxMemberCount = board.maxPerson,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                BoardMemberCountText(
+                    currentMemberCount = board.currentPerson,
+                    maxMemberCount = board.maxPerson,
+                    modifier = Modifier.weight(1f),
+                )
+                if (isChecked != null && onLiked != null) {
+                    CatchMateCheckBox(
+                        isChecked = isChecked,
+                        onCheckedChange = { onLiked(!isChecked) },
+                        checkedIconRes = R.drawable.vec_all_liked_filled_24dp,
+                        uncheckedIconRes = R.drawable.vec_all_liked_empty_24dp,
+                    )
+                }
+            }
             Spacer(Modifier.height(12.dp))
             Text(
                 text = "${dateTimePair.first} | ${dateTimePair.second} | ${board.gameResponse.location}",
@@ -159,6 +174,9 @@ fun PreviewBoardItem() {
                 )
         )
     BoardItem(
-        {}, board
+        onClick = {},
+        board = board,
+        isChecked = false,
+        onLiked = {true},
     )
 }
