@@ -6,6 +6,7 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PutBoardRequest
@@ -14,7 +15,7 @@ import com.catchmate.domain.model.board.PutBoardResponse
 interface BoardRepository {
     suspend fun postBoard(postBoardRequest: PostBoardRequest): Result<PostBoardResponse>
 
-    suspend fun postBoardLike(boardId: Long): Result<Unit>
+    suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse>
 
     suspend fun putBoard(
         boardId: Long,

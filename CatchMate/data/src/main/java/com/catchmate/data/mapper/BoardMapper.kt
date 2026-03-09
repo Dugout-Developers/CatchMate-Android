@@ -8,6 +8,7 @@ import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
+import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PutBoardRequestDTO
@@ -23,6 +24,7 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PutBoardRequest
@@ -214,5 +216,11 @@ object BoardMapper {
             totalElements = responseDTO.totalElements,
             hasNext = responseDTO.hasNext,
             pageNumber = responseDTO.pageNumber,
+        )
+
+    fun toPostLikeBoardResponse(dto: PostBoardLikeResponseDTO): PostBoardLikeResponse =
+        PostBoardLikeResponse(
+            boardId = dto.boardId,
+            bookmarked = dto.bookmarked,
         )
 }

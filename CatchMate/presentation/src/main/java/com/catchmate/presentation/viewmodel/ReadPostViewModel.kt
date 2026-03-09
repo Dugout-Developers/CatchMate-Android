@@ -9,6 +9,7 @@ import com.catchmate.domain.exception.BookmarkFailureException
 import com.catchmate.domain.exception.ReissueFailureException
 import com.catchmate.domain.model.board.GetBoardResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.enroll.DeleteEnrollResponse
 import com.catchmate.domain.model.enroll.GetEnrollResponse
 import com.catchmate.domain.model.enroll.PostEnrollRequest
@@ -41,8 +42,8 @@ class ReadPostViewModel
         val getBoardResponse: LiveData<GetBoardResponse>
             get() = _getBoardResponse
 
-        private val _postBoardLikeResponse = MutableLiveData<Unit>()
-        val postBoardLikeResponse: LiveData<Unit>
+        private val _postBoardLikeResponse = MutableLiveData<PostBoardLikeResponse>()
+        val postBoardLikeResponse: LiveData<PostBoardLikeResponse>
             get() = _postBoardLikeResponse
 
         private val _boardEnrollState = MutableLiveData<EnrollState>()

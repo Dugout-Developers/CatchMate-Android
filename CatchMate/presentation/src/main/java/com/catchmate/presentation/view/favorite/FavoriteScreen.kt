@@ -24,7 +24,7 @@ import com.catchmate.presentation.view.theme.Grey0
 
 @Composable
 fun FavoriteScreen(
-    boardList: List<Board>,
+    boardList: List<Board>?,
 ) {
     val listState = rememberLazyListState()
 
@@ -48,16 +48,31 @@ fun FavoriteScreen(
             modifier = Modifier.padding(innerPadding),
         ) {
             Spacer(Modifier.height(16.dp))
-            LazyColumn(
-                state = listState,
-            ) {
-                items(boardList) { board ->
-                    BoardItem(
-                        onClick = {  },//
-                        board = board,
-                        isChecked = board.bookMarked,
-                        onLiked = {},//
-                    )
+
+            when {
+                boardList == null -> {
+
+                }
+                boardList.isEmpty() -> {
+
+                }
+                else -> {
+                    LazyColumn(
+                        state = listState,
+                    ) {
+                        items(
+                            items = boardList,
+                            key = { it.boardId },
+                        ) { board ->
+                            BoardItem(
+                                modifier = Modifier.animateItem(),
+                                onClick = {  },//
+                                board = board,
+                                isChecked = board.bookMarked,
+                                onLiked = {},//
+                            )
+                        }
+                    }
                 }
             }
         }

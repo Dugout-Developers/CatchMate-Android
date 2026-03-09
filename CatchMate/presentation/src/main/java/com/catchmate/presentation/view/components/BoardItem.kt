@@ -33,6 +33,7 @@ import com.catchmate.presentation.view.theme.Grey800
 
 @Composable
 fun BoardItem(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     board: Board,
     isChecked: Boolean? = null,
@@ -46,7 +47,7 @@ fun BoardItem(
     val isCheerTeam = board.gameResponse.homeClub?.clubId!! == board.cheerClub.clubId
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(vertical = 8.dp),

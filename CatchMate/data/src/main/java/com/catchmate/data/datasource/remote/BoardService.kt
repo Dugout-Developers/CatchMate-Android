@@ -6,6 +6,7 @@ import com.catchmate.data.dto.board.GetLikedBoardResponseDTO
 import com.catchmate.data.dto.board.GetTempBoardResponseDTO
 import com.catchmate.data.dto.board.GetUserBoardListResponseDTO
 import com.catchmate.data.dto.board.PatchBoardLiftUpResponseDTO
+import com.catchmate.data.dto.board.PostBoardLikeResponseDTO
 import com.catchmate.data.dto.board.PostBoardRequestDTO
 import com.catchmate.data.dto.board.PostBoardResponseDTO
 import com.catchmate.data.dto.board.PutBoardRequestDTO
@@ -29,7 +30,7 @@ interface BoardService {
     @POST("api/bookmarks/{boardId}")
     suspend fun postBoardLike(
         @Path("boardId") boardId: Long,
-    ): Response<Unit>
+    ): Response<PostBoardLikeResponseDTO>
 
     @PUT("api/boards/{boardId}")
     suspend fun putBoard(

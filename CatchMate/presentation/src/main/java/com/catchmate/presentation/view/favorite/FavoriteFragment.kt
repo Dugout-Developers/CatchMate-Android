@@ -2,38 +2,24 @@ package com.catchmate.presentation.view.favorite
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
-import com.catchmate.presentation.databinding.FragmentFavoriteBinding
-import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
-import com.catchmate.presentation.interaction.OnPostItemClickListener
-import com.catchmate.presentation.interaction.OnPostItemToggleClickListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
-import com.catchmate.presentation.view.base.BaseFragment
-import com.catchmate.presentation.viewmodel.FavoriteViewModel
+import com.catchmate.presentation.view.base.BaseComposeFragment
+import com.catchmate.presentation.viewmodel.favorite.FavoriteSideEffect
+import com.catchmate.presentation.viewmodel.favorite.FavoriteViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteFragment :
-    BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteBinding::inflate),
-    OnPostItemClickListener,
-    OnPostItemToggleClickListener,
-    OnListItemAllRemovedListener {
+class FavoriteFragment : BaseComposeFragment() {
     private val favoriteViewModel: FavoriteViewModel by viewModels()
-
-    private var currentPage: Int = 0
-    private var hasNext = true
-    private var isLoading = false
-    private var isApiCalled = false
-    private var isFirstLoad = true
-    private var likedList: MutableList<Board> = mutableListOf()
 
     override fun onViewCreated(
         view: View,
@@ -41,131 +27,40 @@ class FavoriteFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
-        initHeader()
-        initViewModel()
-        initRecyclerView()
-
-        if (isFirstLoad) {
-            getLikedBoard()
-            isFirstLoad = false
-        }
     }
 
-    private fun initHeader() {
-        binding.layoutHeaderFavorite.apply {
-            tvHeaderTextTitle.setText(R.string.favorite_title)
-            imgbtnHeaderTextBack.visibility = View.GONE
-        }
-    }
+    @Composable
+    override fun ComposeContent() {
+        val uiState by favoriteViewModel.uiState.collectAsState()
 
-    private fun initViewModel() {
-        favoriteViewModel.getLikedBoardResponse.observe(viewLifecycleOwner) { response ->
-            if (!response.hasNext && response.totalElements == 0) {
-                binding.layoutFavoriteNoList.visibility = View.VISIBLE
-                binding.rvFavoritePost.visibility = View.GONE
-            } else {
-                binding.layoutFavoriteNoList.visibility = View.GONE
-                binding.rvFavoritePost.visibility = View.VISIBLE
-                if (isApiCalled) {
-                    likedList.addAll(response.content)
-                }
-                val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-                adapter.updateLikedList(likedList)
-                hasNext = response.hasNext
-                isLoading = false
-            }
-            isApiCalled = false
-        }
-
-        favoriteViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
-            if (isTrue) {
-                val navOptions =
-                    NavOptions
-                        .Builder()
-                        .setPopUpTo(R.id.favoriteFragment, true)
-                        .build()
-                val bundle = Bundle()
-                bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
-                findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
-            }
-        }
-
-        favoriteViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
-            errorMessage?.let {
-                if (it == "ListLoadError") {
-                    binding.rvFavoritePost.visibility = View.GONE
-                    binding.layoutFavoriteNoList.visibility = View.VISIBLE
-                    Glide
-                        .with(requireContext())
-                        .load(R.drawable.vec_all_list_error_icon)
-                        .into(binding.ivFavoriteNoList)
-                    binding.tvFavoriteNoListTitle.setText(R.string.all_error_page_title)
-                    binding.tvFavoriteNoListSub.visibility = View.GONE
-                } else {
-                    Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun getLikedBoard() {
-        if (isLoading || !hasNext) return
-        isLoading = true
-        favoriteViewModel.getLikedBoard(currentPage)
-        isApiCalled = true
-    }
-
-    private fun initRecyclerView() {
-        binding.rvFavoritePost.apply {
-            adapter =
-                FavoritePostAdapter(
-                    requireContext(),
-                    layoutInflater,
-                    this@FavoriteFragment,
-                    this@FavoriteFragment,
-                    this@FavoriteFragment,
-                )
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addOnScrollListener(
-                object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(
-                        recyclerView: RecyclerView,
-                        dx: Int,
-                        dy: Int,
-                    ) {
-                        super.onScrolled(recyclerView, dx, dy)
-                        val lastVisibleItemPosition =
-                            (recyclerView.layoutManager as LinearLayoutManager)
-                                .findLastCompletelyVisibleItemPosition()
-                        val itemTotalCount = recyclerView.adapter!!.itemCount
-                        if (lastVisibleItemPosition + 1 >= itemTotalCount && hasNext && !isLoading) {
-                            currentPage += 1
-                            getLikedBoard()
-                        }
+        LaunchedEffect(Unit) {
+            favoriteViewModel.sideEffect.collect { effect ->
+                when (effect) {
+                    FavoriteSideEffect.NavigateToLogin -> {
+                        val navOptions =
+                            NavOptions
+                                .Builder()
+                                .setPopUpTo(R.id.favoriteFragment, true)
+                                .build()
+                        val bundle = Bundle()
+                        bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                        findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
                     }
-                },
-            )
+                    is FavoriteSideEffect.NavigateToReadPost -> {
+                        val bundle = Bundle()
+                        bundle.putLong("boardId", effect.boardId)
+                        findNavController().navigate(R.id.action_favoriteFragment_to_readPostFragment, bundle)
+                    }
+                    FavoriteSideEffect.ShowSnackBar -> {
+                        Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT)
+                    }
+                }
+            }
         }
-    }
 
-    override fun onPostItemClicked(boardId: Long) {
-        val bundle = Bundle()
-        bundle.putLong("boardId", boardId)
-        findNavController().navigate(R.id.action_favoriteFragment_to_readPostFragment, bundle)
-    }
+        FavoriteScreen(uiState.boardList)
+        // item 좋아요 해제 로직
+        // 스크린 내 리스트 없을때, response 실패일때 화면 처리
 
-    override fun onPostItemToggleClicked(
-        boardId: Long,
-        position: Int,
-    ) {
-        favoriteViewModel.postBoardLike(boardId)
-        likedList.removeAt(position)
-        val adapter = binding.rvFavoritePost.adapter as FavoritePostAdapter
-        adapter.removeUnlikedPost(position)
-    }
-
-    override fun onListItemAllRemoved() {
-        binding.rvFavoritePost.visibility = View.GONE
-        binding.layoutFavoriteNoList.visibility = View.VISIBLE
     }
 }
