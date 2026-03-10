@@ -34,6 +34,7 @@ import com.catchmate.presentation.view.components.FilterSheetType
 import com.catchmate.presentation.view.components.HomeCalendarGrid
 import com.catchmate.presentation.view.theme.Grey0
 import com.catchmate.presentation.view.theme.Opacity40
+import com.catchmate.presentation.viewmodel.home.HomeEvent
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,10 +42,7 @@ import java.time.LocalDate
 fun HomeBottomSheet(
     sheetType: FilterSheetType,
     onDismissRequest: () -> Unit,
-    onDateApply: (LocalDate) -> Unit,
-    onClubApply: (List<Int>) -> Unit,
-    onMemberApply: (String) -> Unit,
-    onReset: (FilterSheetType) -> Unit,
+    onEvent: (HomeEvent) -> Unit,
 ) {
     // 임시 상태(초기값은 부모로부터 받은 initial 값)
     var tempDate by remember(sheetType) {
@@ -134,15 +132,17 @@ fun HomeBottomSheet(
             Spacer(Modifier.height(28.dp))
             CatchMateBottomSheetButton(
                 onResetClicked = {
-                    onReset(sheetType)
+                    onEvent(HomeEvent.OnFilterReset(sheetType))
                     onDismissRequest()
                 },
                 onSubmitClicked = {
-                    when (sheetType) {
-                        is FilterSheetType.Club -> onClubApply(tempClubIds.toList())
-                        is FilterSheetType.Date -> tempDate?.let { onDateApply(it) }
-                        is FilterSheetType.Member -> onMemberApply(tempMemberCount)
-                    }
+                    val appliedType =
+                        when (sheetType) {
+                            is FilterSheetType.Club -> FilterSheetType.Club(tempClubIds.toList())
+                            is FilterSheetType.Date -> FilterSheetType.Date(tempDate)
+                            is FilterSheetType.Member -> FilterSheetType.Member(tempMemberCount)
+                        }
+                    onEvent(HomeEvent.OnFilterApplied(appliedType))
                     onDismissRequest()
                 },
                 isSubmitEnable =

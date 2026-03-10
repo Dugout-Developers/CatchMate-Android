@@ -48,48 +48,92 @@ class HomeViewModel
                     sendSideEffect(NavigateToNotification)
                 }
                 is HomeEvent.OnDateFilterClicked -> {
-                    // boardlist 비우고 getBoardList 다시 호출
                     sendSideEffect(ShowDatePickerBottomSheet)
                 }
                 HomeEvent.OnClubFilterClicked -> {
-                    // boardlist 비우고 getBoardList 다시 호출
                     sendSideEffect(ShowClubBottomSheet)
                 }
                 HomeEvent.OnMemberFilterClicked -> {
-                    // boardlist 비우고 getBoardList 다시 호출
                     sendSideEffect(ShowMemberCountBottomSheet)
                 }
                 is HomeEvent.OnBoardItemClicked -> {
                     sendSideEffect(NavigateToReadPost(event.boardId))
                 }
                 HomeEvent.OnLoadMoreBoards -> {
-                    getMoreBoardList(
+                    val gameDate =
+                        if (uiState.value.selectedDate == null) {
+                            null
+                        } else {
+                            uiState.value.selectedDate.toString()
+                        }
+                    val maxPerson =
+                        if (uiState.value.memberFilterData.isBlank()) {
+                            null
+                        } else {
+                            uiState.value.memberFilterData.toInt()
+                        }
+                    val preferredTeamIdList =
+                        if (uiState.value.clubFilterData.isEmpty()) {
+                            null
+                        } else {
+                            uiState.value.clubFilterData.toTypedArray()
+                        }
+                    getBoardList(
+                        gameDate = gameDate,
+                        maxPerson = maxPerson,
+                        preferredTeamIdList = preferredTeamIdList,
                         page = uiState.value.pageNumber + 1,
+                        isReadMore = true,
                     )
                 }
                 is HomeEvent.OnBoardDeleted -> {
                     removeBoardItem(event.boardId)
                 }
-                is HomeEvent.OnClubFilterApplied -> {
-                    _uiState.update {
-                        it.copy(
-                            clubFilterData = event.clubIds
-                        )
+
+                is HomeEvent.OnFilterApplied -> {
+                    _uiState.update { state ->
+                        when (event.sheetType) {
+                            is FilterSheetType.Club -> {
+                                state.copy(
+                                    clubFilterData = event.sheetType.initialClubIds
+                                )
+                            }
+                            is FilterSheetType.Date -> {
+                                state.copy(
+                                    selectedDate = event.sheetType.initialDate
+                                )
+                            }
+                            is FilterSheetType.Member -> {
+                                state.copy(
+                                    memberFilterData = event.sheetType.initialCount
+                                )
+                            }
+                        }
                     }
-                }
-                is HomeEvent.OnDateFilterApplied -> {
-                    _uiState.update {
-                        it.copy(
-                            selectedDate = event.date
-                        )
-                    }
-                }
-                is HomeEvent.OnMemberFilterApplied -> {
-                    _uiState.update {
-                        it.copy(
-                            memberFilterData = event.memberCount
-                        )
-                    }
+                    val gameDate =
+                        if (uiState.value.selectedDate == null) {
+                            null
+                        } else {
+                            uiState.value.selectedDate.toString()
+                        }
+                    val maxPerson =
+                        if (uiState.value.memberFilterData.isBlank()) {
+                            null
+                        } else {
+                            uiState.value.memberFilterData.toInt()
+                        }
+                    val preferredTeamIdList =
+                        if (uiState.value.clubFilterData.isEmpty()) {
+                            null
+                        } else {
+                            uiState.value.clubFilterData.toTypedArray()
+                        }
+
+                    getBoardList(
+                        gameDate = gameDate,
+                        maxPerson = maxPerson,
+                        preferredTeamIdList = preferredTeamIdList,
+                    )
                 }
 
                 is HomeEvent.OnFilterReset -> {
@@ -98,6 +142,29 @@ class HomeViewModel
                         is FilterSheetType.Date -> _uiState.update { it.copy(selectedDate = null) }
                         is FilterSheetType.Member -> _uiState.update { it.copy(memberFilterData = "") }
                     }
+                    val gameDate =
+                        if (uiState.value.selectedDate == null) {
+                            null
+                        } else {
+                            uiState.value.selectedDate.toString()
+                        }
+                    val maxPerson =
+                        if (uiState.value.memberFilterData.isBlank()) {
+                            null
+                        } else {
+                            uiState.value.memberFilterData.toInt()
+                        }
+                    val preferredTeamIdList =
+                        if (uiState.value.clubFilterData.isEmpty()) {
+                            null
+                        } else {
+                            uiState.value.clubFilterData.toTypedArray()
+                        }
+                    getBoardList(
+                        gameDate = gameDate,
+                        maxPerson = maxPerson,
+                        preferredTeamIdList = preferredTeamIdList,
+                    )
                 }
             }
         }
@@ -115,49 +182,26 @@ class HomeViewModel
             preferredTeamIdList: Array<Int>? = null,
             page: Int = 0,
             size: Int = 10,
+            isReadMore: Boolean = false,
         ) {
             viewModelScope.launch {
                 val result = getBoardListUseCase.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size)
                 result
                     .onSuccess { response ->
                         _uiState.update {
-                            it.copy(
-                                boardList = response.content,
-                                pageNumber = response.pageNumber,
-                                hasNext = response.hasNext,
-                            )
-                        }
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            sendSideEffect(NavigateToLogin)
-                        } else {
-                            _uiState.update {
+                            if (isReadMore) {
                                 it.copy(
-                                    boardList = null,
+                                    boardList = it.boardList?.plus(response.content),  // next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
+                                    pageNumber = response.pageNumber,
+                                    hasNext = response.hasNext,
+                                )
+                            } else {
+                                it.copy(
+                                    boardList = response.content, // 최초 호출 또는 바텀시트 필터 선택 후 api 호출 시
+                                    pageNumber = response.pageNumber,
+                                    hasNext = response.hasNext,
                                 )
                             }
-                        }
-                    }
-            }
-        }
-
-        private fun getMoreBoardList(
-            gameDate: String? = null,
-            maxPerson: Int? = null,
-            preferredTeamIdList: Array<Int>? = null,
-            page: Int = 0,
-            size: Int = 10,
-        ) {
-            viewModelScope.launch {
-                val result = getBoardListUseCase.getBoardList(gameDate, maxPerson, preferredTeamIdList, page, size)
-                result
-                    .onSuccess { response ->
-                        _uiState.update {
-                            it.copy(
-                                boardList = it.boardList?.plus(response.content),  // 필터 선택시에는 기존 boardList를 비워야함. next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
-                                pageNumber = response.pageNumber,
-                                hasNext = response.hasNext,
-                            )
                         }
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {

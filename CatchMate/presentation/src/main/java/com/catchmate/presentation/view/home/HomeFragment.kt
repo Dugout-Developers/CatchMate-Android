@@ -149,21 +149,7 @@ class HomeFragment : BaseComposeFragment() {
             HomeBottomSheet(
                 sheetType = type,
                 onDismissRequest = { showBottomSheet = null },
-                onDateApply = { dateStr ->
-                    homeViewModel.onEvent(HomeEvent.OnDateFilterApplied(dateStr))
-                    showBottomSheet = null
-                },
-                onClubApply = { clubIds ->
-                    homeViewModel.onEvent(HomeEvent.OnClubFilterApplied(clubIds))
-                    showBottomSheet = null
-                },
-                onMemberApply = { memberStr ->
-                    homeViewModel.onEvent(HomeEvent.OnMemberFilterApplied(memberStr))
-                    showBottomSheet = null
-                },
-                onReset = { filterSheetType ->
-                    homeViewModel.onEvent(HomeEvent.OnFilterReset(filterSheetType))
-                },
+                onEvent = homeViewModel::onEvent,
             )
         }
     }
