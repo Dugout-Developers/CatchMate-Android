@@ -9,7 +9,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -19,27 +18,23 @@ import kotlin.coroutines.resumeWithException
 class KakaoLoginDataSource
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val userApiClient: UserApiClient,
         private val fcmTokenService: FCMTokenService,
     ) {
-        private val isKakaoTalkLoginAvailable: Boolean
-            get() = userApiClient.isKakaoTalkLoginAvailable(context)
-
-        suspend fun loginWithKakao(): UserDataDTO? =
+        suspend fun loginWithKakao(context: Context): UserDataDTO? =
             suspendCancellableCoroutine { continuation ->
+                val isKakaoTalkAvailable = userApiClient.isKakaoTalkLoginAvailable(context)
                 val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                     if (error != null) {
-                        loginFail(error)
+                        val loginType = if (isKakaoTalkAvailable) KAKAO_TALK else KAKAO_ACCOUNT
+                        Log.i("KakaoLoginFail", "${loginType}으로 로그인 실패")
+                        error.printStackTrace()
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                             continuation.resume(null)
                         } else {
                             continuation.resumeWithException(error)
                         }
                     } else if (token != null) {
-                        val loginType = if (isKakaoTalkLoginAvailable) KAKAO_TALK else KAKAO_ACCOUNT
-                        Log.i("KakaoLoginSuccess", "${loginType}으로 로그인 성공 ${token.accessToken}")
-
                         userApiClient.me { user, error ->
                             if (error != null) {
                                 Log.d("KakaoInfoFail", "사용자 정보 요청 실패")
@@ -68,18 +63,12 @@ class KakaoLoginDataSource
                     }
                 }
 
-                if (isKakaoTalkLoginAvailable) {
+                if (isKakaoTalkAvailable) {
                     userApiClient.loginWithKakaoTalk(context, callback = callback)
                 } else {
                     userApiClient.loginWithKakaoAccount(context, callback = callback)
                 }
             }
-
-        private fun loginFail(throwable: Throwable) {
-            val loginType = if (isKakaoTalkLoginAvailable) KAKAO_TALK else KAKAO_ACCOUNT
-            Log.i("KakaoLoginFail", "${loginType}으로 로그인 실패")
-            throwable.printStackTrace()
-        }
 
         companion object {
             const val KAKAO_TALK = "카카오톡"

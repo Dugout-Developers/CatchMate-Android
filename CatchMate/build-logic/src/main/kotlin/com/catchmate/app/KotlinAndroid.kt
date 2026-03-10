@@ -15,11 +15,11 @@ internal fun Project.configureKotlinAndroid() {
 
     // Android Settings
     (androidExtension as BaseExtension).apply {
-        compileSdkVersion(35)
+        compileSdkVersion(36)
 
         defaultConfig {
             minSdk = 31
-            targetSdk = 35
+            targetSdk = 36
         }
 
         compileOptions {

@@ -35,22 +35,23 @@ object ClubUtils {
             else -> Club.BEGINNER.teamName
         }
 
-    fun convertClubIdListToNameList(cludIdList: Array<Int>): MutableList<String> {
-        val newList: MutableList<String> = mutableListOf()
-        cludIdList.forEach { id ->
-            when (id) {
-                Club.KIA.id -> newList.add(Club.KIA.teamName)
-                Club.SAMSUNG.id -> newList.add(Club.SAMSUNG.teamName)
-                Club.LG.id -> newList.add(Club.LG.teamName)
-                Club.DOOSAN.id -> newList.add(Club.DOOSAN.teamName)
-                Club.KT.id -> newList.add(Club.KT.teamName)
-                Club.SSG.id -> newList.add(Club.SSG.teamName)
-                Club.LOTTE.id -> newList.add(Club.LOTTE.teamName)
-                Club.HANWHA.id -> newList.add(Club.HANWHA.teamName)
-                Club.NC.id -> newList.add(Club.NC.teamName)
-                else -> newList.add(Club.KIWOOM.teamName)
-            }
+    fun convertClubIdListToString(clubIdList: List<Int>): String {
+        var newStr = ""
+        clubIdList.forEach { id ->
+            newStr =
+                when (id) {
+                    Club.KIA.id -> newStr + Club.KIA.teamName + ", "
+                    Club.SAMSUNG.id -> newStr + Club.SAMSUNG.teamName + ", "
+                    Club.LG.id -> newStr + Club.LG.teamName + ", "
+                    Club.DOOSAN.id -> newStr + Club.DOOSAN.teamName + ", "
+                    Club.KT.id -> newStr + Club.KT.teamName + ", "
+                    Club.SSG.id -> newStr + Club.SSG.teamName + ", "
+                    Club.LOTTE.id -> newStr + Club.LOTTE.teamName + ", "
+                    Club.HANWHA.id -> newStr + Club.HANWHA.teamName + ", "
+                    Club.NC.id -> newStr + Club.NC.teamName + ", "
+                    else -> newStr + Club.KIWOOM.teamName + ", "
+                }
         }
-        return newList
+        return newStr.substring(0, newStr.length - 2)
     }
 }

@@ -12,6 +12,7 @@ import com.catchmate.domain.model.board.GetLikedBoardResponse
 import com.catchmate.domain.model.board.GetTempBoardResponse
 import com.catchmate.domain.model.board.GetUserBoardListResponse
 import com.catchmate.domain.model.board.PatchBoardLiftUpResponse
+import com.catchmate.domain.model.board.PostBoardLikeResponse
 import com.catchmate.domain.model.board.PostBoardRequest
 import com.catchmate.domain.model.board.PostBoardResponse
 import com.catchmate.domain.model.board.PutBoardRequest
@@ -34,11 +35,11 @@ class BoardRepositoryImpl
                 transform = { BoardMapper.toPostBoardResponse(it!!) },
             )
 
-        override suspend fun postBoardLike(boardId: Long): Result<Unit> =
+        override suspend fun postBoardLike(boardId: Long): Result<PostBoardLikeResponse> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { boardApi.postBoardLike(boardId) },
-                transform = { it },
+                transform = { BoardMapper.toPostLikeBoardResponse(it!!) },
                 errorHandler = { response, jsonObject ->
                     if (response.code() == 400) {
                         val message = jsonObject.getString("message")
@@ -70,8 +71,8 @@ class BoardRepositoryImpl
             gameDate: String?,
             maxPerson: Int?,
             preferredTeamIdList: Array<Int>?,
-            page: Int?,
-            size: Int?,
+            page: Int,
+            size: Int,
         ): Result<GetBoardListResponse> =
             apiCall(
                 tag = this.tag,

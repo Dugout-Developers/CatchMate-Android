@@ -1,6 +1,7 @@
 package com.catchmate.data.repository
 
 import android.util.Log
+import com.catchmate.data.datasource.local.LocalStorageDataSource
 import com.catchmate.data.datasource.remote.AuthService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.AuthMapper
@@ -13,6 +14,7 @@ class AuthRepositoryImpl
     @Inject
     constructor(
         retrofitClient: RetrofitClient,
+        private val localStorageDataSource: LocalStorageDataSource,
     ) : AuthRepository {
         private val authApi = retrofitClient.createApi<AuthService>()
         private val tag = "AuthRepo"
@@ -22,6 +24,11 @@ class AuthRepositoryImpl
                 val response = authApi.postAuthLogin(AuthMapper.toPostLoginRequestDTO(postLoginRequest))
                 if (response.isSuccessful) {
                     Log.d("AuthRepository", "통신 성공 : ${response.code()}")
+                    if (response.body()?.signupRequired == false) {
+                        localStorageDataSource.saveAccessToken(response.body()?.accessToken!!)
+                        localStorageDataSource.saveRefreshToken(response.body()?.refreshToken!!)
+                        localStorageDataSource.saveProvider(postLoginRequest.provider)
+                    }
                     response.body()?.let { AuthMapper.toPostLoginResponse(it) } ?: throw Exception("Empty Response")
                 } else {
                     Log.d("AuthRepository", "통신 실패 : ${response.code()}")

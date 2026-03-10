@@ -2,10 +2,22 @@ package com.catchmate.presentation.util
 
 import android.content.Context
 import android.widget.ImageView
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.catchmate.domain.model.enumclass.Club
 import com.catchmate.presentation.R
+import com.catchmate.presentation.view.theme.Brand500
+import com.catchmate.presentation.view.theme.DoosanBears
+import com.catchmate.presentation.view.theme.HanwhaEagles
+import com.catchmate.presentation.view.theme.KiaTigers
+import com.catchmate.presentation.view.theme.KiwoomHeroes
+import com.catchmate.presentation.view.theme.KtWiz
+import com.catchmate.presentation.view.theme.LgTwins
+import com.catchmate.presentation.view.theme.LotteGiants
+import com.catchmate.presentation.view.theme.NcDinos
+import com.catchmate.presentation.view.theme.SamsungLions
+import com.catchmate.presentation.view.theme.SsgLanders
 
 object ResourceUtil {
     fun convertTeamLogo(clubId: Int): Int =
@@ -20,6 +32,21 @@ object ResourceUtil {
             Club.KIA.id -> R.drawable.vec_all_kia_tigers_logo
             Club.LG.id -> R.drawable.vec_all_lg_twins_logo
             else -> R.drawable.vec_all_kiwoom_heroes_logo
+        }
+
+    fun convertTeamColor(clubId: Int): Color =
+        when (clubId) {
+            Club.NC.id -> NcDinos
+            Club.SAMSUNG.id -> SamsungLions
+            Club.SSG.id -> SsgLanders
+            Club.DOOSAN.id -> DoosanBears
+            Club.KT.id -> KtWiz
+            Club.HANWHA.id -> HanwhaEagles
+            Club.LOTTE.id -> LotteGiants
+            Club.KIA.id -> KiaTigers
+            Club.LG.id -> LgTwins
+            Club.KIWOOM.id -> KiwoomHeroes
+            else -> Brand500
         }
 
     fun convertTeamColor(

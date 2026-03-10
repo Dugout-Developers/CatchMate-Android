@@ -1,166 +1,90 @@
 package com.catchmate.presentation.view.onboarding
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.catchmate.domain.model.enumclass.AlarmType
-import com.catchmate.domain.model.user.PostUserAdditionalInfoRequest
 import com.catchmate.presentation.R
-import com.catchmate.presentation.databinding.FragmentCheerStyleOnboardingBinding
-import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
-import com.catchmate.presentation.view.base.BaseFragment
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
+import com.catchmate.presentation.view.base.BaseComposeFragment
 import com.catchmate.presentation.viewmodel.MainViewModel
-import com.catchmate.presentation.viewmodel.SignUpViewModel
+import com.catchmate.presentation.viewmodel.onboarding.CheerStyleOnboardingSideEffect
+import com.catchmate.presentation.viewmodel.onboarding.CheerStyleOnboardingViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CheerStyleOnboardingFragment : BaseFragment<FragmentCheerStyleOnboardingBinding>(FragmentCheerStyleOnboardingBinding::inflate) {
-    private val signUpViewModel: SignUpViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
+class CheerStyleOnboardingFragment : BaseComposeFragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
-
-    private lateinit var userInfo: PostUserAdditionalInfoRequest
-    private val pushNotificationAgree by lazy { arguments?.getBoolean("PushNotificationAgree") ?: false }
-
-    private var selectedButton: CheerStyleButtonView? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        userInfo = getUserInfo()
-        Log.i("userInfo", "${userInfo.nickName},${userInfo.gender},${userInfo.birthDate},${userInfo.favoriteClubId}")
-    }
+    private val cheerStyleOnboardingViewModel: CheerStyleOnboardingViewModel by viewModels()
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
-        initTitle()
-        initHeader()
-        initFooterButton()
-        initCheerStyleButtons()
+        setUiState()
+        observeEvent()
     }
 
-    private fun getUserInfo(): PostUserAdditionalInfoRequest =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("userInfo", PostUserAdditionalInfoRequest::class.java)!!
-        } else {
-            arguments?.getSerializable("userInfo") as PostUserAdditionalInfoRequest
-        }
+    private fun observeEvent() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cheerStyleOnboardingViewModel.sideEffect.collect { effect ->
+                    when (effect) {
+                        CheerStyleOnboardingSideEffect.NavigateToBack -> {
+                            findNavController().popBackStack()
+                        }
 
-    private fun initTitle() {
-        val title = getString(R.string.team_onboarding_title1)
-        binding.tvCheerStyleOnboardingTitle1.text = title.format(userInfo.nickName)
-    }
+                        CheerStyleOnboardingSideEffect.NavigateToNext -> {
+                            mainViewModel.setGuestLogin(false)
+                            findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
+                        }
 
-    private fun initFooterButton() {
-        binding.layoutCheerStyleOnboardingNext.btnFooterOne.apply {
-            isEnabled = true
-            setText(R.string.next)
-            setOnClickListener {
-                val newUserInfo =
-                    PostUserAdditionalInfoRequest(
-                        userInfo.email,
-                        userInfo.providerId,
-                        userInfo.provider,
-                        userInfo.profileImageUrl,
-                        userInfo.fcmToken,
-                        userInfo.gender,
-                        userInfo.nickName,
-                        userInfo.birthDate,
-                        userInfo.favoriteClubId,
-                        watchStyle =
-                            if (selectedButton
-                                    ?.binding
-                                    ?.tvCheerStyleName
-                                    ?.text
-                                    ?.toString() == null
-                            ) {
-                                ""
-                            } else {
-                                selectedButton
-                                    ?.binding
-                                    ?.tvCheerStyleName
-                                    ?.text
-                                    ?.toString()!!
-                                    .replace(" 스타일", "")
-                            },
-                    )
-                signUpViewModel.postUserAdditionalInfo(newUserInfo)
+                        is CheerStyleOnboardingSideEffect.ShowSnackBar -> {
+                            Snackbar.make(requireView(), effect.message, Snackbar.LENGTH_SHORT)
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun initHeader() {
-        binding.layoutCheerStyleOnboardingHeader.apply {
-            imgbtnOnboardingIndicator4.setImageResource(R.drawable.vec_onboarding_indicator_activated_6dp)
-            imgbtnOnboardingBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
-        }
-    }
-
-    private fun initCheerStyleButtons() {
-        val cheerStyleButtons: List<CheerStyleButtonView> =
+    private fun setUiState() {
+        val imgList =
             listOf(
-                binding.csbvCheerStyleOnboardingDirector,
-                binding.csbvCheerStyleOnboardingMotherBird,
-                binding.csbvCheerStyleOnboardingCheerLeader,
-                binding.csbvCheerStyleOnboardingGlutton,
-                binding.csbvCheerStyleOnboardingStone,
-                binding.csbvCheerStyleOnboardingBodhisattva,
+                R.drawable.img_director_icon,
+                R.drawable.img_mother_bird_icon,
+                R.drawable.img_cheer_leader_icon,
+                R.drawable.img_glutton_icon,
+                R.drawable.img_stone_icon,
+                R.drawable.img_bodhisattva_icon,
             )
-
-        cheerStyleButtons.forEach { btn ->
-            btn.binding.toggleCheerStyle.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    selectedButton?.binding?.toggleCheerStyle?.isChecked = false
-                    buttonView.isChecked = true
-                    selectedButton = btn
-                }
-            }
-        }
+        val textList =
+            listOf(
+                Pair(getString(R.string.cheer_style_director), getString(R.string.cheer_style_director_explain)),
+                Pair(getString(R.string.cheer_style_mother_bird), getString(R.string.cheer_style_mother_bird_explain)),
+                Pair(getString(R.string.cheer_style_cheer_leader), getString(R.string.cheer_style_cheer_leader_explain)),
+                Pair(getString(R.string.cheer_style_glutton), getString(R.string.cheer_style_glutton_explain)),
+                Pair(getString(R.string.cheer_style_stone), getString(R.string.cheer_style_stone_explain)),
+                Pair(getString(R.string.cheer_style_bodhisattva), getString(R.string.cheer_style_bodhisattva_explain)),
+            )
+        cheerStyleOnboardingViewModel.setCheerStyleScreenData(imgList, textList)
     }
 
-    private fun initViewModel() {
-        signUpViewModel.userAdditionalInfoResponse.observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                Log.i("response", "${response.userId}\n${response.accessToken}\n${response.refreshToken}")
-                localDataViewModel.saveAccessToken(response.accessToken)
-                localDataViewModel.saveRefreshToken(response.refreshToken)
-                localDataViewModel.saveUserId(response.userId)
-                localDataViewModel.saveProvider(userInfo.provider)
-                mainViewModel.setGuestLogin(false)
-                signUpViewModel.patchUserAlarm(AlarmType.ALL.name, pushNotificationAgree)
-                findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
-            }
-        }
-        signUpViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
-            if (isTrue) {
-                if (isTrue) {
-                    val navOptions =
-                        NavOptions
-                            .Builder()
-                            .setPopUpTo(R.id.cheerStyleOnboardingFragment, true)
-                            .build()
-                    val bundle = Bundle()
-                    bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
-                    findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_loginFragment, bundle, navOptions)
-                }
-            }
-        }
-        signUpViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Log.i("SIGN UP ERR", message.toString())
-        }
-        signUpViewModel.patchUserAlarmResponse.observe(viewLifecycleOwner) { response ->
-            Log.i("알림 설정 완료", "${response.alarmType} - ${response.enabled}")
-        }
+    @Composable
+    override fun ComposeContent() {
+        val uiState by cheerStyleOnboardingViewModel.uiState.collectAsState()
+        CheerStyleOnboardingScreen(
+            uiState = uiState,
+            onEvent = cheerStyleOnboardingViewModel::onEvent,
+        )
     }
 }

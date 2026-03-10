@@ -5,7 +5,7 @@ import com.catchmate.domain.exception.Result
 import com.catchmate.domain.model.auth.UserData
 
 interface LoginRepository {
-    suspend fun loginWithKakao(): UserData?
+    suspend fun loginWithKakao(activity: Activity): UserData?
 
     suspend fun loginWithNaver(activity: Activity): UserData?
 

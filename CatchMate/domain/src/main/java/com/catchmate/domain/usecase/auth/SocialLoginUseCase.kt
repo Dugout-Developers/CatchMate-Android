@@ -11,7 +11,7 @@ class SocialLoginUseCase
     constructor(
         private val loginRepository: LoginRepository,
     ) {
-        suspend fun loginWithKakao(): UserData? = loginRepository.loginWithKakao()
+        suspend fun loginWithKakao(activity: Activity): UserData? = loginRepository.loginWithKakao(activity)
 
         suspend fun loginWithNaver(activity: Activity): UserData? = loginRepository.loginWithNaver(activity)
 
