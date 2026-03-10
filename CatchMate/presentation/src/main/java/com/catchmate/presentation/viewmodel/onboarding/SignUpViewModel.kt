@@ -92,7 +92,7 @@ class SignUpViewModel
         private fun searchNicknameWithDebounce(nickName: String) {
             nicknameCheckJob?.cancel() // 이전 작업 취소
 
-            if(nickName.isBlank()) {
+            if (nickName.isBlank()) {
                 _uiState.update { it.copy(isNicknameValid = false) }
                 validateAll()
                 return

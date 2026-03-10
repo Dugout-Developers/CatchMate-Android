@@ -33,37 +33,31 @@ val CatchMateTypography =
                 lineHeight = 36.sp,
                 letterSpacing = (-0.01).sp,
             ),
-
         headlineMedium =
             baseTextStyle.copy(
                 fontSize = 24.sp,
                 lineHeight = 31.sp,
             ),
-
         headlineSmall =
             baseTextStyle.copy(
                 fontSize = 20.sp,
                 lineHeight = 26.sp,
             ),
-
         bodyLarge =
             baseTextStyle.copy(
                 fontSize = 16.sp,
                 lineHeight = 21.sp,
             ),
-
         bodyMedium =
             baseTextStyle.copy(
                 fontSize = 14.sp,
                 lineHeight = 18.sp,
             ),
-
         bodySmall =
             baseTextStyle.copy(
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
             ),
-
         labelSmall =
             baseTextStyle.copy(
                 fontSize = 11.sp,

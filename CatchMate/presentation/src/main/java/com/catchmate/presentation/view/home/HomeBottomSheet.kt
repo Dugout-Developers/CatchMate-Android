@@ -54,7 +54,7 @@ fun HomeBottomSheet(
                 sheetType.initialClubIds.toSet()
             } else {
                 emptySet()
-            }
+            },
         )
     }
     var tempMemberCount by remember(sheetType) {
