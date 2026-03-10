@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseComposeFragment
+import com.catchmate.presentation.viewmodel.favorite.FavoriteEvent
 import com.catchmate.presentation.viewmodel.favorite.FavoriteSideEffect
+import com.catchmate.presentation.viewmodel.favorite.FavoriteUiState
 import com.catchmate.presentation.viewmodel.favorite.FavoriteViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,7 @@ class FavoriteFragment : BaseComposeFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
+        favoriteViewModel.onEvent(FavoriteEvent.InitData)
     }
 
     @Composable
@@ -58,9 +61,10 @@ class FavoriteFragment : BaseComposeFragment() {
             }
         }
 
-        FavoriteScreen(uiState.boardList)
-        // item 좋아요 해제 로직
-        // 스크린 내 리스트 없을때, response 실패일때 화면 처리
-
+        FavoriteScreen(
+            boardList = uiState.boardList,
+            uiState = FavoriteUiState(),
+            onEvent = favoriteViewModel::onEvent,
+        )
     }
 }

@@ -91,14 +91,14 @@ fun HomeScreen(
         Column(
             modifier =
                 Modifier
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .padding(horizontal = 18.dp),
         ) {
             Spacer(Modifier.height(8.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(scrollState)
-                    .padding(horizontal = 18.dp),
+                    .horizontalScroll(scrollState),
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 HomeFilterChip(
@@ -131,6 +131,7 @@ fun HomeScreen(
                     )
                 }
                 else -> {
+                    Spacer(Modifier.height(12.dp))
                     LazyColumn(
                         state = listState,
                         modifier = Modifier,

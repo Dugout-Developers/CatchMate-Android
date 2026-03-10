@@ -47,6 +47,12 @@ class FavoriteViewModel
                 is FavoriteEvent.OnFavoriteBoardUnliked -> {
                     postBoardLike(event.boardId)
                 }
+                FavoriteEvent.OnLoadMoreBoards -> {
+                    getLikedBoard(
+                        page = uiState.value.pageNumber + 1,
+                        isReadMore = true,
+                    )
+                }
             }
         }
 
@@ -73,17 +79,26 @@ class FavoriteViewModel
         fun getLikedBoard(
             page: Int = 0,
             size: Int = 10,
+            isReadMore: Boolean = false,
         ) {
             viewModelScope.launch {
                 val result = getLikedBoardUseCase.getLikedBoard(page, size)
                 result
                     .onSuccess { response ->
                         _uiState.update {
-                            it.copy(
-                                boardList = response.content,
-                                pageNumber = response.pageNumber,
-                                hasNext = response.hasNext,
-                            )
+                            if (isReadMore) {
+                                it.copy(
+                                    boardList = it.boardList?.plus(response.content),
+                                    pageNumber = response.pageNumber,
+                                    hasNext = response.hasNext,
+                                )
+                            } else {
+                                it.copy(
+                                    boardList = response.content,
+                                    pageNumber = response.pageNumber,
+                                    hasNext = response.hasNext,
+                                )
+                            }
                         }
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {

@@ -42,7 +42,7 @@ class HomeFragment : BaseComposeFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         enableDoubleBackPressedExit = true
-
+        homeViewModel.onEvent(HomeEvent.InitData)
         (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
