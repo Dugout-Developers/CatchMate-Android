@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,8 +58,13 @@ fun HomeBottomSheet(
     }
 
     var currentMonth by remember { mutableStateOf(LocalDate.now().withDayOfMonth(1)) }
+    val sheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
 
     ModalBottomSheet(
+        sheetState = sheetState,
         onDismissRequest = onDismissRequest,
         containerColor = Grey0,
         scrimColor = Opacity40,
