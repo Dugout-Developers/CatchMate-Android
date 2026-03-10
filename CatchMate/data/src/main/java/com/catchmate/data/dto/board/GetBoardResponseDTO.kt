@@ -15,7 +15,7 @@ data class GetBoardResponseDTO(
     val liftUpDate: String,
     val bookMarked: Boolean,
     val buttonStatus: String,
-    val myEnrollId: Long,
+    val myEnrollId: Long?,
     val chatRoomId: Long,
     val cheerClub: ClubDTO,
     val game: GameInfoDTO,

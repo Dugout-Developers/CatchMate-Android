@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
-import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingSettingBinding
 import com.catchmate.presentation.interaction.OnKickOutClickListener
@@ -38,7 +37,7 @@ class ChattingSettingFragment :
     private lateinit var chattingCrewAdapter: ChattingCrewListAdapter
 
     private lateinit var chattingRoomImage: String
-    private lateinit var chattingCrewList: MutableList<GetUserProfileResponse>
+    private lateinit var chattingCrewList: MutableList<GetChattingCrewListResponse>
     private var loginUserId: Long = -1L
     private var writerId: Long = -1L
     private var chatRoomId: Long = -1L
@@ -69,12 +68,16 @@ class ChattingSettingFragment :
 
     private fun getChattingRoomImage(): String = arguments?.getString("chattingRoomImage") ?: ""
 
-    private fun getChattingCrewList(): MutableList<GetUserProfileResponse>? =
+    private fun getChattingCrewList(): MutableList<GetChattingCrewListResponse>? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("chattingCrewList", GetChattingCrewListResponse::class.java)?.userInfoList?.toMutableList()
+            arguments
+                ?.getParcelableArrayList<GetChattingCrewListResponse>(
+                    "chattingCrewList",
+                    GetChattingCrewListResponse::class.java,
+                )?.toMutableList()
         } else {
-            val parcelable = arguments?.getParcelable("chattingCrewList") as GetChattingCrewListResponse?
-            parcelable?.userInfoList?.toMutableList()
+            val parcelable = arguments?.getParcelableArrayList<GetChattingCrewListResponse>("chattingCrewList")
+            parcelable?.toMutableList()
         }
 
     private fun getLoginUserId(): Long = arguments?.getLong("loginUserId") ?: -1L
@@ -95,18 +98,14 @@ class ChattingSettingFragment :
 
     private fun initViewModel() {
         chattingSettingViewModel.kickOutChattingCrewResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                Log.i("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
-                chattingCrewList = chattingCrewList.filter { it.userId != deletedCrewId }.toMutableList()
-                Log.i("crew list", "$chattingCrewList")
-                chattingCrewAdapter.submitList(chattingCrewList)
-            }
+            Log.i("강퇴 성공", "✅ $deletedCrewId \n $chattingCrewList")
+            chattingCrewList = chattingCrewList.filter { it.userId != deletedCrewId }.toMutableList()
+            Log.i("crew list", "$chattingCrewList")
+            chattingCrewAdapter.submitList(chattingCrewList)
         }
         chattingSettingViewModel.patchChattingRoomImageResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                Log.d("📸채팅방 프로필 변경 성공", "성공")
-                binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
-            }
+            Log.d("📸채팅방 프로필 변경 성공", "성공")
+            binding.ivChattingSettingThumbnail.setImageBitmap(updatedBitmap)
         }
         chattingSettingViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
             if (isTrue) {

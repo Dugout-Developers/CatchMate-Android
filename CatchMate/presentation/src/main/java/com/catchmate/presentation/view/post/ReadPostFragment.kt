@@ -17,8 +17,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.board.Board
 import com.catchmate.domain.model.board.BoardMode
 import com.catchmate.domain.model.board.GetBoardResponse
+import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.domain.model.enroll.PostEnrollRequest
 import com.catchmate.domain.model.enumclass.EnrollState
 import com.catchmate.domain.model.user.GetUserProfileResponse
@@ -219,8 +221,29 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                     }
 
                     EnrollState.VIEW_CHAT -> {
+                        val chatRoomInfo =
+                            ChatRoomInfo(
+                                chatRoomId = readPostViewModel.getBoardResponse.value?.chatRoomId!!,
+                                board =
+                                    Board(
+                                        boardId = readPostViewModel.getBoardResponse.value?.boardId!!,
+                                        title = readPostViewModel.getBoardResponse.value?.title!!,
+                                        content = readPostViewModel.getBoardResponse.value?.content!!,
+                                        currentPerson = readPostViewModel.getBoardResponse.value?.currentPerson!!,
+                                        maxPerson = readPostViewModel.getBoardResponse.value?.maxPerson!!,
+                                        bookMarked = readPostViewModel.getBoardResponse.value?.bookMarked!!,
+                                        cheerClub = readPostViewModel.getBoardResponse.value?.cheerClub!!,
+                                        gameResponse = readPostViewModel.getBoardResponse.value?.game!!,
+                                        userResponse = readPostViewModel.getBoardResponse.value?.user!!,
+                                    ),
+                                lastMessage = null,
+                                unreadCount = 0,
+                                chatRoomImageUrl = null,
+                                createdAt = "",
+                                notificationOn = true,
+                            )
                         val bundle = Bundle()
-                        bundle.putLong("chatRoomId", readPostViewModel.getBoardResponse.value?.chatRoomId!!)
+                        bundle.putParcelable("chatRoomInfo", chatRoomInfo)
                         findNavController().navigate(R.id.action_readPostFragment_to_chattingRoomFragment, bundle)
                     }
 

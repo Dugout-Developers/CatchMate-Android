@@ -1,7 +1,9 @@
 package com.catchmate.data.dto.chatting
 
-import com.catchmate.data.dto.user.GetUserProfileResponseDTO
-
 data class GetChattingCrewListResponseDTO(
-    val userInfoList: List<GetUserProfileResponseDTO>,
+    val memberId: Long,
+    val userId: Long,
+    val nickName: String,
+    val profileImageUrl: String,
+    val joinedAt: String,
 )

@@ -1,6 +1,5 @@
 package com.catchmate.domain.usecase.chatting
 
-import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -11,7 +10,7 @@ class PatchChattingRoomImageUseCase
         private val chattingRepository: ChattingRepository,
     ) {
         suspend operator fun invoke(
-            chatRoomId: Long,
+            roomId: Long,
             chatRoomImage: MultipartBody.Part,
-        ): Result<PatchChattingRoomImageResponse> = chattingRepository.patchChattingRoomImage(chatRoomId, chatRoomImage)
+        ): Result<Unit> = chattingRepository.patchChattingRoomImage(roomId, chatRoomImage)
     }

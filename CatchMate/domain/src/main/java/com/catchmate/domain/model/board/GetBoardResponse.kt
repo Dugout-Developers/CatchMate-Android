@@ -18,7 +18,7 @@ data class GetBoardResponse(
     val liftUpDate: String,
     val bookMarked: Boolean,
     val buttonStatus: String,
-    val myEnrollId: Long,
+    val myEnrollId: Long?,
     val chatRoomId: Long,
     val cheerClub: Club,
     val game: GameInfo,

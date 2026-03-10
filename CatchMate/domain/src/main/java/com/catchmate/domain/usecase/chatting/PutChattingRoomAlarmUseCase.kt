@@ -1,6 +1,6 @@
 package com.catchmate.domain.usecase.chatting
 
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.repository.ChattingRepository
 import javax.inject.Inject
 
@@ -10,7 +10,7 @@ class PutChattingRoomAlarmUseCase
         private val chattingRepository: ChattingRepository,
     ) {
         suspend operator fun invoke(
-            chatRoomId: Long,
-            enable: Boolean,
-        ): Result<PutChattingRoomAlarmResponse> = chattingRepository.putChattingRoomAlarm(chatRoomId, enable)
+            roomId: Long,
+            request: PutChattingRoomAlarmRequest,
+        ): Result<Unit> = chattingRepository.putChattingRoomAlarm(roomId, request)
     }

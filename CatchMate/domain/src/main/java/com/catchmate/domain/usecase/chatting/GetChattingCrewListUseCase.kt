@@ -9,6 +9,6 @@ class GetChattingCrewListUseCase
     constructor(
         private val chattingRepository: ChattingRepository,
     ) {
-        suspend operator fun invoke(chatRoomId: Long): Result<GetChattingCrewListResponse> =
+        suspend operator fun invoke(chatRoomId: Long): Result<List<GetChattingCrewListResponse>> =
             chattingRepository.getChattingCrewList(chatRoomId)
     }

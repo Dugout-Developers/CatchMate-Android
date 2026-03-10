@@ -4,14 +4,10 @@ import com.catchmate.data.datasource.remote.ChattingService
 import com.catchmate.data.datasource.remote.RetrofitClient
 import com.catchmate.data.mapper.ChattingMapper
 import com.catchmate.data.util.ApiResponseHandleUtil.apiCall
-import com.catchmate.domain.model.chatting.ChatRoomInfo
-import com.catchmate.domain.model.chatting.DeleteChattingCrewKickOutResponse
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
-import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
+import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
-import com.catchmate.domain.model.chatting.PatchChattingRoomImageResponse
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.repository.ChattingRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -34,65 +30,71 @@ class ChattingRepositoryImpl
                 transform = { ChattingMapper.toGetChattingRoomListResponse(it!!) },
             )
 
-        override suspend fun getChattingCrewList(chatRoomId: Long): Result<GetChattingCrewListResponse> =
+        override suspend fun getChattingCrewList(chatRoomId: Long): Result<List<GetChattingCrewListResponse>> =
             apiCall(
                 tag = this.tag,
                 apiFunction = { chattingApi.getChattingCrewList(chatRoomId) },
-                transform = { ChattingMapper.toGetChattingCrewListResponse(it!!) },
-            )
-
-        override suspend fun getChattingRoomInfo(chatRoomId: Long): Result<ChatRoomInfo> =
-            apiCall(
-                tag = this.tag,
-                apiFunction = { chattingApi.getChattingRoomInfo(chatRoomId) },
-                transform = { ChattingMapper.toChatRoomInfo(it!!) },
+                transform = { list ->
+                    list?.map { crew ->
+                        ChattingMapper.toGetChattingCrewListResponse(crew)
+                    } ?: emptyList()
+                },
             )
 
         override suspend fun patchChattingRoomImage(
-            chatRoomId: Long,
+            roomId: Long,
             chatRoomImage: MultipartBody.Part,
-        ): Result<PatchChattingRoomImageResponse> =
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.patchChattingRoomImage(chatRoomId, chatRoomImage) },
-                transform = { ChattingMapper.toPatchChattingRoomImageResponse(it!!) },
+                apiFunction = { chattingApi.patchChattingRoomImage(roomId, chatRoomImage) },
+                transform = { it },
             )
 
         override suspend fun putChattingRoomAlarm(
-            chatRoomId: Long,
-            enable: Boolean,
-        ): Result<PutChattingRoomAlarmResponse> =
+            roomId: Long,
+            request: PutChattingRoomAlarmRequest,
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.putChattingRoomAlarm(chatRoomId, enable) },
-                transform = { ChattingMapper.toPutChattingRoomAlarmResponse(it!!) },
+                apiFunction = {
+                    chattingApi.putChattingRoomAlarm(
+                        roomId,
+                        ChattingMapper.toPutChattingRoomAlarmRequestDTO(request),
+                    )
+                },
+                transform = { it },
             )
 
-        override suspend fun deleteChattingRoom(chatRoomId: Long): Result<DeleteChattingRoomResponse> =
+        override suspend fun deleteChattingRoom(roomId: Long): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.deleteChattingRoom(chatRoomId) },
-                transform = { ChattingMapper.toDeleteChattingRoomResponse(it!!) },
+                apiFunction = { chattingApi.deleteChattingRoom(roomId) },
+                transform = { it },
             )
 
-        override suspend fun deleteChattingCrewKickOut(
+        override suspend fun deleteChattingCrew(
             chatRoomId: Long,
-            userId: Long,
-        ): Result<DeleteChattingCrewKickOutResponse> =
+            targetUserId: Long,
+        ): Result<Unit> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.deleteChattingCrewKickOut(chatRoomId, userId) },
-                transform = { ChattingMapper.toDeleteChattingCrewKickOutResponse(it!!) },
+                apiFunction = { chattingApi.deleteChattingCrew(chatRoomId, targetUserId) },
+                transform = { it },
             )
 
-        override suspend fun getChattingHistory(
+        override suspend fun getChattingMessages(
             chatRoomId: Long,
-            lastMessageId: String?,
-            size: Int?,
-        ): Result<GetChattingHistoryResponse> =
+            lastMessageId: Long?,
+            size: Int,
+        ): Result<List<GetChattingMessagesResponse>> =
             apiCall(
                 tag = this.tag,
-                apiFunction = { chattingApi.getChattingHistory(chatRoomId, lastMessageId, size) },
-                transform = { ChattingMapper.toGetChattingHistoryResponse(it!!) },
+                apiFunction = { chattingApi.getChattingMessages(chatRoomId, lastMessageId, size) },
+                transform = { list ->
+                    list?.map { message ->
+                        ChattingMapper.toGetChattingHistoryResponse(message)
+                    } ?: emptyList()
+                },
             )
     }

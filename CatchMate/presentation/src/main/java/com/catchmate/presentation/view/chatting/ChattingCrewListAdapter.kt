@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.catchmate.domain.model.user.GetUserProfileResponse
+import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
 import com.catchmate.presentation.databinding.ItemChattingParticipantBinding
 import com.catchmate.presentation.interaction.OnKickOutClickListener
 
@@ -16,11 +16,11 @@ class ChattingCrewListAdapter(
     private val writerId: Long,
     private val pageType: String,
     private val onKickOutClickListener: OnKickOutClickListener? = null,
-) : ListAdapter<GetUserProfileResponse, ChattingCrewListAdapter.CrewViewHolder>(diffUtil) {
+) : ListAdapter<GetChattingCrewListResponse, ChattingCrewListAdapter.CrewViewHolder>(diffUtil) {
     inner class CrewViewHolder(
         private val binding: ItemChattingParticipantBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(profile: GetUserProfileResponse) {
+        fun bind(profile: GetChattingCrewListResponse) {
             binding.apply {
                 Glide
                     .with(root)
@@ -76,15 +76,15 @@ class ChattingCrewListAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<GetUserProfileResponse>() {
+            object : DiffUtil.ItemCallback<GetChattingCrewListResponse>() {
                 override fun areItemsTheSame(
-                    oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse,
+                    oldItem: GetChattingCrewListResponse,
+                    newItem: GetChattingCrewListResponse,
                 ): Boolean = oldItem == newItem
 
                 override fun areContentsTheSame(
-                    oldItem: GetUserProfileResponse,
-                    newItem: GetUserProfileResponse,
+                    oldItem: GetChattingCrewListResponse,
+                    newItem: GetChattingCrewListResponse,
                 ): Boolean = oldItem == newItem
             }
     }

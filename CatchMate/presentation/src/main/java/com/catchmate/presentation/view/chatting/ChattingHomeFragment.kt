@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.catchmate.domain.model.chatting.ChatRoomInfo
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingHomeBinding
 import com.catchmate.presentation.databinding.LayoutAlertDialogBinding
@@ -20,7 +21,6 @@ import com.catchmate.presentation.interaction.OnListItemAllRemovedListener
 import com.catchmate.presentation.util.ReissueUtil.NAVIGATE_CODE_REISSUE
 import com.catchmate.presentation.view.base.BaseFragment
 import com.catchmate.presentation.viewmodel.ChattingHomeViewModel
-import com.catchmate.presentation.viewmodel.LocalDataViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,11 +32,9 @@ class ChattingHomeFragment :
     OnItemSwipeListener,
     OnListItemAllRemovedListener {
     private val chattingHomeViewModel: ChattingHomeViewModel by viewModels()
-    private val localDataViewModel: LocalDataViewModel by viewModels()
     private var currentPage: Int = 0
     private var hasNext = true
     private var isLoading = false
-    private var isFirstLoad = true
     private var deletedItemPos: Int = -1
     private lateinit var chattingRoomListAdapter: ChattingRoomListAdapter
 
@@ -51,32 +49,23 @@ class ChattingHomeFragment :
             val deletedChatRoomId = bundle.getLong("chatRoomId")
             deleteChatRoom(deletedChatRoomId)
         }
-        localDataViewModel.getAccessToken()
         initHeader()
         initRecyclerView()
         initViewModel()
-
-        if (isFirstLoad) {
-            getChattingRoomList()
-            isFirstLoad = false
-        }
 //        (requireActivity() as MainActivity).refreshNotificationStatus()
     }
 
     override fun onResume() {
         super.onResume()
-        // 화면이 다시 보일 때만 새로고침 (최초 실행 시에는 제외)
-        if (!isFirstLoad) {
-            Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
-            // 페이지 초기화
-            currentPage = 0
-            hasNext = true
-            isLoading = false
+        Log.d("ChattingHomeFragment", "onResume: 채팅방 목록 새로고침")
+        // 페이지 초기화
+        currentPage = 0
+        hasNext = true
+        isLoading = false
 
-            chattingRoomListAdapter.submitList(emptyList())
-            // 채팅방 목록 새로 불러오기
-            getChattingRoomList()
-        }
+        chattingRoomListAdapter.submitList(emptyList())
+        // 채팅방 목록 새로 불러오기
+        getChattingRoomList()
     }
 
     override fun onDestroyView() {
@@ -93,9 +82,6 @@ class ChattingHomeFragment :
     }
 
     private fun initViewModel() {
-        localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-//            chattingHomeViewModel.connectToWebSocket(token)
-        }
         chattingHomeViewModel.getChattingRoomListResponse.observe(viewLifecycleOwner) { response ->
             isLoading = false
             if (!response.hasNext && response.totalElements == 0) {
@@ -146,11 +132,8 @@ class ChattingHomeFragment :
             }
         }
         chattingHomeViewModel.leaveChattingRoomResponse.observe(viewLifecycleOwner) { response ->
-            if (response.state) {
-                chattingRoomListAdapter.removeItem(deletedItemPos)
-            } else {
-                Snackbar.make(requireView(), R.string.chatting_leave_room_fail, Snackbar.LENGTH_SHORT).show()
-            }
+            Log.i("채팅방 나가기 성공", "$response")
+            chattingRoomListAdapter.removeItem(deletedItemPos)
         }
     }
 
@@ -220,14 +203,11 @@ class ChattingHomeFragment :
         dialog.show()
     }
 
-    override fun onChattingRoomSelected(
-        chatRoomId: Long,
-        isNewChatRoom: Boolean,
-    ) {
+    override fun onChattingRoomSelected(chatRoomInfo: ChatRoomInfo) {
         val bundle = Bundle()
-        bundle.putLong("chatRoomId", chatRoomId)
+        bundle.putParcelable("chatRoomInfo", chatRoomInfo)
         findNavController().navigate(R.id.action_chattingHomeFragment_to_chattingRoomFragment, bundle)
-        if (isNewChatRoom) {
+        if (chatRoomInfo.lastMessage == null) {
             showChattingSystemAlertDialog()
         }
     }

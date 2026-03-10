@@ -1,26 +1,20 @@
 package com.catchmate.presentation.viewmodel
 
 import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingRoomListResponse
-import com.catchmate.domain.model.chatting.LastMessageInfo
 import com.catchmate.domain.usecase.chatting.GetChattingRoomListUseCase
 import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
 import com.catchmate.presentation.BuildConfig
-import com.catchmate.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
@@ -41,8 +35,8 @@ class ChattingHomeViewModel
         val getChattingRoomListResponse: LiveData<GetChattingRoomListResponse>
             get() = _getChattingRoomListResponse
 
-        private val _leaveChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
-        val leaveChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
+        private val _leaveChattingRoomResponse = MutableLiveData<Unit>()
+        val leaveChattingRoomResponse: LiveData<Unit>
             get() = _leaveChattingRoomResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -158,9 +152,9 @@ class ChattingHomeViewModel
             }
         }
 
-        fun leaveChattingRoom(chatRoomId: Long) {
+        fun leaveChattingRoom(roomId: Long) {
             viewModelScope.launch {
-                val result = leaveChattingRoomUseCase(chatRoomId)
+                val result = leaveChattingRoomUseCase(roomId)
                 result
                     .onSuccess { response ->
                         _leaveChattingRoomResponse.value = response

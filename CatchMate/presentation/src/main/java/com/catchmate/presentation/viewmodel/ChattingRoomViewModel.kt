@@ -6,21 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.catchmate.domain.exception.ReissueFailureException
-import com.catchmate.domain.model.chatting.ChatMessageId
-import com.catchmate.domain.model.chatting.ChatMessageInfo
 import com.catchmate.domain.model.chatting.ChatRoomInfo
-import com.catchmate.domain.model.chatting.DeleteChattingRoomResponse
 import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
-import com.catchmate.domain.model.chatting.GetChattingHistoryResponse
-import com.catchmate.domain.model.chatting.PutChattingRoomAlarmResponse
-import com.catchmate.domain.model.enumclass.ChatMessageType
+import com.catchmate.domain.model.chatting.GetChattingMessagesResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.usecase.chatting.GetChattingCrewListUseCase
-import com.catchmate.domain.usecase.chatting.GetChattingHistoryUseCase
-import com.catchmate.domain.usecase.chatting.GetChattingRoomInfoUseCase
-import com.catchmate.domain.usecase.chatting.LeaveChattingRoomUseCase
+import com.catchmate.domain.usecase.chatting.GetChattingMessagesUseCase
 import com.catchmate.domain.usecase.chatting.PutChattingRoomAlarmUseCase
 import com.catchmate.presentation.BuildConfig
-import com.catchmate.presentation.util.DateUtils.getCurrentTimeFormatted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
@@ -30,40 +23,39 @@ import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompHeader
 import javax.inject.Inject
 
 @HiltViewModel
 class ChattingRoomViewModel
     @Inject
     constructor(
-        private val getChattingHistoryUseCase: GetChattingHistoryUseCase,
+        private val getChattingMessagesUseCase: GetChattingMessagesUseCase,
         private val getChattingCrewListUseCase: GetChattingCrewListUseCase,
-        private val getChattingRoomInfoUseCase: GetChattingRoomInfoUseCase,
-        private val deleteChattingRoomUseCase: LeaveChattingRoomUseCase,
         private val putChattingRoomAlarmUseCase: PutChattingRoomAlarmUseCase,
     ) : ViewModel() {
         var topic: Disposable? = null
         var stompClient: StompClient? = null
         private var okHttpClient: OkHttpClient? = null
 
-        private val _getChattingHistoryResponse = MutableLiveData<GetChattingHistoryResponse>()
-        val getChattingHistoryResponse: LiveData<GetChattingHistoryResponse>
-            get() = _getChattingHistoryResponse
+        private val _getChattingMessagesResponse = MutableLiveData<List<GetChattingMessagesResponse>>()
+        val getChattingMessagesResponse: LiveData<List<GetChattingMessagesResponse>>
+            get() = _getChattingMessagesResponse
 
-        private val _getChattingCrewListResponse = MutableLiveData<GetChattingCrewListResponse>()
-        val getChattingCrewListResponse: LiveData<GetChattingCrewListResponse>
+        private val _getChattingCrewListResponse = MutableLiveData<List<GetChattingCrewListResponse>>()
+        val getChattingCrewListResponse: LiveData<List<GetChattingCrewListResponse>>
             get() = _getChattingCrewListResponse
 
         private val _chattingRoomInfo = MutableLiveData<ChatRoomInfo>()
         val chattingRoomInfo: LiveData<ChatRoomInfo>
             get() = _chattingRoomInfo
 
-        private val _deleteChattingRoomResponse = MutableLiveData<DeleteChattingRoomResponse>()
-        val deleteChattingRoomResponse: LiveData<DeleteChattingRoomResponse>
-            get() = _deleteChattingRoomResponse
+        private val _isLeft = MutableLiveData<Boolean>()
+        val isLeft: LiveData<Boolean>
+            get() = _isLeft
 
-        private val _putChattingRoomAlarmResponse = MutableLiveData<PutChattingRoomAlarmResponse>()
-        val putChattingRoomAlarmResponse: LiveData<PutChattingRoomAlarmResponse>
+        private val _putChattingRoomAlarmResponse = MutableLiveData<Unit>()
+        val putChattingRoomAlarmResponse: LiveData<Unit>
             get() = _putChattingRoomAlarmResponse
 
         private val _errorMessage = MutableLiveData<String?>()
@@ -82,10 +74,13 @@ class ChattingRoomViewModel
         val isInstability: LiveData<Boolean>
             get() = _isInstability
 
+        fun setChatRoomInfo(info: ChatRoomInfo) {
+            _chattingRoomInfo.value = info
+        }
+
         /** WebSocket 연결 */
         fun connectToWebSocket(
             chatRoomId: Long,
-            userId: Long,
             accessToken: String,
         ) {
             viewModelScope.launch {
@@ -100,8 +95,7 @@ class ChattingRoomViewModel
 
                 val headerMap =
                     mapOf(
-                        "AccessToken" to accessToken,
-                        "ChatRoomId" to chatRoomId.toString(),
+                        "Authorization" to accessToken,
                     )
 
                 stompClient =
@@ -116,13 +110,16 @@ class ChattingRoomViewModel
                             withServerHeartbeat(35000)
                         }
 
-                stompClient?.connect()
+                val stompHeaders =
+                    listOf(
+                        StompHeader("Authorization", accessToken),
+                    )
 
                 stompClient?.lifecycle()?.subscribe({ event ->
                     when (event.type) {
                         LifecycleEvent.Type.OPENED -> {
                             Log.d("Web Socket✅", "연결 성공")
-                            handleWebSocketOpened(chatRoomId, userId)
+                            handleWebSocketOpened(chatRoomId)
                         }
 
                         LifecycleEvent.Type.CLOSED -> {
@@ -130,7 +127,7 @@ class ChattingRoomViewModel
                         }
 
                         LifecycleEvent.Type.ERROR -> {
-                            Log.i("Web Socket", "${event.exception.message}")
+                            Log.i("Web Socket", "${event.exception}")
                             _isInstability.postValue(true)
                         }
 
@@ -140,88 +137,90 @@ class ChattingRoomViewModel
                     Log.i("Web Socket", "${error.message}")
                     _isInstability.postValue(true)
                 })
+
+                stompClient?.connect(stompHeaders)
             }
         }
 
-        private fun handleWebSocketOpened(
-            chatRoomId: Long,
-            userId: Long,
-        ) {
+        private fun handleWebSocketOpened(chatRoomId: Long) {
             // 채팅방 구독
             topic =
-                stompClient?.topic("/topic/chat.$chatRoomId")?.subscribe({ message ->
+                stompClient?.topic("/sub/chat/room/$chatRoomId")?.subscribe({ message ->
                     Log.i("✅ Msg", message.payload)
                     val jsonObject = JSONObject(message.payload)
+                    val messageId = jsonObject.getLong("messageId")
+                    val roomId = jsonObject.getLong("roomId")
+                    val senderId = jsonObject.getLong("senderId")
+                    val senderNickname = jsonObject.getString("senderNickname")
+                    val senderProfileImage = jsonObject.getString("senderProfileImage")
+                    val content = jsonObject.getString("content")
                     val messageType = jsonObject.getString("messageType")
-                    val chatMessageInfo: ChatMessageInfo =
-                        when (messageType) {
-                            ChatMessageType.DATE.name -> {
-                                val roomId = jsonObject.getString("chatRoomId").toLong()
-                                val content = jsonObject.getString("content")
-                                val senderId = jsonObject.getString("senderId").toLong()
-                                ChatMessageInfo(
-                                    chatMessageId = "",
-                                    roomId = roomId,
-                                    content = content,
-                                    senderId = senderId,
-                                    messageType = messageType,
-                                )
-                            }
-
-                            ChatMessageType.TALK.name -> {
-                                val chatMessageId = jsonObject.getString("chatMessageId")
-                                val senderId = jsonObject.getString("senderId").toLong()
-                                val content = jsonObject.getString("content")
-                                val roomId = jsonObject.getString("roomId").toLong()
-                                val id = ChatMessageId(date = getCurrentTimeFormatted())
-                                ChatMessageInfo(
-                                    id = id,
-                                    chatMessageId = chatMessageId,
-                                    roomId = roomId,
-                                    content = content,
-                                    senderId = senderId,
-                                    messageType = messageType,
-                                )
-                            }
-
-                            else -> { // 채팅방 나가고 들어올때 메시지 처리하기
-                                ChatMessageInfo(chatMessageId = "", roomId = -1L, content = "", senderId = -1L, messageType = "")
-                            }
-                        }
-                    addChatMessage(chatMessageInfo)
-                    sendIsMsgRead(chatRoomId, userId)
+                    val createdAt = jsonObject.getString("createdAt")
+                    val chatMessage =
+                        GetChattingMessagesResponse(
+                            messageId = messageId,
+                            chatRoomId = roomId,
+                            senderId = senderId,
+                            senderNickName = senderNickname,
+                            senderProfileImageUrl = senderProfileImage,
+                            content = content,
+                            messageType = messageType,
+                            createdAt = createdAt,
+                        )
+                    addChatMessage(chatMessage)
+                    sendIsMsgRead(chatRoomId)
                 }, { error ->
                     Log.i("ws opened", "chatroom subscribe error / ${error.printStackTrace()}", error)
                 })
         }
 
-        private fun sendIsMsgRead(
-            chatRoomId: Long,
-            userId: Long,
-        ) {
+        private fun sendIsMsgRead(chatRoomId: Long) {
             viewModelScope.launch {
                 val msg =
                     JSONObject()
                         .apply {
                             put("chatRoomId", chatRoomId)
-                            put("userId", userId)
                         }.toString()
-                stompClient?.send("/app/chat/read", msg)?.subscribe()
+                stompClient?.send("/pub/chat/read", msg)?.subscribe()
             }
         }
 
-        fun sendMessage(
-            chatRoomId: Long,
-            message: String,
-        ) {
+        fun sendMessage(request: String) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
-                stompClient?.send("/app/chat.$chatRoomId", message)?.subscribe({
+                stompClient?.send("/pub/chat/message", request)?.subscribe({
                     Log.d("Web Socket📬", "메시지 전달")
                     _isMessageSent.value = true
                 }, { error ->
                     Log.d("Web Socket✉️❌", "메시지 전송 실패", error)
                     _isMessageSent.value = false
+                })
+            }
+        }
+
+        fun leaveChattingRoom(request: String) {
+            viewModelScope.launch {
+                stompClient?.send("/pub/chat/leave", request)?.subscribe({
+                    Log.d("Web Socket🚪", "방 탈퇴")
+                    _isLeft.value = true
+                }, { error ->
+                    Log.d("Web Socket🚪❌", "방 탈퇴 실패", error)
+                    _isLeft.value = false
+                })
+            }
+        }
+
+        fun sendEnterRequest(chatRoomId: Long) {
+            viewModelScope.launch {
+                val request =
+                    JSONObject()
+                        .apply {
+                            put("chatRoomId", chatRoomId)
+                        }.toString()
+                stompClient?.send("/pub/chat/enter", request)?.subscribe({
+                    Log.d("Web Socket🪟", "입장 알림 성공")
+                }, { error ->
+                    Log.d("Web Socket🪟❌", "입장 알림 실패", error)
                 })
             }
         }
@@ -232,33 +231,31 @@ class ChattingRoomViewModel
             stompClient?.disconnect()
         }
 
-        private fun addChatMessage(chatMessageInfo: ChatMessageInfo) {
-            val currentList = _getChattingHistoryResponse.value?.chatMessageInfoList ?: emptyList()
-            val updatedList = listOf(chatMessageInfo) + currentList
+        private fun addChatMessage(chatMessage: GetChattingMessagesResponse) {
+            val currentList = _getChattingMessagesResponse.value ?: emptyList<GetChattingMessagesResponse>()
+            val updatedList = listOf(chatMessage) + currentList
 
-            val updatedResponse =
-                _getChattingHistoryResponse.value?.copy(
-                    chatMessageInfoList = updatedList,
-                ) ?: GetChattingHistoryResponse(
-                    chatMessageInfoList = updatedList,
-                    isFirst = true,
-                    isLast = true,
-                    lastMessageId = updatedList.last().chatMessageId,
-                )
-
-            _getChattingHistoryResponse.postValue(updatedResponse)
+            _getChattingMessagesResponse.postValue(updatedList)
         }
 
-        fun getChattingHistory(
+        fun getChattingMessages(
             chatRoomId: Long,
-            lastMessageId: String? = null,
-            size: Int? = 20,
+            lastMessageId: Long? = null,
+            size: Int = 20,
+            userId: Long,
         ) {
             viewModelScope.launch {
-                val result = getChattingHistoryUseCase(chatRoomId, lastMessageId, size)
+                val result = getChattingMessagesUseCase(chatRoomId, lastMessageId, size)
                 result
                     .onSuccess { response ->
-                        _getChattingHistoryResponse.value = response
+                        _getChattingMessagesResponse.value = response
+                        val hasEnterMsg =
+                            response.any {
+                                it.messageType == "SYSTEM" && it.senderId == userId
+                            }
+                        if (response.isEmpty() || !hasEnterMsg) {
+                            sendEnterRequest(chatRoomId)
+                        }
                     }.onFailure { exception ->
                         if (exception is ReissueFailureException) {
                             _navigateToLogin.value = true
@@ -285,44 +282,12 @@ class ChattingRoomViewModel
             }
         }
 
-        fun getChattingRoomInfo(chatRoomId: Long) {
-            viewModelScope.launch {
-                val result = getChattingRoomInfoUseCase(chatRoomId)
-                result
-                    .onSuccess { info ->
-                        _chattingRoomInfo.value = info
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            _errorMessage.value = exception.message
-                        }
-                    }
-            }
-        }
-
-        fun deleteChattingRoom(chatRoomId: Long) {
-            viewModelScope.launch {
-                val result = deleteChattingRoomUseCase(chatRoomId)
-                result
-                    .onSuccess { response ->
-                        _deleteChattingRoomResponse.value = response
-                    }.onFailure { exception ->
-                        if (exception is ReissueFailureException) {
-                            _navigateToLogin.value = true
-                        } else {
-                            _errorMessage.value = exception.message
-                        }
-                    }
-            }
-        }
-
         fun putChattingRoomAlarm(
-            chatRoomId: Long,
-            enable: Boolean,
+            roomId: Long,
+            request: PutChattingRoomAlarmRequest,
         ) {
             viewModelScope.launch {
-                val result = putChattingRoomAlarmUseCase(chatRoomId, enable)
+                val result = putChattingRoomAlarmUseCase(roomId, request)
                 result
                     .onSuccess { response ->
                         _putChattingRoomAlarmResponse.value = response

@@ -1,8 +1,10 @@
 package com.catchmate.presentation.view.chatting
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,8 +20,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.catchmate.domain.model.chatting.ChatRoomInfo
+import com.catchmate.domain.model.chatting.GetChattingCrewListResponse
+import com.catchmate.domain.model.chatting.PutChattingRoomAlarmRequest
 import com.catchmate.domain.model.enumclass.ChatMessageType
-import com.catchmate.domain.model.user.GetUserProfileResponse
 import com.catchmate.presentation.R
 import com.catchmate.presentation.databinding.FragmentChattingRoomBinding
 import com.catchmate.presentation.databinding.LayoutChattingSideSheetBinding
@@ -40,13 +43,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
     private val chattingRoomViewModel: ChattingRoomViewModel by viewModels()
     private val localDataViewModel: LocalDataViewModel by viewModels()
     private var userId: Long = -1L
-    private var lastChatMessageId: String? = null
+    private var lastMessageId: Long? = null
     private var isLastPage = false
     private var isLoading = false
     private var isApiCalled = false
     private var isFirstLoad = true
-    private val chatRoomId by lazy { arguments?.getLong("chatRoomId") ?: -1L }
-    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") ?: false }
+    private val isPendingIntent by lazy { arguments?.getBoolean("isPendingIntent") == true }
     private var isNotificationEnabled = false
     private lateinit var chatListAdapter: ChatListAdapter
 
@@ -57,7 +59,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         super.onViewCreated(view, savedInstanceState)
         localDataViewModel.getUserId()
         initViewModel()
-        chattingRoomViewModel.getChattingRoomInfo(chatRoomId)
+        getChatRoomInfo()
         initChatBox()
         initSendBtn()
         onBackPressedAction = { setOnBackPressedAction() }
@@ -69,51 +71,51 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         chattingRoomViewModel.stompClient?.disconnect()
     }
 
+    private fun getChatRoomInfo() {
+        val chatRoomInfo =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable("chatRoomInfo", ChatRoomInfo::class.java)
+            } else {
+                arguments?.getParcelable("chatRoomInfo")
+            }
+        chatRoomInfo?.let { info ->
+            chattingRoomViewModel.setChatRoomInfo(info)
+        }
+    }
+
     private fun initViewModel() {
-        chattingRoomViewModel.getChattingHistoryResponse.observe(viewLifecycleOwner) { response ->
-            if (response.isFirst && response.isLast && response.chatMessageInfoList.isEmpty()) {
+        chattingRoomViewModel.getChattingMessagesResponse.observe(viewLifecycleOwner) { response ->
+            if (response.isEmpty()) {
                 Log.d("빈 채팅방 목록", "empty")
             } else {
-                Log.i("👀observer", "work \n ${response.chatMessageInfoList.size}")
+                Log.i("👀observer", "work \n ${response.size}")
                 if (isApiCalled) {
                     val currentList = chatListAdapter.currentList.toMutableList()
                     Log.d("IS API CALLED", "🅾️")
-                    currentList.addAll(response.chatMessageInfoList)
+                    currentList.addAll(response)
                     chatListAdapter.submitList(currentList)
                     isApiCalled = false
                 } else {
-                    chatListAdapter.submitList(response.chatMessageInfoList) {
+                    chatListAdapter.submitList(response) {
                         // 수신 메시지 추가 후 콜백을 통해 최신 메시지로 스크롤 이동
                         binding.rvChattingRoomChatList.smoothScrollToPosition(0)
                         isApiCalled = false
                     }
                 }
-                isLastPage = response.isLast
+                isLastPage = response.size < 20
                 isLoading = false
             }
         }
         chattingRoomViewModel.getChattingCrewListResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                initRecyclerView(response.userInfoList)
+                initRecyclerView(response)
             }
         }
         chattingRoomViewModel.chattingRoomInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) {
-//                isNotificationEnabled = info.isNotificationEnabled
+                isNotificationEnabled = info.notificationOn
                 initChatRoomInfo(info)
                 initHeader(info)
-            }
-        }
-        chattingRoomViewModel.deleteChattingRoomResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
-                if (it.state) {
-                    Log.d("채팅방 나가기 성공", "나가기 성공")
-                    setFragmentResult("deleteChattingRoomResultKey", bundleOf("chatRoomId" to chatRoomId))
-                    findNavController().popBackStack()
-                } else {
-                    Log.d("채팅방 오류", "나가기 실패")
-                    showAlertSnackbar(R.string.chatting_leave_room_fail)
-                }
             }
         }
         chattingRoomViewModel.navigateToLogin.observe(viewLifecycleOwner) { isTrue ->
@@ -136,16 +138,27 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         localDataViewModel.userId.observe(viewLifecycleOwner) { id ->
             userId = id
             localDataViewModel.getAccessToken()
-            chattingRoomViewModel.getChattingCrewList(chatRoomId)
+            chattingRoomViewModel.getChattingCrewList(chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1)
         }
         localDataViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-            chattingRoomViewModel.connectToWebSocket(chatRoomId, userId, token)
+            chattingRoomViewModel.connectToWebSocket(chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1, token)
         }
         chattingRoomViewModel.isMessageSent.observe(viewLifecycleOwner) { isSent ->
             if (isSent) {
                 binding.edtChattingRoomChatBox.setText("")
             } else {
                 showAlertSnackbar(R.string.chatting_message_send_fail)
+            }
+        }
+        chattingRoomViewModel.isLeft.observe(viewLifecycleOwner) { isSent ->
+            if (isSent) {
+                Log.d("채팅방 나가기 성공", "나가기 성공")
+                val chatRoomId = chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1
+                setFragmentResult("deleteChattingRoomResultKey", bundleOf("chatRoomId" to chatRoomId))
+                findNavController().popBackStack()
+            } else {
+                Log.d("채팅방 오류", "나가기 실패")
+                showAlertSnackbar(R.string.chatting_leave_room_fail)
             }
         }
         chattingRoomViewModel.isInstability.observe(viewLifecycleOwner) { isTrue ->
@@ -155,7 +168,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
     }
 
-    private fun initRecyclerView(list: List<GetUserProfileResponse>) {
+    private fun initRecyclerView(list: List<GetChattingCrewListResponse>) {
         Log.i("userID", userId.toString())
         chatListAdapter = ChatListAdapter(userId, list)
         binding.rvChattingRoomChatList.apply {
@@ -179,7 +192,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                                 lastVisibleItemPosition >= 0 &&
                                 lastVisibleItemPosition < chatListAdapter.currentList.size
                             ) {
-                                lastChatMessageId = chatListAdapter.currentList[lastVisibleItemPosition].chatMessageId
+                                lastMessageId = chatListAdapter.currentList[lastVisibleItemPosition].messageId
                                 getChattingHistory()
                             }
                         }
@@ -197,7 +210,11 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         Log.i("api 호출", "호출 $isLoading $isLastPage")
         if (isLoading || isLastPage) return
         isLoading = true
-        chattingRoomViewModel.getChattingHistory(chatRoomId, lastChatMessageId)
+        chattingRoomViewModel.getChattingMessages(
+            chatRoomId = chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1,
+            lastMessageId = lastMessageId,
+            userId = userId,
+        )
         isApiCalled = true
     }
 
@@ -251,15 +268,14 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
 
     private fun initSendBtn() {
         binding.btnChattingRoomChatBoxSend.setOnClickListener {
-            val message =
+            val request =
                 JSONObject()
                     .apply {
-                        put("messageType", ChatMessageType.TALK.name)
+                        put("chatRoomId", chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1)
                         put("content", binding.edtChattingRoomChatBox.text.toString())
-                        put("senderId", userId)
+                        put("messageType", ChatMessageType.TEXT)
                     }.toString()
-
-            chattingRoomViewModel.sendMessage(chatRoomId, message)
+            chattingRoomViewModel.sendMessage(request)
         }
     }
 
@@ -320,7 +336,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         adapter = crewAdapter
                         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     }
-                    crewAdapter.submitList(chattingRoomViewModel.getChattingCrewListResponse.value?.userInfoList)
+                    crewAdapter.submitList(
+                        (
+                            chattingRoomViewModel.getChattingCrewListResponse.value
+                                ?: emptyList<GetChattingCrewListResponse>()
+                        ),
+                    )
 
                     // 버튼 기능
                     ivSideSheetLeaveChattingRoom.setOnClickListener {
@@ -333,11 +354,14 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                             // 채팅방 이미지 url, 참여자 목록, 로그인 유저 id, 게시글 작성자 id, 채팅방 id 넘김
                             val bundle =
                                 Bundle().apply {
-//                                    putString("chattingRoomImage", info.chatRoomImage)
-                                    putParcelable("chattingCrewList", chattingRoomViewModel.getChattingCrewListResponse.value)
+                                    putString("chattingRoomImage", info.chatRoomImageUrl)
+                                    putParcelableArrayList(
+                                        "chattingCrewList",
+                                        chattingRoomViewModel.getChattingCrewListResponse.value as ArrayList<out Parcelable?>?,
+                                    )
                                     putLong("loginUserId", userId)
                                     putLong("writerId", info.board.userResponse.userId)
-                                    putLong("chatRoomId", chatRoomId)
+                                    putLong("chatRoomId", chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1)
                                 }
                             findNavController().navigate(R.id.action_chattingRoomFragment_to_chattingSettingFragment, bundle)
                             sideSheetDialog.dismiss()
@@ -349,7 +373,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     toggleSideSheetChattingRoomNotification.setOnClickListener {
                         isNotificationEnabled = !isNotificationEnabled
                         toggleSideSheetChattingRoomNotification.isChecked = isNotificationEnabled
-                        chattingRoomViewModel.putChattingRoomAlarm(chatRoomId, isNotificationEnabled)
+                        chattingRoomViewModel.putChattingRoomAlarm(
+                            chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1,
+                            PutChattingRoomAlarmRequest(
+                                isNotificationEnabled,
+                            ),
+                        )
                     }
                     layoutSideSheetPostInfo.setOnClickListener {
                         val bundle = Bundle()
@@ -397,7 +426,12 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                     ContextCompat.getColor(requireContext(), R.color.brand500),
                 )
                 setOnClickListener {
-                    chattingRoomViewModel.deleteChattingRoom(chatRoomId)
+                    val request =
+                        JSONObject()
+                            .apply {
+                                put("chatRoomId", chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1)
+                            }.toString()
+                    chattingRoomViewModel.leaveChattingRoom(request)
                     dialog.dismiss()
                 }
             }
