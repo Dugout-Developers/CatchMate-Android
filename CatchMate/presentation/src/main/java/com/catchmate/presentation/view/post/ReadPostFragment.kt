@@ -233,7 +233,7 @@ class ReadPostFragment : BaseFragment<FragmentReadPostBinding>(FragmentReadPostB
                                         maxPerson = readPostViewModel.getBoardResponse.value?.maxPerson!!,
                                         bookMarked = readPostViewModel.getBoardResponse.value?.bookMarked!!,
                                         cheerClub = readPostViewModel.getBoardResponse.value?.cheerClub!!,
-                                        gameResponse =readPostViewModel.getBoardResponse.value?.game!!,
+                                        gameResponse = readPostViewModel.getBoardResponse.value?.game!!,
                                         userResponse = readPostViewModel.getBoardResponse.value?.user!!,
                                     ),
                                 lastMessage = null,

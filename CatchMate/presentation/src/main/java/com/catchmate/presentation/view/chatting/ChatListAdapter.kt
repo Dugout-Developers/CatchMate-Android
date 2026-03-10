@@ -75,9 +75,7 @@ class ChatListAdapter(
     inner class ChattingParticipantViewHolder(
         private val binding: ViewChattingParticipantAlertBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(
-            chat: GetChattingMessagesResponse,
-        ) {
+        fun bind(chat: GetChattingMessagesResponse) {
             binding.tvChattingParticipantAlert.text = chat.content
         }
     }

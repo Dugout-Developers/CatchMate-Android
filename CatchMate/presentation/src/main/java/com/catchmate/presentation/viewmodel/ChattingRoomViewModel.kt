@@ -112,7 +112,7 @@ class ChattingRoomViewModel
 
                 val stompHeaders =
                     listOf(
-                        StompHeader("Authorization", accessToken)
+                        StompHeader("Authorization", accessToken),
                     )
 
                 stompClient?.lifecycle()?.subscribe({ event ->
@@ -142,9 +142,7 @@ class ChattingRoomViewModel
             }
         }
 
-        private fun handleWebSocketOpened(
-            chatRoomId: Long,
-        ) {
+        private fun handleWebSocketOpened(chatRoomId: Long) {
             // 채팅방 구독
             topic =
                 stompClient?.topic("/sub/chat/room/$chatRoomId")?.subscribe({ message ->
@@ -176,9 +174,7 @@ class ChattingRoomViewModel
                 })
         }
 
-        private fun sendIsMsgRead(
-            chatRoomId: Long,
-        ) {
+        private fun sendIsMsgRead(chatRoomId: Long) {
             viewModelScope.launch {
                 val msg =
                     JSONObject()
@@ -189,9 +185,7 @@ class ChattingRoomViewModel
             }
         }
 
-        fun sendMessage(
-            request: String,
-        ) {
+        fun sendMessage(request: String) {
             // 전달 성공 시 view의 edt 텍스트 비우기
             viewModelScope.launch {
                 stompClient?.send("/pub/chat/message", request)?.subscribe({

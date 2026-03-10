@@ -70,7 +70,11 @@ class ChattingSettingFragment :
 
     private fun getChattingCrewList(): MutableList<GetChattingCrewListResponse>? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelableArrayList<GetChattingCrewListResponse>("chattingCrewList", GetChattingCrewListResponse::class.java)?.toMutableList()
+            arguments?.getParcelableArrayList<GetChattingCrewListResponse>(
+                "chattingCrewList",
+                GetChattingCrewListResponse::class.java,
+            )
+                ?.toMutableList()
         } else {
             val parcelable = arguments?.getParcelableArrayList<GetChattingCrewListResponse>("chattingCrewList")
             parcelable?.toMutableList()

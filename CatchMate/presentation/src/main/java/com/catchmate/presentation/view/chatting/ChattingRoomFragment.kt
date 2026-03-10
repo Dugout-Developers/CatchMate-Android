@@ -83,7 +83,6 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
         }
     }
 
-
     private fun initViewModel() {
         chattingRoomViewModel.getChattingMessagesResponse.observe(viewLifecycleOwner) { response ->
             if (response.isEmpty()) {
@@ -337,7 +336,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         adapter = crewAdapter
                         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     }
-                    crewAdapter.submitList((chattingRoomViewModel.getChattingCrewListResponse.value ?: emptyList<GetChattingCrewListResponse>()))
+                    crewAdapter.submitList(
+                        (chattingRoomViewModel.getChattingCrewListResponse.value
+                            ?: emptyList<GetChattingCrewListResponse>())
+                    )
 
                     // 버튼 기능
                     ivSideSheetLeaveChattingRoom.setOnClickListener {
@@ -351,8 +353,9 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                             val bundle =
                                 Bundle().apply {
                                     putString("chattingRoomImage", info.chatRoomImageUrl)
-                                    putParcelableArrayList("chattingCrewList",
-                                        chattingRoomViewModel.getChattingCrewListResponse.value as ArrayList<out Parcelable?>?
+                                    putParcelableArrayList(
+                                        "chattingCrewList",
+                                        chattingRoomViewModel.getChattingCrewListResponse.value as ArrayList<out Parcelable?>?,
                                     )
                                     putLong("loginUserId", userId)
                                     putLong("writerId", info.board.userResponse.userId)
@@ -372,7 +375,7 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                             chattingRoomViewModel.chattingRoomInfo.value?.chatRoomId ?: -1,
                             PutChattingRoomAlarmRequest(
                                 isNotificationEnabled,
-                            )
+                            ),
                         )
                     }
                     layoutSideSheetPostInfo.setOnClickListener {

@@ -8,6 +8,5 @@ class LeaveChattingRoomUseCase
     constructor(
         private val chattingRepository: ChattingRepository,
     ) {
-        suspend operator fun invoke(roomId: Long): Result<Unit> =
-            chattingRepository.deleteChattingRoom(roomId)
+        suspend operator fun invoke(roomId: Long): Result<Unit> = chattingRepository.deleteChattingRoom(roomId)
     }
