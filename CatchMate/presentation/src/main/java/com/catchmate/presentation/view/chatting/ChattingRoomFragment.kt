@@ -337,8 +337,10 @@ class ChattingRoomFragment : BaseFragment<FragmentChattingRoomBinding>(FragmentC
                         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     }
                     crewAdapter.submitList(
-                        (chattingRoomViewModel.getChattingCrewListResponse.value
-                            ?: emptyList<GetChattingCrewListResponse>())
+                        (
+                            chattingRoomViewModel.getChattingCrewListResponse.value
+                                ?: emptyList<GetChattingCrewListResponse>()
+                        ),
                     )
 
                     // 버튼 기능
