@@ -38,18 +38,19 @@ object ClubUtils {
     fun convertClubIdListToString(clubIdList: List<Int>): String {
         var newStr = ""
         clubIdList.forEach { id ->
-            newStr = when (id) {
-                Club.KIA.id -> newStr + Club.KIA.teamName + ", "
-                Club.SAMSUNG.id -> newStr + Club.SAMSUNG.teamName + ", "
-                Club.LG.id -> newStr + Club.LG.teamName + ", "
-                Club.DOOSAN.id -> newStr + Club.DOOSAN.teamName + ", "
-                Club.KT.id -> newStr + Club.KT.teamName + ", "
-                Club.SSG.id -> newStr + Club.SSG.teamName + ", "
-                Club.LOTTE.id -> newStr + Club.LOTTE.teamName + ", "
-                Club.HANWHA.id -> newStr + Club.HANWHA.teamName + ", "
-                Club.NC.id -> newStr + Club.NC.teamName + ", "
-                else -> newStr + Club.KIWOOM.teamName + ", "
-            }
+            newStr =
+                when (id) {
+                    Club.KIA.id -> newStr + Club.KIA.teamName + ", "
+                    Club.SAMSUNG.id -> newStr + Club.SAMSUNG.teamName + ", "
+                    Club.LG.id -> newStr + Club.LG.teamName + ", "
+                    Club.DOOSAN.id -> newStr + Club.DOOSAN.teamName + ", "
+                    Club.KT.id -> newStr + Club.KT.teamName + ", "
+                    Club.SSG.id -> newStr + Club.SSG.teamName + ", "
+                    Club.LOTTE.id -> newStr + Club.LOTTE.teamName + ", "
+                    Club.HANWHA.id -> newStr + Club.HANWHA.teamName + ", "
+                    Club.NC.id -> newStr + Club.NC.teamName + ", "
+                    else -> newStr + Club.KIWOOM.teamName + ", "
+                }
         }
         return newStr.substring(0, newStr.length - 2)
     }

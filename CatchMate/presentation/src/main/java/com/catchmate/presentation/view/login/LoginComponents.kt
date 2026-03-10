@@ -37,17 +37,16 @@ import com.catchmate.presentation.view.theme.Grey900
 import com.catchmate.presentation.view.theme.SystemYellow
 
 @Composable
-fun KakaoLoginButton(
-    onKakaoLoginClick: () -> Unit,
-) {
+fun KakaoLoginButton(onKakaoLoginClick: () -> Unit) {
     Button(
         modifier =
             Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = SystemYellow,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = SystemYellow,
+            ),
         shape = RoundedCornerShape(8.dp),
         contentPadding = PaddingValues(0.dp),
         onClick = onKakaoLoginClick,
@@ -81,9 +80,10 @@ fun RoundLoginButton(
             Modifier
                 .size(53.dp),
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Grey0,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = Grey0,
+            ),
         border = BorderStroke(1.dp, Grey100),
         onClick = onRoundLoginClick,
         contentPadding = PaddingValues(0.dp),
@@ -97,9 +97,7 @@ fun RoundLoginButton(
 }
 
 @Composable
-fun GuestLoginButton(
-    onGuestLoginClick: () -> Unit,
-) {
+fun GuestLoginButton(onGuestLoginClick: () -> Unit) {
     Text(
         text = stringResource(R.string.login_sneak_peek),
         textDecoration = TextDecoration.Underline,
@@ -109,8 +107,7 @@ fun GuestLoginButton(
             Modifier
                 .clickable {
                     onGuestLoginClick()
-                }
-                .padding(8.dp),
+                }.padding(8.dp),
     )
 }
 

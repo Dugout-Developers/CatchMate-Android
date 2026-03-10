@@ -81,6 +81,7 @@ class TeamOnboardingFragment : BaseComposeFragment() {
                         TeamOnboardingSideEffect.NavigateToBack -> {
                             findNavController().popBackStack()
                         }
+
                         is TeamOnboardingSideEffect.NavigateToNext -> {
                             val newUserInfo =
                                 PostUserAdditionalInfoRequest(

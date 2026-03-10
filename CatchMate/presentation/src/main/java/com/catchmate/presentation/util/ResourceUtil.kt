@@ -34,9 +34,7 @@ object ResourceUtil {
             else -> R.drawable.vec_all_kiwoom_heroes_logo
         }
 
-    fun convertTeamColor(
-        clubId: Int,
-    ): Color =
+    fun convertTeamColor(clubId: Int): Color =
         when (clubId) {
             Club.NC.id -> NcDinos
             Club.SAMSUNG.id -> SamsungLions

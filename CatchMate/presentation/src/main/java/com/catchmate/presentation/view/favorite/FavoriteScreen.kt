@@ -61,15 +61,16 @@ fun FavoriteScreen(
                         type = TopAppBarTextType.TITLE,
                         startPadding = 18,
                     )
-                }
+                },
             )
         },
         containerColor = Grey0,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 18.dp),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 18.dp),
         ) {
             when {
                 boardList == null -> {
@@ -78,13 +79,15 @@ fun FavoriteScreen(
                         titleText = stringResource(R.string.all_error_page_title),
                     )
                 }
+
                 boardList.isEmpty() -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.img_no_list_icon,
                         titleText = stringResource(R.string.favorite_no_list_title),
-                        descriptionText = stringResource(R.string.favorite_no_list_explain)
+                        descriptionText = stringResource(R.string.favorite_no_list_explain),
                     )
                 }
+
                 else -> {
                     Spacer(Modifier.height(16.dp))
                     LazyColumn(

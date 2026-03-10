@@ -43,10 +43,16 @@ fun CatchMateFilledButton(
 ) {
     val containerColor =
         when (buttonType) {
-            ButtonType.WEAK -> Grey0
-            ButtonType.RESET -> Grey50
+            ButtonType.WEAK -> {
+                Grey0
+            }
+
+            ButtonType.RESET -> {
+                Grey50
+            }
+
             else -> {
-                if (enabled){
+                if (enabled) {
                     Brand500
                 } else {
                     Brand50
@@ -82,18 +88,19 @@ fun CatchMateFilledButton(
                 .height(52.dp),
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            disabledContainerColor = containerColor,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                disabledContainerColor = containerColor,
+            ),
         border = border,
         contentPadding = PaddingValues(0.dp),
-        elevation = null
+        elevation = null,
     ) {
         Text(
             text = text,
             style = textStyle,
-            color = contentColor
+            color = contentColor,
         )
     }
 }
@@ -105,9 +112,7 @@ fun CatchMateBackButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier =
-            modifier
-                .size(20.dp)
+        modifier = modifier.size(20.dp),
     ) {
         Icon(
             painter = painterResource(R.drawable.vec_all_left_arrow_20dp),

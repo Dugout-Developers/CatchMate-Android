@@ -23,32 +23,40 @@ class TermsAndConditionViewModel
 
         fun onEvent(event: TermsAndConditionEvent) {
             when (event) {
-                TermsAndConditionEvent.OnBackClicked -> sendSideEffect(TermsAndConditionSideEffect.NavigateBack)
+                TermsAndConditionEvent.OnBackClicked -> {
+                    sendSideEffect(TermsAndConditionSideEffect.NavigateBack)
+                }
 
-                TermsAndConditionEvent.OnSubmitClicked ->
+                TermsAndConditionEvent.OnSubmitClicked -> {
                     if (uiState.value.isSubmitButtonEnable) {
                         sendSideEffect(TermsAndConditionSideEffect.NavigateToNext(uiState.value.isMarketingPushChecked))
                     }
+                }
 
-                TermsAndConditionEvent.OnServiceDetailClicked ->
+                TermsAndConditionEvent.OnServiceDetailClicked -> {
                     sendSideEffect(
                         TermsAndConditionSideEffect
-                            .NavigateToWeb("https://catchmate.notion.site/19690504ec15803588a7ca69b306bf3e")
+                            .NavigateToWeb("https://catchmate.notion.site/19690504ec15803588a7ca69b306bf3e"),
                     )
+                }
 
-                TermsAndConditionEvent.OnPrivacyDetailClicked ->
+                TermsAndConditionEvent.OnPrivacyDetailClicked -> {
                     sendSideEffect(
                         TermsAndConditionSideEffect
-                            .NavigateToWeb("https://catchmate.notion.site/19690504ec15804ba163fcf8fa0ab937")
+                            .NavigateToWeb("https://catchmate.notion.site/19690504ec15804ba163fcf8fa0ab937"),
                     )
+                }
 
-                TermsAndConditionEvent.OnMarketingDetailClicked ->
+                TermsAndConditionEvent.OnMarketingDetailClicked -> {
                     sendSideEffect(
                         TermsAndConditionSideEffect
-                            .NavigateToWeb("https://catchmate.notion.site/1b890504ec15805fa95ef55c252d53e6")
+                            .NavigateToWeb("https://catchmate.notion.site/1b890504ec15805fa95ef55c252d53e6"),
                     )
+                }
 
-                TermsAndConditionEvent.OnAllAgreementToggled -> toggleAllAgreement()
+                TermsAndConditionEvent.OnAllAgreementToggled -> {
+                    toggleAllAgreement()
+                }
 
                 TermsAndConditionEvent.OnServiceTermsToggled -> {
                     updateCheckState {
@@ -95,16 +103,16 @@ class TermsAndConditionViewModel
 
                 val isAllChecked =
                     newState.isServiceTermsChecked &&
-                            newState.isPrivacyPolicyChecked &&
-                            newState.isMarketingPushChecked
+                        newState.isPrivacyPolicyChecked &&
+                        newState.isMarketingPushChecked
 
                 val isNextButtonEnabled =
                     newState.isServiceTermsChecked &&
-                            newState.isPrivacyPolicyChecked
+                        newState.isPrivacyPolicyChecked
 
                 newState.copy(
                     isAllAgreementChecked = isAllChecked,
-                    isSubmitButtonEnable = isNextButtonEnabled
+                    isSubmitButtonEnable = isNextButtonEnabled,
                 )
             }
         }

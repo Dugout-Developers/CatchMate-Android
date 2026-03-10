@@ -68,9 +68,10 @@ fun CatchMateCheerStyleButton(
             Image(
                 painter = painterResource(res),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(72.dp)
-                    .align(Alignment.BottomEnd) // 오른쪽 아래로 밀기
+                modifier =
+                    Modifier
+                        .size(72.dp)
+                        .align(Alignment.BottomEnd), // 오른쪽 아래로 밀기
             )
         }
     }

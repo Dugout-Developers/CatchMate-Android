@@ -43,7 +43,7 @@ fun TermsAndConditionAllAgreementRow(
                 .clip(RoundedCornerShape(8.dp))
                 .background(Grey50)
                 .clickable { onCheckedChange(!isChecked) }
-                .padding(horizontal = 16.dp, vertical = 15.5.dp)
+                .padding(horizontal = 16.dp, vertical = 15.5.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

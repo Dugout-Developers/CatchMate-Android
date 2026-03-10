@@ -48,17 +48,22 @@ class TermsAndConditionFragment : BaseComposeFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 termsAndConditionViewModel.sideEffect.collect { effect ->
                     when (effect) {
-                        TermsAndConditionSideEffect.NavigateBack -> findNavController().popBackStack()
+                        TermsAndConditionSideEffect.NavigateBack -> {
+                            findNavController().popBackStack()
+                        }
+
                         is TermsAndConditionSideEffect.NavigateToNext -> {
                             val bundle = Bundle()
                             bundle.putSerializable("userInfo", userInfo)
                             bundle.putBoolean("isMarketingPushChecked", effect.isMarketingPushChecked)
                             findNavController().navigate(R.id.action_termsAndConditionFragment_to_signupFragment, bundle)
                         }
+
                         is TermsAndConditionSideEffect.NavigateToWeb -> {
                             val intent = Intent(Intent.ACTION_VIEW, effect.url.toUri())
                             startActivity(intent)
                         }
+
                         is TermsAndConditionSideEffect.ShowError -> {
                             Snackbar.make(requireView(), effect.message, Snackbar.LENGTH_SHORT).show()
                         }
@@ -67,7 +72,6 @@ class TermsAndConditionFragment : BaseComposeFragment() {
             }
         }
     }
-
 
     @Composable
     override fun ComposeContent() {

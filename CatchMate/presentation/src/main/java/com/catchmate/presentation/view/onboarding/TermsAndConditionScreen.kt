@@ -43,7 +43,7 @@ fun TermsAndConditionScreen(
                 onBackClick = { onEvent(TermsAndConditionEvent.OnBackClicked) },
                 actions = {
                     CatchMateIndicator(currentPage = 1)
-                }
+                },
             )
         },
         bottomBar = {
@@ -64,7 +64,6 @@ fun TermsAndConditionScreen(
                 )
                 Spacer(Modifier.height(34.dp))
             }
-
         },
     ) { innerPadding ->
         Column(
@@ -73,7 +72,7 @@ fun TermsAndConditionScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(horizontal = 24.dp)
-                    .padding(top = 52.dp)
+                    .padding(top = 52.dp),
         ) {
             Text(
                 text = stringResource(R.string.tac_title_1),
@@ -132,6 +131,6 @@ fun TermsAndConditionScreen(
 fun PreviewTermsAndConditionScreen() {
     TermsAndConditionScreen(
         uiState = TermsAndConditionUiState(),
-        onEvent = {}
+        onEvent = {},
     )
 }

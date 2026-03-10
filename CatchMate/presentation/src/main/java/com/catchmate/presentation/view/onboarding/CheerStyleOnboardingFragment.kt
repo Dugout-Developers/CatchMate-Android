@@ -42,10 +42,12 @@ class CheerStyleOnboardingFragment : BaseComposeFragment() {
                         CheerStyleOnboardingSideEffect.NavigateToBack -> {
                             findNavController().popBackStack()
                         }
+
                         CheerStyleOnboardingSideEffect.NavigateToNext -> {
                             mainViewModel.setGuestLogin(false)
                             findNavController().navigate(R.id.action_cheerStyleOnboardingFragment_to_signupCompleteFragment)
                         }
+
                         is CheerStyleOnboardingSideEffect.ShowSnackBar -> {
                             Snackbar.make(requireView(), effect.message, Snackbar.LENGTH_SHORT)
                         }

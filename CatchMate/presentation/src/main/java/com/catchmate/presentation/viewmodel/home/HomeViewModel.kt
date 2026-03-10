@@ -26,7 +26,6 @@ class HomeViewModel
     constructor(
         private val getBoardListUseCase: GetBoardListUseCase,
     ) : ViewModel() {
-
         private val _uiState = MutableStateFlow(HomeUiState())
         val uiState = _uiState.asStateFlow()
 
@@ -44,21 +43,27 @@ class HomeViewModel
                 HomeEvent.InitData -> {
                     getBoardList()
                 }
+
                 HomeEvent.OnNotificationClicked -> {
                     sendSideEffect(NavigateToNotification)
                 }
+
                 is HomeEvent.OnDateFilterClicked -> {
                     sendSideEffect(ShowDatePickerBottomSheet)
                 }
+
                 HomeEvent.OnClubFilterClicked -> {
                     sendSideEffect(ShowClubBottomSheet)
                 }
+
                 HomeEvent.OnMemberFilterClicked -> {
                     sendSideEffect(ShowMemberCountBottomSheet)
                 }
+
                 is HomeEvent.OnBoardItemClicked -> {
                     sendSideEffect(NavigateToReadPost(event.boardId))
                 }
+
                 HomeEvent.OnLoadMoreBoards -> {
                     val gameDate =
                         if (uiState.value.selectedDate == null) {
@@ -86,6 +91,7 @@ class HomeViewModel
                         isReadMore = true,
                     )
                 }
+
                 is HomeEvent.OnBoardDeleted -> {
                     removeBoardItem(event.boardId)
                 }
@@ -95,17 +101,19 @@ class HomeViewModel
                         when (event.sheetType) {
                             is FilterSheetType.Club -> {
                                 state.copy(
-                                    clubFilterData = event.sheetType.initialClubIds
+                                    clubFilterData = event.sheetType.initialClubIds,
                                 )
                             }
+
                             is FilterSheetType.Date -> {
                                 state.copy(
-                                    selectedDate = event.sheetType.initialDate
+                                    selectedDate = event.sheetType.initialDate,
                                 )
                             }
+
                             is FilterSheetType.Member -> {
                                 state.copy(
-                                    memberFilterData = event.sheetType.initialCount
+                                    memberFilterData = event.sheetType.initialCount,
                                 )
                             }
                         }
@@ -191,7 +199,7 @@ class HomeViewModel
                         _uiState.update {
                             if (isReadMore) {
                                 it.copy(
-                                    boardList = it.boardList?.plus(response.content),  // next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
+                                    boardList = it.boardList?.plus(response.content), // next page 가져오는 경우의 api 호출에만 기존 리스트에 추가되도록.
                                     pageNumber = response.pageNumber,
                                     hasNext = response.hasNext,
                                 )

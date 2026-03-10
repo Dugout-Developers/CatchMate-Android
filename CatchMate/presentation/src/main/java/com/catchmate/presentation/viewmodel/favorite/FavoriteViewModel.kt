@@ -41,12 +41,15 @@ class FavoriteViewModel
                 FavoriteEvent.InitData -> {
                     getLikedBoard()
                 }
+
                 is FavoriteEvent.OnFavoriteBoardClicked -> {
                     sendSideEffect(NavigateToReadPost(event.boardId))
                 }
+
                 is FavoriteEvent.OnFavoriteBoardUnliked -> {
                     postBoardLike(event.boardId)
                 }
+
                 FavoriteEvent.OnLoadMoreBoards -> {
                     getLikedBoard(
                         page = uiState.value.pageNumber + 1,
@@ -63,7 +66,7 @@ class FavoriteViewModel
                     .onSuccess { response ->
                         _uiState.update {
                             it.copy(
-                                boardList = it.boardList?.filter { it.boardId != response.boardId }
+                                boardList = it.boardList?.filter { it.boardId != response.boardId },
                             )
                         }
                     }.onFailure { exception ->

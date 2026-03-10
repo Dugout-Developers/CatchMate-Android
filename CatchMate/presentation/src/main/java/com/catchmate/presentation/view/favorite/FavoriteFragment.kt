@@ -49,11 +49,13 @@ class FavoriteFragment : BaseComposeFragment() {
                         bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
                         findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
                     }
+
                     is FavoriteSideEffect.NavigateToReadPost -> {
                         val bundle = Bundle()
                         bundle.putLong("boardId", effect.boardId)
                         findNavController().navigate(R.id.action_favoriteFragment_to_readPostFragment, bundle)
                     }
+
                     FavoriteSideEffect.ShowSnackBar -> {
                         Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT)
                     }

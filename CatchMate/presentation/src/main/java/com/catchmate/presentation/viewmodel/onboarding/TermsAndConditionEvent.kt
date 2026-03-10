@@ -1,13 +1,21 @@
 package com.catchmate.presentation.viewmodel.onboarding
 
 sealed interface TermsAndConditionEvent {
-    data object OnBackClicked : TermsAndConditionEvent
-    data object OnSubmitClicked : TermsAndConditionEvent
-    data object OnAllAgreementToggled : TermsAndConditionEvent
-    data object OnServiceTermsToggled : TermsAndConditionEvent
-    data object OnPrivacyPolicyToggled : TermsAndConditionEvent
-    data object OnMarketingPushToggled : TermsAndConditionEvent
-    data object OnServiceDetailClicked : TermsAndConditionEvent
-    data object OnPrivacyDetailClicked : TermsAndConditionEvent
-    data object OnMarketingDetailClicked : TermsAndConditionEvent
+    object OnBackClicked : TermsAndConditionEvent
+
+    object OnSubmitClicked : TermsAndConditionEvent
+
+    object OnAllAgreementToggled : TermsAndConditionEvent
+
+    object OnServiceTermsToggled : TermsAndConditionEvent
+
+    object OnPrivacyPolicyToggled : TermsAndConditionEvent
+
+    object OnMarketingPushToggled : TermsAndConditionEvent
+
+    object OnServiceDetailClicked : TermsAndConditionEvent
+
+    object OnPrivacyDetailClicked : TermsAndConditionEvent
+
+    object OnMarketingDetailClicked : TermsAndConditionEvent
 }

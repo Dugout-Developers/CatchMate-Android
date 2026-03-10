@@ -51,7 +51,7 @@ fun CatchMateTeamLogoBox(
                 .clip(RoundedCornerShape(6.dp))
                 .background(backgroundColor)
                 .then(
-                    if (isEnabled) Modifier.clickable { onClick() } else Modifier
+                    if (isEnabled) Modifier.clickable { onClick() } else Modifier,
                 ),
         contentAlignment = Alignment.Center,
     ) {

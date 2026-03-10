@@ -14,8 +14,8 @@ abstract class BaseComposeFragment : CoreFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return ComposeView(requireContext()).apply {
+    ): View? =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 CatchMateTheme {
@@ -23,7 +23,6 @@ abstract class BaseComposeFragment : CoreFragment() {
                 }
             }
         }
-    }
 
     @Composable
     abstract fun ComposeContent()

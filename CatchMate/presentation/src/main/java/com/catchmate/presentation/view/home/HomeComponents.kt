@@ -77,9 +77,10 @@ fun HomeFilterChip(
                 .then(border),
     ) {
         Row(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .padding(start = 16.dp, end = 12.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 12.dp)
+                    .padding(start = 16.dp, end = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(

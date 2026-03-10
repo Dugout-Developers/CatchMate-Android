@@ -28,9 +28,7 @@ import com.catchmate.presentation.view.theme.Grey500
 import com.catchmate.presentation.view.theme.Grey800
 
 @Composable
-fun SignUpCompleteScreen(
-    onSubmitClicked: () -> Unit,
-) {
+fun SignUpCompleteScreen(onSubmitClicked: () -> Unit) {
     Scaffold(
         modifier =
             Modifier.fillMaxSize(),

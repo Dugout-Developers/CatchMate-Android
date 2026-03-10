@@ -35,17 +35,25 @@ class CheerStyleOnboardingViewModel
                 CheerStyleOnboardingEvent.OnBackClicked -> {
                     sendSideEffect(CheerStyleOnboardingSideEffect.NavigateToBack)
                 }
+
                 is CheerStyleOnboardingEvent.OnSubmitClicked -> {
                     try {
                         val request =
                             initialUserInfo?.copy(
-                                watchStyle = uiState.value.cheerStyleButtonTextList[uiState.value.selectedButtonId!!].first.replace(" 스타일", "")
+                                watchStyle =
+                                    uiState.value.cheerStyleButtonTextList[uiState.value.selectedButtonId!!]
+                                        .first
+                                        .replace(
+                                            " 스타일",
+                                            "",
+                                        ),
                             )
                         postUserAdditionalInfo(request!!)
                     } catch (_: Exception) {
                         postUserAdditionalInfo(initialUserInfo!!)
                     }
                 }
+
                 is CheerStyleOnboardingEvent.OnCheerStyleSelected -> {
                     _uiState.update {
                         it.copy(

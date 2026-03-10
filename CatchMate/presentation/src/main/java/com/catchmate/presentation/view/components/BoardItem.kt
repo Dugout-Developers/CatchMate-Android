@@ -47,10 +47,11 @@ fun BoardItem(
     val isCheerTeam = board.gameResponse.homeClub?.clubId!! == board.cheerClub.clubId
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .padding(vertical = 8.dp),
         shape = RoundedCornerShape(8.dp),
         color = Grey0,
         shadowElevation = 4.dp,
@@ -172,12 +173,12 @@ fun PreviewBoardItem() {
                             homeStadium = "한화생명 이글스파크",
                             region = "대전",
                         ),
-                )
+                ),
         )
     BoardItem(
         onClick = {},
         board = board,
         isChecked = false,
-        onLiked = {true},
+        onLiked = { true },
     )
 }

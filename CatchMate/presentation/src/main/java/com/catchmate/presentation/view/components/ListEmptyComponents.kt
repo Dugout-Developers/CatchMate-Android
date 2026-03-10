@@ -68,6 +68,6 @@ fun PreviewListEmptyComponent() {
     ListEmptyComponent(
         iconRes = R.drawable.img_no_list_icon,
         titleText = stringResource(R.string.home_no_list_message),
-        descriptionText = "야구 팬들이 올린 다양한 글을 둘러보고\n마음에 드는 직관 글을 저장해보세요!"
+        descriptionText = "야구 팬들이 올린 다양한 글을 둘러보고\n마음에 드는 직관 글을 저장해보세요!",
     )
 }

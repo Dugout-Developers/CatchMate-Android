@@ -51,6 +51,7 @@ class SignupFragment : BaseComposeFragment() {
                         SignUpSideEffect.NavigateToBack -> {
                             findNavController().popBackStack()
                         }
+
                         is SignUpSideEffect.NavigateToNext -> {
                             if (effect.nickname.isNotEmpty() && effect.gender.isNotEmpty() && effect.birthDate.isNotEmpty()) {
                                 val newUserInfo =
@@ -72,6 +73,7 @@ class SignupFragment : BaseComposeFragment() {
                                 findNavController().navigate(R.id.action_signupFragment_to_teamOnboardingFragment, bundle)
                             }
                         }
+
                         is SignUpSideEffect.ShowSnackBar -> {
                             Snackbar.make(requireView(), effect.message, Snackbar.LENGTH_SHORT)
                         }

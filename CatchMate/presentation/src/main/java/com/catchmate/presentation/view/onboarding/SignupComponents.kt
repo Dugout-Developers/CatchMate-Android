@@ -21,7 +21,7 @@ fun SignupGenderChipGroup(
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(9.dp)
+        horizontalArrangement = Arrangement.spacedBy(9.dp),
     ) {
         CatchMateChip(
             text = female,

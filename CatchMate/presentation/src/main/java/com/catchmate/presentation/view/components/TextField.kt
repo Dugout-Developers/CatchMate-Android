@@ -12,24 +12,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.catchmate.presentation.R
-import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body02Medium
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
+import com.catchmate.presentation.R
 import com.catchmate.presentation.view.theme.Brand500
+import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body02Medium
 import com.catchmate.presentation.view.theme.CatchMateTextStyle.Body02SemiBold
 import com.catchmate.presentation.view.theme.Grey400
 import com.catchmate.presentation.view.theme.Grey50
-import com.catchmate.presentation.view.theme.Grey500
 import com.catchmate.presentation.view.theme.Grey800
 
 @Composable
@@ -39,7 +36,7 @@ fun CatchMateTextField(
     hint: String,
     modifier: Modifier = Modifier,
     showClearIcon: Boolean = true,
-    onClearClick: () -> Unit = { onValueChange("") }
+    onClearClick: () -> Unit = { onValueChange("") },
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -56,7 +53,7 @@ fun CatchMateTextField(
                 .border(
                     width = 1.dp,
                     color = strokeColor,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 ),
         textStyle = Body02Medium.copy(color = Grey800),
         interactionSource = interactionSource,
@@ -86,7 +83,7 @@ fun CatchMateTextField(
                     )
                 }
             }
-        }
+        },
     )
 }
 

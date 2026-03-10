@@ -78,7 +78,7 @@ fun CatchMateTeamButton(
                     Modifier.size(95.dp),
                 painter = painterResource(teamLogoRes),
                 contentDescription = null,
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Fit,
             )
             Spacer(Modifier.height(4.dp))
             Text(

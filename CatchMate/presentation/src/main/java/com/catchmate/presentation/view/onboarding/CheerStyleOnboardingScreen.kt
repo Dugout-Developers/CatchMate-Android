@@ -68,7 +68,7 @@ fun CheerStyleOnboardingScreen(
                 )
                 Spacer(Modifier.height(34.dp))
             }
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier =

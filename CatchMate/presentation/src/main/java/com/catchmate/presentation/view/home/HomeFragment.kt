@@ -70,9 +70,8 @@ class HomeFragment : BaseComposeFragment() {
         val uiState by homeViewModel.uiState.collectAsState()
         var showBottomSheet by remember { mutableStateOf<FilterSheetType?>(null) }
 
-        val result = findNavController().currentBackStackEntry
-            ?.savedStateHandle
-            ?.get<Long>("deletedBoardId")
+        val result =
+            findNavController().currentBackStackEntry?.savedStateHandle?.get<Long>("deletedBoardId")
 
         LaunchedEffect(result) {
             result?.let { id ->
@@ -95,43 +94,49 @@ class HomeFragment : BaseComposeFragment() {
                         findNavController().navigate(
                             R.id.action_homeFragment_to_loginFragment,
                             bundle,
-                            navOptions
+                            navOptions,
                         )
                     }
 
                     HomeSideEffect.NavigateToNotification -> {
                         if (mainViewModel.isGuestLogin.value == true) {
-                            Snackbar.make(
-                                requireView(),
-                                R.string.all_guest_snackbar,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            Snackbar
+                                .make(
+                                    requireView(),
+                                    R.string.all_guest_snackbar,
+                                    Snackbar.LENGTH_SHORT,
+                                ).show()
                         } else {
                             findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
                         }
                     }
+
                     HomeSideEffect.ShowClubBottomSheet -> {
                         showBottomSheet = FilterSheetType.Club(uiState.clubFilterData)
                     }
+
                     HomeSideEffect.ShowDatePickerBottomSheet -> {
                         showBottomSheet = FilterSheetType.Date(uiState.selectedDate)
                     }
+
                     HomeSideEffect.ShowMemberCountBottomSheet -> {
                         showBottomSheet = FilterSheetType.Member(uiState.memberFilterData)
                     }
+
                     is HomeSideEffect.NavigateToReadPost -> {
                         if (mainViewModel.isGuestLogin.value == true) {
-                            Snackbar.make(
-                                requireView(),
-                                R.string.all_guest_snackbar,
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            Snackbar
+                                .make(
+                                    requireView(),
+                                    R.string.all_guest_snackbar,
+                                    Snackbar.LENGTH_SHORT,
+                                ).show()
                         } else {
                             val bundle = Bundle()
                             bundle.putLong("boardId", effect.boardId)
                             findNavController().navigate(
                                 R.id.action_homeFragment_to_readPostFragment,
-                                bundle
+                                bundle,
                             )
                         }
                     }
@@ -154,5 +159,3 @@ class HomeFragment : BaseComposeFragment() {
         }
     }
 }
-
-

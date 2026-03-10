@@ -23,17 +23,21 @@ class TeamOnboardingViewModel
 
         fun onEvent(event: TeamOnboardingEvent) {
             when (event) {
-                TeamOnboardingEvent.OnBackClicked -> sendSideEffect(TeamOnboardingSideEffect.NavigateToBack)
+                TeamOnboardingEvent.OnBackClicked -> {
+                    sendSideEffect(TeamOnboardingSideEffect.NavigateToBack)
+                }
+
                 TeamOnboardingEvent.OnSubmitClicked -> {
                     if (uiState.value.isSubmitButtonEnable) {
                         sendSideEffect(TeamOnboardingSideEffect.NavigateToNext(uiState.value.selectedClubId!!))
                     }
                 }
+
                 is TeamOnboardingEvent.OnTeamSelected -> {
                     _uiState.update {
                         it.copy(
                             selectedClubId =
-                                if (uiState.value.selectedClubId == event.clubId){
+                                if (uiState.value.selectedClubId == event.clubId) {
                                     -1
                                 } else {
                                     event.clubId

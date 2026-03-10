@@ -49,7 +49,13 @@ fun HomeBottomSheet(
         mutableStateOf(if (sheetType is FilterSheetType.Date && sheetType.initialDate != null) sheetType.initialDate else null)
     }
     var tempClubIds by remember(sheetType) {
-        mutableStateOf(if (sheetType is FilterSheetType.Club && sheetType.initialClubIds.isNotEmpty()) sheetType.initialClubIds.toSet() else emptySet())
+        mutableStateOf(
+            if (sheetType is FilterSheetType.Club && sheetType.initialClubIds.isNotEmpty()) {
+                sheetType.initialClubIds.toSet()
+            } else {
+                emptySet()
+            }
+        )
     }
     var tempMemberCount by remember(sheetType) {
         mutableStateOf(if (sheetType is FilterSheetType.Member && sheetType.initialCount.isNotEmpty()) sheetType.initialCount else "")
@@ -76,10 +82,11 @@ fun HomeBottomSheet(
         },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 34.dp, top = 24.dp)
-                .padding(horizontal = 12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 34.dp, top = 24.dp)
+                    .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             when (sheetType) {
@@ -87,10 +94,11 @@ fun HomeBottomSheet(
                     val teamIdList =
                         listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f, fill = false)
-                            .heightIn(max = 400.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = false)
+                                .heightIn(max = 400.dp),
                         contentPadding = PaddingValues(horizontal = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
@@ -111,12 +119,13 @@ fun HomeBottomSheet(
                                         } else {
                                             tempClubIds - id
                                         }
-                                }
+                                },
                             )
                             Spacer(Modifier.height(11.dp))
                         }
                     }
                 }
+
                 is FilterSheetType.Date -> {
                     HomeCalendarGrid(
                         currentMonth = currentMonth,
@@ -124,10 +133,13 @@ fun HomeBottomSheet(
                         onDateClick = { tempDate = it },
                         onMonthChange = { offset ->
                             currentMonth = currentMonth.plusMonths(offset.toLong())
-                        }
+                        },
                     )
                 }
-                is FilterSheetType.Member -> TODO()
+
+                is FilterSheetType.Member -> {
+                    //
+                }
             }
             Spacer(Modifier.height(28.dp))
             CatchMateBottomSheetButton(

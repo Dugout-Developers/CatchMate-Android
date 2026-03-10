@@ -45,11 +45,10 @@ fun DateItem(
     date: LocalDate,
     isSelected: Boolean,
     isEnabled: Boolean, // 오늘 이전 날짜는 false로 전달
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val today = LocalDate.now()
     val isToday = date == today
-    
     val backgroundColor =
         when {
             isSelected -> Brand500
@@ -65,18 +64,19 @@ fun DateItem(
         }
 
     Box(
-        modifier = Modifier
-            .aspectRatio(1f) // 정사각형 유지
-            .clip(CircleShape)
-            .size(38.dp)
-            .background(backgroundColor)
-            .clickable(enabled = isEnabled) { onClick() },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .aspectRatio(1f) // 정사각형 유지
+                .clip(CircleShape)
+                .size(38.dp)
+                .background(backgroundColor)
+                .clickable(enabled = isEnabled) { onClick() },
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = date.dayOfMonth.toString(),
             style = Body01Medium,
-            color = textColor
+            color = textColor,
         )
     }
 }
@@ -93,8 +93,7 @@ fun HomeCalendarGrid(
     val today = LocalDate.now()
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
@@ -127,7 +126,7 @@ fun HomeCalendarGrid(
         }
         Spacer(Modifier.height(8.dp))
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
         ) {
             listOf("일", "월", "화", "수", "목", "금", "토").forEach { day ->
                 Text(
@@ -173,7 +172,8 @@ fun PreviewHomeCalendarGrid() {
     HomeCalendarGrid(
         currentMonth = LocalDate.now().withDayOfMonth(1),
         selectedDate = LocalDate.parse("2026-02-28"),
-        {}, {},
+        {},
+        {},
     )
 }
 

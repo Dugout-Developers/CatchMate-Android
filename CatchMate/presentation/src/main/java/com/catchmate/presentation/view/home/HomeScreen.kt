@@ -96,9 +96,10 @@ fun HomeScreen(
         ) {
             Spacer(Modifier.height(8.dp))
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(scrollState),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(scrollState),
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 HomeFilterChip(
@@ -124,12 +125,14 @@ fun HomeScreen(
                         titleText = stringResource(R.string.all_error_page_title),
                     )
                 }
+
                 boardList.isEmpty() -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.img_no_list_icon,
                         titleText = stringResource(R.string.home_no_list_message),
                     )
                 }
+
                 else -> {
                     Spacer(Modifier.height(12.dp))
                     LazyColumn(

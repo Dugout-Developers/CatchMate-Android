@@ -130,9 +130,9 @@ fun CatchMateTopAppBar(
     modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
-    actions: @Composable (RowScope. () -> Unit)? = null,
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
-    val  backgroundColor =
+    val backgroundColor =
         if (onBackClick == null && actions != null) {
             Grey50
         } else {

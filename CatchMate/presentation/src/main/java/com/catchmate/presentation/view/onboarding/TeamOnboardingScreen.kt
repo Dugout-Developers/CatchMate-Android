@@ -45,7 +45,7 @@ fun TeamOnboardingScreen(
                 onBackClick = { onEvent(TeamOnboardingEvent.OnBackClicked) },
                 actions = {
                     CatchMateIndicator(currentPage = 3)
-                }
+                },
             )
         },
         bottomBar = {
@@ -66,7 +66,7 @@ fun TeamOnboardingScreen(
                 )
                 Spacer(Modifier.height(34.dp))
             }
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier =
@@ -74,7 +74,7 @@ fun TeamOnboardingScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(horizontal = 24.dp)
-                    .padding(top = 52.dp)
+                    .padding(top = 52.dp),
         ) {
             Text(
                 text = stringResource(R.string.team_onboarding_title1, uiState.nickname),

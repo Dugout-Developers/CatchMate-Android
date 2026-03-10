@@ -33,6 +33,7 @@ class SignUpViewModel
                 SignUpEvent.OnBackClicked -> {
                     sendSideEffect(SignUpSideEffect.NavigateToBack)
                 }
+
                 is SignUpEvent.OnSubmitClicked -> {
                     if (uiState.value.isSubmitButtonEnable) {
                         sendSideEffect(
@@ -40,20 +41,24 @@ class SignUpViewModel
                                 nickname = uiState.value.nickname,
                                 birthDate = uiState.value.birthDate,
                                 gender = uiState.value.gender,
-                            )
+                            ),
                         )
                     }
                 }
+
                 SignUpEvent.OnNicknameClearClicked -> {
                     _uiState.update { it.copy(nickname = "", isNicknameValid = false) }
                 }
+
                 is SignUpEvent.OnBirthDateChanged -> {
                     _uiState.update { it.copy(birthDate = event.birthDate) }
                     validateAll()
                 }
+
                 is SignUpEvent.OnGenderSelected -> {
                     _uiState.update { it.copy(gender = event.gender) }
                 }
+
                 is SignUpEvent.OnNicknameChanged -> {
                     val limitedNickname =
                         if (event.nickname.length > 10) {
@@ -72,8 +77,8 @@ class SignUpViewModel
                 it.copy(
                     isSubmitButtonEnable =
                         uiState.value.nickname.isNotEmpty() &&
-                        uiState.value.birthDate.isNotEmpty() &&
-                        uiState.value.isNicknameValid
+                            uiState.value.birthDate.isNotEmpty() &&
+                            uiState.value.isNicknameValid,
                 )
             }
         }
@@ -84,21 +89,21 @@ class SignUpViewModel
             }
         }
 
-    private fun searchNicknameWithDebounce(nickName: String) {
-        nicknameCheckJob?.cancel() // 이전 작업 취소
+        private fun searchNicknameWithDebounce(nickName: String) {
+            nicknameCheckJob?.cancel() // 이전 작업 취소
 
-        if(nickName.isBlank()) {
-            _uiState.update { it.copy(isNicknameValid = false) }
-            validateAll()
-            return
-        }
-
-        nicknameCheckJob =
-            viewModelScope.launch {
-                delay(500L)
-                getCheckNickname(nickName)
+            if(nickName.isBlank()) {
+                _uiState.update { it.copy(isNicknameValid = false) }
+                validateAll()
+                return
             }
-    }
+
+            nicknameCheckJob =
+                viewModelScope.launch {
+                    delay(500L)
+                    getCheckNickname(nickName)
+                }
+        }
 
         fun getCheckNickname(nickName: String) {
             viewModelScope.launch {

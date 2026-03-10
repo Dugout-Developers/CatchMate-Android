@@ -47,7 +47,7 @@ fun SignUpScreen(
                 onBackClick = { onEvent(SignUpEvent.OnBackClicked) },
                 actions = {
                     CatchMateIndicator(currentPage = 2)
-                }
+                },
             )
         },
         bottomBar = {
@@ -76,7 +76,7 @@ fun SignUpScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(horizontal = 24.dp)
-                    .padding(top = 52.dp)
+                    .padding(top = 52.dp),
         ) {
             Text(
                 text = stringResource(R.string.signup_title_1),
@@ -121,13 +121,14 @@ fun SignUpScreen(
             Spacer(Modifier.height(4.dp))
             if (uiState.nickname.isNotEmpty()) {
                 Text(
-                    text = stringResource(
-                        if (uiState.isNicknameValid == true) {
-                            R.string.signup_nickname_usable
-                        } else {
-                            R.string.signup_nickname_unusable
-                        }
-                    ),
+                    text =
+                        stringResource(
+                            if (uiState.isNicknameValid == true) {
+                                R.string.signup_nickname_usable
+                            } else {
+                                R.string.signup_nickname_unusable
+                            },
+                        ),
                     style = Caption01SemiBold,
                     color = if (uiState.isNicknameValid == true) SystemBlue else SystemRed,
                 )

@@ -91,28 +91,29 @@ class LoginViewModel
                     }
 
                     is Result.Error -> {
-                        val errorMessage = when (result.exception) {
-                            is GoogleLoginException.Cancelled -> {
-                                Log.e("GoogleLoginError", "로그인이 취소되었습니다.")
-                                null
-                            }
+                        val errorMessage =
+                            when (result.exception) {
+                                is GoogleLoginException.Cancelled -> {
+                                    Log.e("GoogleLoginError", "로그인이 취소되었습니다.")
+                                    null
+                                }
 
-                            is GoogleLoginException.NoCredentials -> {
-                                "앱 로그인을 위해서 기기에 Google 계정을 등록해주세요."
-                            }
+                                is GoogleLoginException.NoCredentials -> {
+                                    "앱 로그인을 위해서 기기에 Google 계정을 등록해주세요."
+                                }
 
-                            is GoogleLoginException.TokenParsing -> {
-                                "로그인 정보 처리 중 오류가 발생했습니다."
-                            }
+                                is GoogleLoginException.TokenParsing -> {
+                                    "로그인 정보 처리 중 오류가 발생했습니다."
+                                }
 
-                            is GoogleLoginException.Unknown -> {
-                                "알 수 없는 오류가 발생했습니다."
-                            }
+                                is GoogleLoginException.Unknown -> {
+                                    "알 수 없는 오류가 발생했습니다."
+                                }
 
-                            else -> {
-                                "로그인 중 오류가 발생했습니다."
+                                else -> {
+                                    "로그인 중 오류가 발생했습니다."
+                                }
                             }
-                        }
 
                         errorMessage?.let { msg ->
                             _event.emit(LoginEvent.ShowSnackBar(msg))
