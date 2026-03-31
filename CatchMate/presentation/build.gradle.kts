@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation(libs.circleimageview)
+    implementation(libs.coil)
     implementation(libs.glide)
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
