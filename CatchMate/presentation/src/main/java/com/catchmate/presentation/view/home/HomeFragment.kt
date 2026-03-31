@@ -145,7 +145,6 @@ class HomeFragment : BaseComposeFragment() {
         }
 
         HomeScreen(
-            boardList = uiState.boardList,
             uiState = uiState,
             onEvent = homeViewModel::onEvent,
         )

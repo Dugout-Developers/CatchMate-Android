@@ -9,6 +9,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RetrofitClient
@@ -49,6 +50,8 @@ class RetrofitClient
         private val okHttpClient =
             OkHttpClient
                 .Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // 서버 연결 대기 시간
+                .readTimeout(30, TimeUnit.SECONDS) // 데이터 읽기 대기 시간
                 .addInterceptor(authInterceptor)
                 .addInterceptor(logging)
                 .authenticator(authAuthenticator)
