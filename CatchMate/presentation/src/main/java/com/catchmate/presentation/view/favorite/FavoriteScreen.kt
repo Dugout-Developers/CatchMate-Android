@@ -30,7 +30,6 @@ import com.catchmate.presentation.viewmodel.favorite.FavoriteUiState
 
 @Composable
 fun FavoriteScreen(
-    boardList: List<Board>?,
     uiState: FavoriteUiState,
     onEvent: (FavoriteEvent) -> Unit,
 ) {
@@ -73,14 +72,14 @@ fun FavoriteScreen(
                     .padding(horizontal = 18.dp),
         ) {
             when {
-                boardList == null -> {
+                uiState.boardList == null -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.vec_all_list_error_icon,
                         titleText = stringResource(R.string.all_error_page_title),
                     )
                 }
 
-                boardList.isEmpty() -> {
+                uiState.boardList.isEmpty() -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.img_no_list_icon,
                         titleText = stringResource(R.string.favorite_no_list_title),
@@ -94,7 +93,7 @@ fun FavoriteScreen(
                         state = listState,
                     ) {
                         items(
-                            items = boardList,
+                            items = uiState.boardList,
                             key = { it.boardId },
                         ) { board ->
                             BoardItem(
@@ -115,5 +114,5 @@ fun FavoriteScreen(
 @Composable
 @Preview
 fun PreviewFavoriteScreen() {
-    FavoriteScreen(emptyList(), FavoriteUiState(), {})
+    FavoriteScreen(FavoriteUiState(), {})
 }

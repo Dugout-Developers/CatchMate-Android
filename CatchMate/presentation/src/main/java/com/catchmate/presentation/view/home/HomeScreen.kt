@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.catchmate.domain.model.board.Board
 import com.catchmate.presentation.R
 import com.catchmate.presentation.util.ClubUtils.convertClubIdListToString
 import com.catchmate.presentation.util.DateUtils.formatDateToFilterDate
@@ -38,7 +37,6 @@ import com.catchmate.presentation.viewmodel.home.HomeUiState
 
 @Composable
 fun HomeScreen(
-    boardList: List<Board>?,
     uiState: HomeUiState,
     onEvent: (HomeEvent) -> Unit,
 ) {
@@ -119,14 +117,14 @@ fun HomeScreen(
                 )
             }
             when {
-                boardList == null -> {
+                uiState.boardList == null -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.vec_all_list_error_icon,
                         titleText = stringResource(R.string.all_error_page_title),
                     )
                 }
 
-                boardList.isEmpty() -> {
+                uiState.boardList.isEmpty() -> {
                     ListEmptyComponent(
                         iconRes = R.drawable.img_no_list_icon,
                         titleText = stringResource(R.string.home_no_list_message),
@@ -139,7 +137,7 @@ fun HomeScreen(
                         state = listState,
                         modifier = Modifier,
                     ) {
-                        items(boardList) { board ->
+                        items(uiState.boardList) { board ->
                             BoardItem(
                                 onClick = { onEvent(HomeEvent.OnBoardItemClicked(board.boardId)) },
                                 board = board,
@@ -155,5 +153,5 @@ fun HomeScreen(
 @Composable
 @Preview
 fun PreviewHomeScreen() {
-    HomeScreen(emptyList(), HomeUiState(), {})
+    HomeScreen(HomeUiState(), {})
 }

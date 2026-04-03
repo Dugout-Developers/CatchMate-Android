@@ -7,6 +7,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.catchmate.presentation.R
@@ -35,37 +38,39 @@ class FavoriteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeContent() {
         val uiState by favoriteViewModel.uiState.collectAsState()
+        val lifecycleOwner = LocalLifecycleOwner.current
 
-        LaunchedEffect(Unit) {
-            favoriteViewModel.sideEffect.collect { effect ->
-                when (effect) {
-                    FavoriteSideEffect.NavigateToLogin -> {
-                        val navOptions =
-                            NavOptions
-                                .Builder()
-                                .setPopUpTo(R.id.favoriteFragment, true)
-                                .build()
-                        val bundle = Bundle()
-                        bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
-                        findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
-                    }
+        LaunchedEffect(lifecycleOwner.lifecycle) {
+            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favoriteViewModel.sideEffect.collect { effect ->
+                    when (effect) {
+                        FavoriteSideEffect.NavigateToLogin -> {
+                            val navOptions =
+                                NavOptions
+                                    .Builder()
+                                    .setPopUpTo(R.id.favoriteFragment, true)
+                                    .build()
+                            val bundle = Bundle()
+                            bundle.putInt("navigateCode", NAVIGATE_CODE_REISSUE)
+                            findNavController().navigate(R.id.action_favoriteFragment_to_loginFragment, bundle, navOptions)
+                        }
 
-                    is FavoriteSideEffect.NavigateToReadPost -> {
-                        val bundle = Bundle()
-                        bundle.putLong("boardId", effect.boardId)
-                        findNavController().navigate(R.id.action_favoriteFragment_to_readPostFragment, bundle)
-                    }
+                        is FavoriteSideEffect.NavigateToReadPost -> {
+                            val bundle = Bundle()
+                            bundle.putLong("boardId", effect.boardId)
+                            findNavController().navigate(R.id.action_favoriteFragment_to_readPostFragment, bundle)
+                        }
 
-                    FavoriteSideEffect.ShowSnackBar -> {
-                        Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT)
+                        FavoriteSideEffect.ShowSnackBar -> {
+                            Snackbar.make(requireView(), R.string.all_component_error_msg, Snackbar.LENGTH_SHORT)
+                        }
                     }
                 }
             }
         }
 
         FavoriteScreen(
-            boardList = uiState.boardList,
-            uiState = FavoriteUiState(),
+            uiState = uiState,
             onEvent = favoriteViewModel::onEvent,
         )
     }
