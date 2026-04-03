@@ -22,8 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NotificationFragment :
-    BaseComposeFragment() {
+class NotificationFragment : BaseComposeFragment() {
     private val notificationViewModel: NotificationViewModel by viewModels()
 
     override fun onViewCreated(

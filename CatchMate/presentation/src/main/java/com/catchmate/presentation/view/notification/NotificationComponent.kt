@@ -71,7 +71,7 @@ fun NotificationItemBox(
             )
             Spacer(Modifier.width(12.dp))
             Column(
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = 4.dp),
             ) {
                 Text(
                     text = item.title,

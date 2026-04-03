@@ -7,5 +7,7 @@ sealed interface NotificationSideEffect {
 
     object NavigateToDetail : NotificationSideEffect
 
-    data class ShowSnackBar(val stringResource: Int) : NotificationSideEffect
+    data class ShowSnackBar(
+        val stringResource: Int,
+    ) : NotificationSideEffect
 }

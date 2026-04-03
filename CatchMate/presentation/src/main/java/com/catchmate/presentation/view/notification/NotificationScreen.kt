@@ -125,7 +125,7 @@ fun PreviewNotificationScreen() {
                     senderProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Y8C0XSLa2fOCPgeLYf6Es2mQwmapOOIy7w&s",
                     gameInfo = "2026-05-15 · 대구 · 한화 이글스 vs 두산 베어스",
                 ),
-            )
+            ),
         ),
         {},
     )
