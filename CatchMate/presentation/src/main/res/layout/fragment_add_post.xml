@@ -399,7 +399,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/regardless_of_age" />
+                    android:text="나이무관" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_teenager"
@@ -407,7 +407,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/teenager" />
+                    android:text="10대" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_twenties"
@@ -415,7 +415,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/twenties" />
+                    android:text="20대" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_thirties"
@@ -423,7 +423,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/thirties" />
+                    android:text="30대" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_fourties"
@@ -431,7 +431,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/fourties" />
+                    android:text="40대" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_add_post_age_fifties"
@@ -439,7 +439,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="@string/fifties" />
+                    android:text="50대 이상" />
             </com.google.android.material.chip.ChipGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
