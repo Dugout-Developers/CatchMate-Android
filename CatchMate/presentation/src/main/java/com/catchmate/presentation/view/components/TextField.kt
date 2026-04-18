@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -62,7 +62,6 @@ fun CatchMateTextField(
                 modifier =
                     Modifier
                         .padding(vertical = 17.dp, horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(modifier = Modifier.weight(1f)) {
                     if (value.isEmpty() && !isFocused) {
@@ -90,5 +89,5 @@ fun CatchMateTextField(
 @Composable
 @Preview
 fun PreviewCatchMateTextField() {
-    CatchMateTextField("", {}, stringResource(R.string.signup_nickname_hint))
+    CatchMateTextField("", {}, stringResource(R.string.signup_nickname_hint), Modifier.height(170.dp))
 }

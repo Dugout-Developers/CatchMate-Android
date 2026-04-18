@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.catchmate.presentation.R
-import com.catchmate.presentation.view.components.CatchMateChip
+import com.catchmate.presentation.view.components.OnboardingGenderChip
 
 @Composable
 fun SignupGenderChipGroup(
@@ -23,13 +23,13 @@ fun SignupGenderChipGroup(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(9.dp),
     ) {
-        CatchMateChip(
+        OnboardingGenderChip(
             text = female,
             isSelected = selectedGender == female,
             onSelectedChange = { onGenderSelect(female) },
             modifier = Modifier.weight(1f),
         )
-        CatchMateChip(
+        OnboardingGenderChip(
             text = male,
             isSelected = selectedGender == male,
             onSelectedChange = { onGenderSelect(male) },

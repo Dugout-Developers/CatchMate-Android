@@ -23,7 +23,7 @@ import com.catchmate.presentation.view.theme.Grey400
 import com.catchmate.presentation.view.theme.Grey50
 
 @Composable
-fun CatchMateChip(
+fun OnboardingGenderChip(
     text: String,
     isSelected: Boolean,
     onSelectedChange: () -> Unit,
@@ -57,5 +57,5 @@ fun CatchMateChip(
 @Composable
 @Preview
 fun PreviewCatchMateChip() {
-    CatchMateChip(stringResource(R.string.female), false, {})
+    OnboardingGenderChip(stringResource(R.string.female), false, {})
 }
