@@ -57,7 +57,7 @@ fun WriteBoardScreen() {
             ) {
                 CatchMateFilledButton(
                     text = stringResource(R.string.post_complete),
-                    onClick = {  }, //
+                    onClick = { }, //
                     enabled = false, //
                     buttonType = ButtonType.FILLED,
                     modifier =
