@@ -67,7 +67,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/regardless_of_age"
+                        android:text="나이무관"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
@@ -83,7 +83,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/teenager"
+                        android:text="10대"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
@@ -99,7 +99,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/twenties"
+                        android:text="20대"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
@@ -115,7 +115,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/thirties"
+                        android:text="30대"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
@@ -131,7 +131,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/fourties"
+                        android:text="40대"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
@@ -147,7 +147,7 @@
                         android:paddingTop="2dp"
                         android:paddingRight="@dimen/tiny"
                         android:paddingBottom="2dp"
-                        android:text="@string/fifties"
+                        android:text="50대 이상"
                         android:textAppearance="@style/Typography.Caption01.Regular"
                         android:textColor="@color/grey500"
                         android:visibility="gone" />
