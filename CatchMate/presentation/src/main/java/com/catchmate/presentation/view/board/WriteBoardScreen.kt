@@ -33,16 +33,14 @@ import com.catchmate.presentation.view.theme.Grey0
 import com.catchmate.presentation.view.theme.Grey500
 
 @Composable
-fun WriteBoardScreen(
-
-) {
+fun WriteBoardScreen() {
     val scrollState = rememberScrollState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CatchMateTopAppBar(
-                onBackClick = {},//
+                onBackClick = {}, //
                 actions = {
                     CatchMateTopAppBarTextButton(
                         text = stringResource(R.string.temporary_storage),
@@ -59,8 +57,8 @@ fun WriteBoardScreen(
             ) {
                 CatchMateFilledButton(
                     text = stringResource(R.string.post_complete),
-                    onClick = {  },//
-                    enabled = false,//
+                    onClick = {  }, //
+                    enabled = false, //
                     buttonType = ButtonType.FILLED,
                     modifier =
                         Modifier
@@ -71,7 +69,7 @@ fun WriteBoardScreen(
             }
         },
         containerColor = Grey0,
-    ) {  innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier =
                 Modifier
@@ -90,46 +88,46 @@ fun WriteBoardScreen(
             )
             Spacer(Modifier.height(8.dp))
             BoardTextBox(
-                text = "",//
+                text = "", //
                 hint = stringResource(R.string.post_edt_hint_count),
                 isMemberCountBox = true,
-                onClick = {},//
+                onClick = {}, //
             )
             Spacer(Modifier.height(32.dp))
             RequiredTextRow(text = stringResource(R.string.post_game_info))
             Spacer(Modifier.height(12.dp))
             BoardTextBox(
-                text = "",//
+                text = "", //
                 hint = stringResource(R.string.post_edt_hint_game_date_time),
-                onClick = {},//
+                onClick = {}, //
             )
             Spacer(Modifier.height(12.dp))
             Row {
                 BoardTextBox(
-                    text = "",//
+                    text = "", //
                     hint = stringResource(R.string.post_edt_hint_home),
-                    onClick = {},//
+                    onClick = {}, //
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(9.dp))
                 BoardTextBox(
-                    text = "",//
+                    text = "", //
                     hint = stringResource(R.string.post_edt_hint_away),
-                    onClick = {},//
+                    onClick = {}, //
                     modifier = Modifier.weight(1f),
                 )
             }
             Spacer(Modifier.height(12.dp))
             BoardTextBox(
-                text = "",//
+                text = "", //
                 hint = stringResource(R.string.post_edt_hint_cheer_team),
-                onClick = {},//
+                onClick = {}, //
             )
             Spacer(Modifier.height(12.dp))
             BoardTextBox(
-                text = "",//
+                text = "", //
                 hint = stringResource(R.string.post_edt_hint_place),
-                onClick = {},//
+                onClick = {}, //
             )
             Spacer(Modifier.height(32.dp))
             Row(
@@ -148,7 +146,7 @@ fun WriteBoardScreen(
             Spacer(Modifier.height(12.dp))
             CatchMateTextField(
                 value = "",
-                onValueChange = {},//
+                onValueChange = {}, //
                 hint = stringResource(R.string.post_edt_hint_additional_info),
                 showClearIcon = false,
                 modifier = Modifier.height(170.dp),
@@ -166,15 +164,15 @@ fun WriteBoardScreen(
             ) {
                 BoardGenderAgeChip(
                     text = stringResource(R.string.regardless_of_gender),
-                    onSelectedChange = {},//
+                    onSelectedChange = {}, //
                 )
                 BoardGenderAgeChip(
                     text = stringResource(R.string.male),
-                    onSelectedChange = {},//
+                    onSelectedChange = {}, //
                 )
                 BoardGenderAgeChip(
                     text = stringResource(R.string.female),
-                    onSelectedChange = {},//
+                    onSelectedChange = {}, //
                 )
             }
             Spacer(Modifier.height(32.dp))
@@ -193,7 +191,7 @@ fun WriteBoardScreen(
                 AgeGroup.entries.forEach { age ->
                     BoardGenderAgeChip(
                         text = age.label,
-                        onSelectedChange = {},//
+                        onSelectedChange = {}, //
                     )
                 }
             }

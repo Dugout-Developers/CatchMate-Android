@@ -1,6 +1,8 @@
 package com.catchmate.domain.model.enumclass
 
-enum class AgeGroup(val label: String) {
+enum class AgeGroup(
+    val label: String,
+) {
     ALL("전연령"),
     AGE_10("10대"),
     AGE_20("20대"),

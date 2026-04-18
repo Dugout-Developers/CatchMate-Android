@@ -8,14 +8,14 @@ sealed interface WriteBoardEvent {
     object InitData : WriteBoardEvent
 
     data class OnSaveTempClicked(
-        val boardId: Long? = null
+        val boardId: Long? = null,
     ) : WriteBoardEvent
 
     data class OnLocationClicked(
-        val location: String? = null
+        val location: String? = null,
     ) : WriteBoardEvent
 
     data class OnDateTimeClicked(
-        val dateTime: String? = null // 
-    )
+        val dateTime: String? = null,
+    ) : WriteBoardEvent
 }
